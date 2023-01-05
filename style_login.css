@@ -1,0 +1,206 @@
+/*body {
+    font-family: Arial, Helvetica, sans-serif;
+
+    background:
+    linear-gradient(135deg, #708090 21px, #d9ecff 22px, #d9ecff 24px, transparent 24px, transparent 67px, #d9ecff 67px, #d9ecff 69px, transparent 69px),
+    linear-gradient(225deg, #708090 21px, #d9ecff 22px, #d9ecff 24px, transparent 24px, transparent 67px, #d9ecff 67px, #d9ecff 69px, transparent 69px)0 64px;
+    background-color:#708090;
+    background-size: 64px 128px;
+}
+
+.row {
+    margin: 10% 35%;
+    display: flex;
+    background: rgb(195,192,236);
+    background: linear-gradient(90deg, rgba(195,192,236,1) 0%, rgba(226,237,238,1) 51%, rgba(255,255,255,1) 100%);
+    border-radius: 1em;
+    padding: 1em;
+}
+
+.column {
+    flex: 100%;  
+    padding: 0 2em;
+} 
+
+input, select {
+    margin-bottom: 1em;
+    height: 2.5em;
+    border-radius: 5px;
+    border: 0.5px solid grey;
+    padding-left: 1em;
+}
+
+input[type=submit] {
+    height: 3em;
+    cursor: pointer;
+    background-color: snow;
+    font-weight: bold;
+    color: darkslategray;
+}
+
+input[type=submit]:hover {
+    background-color: darkslategray;
+    color: snow;
+}
+
+form {
+    display: grid;
+}
+
+h2 {
+    margin-bottom: 5em 0;
+    color: darkslategray;
+    display: inline;
+}
+
+.title {
+    margin: 1em 0;
+}
+
+.message-bar {
+    padding: 10px;
+    margin-bottom: 1em;
+    font-size: 1.2em;
+    border-radius: 10px;
+    font-family: monospace;
+    background: rgb(214 128 128 / 30%);
+    color: darkslategrey;
+}*/
+
+
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	/*background: #f6f5f7;*/
+	background: #5fc4ff;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	font-family: 'Montserrat', sans-serif;
+	height: 100vh;
+	margin: -20px 0 50px;
+}
+
+h1 {
+	font-weight: bold;
+	margin: 0;
+}
+
+h2 {
+	text-align: center;
+}
+
+p {
+	font-size: 14px;
+	font-weight: 100;
+	line-height: 20px;
+	letter-spacing: 0.5px;
+	margin: 20px 0 30px;
+}
+
+button {
+	border-radius: 20px;
+	border: 1px solid #33B4FF;
+	background-color: #33B4FF;
+	color: #FFFFFF;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 12px 45px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+}
+
+button:active {
+	transform: scale(0.95);
+}
+
+button:focus {
+	outline: none;
+}
+
+button.ghost {
+	background-color: transparent;
+	border-color: #FFFFFF;
+}
+
+form {
+	background-color: #FFFFFF;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	padding: 0 50px;
+	height: 100%;
+	text-align: center;
+}
+
+input {
+	background-color: #eee;
+	border: none;
+	padding: 12px 15px;
+	margin: 8px 0;
+	width: 100%;
+}
+
+.container {
+	background-color: #fff;
+	border-radius: 10px;
+  	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+			0 10px 10px rgba(0,0,0,0.22);
+	position: relative;
+	width: 768px;
+	max-width: 100%;
+	min-height: 480px;
+}
+
+.form-container {
+	position: absolute;
+	top: 0;
+	height: 100%;
+}
+
+.sign-in-container {
+	left: 0;
+	width: 50%;
+	z-index: 2;
+}
+
+.overlay-container {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	width: 50%;
+	height: 100%;
+	z-index: 100;
+}
+
+.overlay {
+	background: #33B4FF;
+	background: -webkit-linear-gradient(to right, #33B4FF, #0059fd);
+	background: linear-gradient(to right, #33B4FF, #0059fd);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 0 0;
+	color: #FFFFFF;
+	left: -100%;
+	height: 100%;
+	width: 100%;
+}
+
+.overlay-panel {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	padding: 0 40px;
+	text-align: center;
+	top: 0;
+	height: 100%;
+	width: 100%;
+}
+
