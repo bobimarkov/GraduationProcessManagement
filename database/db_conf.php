@@ -3,9 +3,9 @@ class Db {
     private $connection;
     public function __construct() {
         $dbhost = "localhost";
-        $dbName = "w18_62372_62418_diplomirane";
-        $userName = "w18_62372_62418_diplomirane";
-        $userPassword = "w18_62372_62418_diplomirane";
+        $dbName = "graduation";
+        $userName = "root";
+        $userPassword = "";
         $this->connection = new PDO("mysql:host=$dbhost;dbname=$dbName", $userName, $userPassword,
         [
             PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8", 
