@@ -345,35 +345,20 @@ function toggleBorderColor(c) {
 
 /*---- SWITCH_SECTIONS  START ----*/
 function showUsers() {
-    
     showGivenSection("users_section");
     activeHeader("users_header");
-    
-    var errElem = document.getElementById('message-bar-users');
-    errElem.classList.remove(['success']);
-    errElem.classList.remove(['error']);
-    errElem.innerHTML = "";
-    document.getElementById("userTextarea").value = "";
 }
 
 function showStudents() {
-    
     showGivenSection("students_section");
     activeHeader("students_header");
     getAllStudents();
-    var errElem = document.getElementById('message-bar-students');
-    errElem.classList.remove(['success']);
-    errElem.classList.remove(['error']);
-    errElem.innerHTML = "";
-    document.getElementById("studentTextarea").value = "";
 }
 
 function showEditSection() {
-   
     showGivenSection("edit_section");
     activeHeader("edit_header");
     getAllUsers();
-
 }
 
 
@@ -414,9 +399,6 @@ function  showAnalyticsSection() {
 
 
 
-
-
-
 function showDiplomaSection() {
    
     showGivenSection("diploma_section");
@@ -450,10 +432,10 @@ function showGivenSection(sectionToBeDisplayed){
         'analytic_section'];
     sections = sections.map(x => document.getElementById(x));
 
-
     //iterate all sections
     //make all style.display = "none"
     //make the element we want style.display=grid
+
     for(let i=0; i<6;i++){
        sections[i].style.display = 'none';
 
@@ -463,28 +445,20 @@ function showGivenSection(sectionToBeDisplayed){
        }
 
     }
-    
-    //TODO -> find what this piece of code is supposed to do and fix it, cause currently it does
-    //the corner cases for flex and make 2 grids at the same time
-    if(sectionToBeDisplayed.localeCompare(sections[5].id)==0){
-        sections[5].style.display='flex';
-    }else if(sectionToBeDisplayed.localeCompare(sections[3].id)==0){
-        sections[3].style.display='grid';
-        sections[4].style.display='grid';
-    }
-
 }
 
 /*---- SWITCH_SECTIONS  END ----*/
 //give class "active_header" to only element with elementid
 function activeHeader(elementId){
 
-    headers=[];
-    headers[0]=document.getElementById('analytic_header');
-    headers[1]=document.getElementById('users_header');
-    headers[2]=document.getElementById('edit_header');
-    headers[3]=document.getElementById('diploma_header');
-    headers[4]=document.getElementById('students_header');
+    headers = [
+        'users_header',
+        'students_header',
+        'edit_header',
+        'diploma_header',
+        'analytic_header'];
+        
+    headers = headers.map(x => document.getElementById(x));
 
     for(let i=0;i<5;i++){
         if(headers[i].id.localeCompare(elementId)==0){
@@ -668,68 +642,9 @@ function showDashboardAdditionalInputElement(value) {
     }
 }
 
+//removed submitUsers
 
-function submitUsers(event) {
-    event.preventDefault;
-    var form = document.getElementById('add_users_form');
-    var usersData = form.userTextarea.value;
-
-    fetch('../../services/add_users.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify(usersData)
-    })
-        .then(response => response.json())
-        .then((data) => {
-            var errElem = document.getElementById('message-bar-users');
-            if (!data.success) {
-                errElem.classList.remove(['success']);
-                errElem.classList.add(['error']);
-                errElem.innerHTML = data.message;
-            } else {
-                errElem.classList.remove(['error']);
-                errElem.classList.add(['success']);
-                errElem.innerHTML = data.message;
-                document.getElementById("userTextarea").value = "";
-                getAllUsers();
-            }
-        });
-}
-
-function editStudent(event){
-    
-    event.preventDefault;
-    var form=document.getElementById("edit_students_form");
-    var usersData = form.editStudentTextarea.value;
-  
-    fetch('../../services/edit_students.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify(usersData)
-    })
-    .then(response=> response.json())
-    .then((data)=>{
-        var errElem = document.getElementById('message-bar-edit-students');
-        if (!data.success) {
-            errElem.classList.remove(['success']);
-            errElem.classList.add(['error']);
-            errElem.innerHTML = data.message;
-        } else {
-            errElem.classList.remove(['error']);
-            errElem.classList.add(['success']);
-            errElem.innerHTML = data.message;
-            document.getElementById("userTextarea").value = "";
-        }
-    }
-    );
-    form.editStudentTextarea.valuе=null;
-}
+//removed editStudent
 
 function submitStudents(event) {
     event.preventDefault;
