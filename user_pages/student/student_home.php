@@ -49,17 +49,15 @@ $email = $_SESSION["user"];
                     console.log(data.error);
                 }
                 else if (data.users[0].grade < 3) {
-                    buildContent1(data.users[0]);
+                    buildContentForNotGraduatingStudent(data.users[0]);
                 }
                 else {
-                    buildContent(data.users[0]);
+                    buildContentForGraduatingStudent(data.users[0]);
                 }
             })
     }
 
-    function buildContent1(user) {
-        const box = ` 
-        <img class="logo" src="../../Images/su-logo.png" alt="su-logo">
+    const header = `<img class="logo" src="../../Images/su-logo.png" alt="su-logo">
     <p class="su-header">СУ "СВ. КЛИМЕНТ ОХРИДСКИ"</p>
     <div class="navigation">
         <h2 class="navigation_element" id="students_header">ДОБРЕ ДОШЪЛ,</h2>
@@ -70,14 +68,9 @@ $email = $_SESSION["user"];
         <div class="vertical_line"></div>
         <h2 class="navigation_element" id="logout_header"><a href="../../services/logout.php"
                 class="logout_header_link">ИЗХОД <i class="fas fa-sign-out-alt"></i></a></h2>
-    </div> 
-        <div class="row">
-            <div class="notifications_section">
-                <h3> <i class="fa fa-bell-o" aria-hidden="true"></i> Известия</h3>
-                <p>Вие нямате право на диплома!</p>
-            </div>
+    </div> `
 
-            <div class="profile_info_section">
+    const infoUser = `            <div class="profile_info_section">
                 <h3> <i class="fa fa-user-o" aria-hidden="true"></i> Информация за потребителя</h3>
                 <div class="profile_info_section_content">
                     <div id="profile_info_section_content_1_wrapper">
@@ -96,15 +89,29 @@ $email = $_SESSION["user"];
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="diploma_info_section">
-            <h3><i class="fa fa-file-text-o" aria-hidden="true"></i> Информация за дипломомирането</h3>
-                <div id="diploma_info_section_content_3_wrapper">
+            </div>`
+
+    const infoForAttendance = `  <div id="diploma_info_section_content_3_wrapper">
                     <div id="diploma_info_section_content_3">
                         <p>Ще присъствам на дипломирането: <input type="checkbox" id="attendance" onchange="setAttandance('<?php echo $email ?>', this)"></p>
                         <p>Искам снимки: <input type="checkbox" id="photos_requested" onchange="requestPhotos('<?php echo $email ?>', this)"></p>
                     </div>
-                </div>              
+                </div>`
+
+
+    function buildContentForNotGraduatingStudent(user) {
+        const box = ` 
+        ${header}
+        <div class="row">
+            <div class="notifications_section">
+                <h3> <i class="fa fa-bell-o" aria-hidden="true"></i> Известия</h3>
+                <p>Вие нямате право на диплома!</p>
+            </div>
+
+        ${infoUser}
+            <div class="diploma_info_section">
+            <h3><i class="fa fa-file-text-o" aria-hidden="true"></i> Информация за дипломомирането</h3>
+            ${infoForAttendance}            
             </div>
         </div>`
         document.body.innerHTML = box;
@@ -124,20 +131,9 @@ $email = $_SESSION["user"];
     }
 
 
-    function buildContent(user) {
+    function buildContentForGraduatingStudent(user) {
         const box = `
-        <img class="logo" src="../../Images/su-logo.png" alt="su-logo">
-    <p class="su-header">СУ "СВ. КЛИМЕНТ ОХРИДСКИ"</p>
-    <div class="navigation">
-        <h2 class="navigation_element" id="students_header">ДОБРЕ ДОШЪЛ,</h2>
-        <h2 class="navigation_element active_header" id="users_header">
-            <?php echo $name ?>
-        </h2>
-        <h2 class="navigation_element"><i class="fas fa-user-graduate"></i></h2>
-        <div class="vertical_line"></div>
-        <h2 class="navigation_element" id="logout_header"><a href="../../services/logout.php"
-                class="logout_header_link">ИЗХОД <i class="fas fa-sign-out-alt"></i></a></h2>
-    </div>
+        ${header}
         <div class="row">
         <div class="notifications_section">
             <h3> <i class="fa fa-bell-o" aria-hidden="true"></i> Известия</h3>
@@ -152,26 +148,7 @@ $email = $_SESSION["user"];
             </div>
 
         </div>
-        <div class="profile_info_section">
-            <h3> <i class="fa fa-user-o" aria-hidden="true"></i> Информация за потребителя</h3>
-            <div class="profile_info_section_content">
-                <div id="profile_info_section_content_1_wrapper">
-                    <div id="profile_info_section_content_1">
-                        <p id="name"></p>
-                        <p id="email"></p>
-                        <p id="phone"></p>
-                    </div>
-                </div>
-                <div id="profile_info_section_content_2_wrapper">
-                    <div id="profile_info_section_content_2">
-                        <p id="degree"></p>
-                        <p id="major"></p>
-                        <p id="group"></p>
-                        <p id="fn"></p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        ${infoUser}
         <div class="diploma_info_section">
             <h3><i class="fa fa-file-text-o" aria-hidden="true"></i> Информация за диплома</h3>
             <div class="diploma_info_section_content">
@@ -190,12 +167,7 @@ $email = $_SESSION["user"];
                         <p id="taken_at_time"></p>
                     </div>
                 </div>
-                <div id="diploma_info_section_content_3_wrapper">
-                    <div id="diploma_info_section_content_3">
-                        <p>Ще присъствам на дипломирането: <input type="checkbox" id="attendance" onchange="setAttandance('<?php echo $email ?>', this)"></p>
-                        <p>Искам снимки: <input type="checkbox" id="photos_requested" onchange="requestPhotos('<?php echo $email ?>', this)"></p>
-                    </div>
-                </div>
+                ${infoForAttendance}
                 <div id="diploma_info_section_content_4_wrapper">
                     <div id="diploma_info_section_content_4">
                         <p>Административен коментар:</p>

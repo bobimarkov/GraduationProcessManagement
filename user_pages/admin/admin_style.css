@@ -247,7 +247,7 @@ table td {
 
 .students-table td:nth-child(2) {
     /* 3 names */
-    width: 50%;
+    width: 40%;
 }
 
 .students-table td:nth-child(3) {
@@ -272,19 +272,19 @@ table td {
     width: 5%;
 }
 
-.students-table td:nth-child(6) {
+.students-table td:nth-child(7) {
     /* major */
     text-align: center;
     width: 5%;
 }
 
-.students-table td:nth-child(6) {
+.students-table td:nth-child(8) {
     /* group */
     text-align: center;
     width: 5%;
 }
 
-.students-table td:nth-child(6) {
+.students-table td:nth-child(9) {
     /* role */
     text-align: center;
     width: 5%;

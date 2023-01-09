@@ -144,7 +144,7 @@ function buildStudentsTable(data) {
     let i = 1;
     let rows = data.users;
 
-    table.innerHTML = "<tr> <td>ID</td> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>ФН</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Роля</td> </tr>";
+    table.innerHTML = "<tr> <td>ID</td> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>ФН</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Дипломиращ се</td> <td>Роля</td> </tr>";
 
     //console.log("table=",table);
     rows.forEach(row_data => {
@@ -159,6 +159,7 @@ function buildStudentsTable(data) {
         var cell6 = row.insertCell(6);
         var cell7 = row.insertCell(7);
         var cell8 = row.insertCell(8);
+        var cell9 = row.insertCell(9);
         cell0.innerHTML = row_data.id;
         cell1.innerHTML = row_data.name;
         cell2.innerHTML = row_data.email;
@@ -167,10 +168,14 @@ function buildStudentsTable(data) {
         cell5.innerHTML = row_data.degree;
         cell6.innerHTML = row_data.major;
         cell7.innerHTML = row_data.group;
+        switch (row_data.has_diploma_right) {
+            case 0 : cell8.innerHTML = "Не"; break;
+            case 1 : cell8.innerHTML = "Да"; break;
+        }
         switch (row_data.role) {
-            case 'admin': cell8.innerHTML = '<i class="fas fa-user-lock user-role-icon"></i>'; break;
-            case 'moderator': cell8.innerHTML = '<i class="fas fa-user-cog user-role-icon"></i>'; break;
-            case 'student': cell8.innerHTML = '<i class="fas fa-user-graduate user-role-icon"></i>'; break;
+            case 'admin': cell9.innerHTML = '<i class="fas fa-user-lock user-role-icon"></i>'; break;
+            case 'moderator': cell9.innerHTML = '<i class="fas fa-user-cog user-role-icon"></i>'; break;
+            case 'student': cell9.innerHTML = '<i class="fas fa-user-graduate user-role-icon"></i>'; break;
         }
         i++;
     })
@@ -228,7 +233,7 @@ function buildStudentsDiplomaTable(users, colors_config) {
     let i = 1;
     for(const j in users){
         const user = users[j];
-        if (user.grade > 3) {
+        if (user.grade >= 3) {
             var row = table.insertRow(i);
             row.id = 'user' + i;
             row.setAttribute("onmousedown", "toggleBorderColor(this)")
@@ -416,10 +421,6 @@ function showAnalyticsSection() {
 
 
 }
-
-
-
-
 
 
 function showDiplomaSection() {

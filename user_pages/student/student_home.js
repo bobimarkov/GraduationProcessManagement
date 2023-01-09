@@ -27,7 +27,6 @@ function submitRequestSpeechAnswer(email, value) {
 
 function setAttandance(email, checkbox) {
     var value = checkbox.checked ? 1 : 0;
-    console.log(value);
     var requestData = {
         "column_name": "attendance",
         "email": email,

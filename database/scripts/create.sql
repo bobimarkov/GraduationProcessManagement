@@ -23,6 +23,7 @@ CREATE TABLE `student` (
     `degree` VARCHAR(99) NOT NULL , 
     `major` VARCHAR(99) NOT NULL , 
     `group` INT NOT NULL , 
+    `has_diploma_right` BOOLEAN ,
     PRIMARY KEY (`fn`) 
 ) ENGINE = InnoDB;
 
