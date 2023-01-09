@@ -454,7 +454,7 @@ function showGivenSection(sectionToBeDisplayed){
     //iterate all sections
     //make all style.display = "none"
     //make the element we want style.display=grid
-    for(let i=0; i<6;i++){
+    for(let i=0; i < sections.length; i++){
        sections[i].style.display = 'none';
 
        if(sections[i].id.localeCompare(sectionToBeDisplayed)==0){
@@ -479,14 +479,15 @@ function showGivenSection(sectionToBeDisplayed){
 //give class "active_header" to only element with elementid
 function activeHeader(elementId){
 
-    headers=[];
-    headers[0]=document.getElementById('analytic_header');
-    headers[1]=document.getElementById('users_header');
-    headers[2]=document.getElementById('edit_header');
-    headers[3]=document.getElementById('diploma_header');
-    headers[4]=document.getElementById('students_header');
+    headers = [
+        'users_header',
+        'students_header',
+        'edit_header',
+        'diploma_header',
+        'analytic_header'];
+    headers = headers.map(x => document.getElementById(x));
 
-    for(let i=0;i<5;i++){
+    for(let i=0 ; i < headers.length ; i++){
         if(headers[i].id.localeCompare(elementId)==0){
             headers[i].classList.add(['active_header']);
         }else{

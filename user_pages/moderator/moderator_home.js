@@ -109,35 +109,10 @@ function getAllStudents() {
             } else {
                 /* redirect to a page based on the user role, passing the id of the user in the url */
                 buildStudentsTable(data);
-                buildEditStudentsTable(data);
             }
         })
 }
 
-function buildEditStudentsTable(data){
-    var table=document.getElementById("edit-students-table");
-
-    let i = 1;
-    let rows = data.users;
-    table.innerHTML="<tr><td>ID</td><td>Име</td><td>Имейл</td><td>Телефон</td><td>ФН</td></tr>";
-    rows.forEach(row_data => {
-        var row = table.insertRow(i);
-        row.id = 'user' + i;
-        var cell0 = row.insertCell(0);
-        var cell1 = row.insertCell(1);
-        var cell2 = row.insertCell(2);
-        var cell3 = row.insertCell(3);
-        var cell4 = row.insertCell(4);
-        cell0.innerHTML = row_data.id;
-        cell1.innerHTML = row_data.name;
-        cell2.innerHTML = row_data.email;
-        cell3.innerHTML = row_data.phone;
-        cell4.innerHTML = row_data.fn;
-        
-        i++;
-    })
-
-}
 
 function buildStudentsTable(data) {
     var table = document.getElementById("students-table");
@@ -355,12 +330,6 @@ function showStudents() {
     getAllStudents();
 }
 
-function showEditSection() {
-    showGivenSection("edit_section");
-    activeHeader("edit_header");
-    getAllUsers();
-}
-
 
 function  showAnalyticsSection() {
 
@@ -426,7 +395,6 @@ function showGivenSection(sectionToBeDisplayed){
     sections = [
         'users_section',
         'students_section',
-        'edit_section',
         'diploma_section',
         'diploma_order_section',
         'analytic_section'];
@@ -436,7 +404,7 @@ function showGivenSection(sectionToBeDisplayed){
     //make all style.display = "none"
     //make the element we want style.display=grid
 
-    for(let i=0; i<6;i++){
+    for(let i=0; i< sections.length ;i++){
        sections[i].style.display = 'none';
 
        if(sections[i].id.localeCompare(sectionToBeDisplayed)==0){
@@ -454,13 +422,12 @@ function activeHeader(elementId){
     headers = [
         'users_header',
         'students_header',
-        'edit_header',
         'diploma_header',
         'analytic_header'];
-        
+
     headers = headers.map(x => document.getElementById(x));
 
-    for(let i=0;i<5;i++){
+    for(let i=0;i<headers.length;i++){
         if(headers[i].id.localeCompare(elementId)==0){
             headers[i].classList.add(['active_header']);
         }else{

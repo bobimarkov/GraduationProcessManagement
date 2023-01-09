@@ -25,8 +25,6 @@ if (!isset($_SESSION["user"]) || !isset($_SESSION["role"]) || (isset($_SESSION["
         <div class="vertical_line"></div>
         <h2 class="navigation_element" id="students_header" onclick="showStudents()">СТУДЕНТИ</h2>
         <div class="vertical_line"></div>
-        <h2 class="navigation_element" id="edit_header" onclick="showEditSection()">РЕДАКТИРАЙ</h2>
-        <div class="vertical_line"></div>
         <h2 class="navigation_element" id="analytic_header" onclick="showAnalyticsSection()">СТАТИСТИКА</h2>
         <div class="vertical_line"></div>
 
@@ -60,20 +58,6 @@ if (!isset($_SESSION["user"]) || !isset($_SESSION["role"]) || (isset($_SESSION["
                     <td>Спец.</td>
                     <td>Група</td>
                     <td>Роля</td>
-                </tr>
-            </table>
-        </div>
-
-        <div id="edit_section">
-        <h3><i class="fas fa-list"></i> Списък студенти</h3>
-            <table class="edit-students-table" id="edit-students-table">
-                <tr>
-                    <td>ID</td>
-                    <td>Име</td>
-                    <td>Имейл</td>
-                    <td>Телефон</td>
-                    <td>ФН</td>
-                    
                 </tr>
             </table>
         </div>
