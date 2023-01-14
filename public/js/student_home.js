@@ -4,14 +4,14 @@ let logoutHeader = document.getElementById("logout_header");
 logoutHeader.addEventListener("click", (e) => {
     sessionStorage.clear();
 
-    window.location.replace("../../index.html");
+    window.location.replace("../../");
 });
 
 function sessionLoader() {
     if (!sessionStorage.getItem("user") || !sessionStorage.getItem("role") || (sessionStorage.getItem("role") && sessionStorage.getItem("role") !== "student")) {
         sessionStorage.clear();
 
-        window.location.replace("../../index.html");
+        window.location.replace("../../");
         return;
     }
     email = sessionStorage.getItem("user");

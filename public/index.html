@@ -1,33 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>Вход</title>
-        <link href="css/login_style.css" rel="stylesheet" />
-        <script defer src="js/login.js"></script>
-        <script src="https://kit.fontawesome.com/ee112817f8.js" crossorigin="anonymous"></script>
+        <title>Управление на дипломиране</title>
+        <link rel="stylesheet" href="css/home_style.css" />
+        <script defer src="js/home.js"></script>
     </head>
-
     <body>
-        <div class="container" id="container">
-            <div class="form-container sign-in-container">
-                <form id="login_form" name="login_form">
-                    <img src="images/su-logo.png" />
-                    <h1>Вход</h1>
-                    <input type="email" name="email" placeholder="Email" required />
-                    <input type="password" name="password" placeholder="Password" required />
-                    <button>Вход</button>
-                </form>
-                <p class="message-bar" id="message-bar-users"></p>
+        <div class="container">
+            <div class="header_section">
+                <img src="images/su-logo.png" />
+                <h1>Дипломиране</h1>
             </div>
-            <div class="overlay-container">
-                <div class="overlay">
-                    <div class="overlay-panel">
-                        <h1>Здравей!</h1>
-                        <p>Въведи своите данни, за да продължиш :)</p>
-                    </div>
-                </div>
-            </div>
+            <div class="graduation_info_section"></div>
+            <button id="to_login_button">Вход за студенти и служители</button>
         </div>
     </body>
 </html>
