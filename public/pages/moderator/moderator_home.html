@@ -113,31 +113,6 @@
                     <td>Дата/час</td>
                 </tr>
             </table>
-            <h3><i class="fas fa-user-edit"></i> Редактиране </h3>
-            <form class="dashboard" id="dashboard">
-                <textarea class="dashboard-textarea-fn" name="dashboard-textarea" id="dashboard_textarea" placeholder="Факуктетни номера (отделени със запетая)"></textarea>
-                <select class="dashboard-action" id="dashboard_action" onchange="showDashboardAdditionalInputElement(this.value)">
-                    <option value="" selected disabled hidden>Изберете действие...</option>
-                    <option value="1">Право на диплома</option>
-                    <option value="2">Готова диплома</option>
-                    <option value="3">Взета</option>
-                    <option value="4">Взета предварително</option>
-                    <option value="5">Коментар</option>
-                    <option value="6">Покана за реч</option>
-                    <option value="7">Взета тога</option>
-                    <option value="8">Върната тога</option>
-                    <option value="9">Взета шапка</option>
-                    <option value="10">Върната шапка</option>
-                </select>
-                <select class="boolean-select-after-select" id="boolean_select_after_select">
-                    <option value="" selected disabled hidden>Изберете стойност...</option>
-                    <option value="Да">Да</option>
-                    <option value="Не">Не</option>
-                </select>
-                <textarea class="textarea-after-select" id="textarea_after_select" placeholder="Коментар..."></textarea>
-                <button type="submit" id="submit_action" class="submit-action" onclick="submitAction(event)">Запази <i class="far fa-save"></i></i></button>
-            </form>
-            <p class="message-bar" id='message-bar-diploma'></p>
 
         </div>
 

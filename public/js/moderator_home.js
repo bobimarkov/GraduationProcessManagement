@@ -179,7 +179,7 @@ function buildStudentsDiplomaTable(users, colors_config) {
     for (const user of users) {
         var row = table.insertRow(i);
         row.id = 'user' + i;
-        row.setAttribute("onmousedown", "toggleBorderColor(this)")
+        // row.setAttribute("onmousedown", "toggleBorderColor(this)")
         var row_data = [
             i,
             user.student_fn,
@@ -239,23 +239,6 @@ function extractColor(color_code) {
     return "<i class='fas fa-square' style='color:" + color_code + ";'></i>";
 }
 
-function toggleBorderColor(c) {
-    var fn = c.cells[1].innerHTML;
-    var fnTextArea = document.getElementById('dashboard_textarea');
-    var currentFns = fnTextArea.value;
-
-    if (c.style.backgroundColor == "slategray") {
-        c.style.backgroundColor = "transparent";
-        c.style.color = "black";
-        currentFns = currentFns.replace(`${fn},`, "");
-        fnTextArea.value = currentFns
-    } else {
-        c.style.backgroundColor = "slategray";
-        c.style.color = "snow";
-        currentFns = currentFns.concat(`${fn},`);
-        fnTextArea.value = currentFns
-    }
-}
 /*---- GET_STUDENTS_DIPLOMA  END ----*/
 
 /*---- SWITCH_SECTIONS  START ----*/
@@ -307,19 +290,6 @@ function showDiplomaSection() {
     showGivenSection("diploma_section");
     activeHeader("diploma_header");
     getStudentsDiplomaInfo();
-    var errElem = document.getElementById('message-bar-diploma');
-    errElem.classList.remove(['success']);
-    errElem.classList.remove(['error']);
-    errElem.innerHTML = "";
-    document.getElementById("dashboard_textarea").value = "";
-    document.getElementById("dashboard_action").selectedIndex = null;
-
-    document.getElementById("textarea_after_select").value = "";
-    document.getElementById("textarea_after_select").style.display = 'none';
-    document.getElementById("boolean_select_after_select").selectedIndex = null;
-    document.getElementById("boolean_select_after_select").style.display = 'none';
-
-    showDiplomaOrderMessage();
 }
 
 //make section visible, giving only its name
@@ -423,22 +393,6 @@ function displayOrderMessage(data) {
 
 }
 
-function showDashboardAdditionalInputElement(value) {
-    document.getElementById("textarea_after_select").value = "";
-    document.getElementById("boolean_select_after_select").selectedIndex = null;
-
-    if (value == 5) {
-        document.getElementById('boolean_select_after_select').style.display = 'none';
-        document.getElementById('textarea_after_select').style.display = 'block';
-    } else {
-        document.getElementById('boolean_select_after_select').style.display = 'block';
-        document.getElementById('textarea_after_select').style.display = 'none';
-    }
-}
-
-//removed submitUsers
-
-//removed editStudent
 
 function submitStudents(event) {
     event.preventDefault;
@@ -469,48 +423,6 @@ function submitStudents(event) {
             }
         });
        
-}
-
-function submitAction(event) {
-    event.preventDefault();
-    var form = document.getElementById('dashboard');
-    var fns = form.dashboard_textarea.value;
-    var action_option = form.dashboard_action.value;
-    var action_content = action_option == 5 ? form.textarea_after_select.value : form.boolean_select_after_select.value
-
-    var action = {
-        "fns": fns,
-        "action_option": action_option,
-        "action_content": action_content
-    };
-
-    fetch('../../api?endpoint=save_action', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify(action)
-    })
-        .then(response => response.json())
-        .then((data) => {
-            var errElem = document.getElementById('message-bar-diploma');
-            if (!data.success) {
-                errElem.classList.remove(['success']);
-                errElem.classList.add(['error']);
-                errElem.innerHTML = data.message;
-            } else {
-                errElem.classList.remove(['error']);
-                errElem.classList.add(['success']);
-                errElem.innerHTML = data.message;
-                document.getElementById("dashboard_textarea").value = "";
-                document.getElementById("dashboard_action").selectedIndex = null;
-                document.getElementById("textarea_after_select").value = "";
-                document.getElementById("textarea_after_select").style.display = 'none';
-                document.getElementById("boolean_select_after_select").selectedIndex = null;
-                document.getElementById("boolean_select_after_select").style.display = 'none';
-            }
-        });
 }
 
 function removeValueFromOtherLists(selectObject) {
