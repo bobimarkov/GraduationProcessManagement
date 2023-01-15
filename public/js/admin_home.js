@@ -69,41 +69,6 @@ function buildUsersTable(data) {
 
 }
 
-function addDeleteUserListener(button, id, username, row_id) {
-    button.addEventListener('click', () => {
-        console.log('detele user with id: ' + id + " and username: " + username);
-
-        var data = {
-            "id": id,
-            "username": username
-        };
-
-        fetch('../../api?endpoint=delete-user', {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(response => response.json())
-            .then((data) => {
-                if (data.error) {
-                    console.log(data.error);
-                } else {
-                    console.log(data.success);
-                    deleteRowFromTable(row_id);
-                }
-            })
-    })
-}
-
-function deleteRowFromTable(id) {
-    let node = document.getElementById(id);
-    if (node.parentNode) {
-        node.parentNode.removeChild(node);
-    }
-}
 /*---- GET_USERS  END ----*/
 
 /*---- GET_STUDENTS  START ----*/

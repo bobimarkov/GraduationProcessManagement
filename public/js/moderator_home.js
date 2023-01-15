@@ -23,6 +23,7 @@ function sessionLoader() {
 sessionLoader();
 
 /*---- GET_USERS  START ----*/
+
 function getAllUsers() {
      fetch(`../../api?endpoint=get_users`, {
         method: 'GET',
@@ -44,66 +45,32 @@ function getAllUsers() {
 function buildUsersTable(data) {
     var table = document.getElementById("users-table");
     let i = 1;
-    let rows = data.users;
+    let users = data.users;
+    const number_columns = 5;
    
    table.innerHTML=" <tr> <td>ID</td> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>Роля</td> </tr>";
-    rows.forEach(row_data => {
+
+    for (const user of users) {
         var row = table.insertRow(i);
         row.id = 'user' + i;
-        var cell0 = row.insertCell(0);
-        var cell1 = row.insertCell(1);
-        var cell2 = row.insertCell(2);
-        var cell3 = row.insertCell(3);
-        var cell4 = row.insertCell(4);
-        cell0.innerHTML = row_data.id;
-        cell1.innerHTML = row_data.name;
-        cell2.innerHTML = row_data.email;
-        cell3.innerHTML = row_data.phone;
-        switch (row_data.role) {
-            case 'admin': cell4.innerHTML = '<i class="fas fa-user-lock user-role-icon"></i>'; break;
-            case 'moderator': cell4.innerHTML = '<i class="fas fa-user-cog user-role-icon"></i>'; break;
-            case 'student': cell4.innerHTML = '<i class="fas fa-user-graduate user-role-icon"></i>'; break;
+        let row_data = [
+            user.id,
+            user.name,
+            user.email,
+            user.phone
+        ];
+        for(var j = 0; j < number_columns - 1; j++) {
+            row.insertCell(j).innerHTML = row_data[j];
+        } 
+        const index_icon_column = number_columns - 1;
+        switch (user.role) {
+            case 'admin': row.insertCell(index_icon_column).innerHTML = '<i class="fas fa-user-lock user-role-icon"></i>'; break;
+            case 'moderator': row.insertCell(index_icon_column).innerHTML = '<i class="fas fa-user-cog user-role-icon"></i>'; break;
+            case 'student': row.insertCell(index_icon_column).innerHTML = '<i class="fas fa-user-graduate user-role-icon"></i>'; break;
         }
-        
-    })
-
-}
-
-function addDeleteUserListener(button, id, username, row_id) {
-    button.addEventListener('click', () => {
-        console.log('delete user with id: ' + id + " and username: " + username);
-
-        var data = {
-            "id": id,
-            "username": username
-        };
-
-        fetch('../../api?endpoint=delete-user', {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(response => response.json())
-            .then((data) => {
-                if (data.error) {
-                    /* display error to user */
-                    console.log(data.error);
-                } else {
-                    console.log(data.success);
-                    deleteRowFromTable(row_id);
-                }
-            })
-    })
-}
-
-function deleteRowFromTable(id) {
-    let node = document.getElementById(id);
-    if (node.parentNode) {
-        node.parentNode.removeChild(node);
+        i++;
     }
+
 }
 /*---- GET_USERS  END ----*/
 
@@ -131,40 +98,35 @@ function getAllStudents() {
 function buildStudentsTable(data) {
     var table = document.getElementById("students-table");
     let i = 1;
-    let rows = data.users;
-    
+    const number_columns = 9;
+    let users = data.users;
     table.innerHTML="<tr> <td>ID</td> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>ФН</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Роля</td> </tr>";
     
-    //console.log("table=",table);
-    rows.forEach(row_data => {
+    for (const user of users) {
         var row = table.insertRow(i);
         row.id = 'user' + i;
-        var cell0 = row.insertCell(0);
-        var cell1 = row.insertCell(1);
-        var cell2 = row.insertCell(2);
-        var cell3 = row.insertCell(3);
-        var cell4 = row.insertCell(4);
-        var cell5 = row.insertCell(5);
-        var cell6 = row.insertCell(6);
-        var cell7 = row.insertCell(7);
-        var cell8 = row.insertCell(8);
-        cell0.innerHTML = row_data.id;
-        cell1.innerHTML = row_data.name;
-        cell2.innerHTML = row_data.email;
-        cell3.innerHTML = row_data.phone;
-        cell4.innerHTML = row_data.fn;
-        cell5.innerHTML = row_data.degree;
-        cell6.innerHTML = row_data.major;
-        cell7.innerHTML = row_data.group;
-        switch (row_data.role) {
-            case 'admin': cell8.innerHTML = '<i class="fas fa-user-lock user-role-icon"></i>'; break;
-            case 'moderator': cell8.innerHTML = '<i class="fas fa-user-cog user-role-icon"></i>'; break;
-            case 'student': cell8.innerHTML = '<i class="fas fa-user-graduate user-role-icon"></i>'; break;
+        let row_data = [
+            user.id,
+            user.name,
+            user.email,
+            user.phone,
+            user.fn,
+            user.degree,
+            user.major,
+            user.group
+        ];
+        for(var j = 0; j < number_columns - 1; j++) {
+            row.insertCell(j).innerHTML = row_data[j];
+        } 
+        const index_icon_column = number_columns - 1;
+        switch (user.role) {
+            case 'admin': row.insertCell(index_icon_column).innerHTML = '<i class="fas fa-user-lock user-role-icon"></i>'; break;
+            case 'moderator': row.insertCell(index_icon_column).innerHTML = '<i class="fas fa-user-cog user-role-icon"></i>'; break;
+            case 'student': row.insertCell(index_icon_column).innerHTML = '<i class="fas fa-user-graduate user-role-icon"></i>'; break;
         }
         i++;
-    })
+    }
    
-
 }
 /*---- GET_STUDENTS  END ----*/
 
@@ -210,77 +172,52 @@ function getColorsConfig(users) {
 
 function buildStudentsDiplomaTable(users, colors_config) {
     var table = document.getElementById("diploma-table");
-    
-    table.innerHTML="";
     table.innerHTML = "<tr> <td>№</td> <td>ФН</td> <td>Име</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Успех</td> <td>Присъствие</td> <td>Има право</td> <td>Готова</td> <td>Взета</td> <td>Заявка взимане предв.</td> <td>Коментар (студент)</td> <td>Взета предв.</td> <td>Дата/час</td> <td>Коментар (администр.)</td> <td>Покана реч</td> <td>Отговор</td> <td>Снимки</td> <td>Заявена тога</td> <td>Взета</td> <td>Дата/час</td> <td>Върната</td> <td>Дата/час</td> <td>Заявена шапка</td> <td>Взета</td> <td>Дата/час</td> <td>Върната</td> <td>Дата/час</td></tr>";
-    
     let i = 1;
-    users.forEach(user => {
+    const number_columns = 29;
+
+    for (const user of users) {
         var row = table.insertRow(i);
         row.id = 'user' + i;
         row.setAttribute("onmousedown", "toggleBorderColor(this)")
-        var cell0 = row.insertCell(0);
-        var cell1 = row.insertCell(1);
-        var cell2 = row.insertCell(2);
-        var cell3 = row.insertCell(3);
-        var cell4 = row.insertCell(4);
-        var cell5 = row.insertCell(5);
-        var cell6 = row.insertCell(6);
-        var cell7 = row.insertCell(7);
-        var cell8 = row.insertCell(8);
-        var cell9 = row.insertCell(9);
-        var cell10 = row.insertCell(10);
-        var cell11 = row.insertCell(11);
-        var cell12 = row.insertCell(12);
-        var cell13 = row.insertCell(13);
-        var cell14 = row.insertCell(14);
-        var cell15 = row.insertCell(15);
-        var cell16 = row.insertCell(16);
-        var cell17 = row.insertCell(17);
-        var cell18 = row.insertCell(18);
-        var cell19 = row.insertCell(19);
-        var cell20 = row.insertCell(20);
-        var cell21 = row.insertCell(21);
-        var cell22 = row.insertCell(22);
-        var cell23 = row.insertCell(23);
-        var cell24 = row.insertCell(24);
-        var cell25 = row.insertCell(25);
-        var cell26 = row.insertCell(26);
-        var cell27 = row.insertCell(27);
-        var cell28 = row.insertCell(28);
-        cell0.innerHTML = i;
-        cell1.innerHTML = user.student_fn;
-        cell2.innerHTML = user.name.concat(" " + getColor(i, users.length, colors_config));
-        cell3.innerHTML = user.degree;
-        cell4.innerHTML = user.major;
-        cell5.innerHTML = user.group;
-        cell6.innerHTML = user.grade;
-        cell7.innerHTML = user.attendance == 0 ? 'Не' : 'Да';
-        cell8.innerHTML = user.has_right == 0 ? 'Не' : 'Да';
-        cell9.innerHTML = user.is_ready == 0 ? 'Не' : 'Да';
-        cell10.innerHTML = user.is_taken == 0 ? 'Не' : 'Да';
-        cell11.innerHTML = user.take_in_advance_request == 0 ? 'Не' : 'Да';
-        cell12.innerHTML = user.take_in_advance_request_comment == null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.take_in_advance_request_comment}</span></i>`;
-        cell13.innerHTML = user.is_taken_in_advance == 0 ? 'Не' : 'Да';
-        cell14.innerHTML = user.taken_at_time;
-        cell15.innerHTML = user.diploma_comment == null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.diploma_comment}</span></i>`
-        cell16.innerHTML = user.speech_request == 0 ? 'Не' : 'Да';
-        cell17.innerHTML = user.speech_response == null ? '-' : user.speech_response;
-        cell18.innerHTML = user.photos_requested == 0 ? 'Не' : 'Да';
-        cell19.innerHTML = user.grown_requested == 0 ? 'Не' : 'Да';
-        cell20.innerHTML = user.grown_taken == 0 ? 'Не' : 'Да';
-        cell21.innerHTML = user.grown_taken_date;
-        cell22.innerHTML = user.grown_returned == 0 ? 'Не' : 'Да';
-        cell23.innerHTML = user.grown_returned_date;
-        cell24.innerHTML = user.hat_requested == 0 ? 'Не' : 'Да';
-        cell25.innerHTML = user.hat_taken == 0 ? 'Не' : 'Да';
-        cell26.innerHTML = user.hat_taken_date;
-        cell27.innerHTML = user.hat_returned == 0 ? 'Не' : 'Да';
-        cell28.innerHTML = user.hat_returned_date;
-        i++;
-    })
-}
+        var row_data = [
+            i,
+            user.student_fn,
+            user.name.concat(" " + getColor(i, users.length, colors_config)),
+            user.degree,
+            user.major,
+            user.group,
+            user.grade,
+            user.attendance == 0 ? 'Не' : 'Да',
+            user.has_right == 0 ? 'Не' : 'Да',
+            user.is_ready == 0 ? 'Не' : 'Да',
+            user.is_taken == 0 ? 'Не' : 'Да',
+            user.take_in_advance_request == 0 ? 'Не' : 'Да',
+            user.take_in_advance_request_comment == null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.take_in_advance_request_comment}</span></i>`,
+            user.is_taken_in_advance == 0 ? 'Не' : 'Да',
+            user.taken_at_time,
+            user.diploma_comment == null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.diploma_comment}</span></i>`,
+            user.speech_request == 0 ? 'Не' : 'Да',
+            user.speech_response == null ? '-' : user.speech_response,
+            user.photos_requested == 0 ? 'Не' : 'Да',
+            user.grown_requested == 0 ? 'Не' : 'Да',
+            user.grown_taken == 0 ? 'Не' : 'Да',
+            user.grown_taken_date,
+            user.grown_returned == 0 ? 'Не' : 'Да',
+            user.grown_returned_date,
+            user.hat_requested == 0 ? 'Не' : 'Да',
+            user.hat_taken == 0 ? 'Не' : 'Да',
+            user.hat_taken_date,
+            user.hat_returned == 0 ? 'Не' : 'Да',
+            user.hat_returned_date,
 
+        ];
+        for(var j = 0; j < number_columns; j++) {
+            row.insertCell(j).innerHTML = row_data[j];
+        } 
+        i++;
+    }
+}
 
 function getColor(i, n, colors_config) {
     var part = Math.round((colors_config[0].color_interval/100 * n));
@@ -299,20 +236,9 @@ function getColor(i, n, colors_config) {
 }
 
 function extractColor(color_code) {
-    switch(color_code) {
-        case "#FF0000": return "<i class='fas fa-square' style='color: #FF0000;'></i>"; break;
-        case "#FFA500": return "<i class='fas fa-square' style='color: #FFA500;'></i>"; break;
-        case "#FFFF00": return "<i class='fas fa-square' style='color: #FFFF00;'></i>"; break;
-        case "#228B22": return "<i class='fas fa-square' style='color: #228B22;'></i>"; break;
-        case "#0000FF": return "<i class='fas fa-square' style='color: #0000FF;'></i>"; break;
-        case "#FF1493": return "<i class='fas fa-square' style='color: #FF1493;'></i>"; break;
-        case "#663399": return "<i class='fas fa-square' style='color: #663399;'></i>"; break;
-        case "#8B4513": return "<i class='fas fa-square' style='color: #8B4513;'></i>"; break;
-        case "#000000": return "<i class='fas fa-square' style='color: #000000;'></i>"; break;
-        case "#F0FFFF": return "<i class='fas fa-square' style='color: #F0FFFF;'></i>"; break;
-        default: return "<i class='fas fa-square' style='color: #A9A9A9;'></i>"
-    }
+    return "<i class='fas fa-square' style='color:" + color_code + ";'></i>";
 }
+
 function toggleBorderColor(c) {
     var fn = c.cells[1].innerHTML;
     var fnTextArea = document.getElementById('dashboard_textarea');
@@ -344,9 +270,7 @@ function showStudents() {
     getAllStudents();
 }
 
-
 function  showAnalyticsSection() {
-
     showGivenSection("analytic_section");
     activeHeader("analytic_header");
 
@@ -376,14 +300,10 @@ function  showAnalyticsSection() {
                 }
             })
 
-    
-  
 }
 
 
-
 function showDiplomaSection() {
-   
     showGivenSection("diploma_section");
     activeHeader("diploma_header");
     getStudentsDiplomaInfo();
@@ -406,7 +326,7 @@ function showDiplomaSection() {
 function showGivenSection(sectionToBeDisplayed){
    
     //get all sections
-    sections = [
+    var sections = [
         'users_section',
         'students_section',
         'diploma_section',
@@ -433,7 +353,7 @@ function showGivenSection(sectionToBeDisplayed){
 //give class "active_header" to only element with elementid
 function activeHeader(elementId){
 
-    headers = [
+    var headers = [
         'users_header',
         'students_header',
         'diploma_header',
@@ -441,7 +361,7 @@ function activeHeader(elementId){
         
     headers = headers.map(x => document.getElementById(x));
 
-    for(let i=0;i<headers.length ;i++){
+    for(let i=0 ; i<headers.length ; i++) {
         if(headers[i].id.localeCompare(elementId)==0){
             headers[i].classList.add(['active_header']);
         }else{
@@ -451,113 +371,6 @@ function activeHeader(elementId){
 
 }
 
-//start of converting differnet data to array
-function dataHasRightToArray(data){
-    const a = [["Имащи право на диплома","Брой студенти"],["Имат право",0],["Нямат право",0]];
-
-    let rows=data.users;
-    rows.forEach(row_data =>{
-        switch(row_data.has_right){
-            case 1: 
-                a[1][1]++;
-                break;
-            case 0:
-                a[2][1]++;
-                break;
-            default:
-                break;
-        }
-    });
-    return a;
-
-}
-
-function dataDegreeToArray(data){
-    const a = [["Степен на образование","Брой студенти"],["Бакалавър",0],["Магистър",0]];
-    
-    let rows=data.users;
-    rows.forEach(row_data =>{
-        switch(row_data.degree){
-            case 'Б': 
-                a[1][1]++;
-                break;
-            case 'М':
-                a[2][1]++;
-                break;
-            default:
-                break;
-        }
-    });
-    return a;
-}
-function dataGradesToArray(data){
-    const a=[["Оценка","Брой студенти с такава оценка"],["[2-3)",0],["[3,4)",0],["[4,5)",0],["[5,6]",0]];
-    let rows=data.users;
-    rows.forEach(row_data =>{
-        if(row_data.grade>=2 && row_data.grade<3){
-            a[1][1]++;
-        }else if (row_data.grade>=3 && row_data.grade<4){
-            a[2][1]++;
-        }else if (row_data.grade>=4 && row_data.grade<5){
-            a[3][1]++;
-        }else {
-            a[4][1]++;
-        }
-    });
-    return a;
-}
-
-
-function dataMajorToArray(data){
-
-    const a = [["Специалност","Брой студенти"],["СИ",0],["КН",0],["ИС",0],["И",0],["М",0],["С",0],["х",0]];
-
-    let rows=data.users;
-    rows.forEach(row_data =>{
-        switch(row_data.major){
-            case 'СИ': 
-                a[1][1]++;
-                break;
-            case 'КН':
-                a[2][1]++;
-                break;
-            case 'ИС':
-                a[3][1]++;
-                break;
-            case 'И':
-                a[4][1]++;
-                break;
-            case 'М':
-                a[5][1]++;
-                break;
-            case 'С':
-                a[6][1]++;
-                break;
-            default:
-                a[7][1]++;
-                break;
-        }
-    });
-    return a;
-
-
-}
-//end of converting different data to array
-
-
-
-// Draw the chart and set the chart values
-function drawChart(majorData, id,titleMessage) {
-    
-  var data = google.visualization.arrayToDataTable(majorData);
-
-  // Optional; add a title and set the width and height of the chart
-  var options = {'title':titleMessage, 'width':550, 'height':400};
-
-  // Display the chart inside the <div> element with id="piechart"
-  var chart = new google.visualization.PieChart(document.getElementById(id));
-  chart.draw(data, options);
-} 
 
 function showDiplomaOrderMessage() {
     var order_message = document.getElementById('message-bar-diploma-order');
@@ -832,3 +645,111 @@ function filterActivate(){
 }
 
 //Filters End
+
+
+//start of converting differnet data to array
+function dataHasRightToArray(data){
+    const a = [["Имащи право на диплома","Брой студенти"],["Имат право",0],["Нямат право",0]];
+
+    let rows=data.users;
+    rows.forEach(row_data =>{
+        switch(row_data.has_right){
+            case 1: 
+                a[1][1]++;
+                break;
+            case 0:
+                a[2][1]++;
+                break;
+            default:
+                break;
+        }
+    });
+    return a;
+
+}
+
+function dataDegreeToArray(data){
+    const a = [["Степен на образование","Брой студенти"],["Бакалавър",0],["Магистър",0]];
+    
+    let rows=data.users;
+    rows.forEach(row_data =>{
+        switch(row_data.degree){
+            case 'Б': 
+                a[1][1]++;
+                break;
+            case 'М':
+                a[2][1]++;
+                break;
+            default:
+                break;
+        }
+    });
+    return a;
+}
+function dataGradesToArray(data){
+    const a=[["Оценка","Брой студенти с такава оценка"],["[2-3)",0],["[3,4)",0],["[4,5)",0],["[5,6]",0]];
+    let rows=data.users;
+    rows.forEach(row_data =>{
+        if(row_data.grade>=2 && row_data.grade<3){
+            a[1][1]++;
+        }else if (row_data.grade>=3 && row_data.grade<4){
+            a[2][1]++;
+        }else if (row_data.grade>=4 && row_data.grade<5){
+            a[3][1]++;
+        }else {
+            a[4][1]++;
+        }
+    });
+    return a;
+}
+
+
+function dataMajorToArray(data){
+
+    const a = [["Специалност","Брой студенти"],["СИ",0],["КН",0],["ИС",0],["И",0],["М",0],["С",0],["х",0]];
+
+    let rows=data.users;
+    rows.forEach(row_data =>{
+        switch(row_data.major){
+            case 'СИ': 
+                a[1][1]++;
+                break;
+            case 'КН':
+                a[2][1]++;
+                break;
+            case 'ИС':
+                a[3][1]++;
+                break;
+            case 'И':
+                a[4][1]++;
+                break;
+            case 'М':
+                a[5][1]++;
+                break;
+            case 'С':
+                a[6][1]++;
+                break;
+            default:
+                a[7][1]++;
+                break;
+        }
+    });
+    return a;
+
+
+}
+//end of converting different data to array
+
+
+// Draw the chart and set the chart values
+function drawChart(majorData, id,titleMessage) {
+    
+    var data = google.visualization.arrayToDataTable(majorData);
+  
+    // Optional; add a title and set the width and height of the chart
+    var options = {'title':titleMessage, 'width':550, 'height':400};
+  
+    // Display the chart inside the <div> element with id="piechart"
+    var chart = new google.visualization.PieChart(document.getElementById(id));
+    chart.draw(data, options);
+  } 
