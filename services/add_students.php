@@ -10,9 +10,19 @@ $data_array = array();
 $users_data = "";
 session_start();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $data = json_decode(file_get_contents("php://input"));
-
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (!empty($_FILES['file']['tmp_name'])) {
+        $data = '';
+        foreach ($_FILES['file']['tmp_name'] as $key => $tmp_name) {
+            $file_handle = fopen($tmp_name, "r");
+            $file_content = fread($file_handle, filesize($tmp_name));
+            fclose($file_handle);
+            $data .= $file_content . "\n";
+        }
+    } else {
+        $data = json_decode(file_get_contents("php://input"));
+    }
+    
     if (empty(trim($data))) {
         $response = array("success" => false, "message" => "Грешка: Моля, въведете данни за студент(и).");
         echo json_encode($response);
@@ -54,8 +64,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 function validateInput($values, $user, $i)
 {
-    $alpha_numeric_pattern  = "/^[a-zA-Z\p{Cyrillic}0-9\s\-]+$/u";
-    $letters_only_pattern  = "/^[a-zA-Z\p{Cyrillic}\s\-]+$/u";
+    $alpha_numeric_pattern = "/^[a-zA-Z\p{Cyrillic}0-9\s\-]+$/u";
+    $letters_only_pattern = "/^[a-zA-Z\p{Cyrillic}\s\-]+$/u";
 
     $values_trimmed = array_map("trim", $values);
     $values_indexed = array_values($values_trimmed);
@@ -69,7 +79,7 @@ function validateInput($values, $user, $i)
     if (
         empty($values_indexed[0]) || empty($values_indexed[1]) || empty($values_indexed[2]) || empty($values_indexed[3]) || empty($values_indexed[4])
         || empty($values_indexed[5]) || empty($values_indexed[6]) || empty($values_indexed[7]) || empty($values_indexed[8] || empty($values_indexed[9]))
-    ) { 
+    ) {
         $response = array("success" => false, "message" => "Грешка за студент $i ($user) - стойностите не трябва да са празни!");
         echo json_encode($response);
         die;
@@ -154,16 +164,6 @@ function validateInput($values, $user, $i)
         die;
     }
 
-    /*$has_diploma_right = $values_indexed[9];
-    if ($has_diploma_right != "" && $has_diploma_right != 0 && $has_diploma_right != 1) {
-        $response = array("success" => false, "message" => "Грешка за потребител $i ($user) - правото на диплома може да е само 0(НЕ) или 1(ДА)!");
-        echo json_encode($response);
-        die;
-    }
-    if ($has_diploma_right != "") {
-        $values_indexed[9] = 0;
-    }*/
-
     $grade = $values_indexed[9];
     // echo $grade;
     if (!is_numeric($grade) && $grade != '-') {
@@ -233,12 +233,7 @@ function exportStudentsToDB($users_arr_2d)
             "role" => $values[4]
         ]);
 
-        if (floatval($values[9]) < 3 || $values[9] === '-') {
-            $has_diploma_right = 0;
-        }
-        else {
-            $has_diploma_right = 1;
-        }
+        $has_diploma_right = (floatval($values[9]) < 3 || $values[9] === '-') ? 0 : 1;
 
         //get the id of the registered user
         $stmt_id_extract->execute(["email" => $values[0]]);

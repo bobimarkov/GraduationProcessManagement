@@ -441,6 +441,14 @@ h3 {
     color: #2f4f4f;
 }
 
+#import_files, #export_files{
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 1%;
+    width: 100%;
+    background-color: rgba(247, 241, 241, 0.603);
+}
+
 
 /* Newly added*/
 

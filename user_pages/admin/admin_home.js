@@ -168,10 +168,7 @@ function buildStudentsTable(data) {
         cell5.innerHTML = row_data.degree;
         cell6.innerHTML = row_data.major;
         cell7.innerHTML = row_data.group;
-        switch (row_data.has_diploma_right) {
-            case 0 : cell8.innerHTML = "Не"; break;
-            case 1 : cell8.innerHTML = "Да"; break;
-        }
+        cell8.innerHTML = row_data.has_diploma_right === 0 ? "Не" : "Да";
         switch (row_data.role) {
             case 'admin': cell9.innerHTML = '<i class="fas fa-user-lock user-role-icon"></i>'; break;
             case 'moderator': cell9.innerHTML = '<i class="fas fa-user-cog user-role-icon"></i>'; break;
@@ -231,7 +228,7 @@ function buildStudentsDiplomaTable(users, colors_config) {
     table.innerHTML = "<tr> <td>№</td> <td>ФН</td> <td>Име</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Успех</td> <td>Присъствие</td> <td>Има право</td> <td>Готова</td> <td>Взета</td> <td>Заявка взимане предв.</td> <td>Коментар (студент)</td> <td>Взета предв.</td> <td>Дата/час</td> <td>Коментар (администр.)</td> <td>Покана реч</td> <td>Отговор</td> <td>Снимки</td> <td>Заявена тога</td> <td>Взета</td> <td>Дата/час</td> <td>Върната</td> <td>Дата/час</td> <td>Заявена шапка</td> <td>Взета</td> <td>Дата/час</td> <td>Върната</td> <td>Дата/час</td></tr>";
 
     let i = 1;
-    for(const j in users){
+    for (const j in users) {
         const user = users[j];
         if (user.grade >= 3) {
             var row = table.insertRow(i);
@@ -736,18 +733,10 @@ function editStudent(event) {
     form.editStudentTextarea.valuе = null;
 }
 
-function submitStudents(event) {
-    event.preventDefault;
-    var form = document.getElementById('add_students_form');
-    var studentsData = form.studentTextarea.value;
-
-    fetch('../../services/add_students.php', {
+function submitStudentHelper(url, bodyData) {
+    fetch(url, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify(studentsData)
+        body: bodyData
     })
         .then(response => response.json())
         .then((data) => {
@@ -764,8 +753,31 @@ function submitStudents(event) {
                 showStudents();
             }
         });
-
 }
+
+
+function submitStudents(event) {
+    event.preventDefault;
+    var form = document.getElementById('add_students_form');
+    var studentsData = form.studentTextarea.value;
+
+    submitStudentHelper('../../services/add_students.php', JSON.stringify(studentsData));
+    
+}
+
+function submitStudentsFromFile(event) {
+    event.preventDefault();
+    const files = document.getElementById('file').files;
+    const formData = new FormData();
+    for(let i=0; i<files.length; i++){
+        formData.append('file[]', files[i]);
+    }
+
+    submitStudentHelper('../../services/add_students.php', formData);
+    document.getElementById('file').value = "";    
+}
+
+
 
 function submitAction(event) {
     event.preventDefault();
@@ -940,4 +952,17 @@ function filterActivate() {
 
 }
 
-//Filters End
+function exportStudents() {
+    var allStudentsFromTable = [];
+    myTable = document.getElementById("students-table");
+    myTableBody = myTable.getElementsByTagName("tbody")[0];
+    myRow = myTableBody.getElementsByTagName("tr");
+    for (let j = 1; j < myRow.length ; j++) {
+        myCell = myRow[j].getElementsByTagName("td");
+        var students = [];
+        for (let i = 0; i < myCell.length - 1; i++) {
+            students.push(myCell[i].innerHTML);
+        }
+        allStudentsFromTable.push(students);
+    }
+}
