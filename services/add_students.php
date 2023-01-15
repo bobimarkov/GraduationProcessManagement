@@ -51,6 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+
 function validateInput($values, $user, $i)
 {
     $alpha_numeric_pattern  = "/^[a-zA-Z\p{Cyrillic}0-9\s\-]+$/u";
@@ -59,17 +60,16 @@ function validateInput($values, $user, $i)
     $values_trimmed = array_map("trim", $values);
     $values_indexed = array_values($values_trimmed);
 
-    if (count($values) != 11) {
-        $response = array("success" => false, "message" => "Грешка за студент $i ($user) - стойностите трябва да са 9 на брой! \nМоля, отделяйте всеки студент на нов ред.");
+    if (count($values) != 10) {
+        $response = array("success" => false, "message" => "Грешка за студент $i ($user) - стойностите трябва да са 10 на брой! \nМоля, отделяйте всеки студент на нов ред.");
         echo json_encode($response);
         die;
     }
 
     if (
         empty($values_indexed[0]) || empty($values_indexed[1]) || empty($values_indexed[2]) || empty($values_indexed[3]) || empty($values_indexed[4])
-        || empty($values_indexed[5]) || empty($values_indexed[6]) || empty($values_indexed[7]) || empty($values_indexed[8])
-        || empty($values_indexed[10])
-    ) { // без 9 т.к. там може да е 0, а trim на 60 ред ще я изтрие
+        || empty($values_indexed[5]) || empty($values_indexed[6]) || empty($values_indexed[7]) || empty($values_indexed[8] || empty($values_indexed[9]))
+    ) { 
         $response = array("success" => false, "message" => "Грешка за студент $i ($user) - стойностите не трябва да са празни!");
         echo json_encode($response);
         die;
@@ -154,7 +154,7 @@ function validateInput($values, $user, $i)
         die;
     }
 
-    $has_diploma_right = $values_indexed[9];
+    /*$has_diploma_right = $values_indexed[9];
     if ($has_diploma_right != "" && $has_diploma_right != 0 && $has_diploma_right != 1) {
         $response = array("success" => false, "message" => "Грешка за потребител $i ($user) - правото на диплома може да е само 0(НЕ) или 1(ДА)!");
         echo json_encode($response);
@@ -162,11 +162,11 @@ function validateInput($values, $user, $i)
     }
     if ($has_diploma_right != "") {
         $values_indexed[9] = 0;
-    }
+    }*/
 
-    $grade = $values_indexed[10];
+    $grade = $values_indexed[9];
     // echo $grade;
-    if (!is_numeric($grade)) {
+    if (!is_numeric($grade) && $grade != '-') {
         $response = array("success" => false, "message" => "Грешка за потребител $i ($user) - оценката трябва да е двоично число със запетая!");
         echo json_encode($response);
         die;
@@ -196,8 +196,8 @@ function exportStudentsToDB($users_arr_2d)
                                      WHERE user.email = :email");
     $stmt_register_user = $conn->prepare("INSERT INTO `user` (`email`, `password`, `name`, `phone`, `role`) 
                                           VALUES (:email, :password, :name, :phone, :role)");
-    $stmt_register_student = $conn->prepare("INSERT INTO `student` (`fn`, `user_id`, `degree`, `major`, `group`) 
-                                             VALUES (:fn, :user_id, :degree, :major, :group)");
+    $stmt_register_student = $conn->prepare("INSERT INTO `student` (`fn`, `user_id`, `degree`, `major`, `group`, `has_diploma_right`) 
+                                             VALUES (:fn, :user_id, :degree, :major, :group, :has_diploma_right)");
     $stmt_register_student_diploma = $conn->prepare("INSERT INTO `student_diploma` (`student_fn`, `has_right`, `grade`) 
                                              VALUES (:student_fn, :has_right, :grade)");
     $stmt_register_student_grown = $conn->prepare("INSERT INTO `student_grown` (`student_fn`) 
@@ -232,6 +232,14 @@ function exportStudentsToDB($users_arr_2d)
             "phone" => $values[3],
             "role" => $values[4]
         ]);
+
+        if (floatval($values[9]) < 3 || $values[9] === '-') {
+            $has_diploma_right = 0;
+        }
+        else {
+            $has_diploma_right = 1;
+        }
+
         //get the id of the registered user
         $stmt_id_extract->execute(["email" => $values[0]]);
         $id = $stmt_id_extract->fetchAll();
@@ -242,12 +250,13 @@ function exportStudentsToDB($users_arr_2d)
                 "user_id" => $id[0]["id"],
                 "degree" => $values[6],
                 "major" => $values[7],
-                "group" => $values[8]
+                "group" => $values[8],
+                "has_diploma_right" => $has_diploma_right,
             ]);
             $stmt_register_student_diploma->execute([
                 "student_fn" => $values[5],
-                "has_right" => $values[9],
-                "grade" => $values[10]
+                "has_right" => $has_diploma_right,
+                "grade" => $values[9],
             ]);
             $stmt_register_student_grown->execute([
                 "student_fn" => $values[5]

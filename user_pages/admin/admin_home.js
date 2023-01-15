@@ -3,11 +3,11 @@ getAllUsers();
 getAllStudents();
 getStudentsDiplomaInfo();
 // Load google charts
-google.charts.load('current', {'packages':['corechart']});
+google.charts.load('current', { 'packages': ['corechart'] });
 
 /*---- GET_USERS  START ----*/
 function getAllUsers() {
-     fetch(`../../services/get_users.php`, {
+    fetch(`../../services/get_users.php`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -30,8 +30,8 @@ function buildUsersTable(data) {
     var table = document.getElementById("users-table");
     let i = 1;
     let rows = data.users;
-   
-   table.innerHTML=" <tr> <td>ID</td> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>Роля</td> </tr>";
+
+    table.innerHTML = " <tr> <td>ID</td> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>Роля</td> </tr>";
     rows.forEach(row_data => {
         var row = table.insertRow(i);
         row.id = 'user' + i;
@@ -49,7 +49,7 @@ function buildUsersTable(data) {
             case 'moderator': cell4.innerHTML = '<i class="fas fa-user-cog user-role-icon"></i>'; break;
             case 'student': cell4.innerHTML = '<i class="fas fa-user-graduate user-role-icon"></i>'; break;
         }
-        
+
     })
 
 }
@@ -114,12 +114,12 @@ function getAllStudents() {
         })
 }
 
-function buildEditStudentsTable(data){
-    var table=document.getElementById("edit-students-table");
+function buildEditStudentsTable(data) {
+    var table = document.getElementById("edit-students-table");
 
     let i = 1;
     let rows = data.users;
-    table.innerHTML="<tr><td>ID</td><td>Име</td><td>Имейл</td><td>Телефон</td><td>ФН</td></tr>";
+    table.innerHTML = "<tr><td>ID</td><td>Име</td><td>Имейл</td><td>Телефон</td><td>ФН</td></tr>";
     rows.forEach(row_data => {
         var row = table.insertRow(i);
         row.id = 'user' + i;
@@ -133,7 +133,7 @@ function buildEditStudentsTable(data){
         cell2.innerHTML = row_data.email;
         cell3.innerHTML = row_data.phone;
         cell4.innerHTML = row_data.fn;
-        
+
         i++;
     })
 
@@ -143,9 +143,9 @@ function buildStudentsTable(data) {
     var table = document.getElementById("students-table");
     let i = 1;
     let rows = data.users;
-    
-    table.innerHTML="<tr> <td>ID</td> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>ФН</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Роля</td> </tr>";
-    
+
+    table.innerHTML = "<tr> <td>ID</td> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>ФН</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Дипломиращ се</td> <td>Роля</td> </tr>";
+
     //console.log("table=",table);
     rows.forEach(row_data => {
         var row = table.insertRow(i);
@@ -159,6 +159,7 @@ function buildStudentsTable(data) {
         var cell6 = row.insertCell(6);
         var cell7 = row.insertCell(7);
         var cell8 = row.insertCell(8);
+        var cell9 = row.insertCell(9);
         cell0.innerHTML = row_data.id;
         cell1.innerHTML = row_data.name;
         cell2.innerHTML = row_data.email;
@@ -167,14 +168,18 @@ function buildStudentsTable(data) {
         cell5.innerHTML = row_data.degree;
         cell6.innerHTML = row_data.major;
         cell7.innerHTML = row_data.group;
+        switch (row_data.has_diploma_right) {
+            case 0 : cell8.innerHTML = "Не"; break;
+            case 1 : cell8.innerHTML = "Да"; break;
+        }
         switch (row_data.role) {
-            case 'admin': cell8.innerHTML = '<i class="fas fa-user-lock user-role-icon"></i>'; break;
-            case 'moderator': cell8.innerHTML = '<i class="fas fa-user-cog user-role-icon"></i>'; break;
-            case 'student': cell8.innerHTML = '<i class="fas fa-user-graduate user-role-icon"></i>'; break;
+            case 'admin': cell9.innerHTML = '<i class="fas fa-user-lock user-role-icon"></i>'; break;
+            case 'moderator': cell9.innerHTML = '<i class="fas fa-user-cog user-role-icon"></i>'; break;
+            case 'student': cell9.innerHTML = '<i class="fas fa-user-graduate user-role-icon"></i>'; break;
         }
         i++;
     })
-   
+
 
 }
 /*---- GET_STUDENTS  END ----*/
@@ -202,99 +207,104 @@ function getStudentsDiplomaInfo() {
 
 function getColorsConfig(users) {
     fetch('../../services/get_graduation_colors.php', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        })
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
         .then(response => response.json())
         .then((data) => {
             if (!data.success) {
-                buildStudentsDiplomaTable(users,null);
+                buildStudentsDiplomaTable(users, null);
             } else {
                 var colors_config = data.graduation_colors;
-                buildStudentsDiplomaTable(users,colors_config);
+                buildStudentsDiplomaTable(users, colors_config);
             }
         });
 }
 
 function buildStudentsDiplomaTable(users, colors_config) {
     var table = document.getElementById("diploma-table");
-    
-    table.innerHTML="";
+
+    table.innerHTML = "";
     table.innerHTML = "<tr> <td>№</td> <td>ФН</td> <td>Име</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Успех</td> <td>Присъствие</td> <td>Има право</td> <td>Готова</td> <td>Взета</td> <td>Заявка взимане предв.</td> <td>Коментар (студент)</td> <td>Взета предв.</td> <td>Дата/час</td> <td>Коментар (администр.)</td> <td>Покана реч</td> <td>Отговор</td> <td>Снимки</td> <td>Заявена тога</td> <td>Взета</td> <td>Дата/час</td> <td>Върната</td> <td>Дата/час</td> <td>Заявена шапка</td> <td>Взета</td> <td>Дата/час</td> <td>Върната</td> <td>Дата/час</td></tr>";
-    
+
     let i = 1;
-    users.forEach(user => {
-        var row = table.insertRow(i);
-        row.id = 'user' + i;
-        row.setAttribute("onmousedown", "toggleBorderColor(this)")
-        var cell0 = row.insertCell(0);
-        var cell1 = row.insertCell(1);
-        var cell2 = row.insertCell(2);
-        var cell3 = row.insertCell(3);
-        var cell4 = row.insertCell(4);
-        var cell5 = row.insertCell(5);
-        var cell6 = row.insertCell(6);
-        var cell7 = row.insertCell(7);
-        var cell8 = row.insertCell(8);
-        var cell9 = row.insertCell(9);
-        var cell10 = row.insertCell(10);
-        var cell11 = row.insertCell(11);
-        var cell12 = row.insertCell(12);
-        var cell13 = row.insertCell(13);
-        var cell14 = row.insertCell(14);
-        var cell15 = row.insertCell(15);
-        var cell16 = row.insertCell(16);
-        var cell17 = row.insertCell(17);
-        var cell18 = row.insertCell(18);
-        var cell19 = row.insertCell(19);
-        var cell20 = row.insertCell(20);
-        var cell21 = row.insertCell(21);
-        var cell22 = row.insertCell(22);
-        var cell23 = row.insertCell(23);
-        var cell24 = row.insertCell(24);
-        var cell25 = row.insertCell(25);
-        var cell26 = row.insertCell(26);
-        var cell27 = row.insertCell(27);
-        var cell28 = row.insertCell(28);
-        cell0.innerHTML = i;
-        cell1.innerHTML = user.student_fn;
-        cell2.innerHTML = user.name.concat(" " + getColor(i, users.length, colors_config));
-        cell3.innerHTML = user.degree;
-        cell4.innerHTML = user.major;
-        cell5.innerHTML = user.group;
-        cell6.innerHTML = user.grade;
-        cell7.innerHTML = user.attendance == 0 ? 'Не' : 'Да';
-        cell8.innerHTML = user.has_right == 0 ? 'Не' : 'Да';
-        cell9.innerHTML = user.is_ready == 0 ? 'Не' : 'Да';
-        cell10.innerHTML = user.is_taken == 0 ? 'Не' : 'Да';
-        cell11.innerHTML = user.take_in_advance_request == 0 ? 'Не' : 'Да';
-        cell12.innerHTML = user.take_in_advance_request_comment == null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.take_in_advance_request_comment}</span></i>`;
-        cell13.innerHTML = user.is_taken_in_advance == 0 ? 'Не' : 'Да';
-        cell14.innerHTML = user.taken_at_time;
-        cell15.innerHTML = user.diploma_comment == null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.diploma_comment}</span></i>`
-        cell16.innerHTML = user.speech_request == 0 ? 'Не' : 'Да';
-        cell17.innerHTML = user.speech_response == null ? '-' : user.speech_response;
-        cell18.innerHTML = user.photos_requested == 0 ? 'Не' : 'Да';
-        cell19.innerHTML = user.grown_requested == 0 ? 'Не' : 'Да';
-        cell20.innerHTML = user.grown_taken == 0 ? 'Не' : 'Да';
-        cell21.innerHTML = user.grown_taken_date;
-        cell22.innerHTML = user.grown_returned == 0 ? 'Не' : 'Да';
-        cell23.innerHTML = user.grown_returned_date;
-        cell24.innerHTML = user.hat_requested == 0 ? 'Не' : 'Да';
-        cell25.innerHTML = user.hat_taken == 0 ? 'Не' : 'Да';
-        cell26.innerHTML = user.hat_taken_date;
-        cell27.innerHTML = user.hat_returned == 0 ? 'Не' : 'Да';
-        cell28.innerHTML = user.hat_returned_date;
-        i++;
-    })
+    for(const j in users){
+        const user = users[j];
+        if (user.grade >= 3) {
+            var row = table.insertRow(i);
+            row.id = 'user' + i;
+            row.setAttribute("onmousedown", "toggleBorderColor(this)")
+            var cell0 = row.insertCell(0);
+            var cell1 = row.insertCell(1);
+            var cell2 = row.insertCell(2);
+            var cell3 = row.insertCell(3);
+            var cell4 = row.insertCell(4);
+            var cell5 = row.insertCell(5);
+            var cell6 = row.insertCell(6);
+            var cell7 = row.insertCell(7);
+            var cell8 = row.insertCell(8);
+            var cell9 = row.insertCell(9);
+            var cell10 = row.insertCell(10);
+            var cell11 = row.insertCell(11);
+            var cell12 = row.insertCell(12);
+            var cell13 = row.insertCell(13);
+            var cell14 = row.insertCell(14);
+            var cell15 = row.insertCell(15);
+            var cell16 = row.insertCell(16);
+            var cell17 = row.insertCell(17);
+            var cell18 = row.insertCell(18);
+            var cell19 = row.insertCell(19);
+            var cell20 = row.insertCell(20);
+            var cell21 = row.insertCell(21);
+            var cell22 = row.insertCell(22);
+            var cell23 = row.insertCell(23);
+            var cell24 = row.insertCell(24);
+            var cell25 = row.insertCell(25);
+            var cell26 = row.insertCell(26);
+            var cell27 = row.insertCell(27);
+            var cell28 = row.insertCell(28);
+            cell0.innerHTML = i;
+            cell1.innerHTML = user.student_fn;
+            cell2.innerHTML = user.name.concat(" " + getColor(i, users.length, colors_config));
+            cell3.innerHTML = user.degree;
+            cell4.innerHTML = user.major;
+            cell5.innerHTML = user.group;
+            cell6.innerHTML = user.grade;
+            cell7.innerHTML = user.attendance == 0 ? 'Не' : 'Да';
+            cell8.innerHTML = user.grade < 3 ? 'Не' : 'Да';
+            cell9.innerHTML = user.is_ready == 0 ? 'Не' : 'Да';
+            cell10.innerHTML = user.is_taken == 0 ? 'Не' : 'Да';
+            cell11.innerHTML = user.take_in_advance_request == 0 ? 'Не' : 'Да';
+            cell12.innerHTML = user.take_in_advance_request_comment == null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.take_in_advance_request_comment}</span></i>`;
+            cell13.innerHTML = user.is_taken_in_advance == 0 ? 'Не' : 'Да';
+            cell14.innerHTML = user.taken_at_time;
+            cell15.innerHTML = user.diploma_comment == null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.diploma_comment}</span></i>`
+            cell16.innerHTML = user.speech_request == 0 ? 'Не' : 'Да';
+            cell17.innerHTML = user.speech_response == null ? '-' : user.speech_response;
+            cell18.innerHTML = user.photos_requested == 0 ? 'Не' : 'Да';
+            cell19.innerHTML = user.grown_requested == 0 ? 'Не' : 'Да';
+            cell20.innerHTML = user.grown_taken == 0 ? 'Не' : 'Да';
+            cell21.innerHTML = user.grown_taken_date;
+            cell22.innerHTML = user.grown_returned == 0 ? 'Не' : 'Да';
+            cell23.innerHTML = user.grown_returned_date;
+            cell24.innerHTML = user.hat_requested == 0 ? 'Не' : 'Да';
+            cell25.innerHTML = user.hat_taken == 0 ? 'Не' : 'Да';
+            cell26.innerHTML = user.hat_taken_date;
+            cell27.innerHTML = user.hat_returned == 0 ? 'Не' : 'Да';
+            cell28.innerHTML = user.hat_returned_date;
+
+
+            i++;
+        }
+    }
 }
 
 
 function getColor(i, n, colors_config) {
-    var part = Math.round((colors_config[0].color_interval/100 * n));
+    var part = Math.round((colors_config[0].color_interval / 100 * n));
     var current_part = part;
     var color_index = 1;
 
@@ -310,7 +320,7 @@ function getColor(i, n, colors_config) {
 }
 
 function extractColor(color_code) {
-    switch(color_code) {
+    switch (color_code) {
         case "#FF0000": return "<i class='fas fa-square' style='color: #FF0000;'></i>"; break;
         case "#FFA500": return "<i class='fas fa-square' style='color: #FFA500;'></i>"; break;
         case "#FFFF00": return "<i class='fas fa-square' style='color: #FFFF00;'></i>"; break;
@@ -345,10 +355,10 @@ function toggleBorderColor(c) {
 
 /*---- SWITCH_SECTIONS  START ----*/
 function showUsers() {
-    
+
     showGivenSection("users_section");
     activeHeader("users_header");
-    
+
     var errElem = document.getElementById('message-bar-users');
     errElem.classList.remove(['success']);
     errElem.classList.remove(['error']);
@@ -357,7 +367,7 @@ function showUsers() {
 }
 
 function showStudents() {
-    
+
     showGivenSection("students_section");
     activeHeader("students_header");
     getAllStudents();
@@ -369,7 +379,7 @@ function showStudents() {
 }
 
 function showEditSection() {
-   
+
     showGivenSection("edit_section");
     activeHeader("edit_header");
     getAllUsers();
@@ -377,48 +387,44 @@ function showEditSection() {
 }
 
 
-function  showAnalyticsSection() {
+function showAnalyticsSection() {
 
     showGivenSection("analytic_section");
     activeHeader("analytic_header");
 
-        fetch(`../../services/get_students_diploma.php`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-        })
-            .then(response => response.json())
-            .then((data) => {
-                if (data.error) {
-                    // display error to user 
-                    console.log(data.error);
-                } else {
-                    
-                    //build piecharts from data
-                    let studentMajorData= dataMajorToArray(data);
-                    let studentGradeData = dataGradesToArray(data); 
-                    let studentDegreeData = dataDegreeToArray(data);
-                    let studentHasRightData = dataHasRightToArray(data);
-                    google.charts.setOnLoadCallback(drawChart(studentMajorData,"analytics1","Брой стундети с дадена специалност"));
-                    google.charts.setOnLoadCallback(drawChart(studentGradeData,"analytics2","Брой студенти с дадени оценки"));
-                    google.charts.setOnLoadCallback(drawChart(studentDegreeData,"analytics3","Брой студенти с дадени степени на образование"));
-                    google.charts.setOnLoadCallback(drawChart(studentHasRightData,"analytics4","Студенти имащи право на диплома"));
-                }
-            })
+    fetch(`../../services/get_students_diploma.php`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+    })
+        .then(response => response.json())
+        .then((data) => {
+            if (data.error) {
+                // display error to user 
+                console.log(data.error);
+            } else {
 
-    
-  
+                //build piecharts from data
+                let studentMajorData = dataMajorToArray(data);
+                let studentGradeData = dataGradesToArray(data);
+                let studentDegreeData = dataDegreeToArray(data);
+                let studentHasRightData = dataHasRightToArray(data);
+                google.charts.setOnLoadCallback(drawChart(studentMajorData, "analytics1", "Брой стундети с дадена специалност"));
+                google.charts.setOnLoadCallback(drawChart(studentGradeData, "analytics2", "Брой студенти с дадени оценки"));
+                google.charts.setOnLoadCallback(drawChart(studentDegreeData, "analytics3", "Брой студенти с дадени степени на образование"));
+                google.charts.setOnLoadCallback(drawChart(studentHasRightData, "analytics4", "Студенти имащи право на диплома"));
+            }
+        })
+
+
+
 }
 
 
-
-
-
-
 function showDiplomaSection() {
-   
+
     showGivenSection("diploma_section");
     activeHeader("diploma_header");
     getStudentsDiplomaInfo();
@@ -438,57 +444,57 @@ function showDiplomaSection() {
 }
 
 //make section visible, giving only its name
-function showGivenSection(sectionToBeDisplayed){
-   
+function showGivenSection(sectionToBeDisplayed) {
+
     //get all sections
-    sections=[];
-    sections[0]=document.getElementById('users_section');
-    sections[1]=document.getElementById('students_section');
-    sections[2]=document.getElementById('edit_section');
-    sections[3]=document.getElementById('diploma_section');
-    sections[4]=document.getElementById('diploma_order_section');
-    sections[5]=document.getElementById('analytic_section');
+    sections = [];
+    sections[0] = document.getElementById('users_section');
+    sections[1] = document.getElementById('students_section');
+    sections[2] = document.getElementById('edit_section');
+    sections[3] = document.getElementById('diploma_section');
+    sections[4] = document.getElementById('diploma_order_section');
+    sections[5] = document.getElementById('analytic_section');
 
 
     //iterate all sections
     //make all style.display = "none"
     //make the element we want style.display=grid
-    for(let i=0; i<6;i++){
-       sections[i].style.display = 'none';
+    for (let i = 0; i < 6; i++) {
+        sections[i].style.display = 'none';
 
-       if(sections[i].id.localeCompare(sectionToBeDisplayed)==0){
+        if (sections[i].id.localeCompare(sectionToBeDisplayed) == 0) {
 
-         sections[i].style.display='grid';
-       }
+            sections[i].style.display = 'grid';
+        }
 
     }
 
 
     //the corner cases for flex and make 2 grids at the same time
-    if(sectionToBeDisplayed.localeCompare(sections[5].id)==0){
-        sections[5].style.display='flex';
-    }else if(sectionToBeDisplayed.localeCompare(sections[3].id)==0){
-        sections[3].style.display='grid';
-        sections[4].style.display='grid';
+    if (sectionToBeDisplayed.localeCompare(sections[5].id) == 0) {
+        sections[5].style.display = 'flex';
+    } else if (sectionToBeDisplayed.localeCompare(sections[3].id) == 0) {
+        sections[3].style.display = 'grid';
+        sections[4].style.display = 'grid';
     }
 
 }
 
 /*---- SWITCH_SECTIONS  END ----*/
 //give class "active_header" to only element with elementid
-function activeHeader(elementId){
+function activeHeader(elementId) {
 
-    headers=[];
-    headers[0]=document.getElementById('analytic_header');
-    headers[1]=document.getElementById('users_header');
-    headers[2]=document.getElementById('edit_header');
-    headers[3]=document.getElementById('diploma_header');
-    headers[4]=document.getElementById('students_header');
+    headers = [];
+    headers[0] = document.getElementById('analytic_header');
+    headers[1] = document.getElementById('users_header');
+    headers[2] = document.getElementById('edit_header');
+    headers[3] = document.getElementById('diploma_header');
+    headers[4] = document.getElementById('students_header');
 
-    for(let i=0;i<5;i++){
-        if(headers[i].id.localeCompare(elementId)==0){
+    for (let i = 0; i < 5; i++) {
+        if (headers[i].id.localeCompare(elementId) == 0) {
             headers[i].classList.add(['active_header']);
-        }else{
+        } else {
             headers[i].classList.remove(['active_header']);
         }
     }
@@ -496,13 +502,13 @@ function activeHeader(elementId){
 }
 
 //start of converting differnet data to array
-function dataHasRightToArray(data){
-    const a = [["Имащи право на диплома","Брой студенти"],["Имат право",0],["Нямат право",0]];
+function dataHasRightToArray(data) {
+    const a = [["Имащи право на диплома", "Брой студенти"], ["Имат право", 0], ["Нямат право", 0]];
 
-    let rows=data.users;
-    rows.forEach(row_data =>{
-        switch(row_data.has_right){
-            case 1: 
+    let rows = data.users;
+    rows.forEach(row_data => {
+        switch (row_data.has_right) {
+            case 1:
                 a[1][1]++;
                 break;
             case 0:
@@ -516,13 +522,13 @@ function dataHasRightToArray(data){
 
 }
 
-function dataDegreeToArray(data){
-    const a = [["Степен на образование","Брой студенти"],["Бакалавър",0],["Магистър",0]];
-    
-    let rows=data.users;
-    rows.forEach(row_data =>{
-        switch(row_data.degree){
-            case 'Б': 
+function dataDegreeToArray(data) {
+    const a = [["Степен на образование", "Брой студенти"], ["Бакалавър", 0], ["Магистър", 0]];
+
+    let rows = data.users;
+    rows.forEach(row_data => {
+        switch (row_data.degree) {
+            case 'Б':
                 a[1][1]++;
                 break;
             case 'М':
@@ -534,17 +540,17 @@ function dataDegreeToArray(data){
     });
     return a;
 }
-function dataGradesToArray(data){
-    const a=[["Оценка","Брой студенти с такава оценка"],["[2-3)",0],["[3,4)",0],["[4,5)",0],["[5,6]",0]];
-    let rows=data.users;
-    rows.forEach(row_data =>{
-        if(row_data.grade>=2 && row_data.grade<3){
+function dataGradesToArray(data) {
+    const a = [["Оценка", "Брой студенти с такава оценка"], ["[2-3)", 0], ["[3,4)", 0], ["[4,5)", 0], ["[5,6]", 0]];
+    let rows = data.users;
+    rows.forEach(row_data => {
+        if (row_data.grade >= 2 && row_data.grade < 3) {
             a[1][1]++;
-        }else if (row_data.grade>=3 && row_data.grade<4){
+        } else if (row_data.grade >= 3 && row_data.grade < 4) {
             a[2][1]++;
-        }else if (row_data.grade>=4 && row_data.grade<5){
+        } else if (row_data.grade >= 4 && row_data.grade < 5) {
             a[3][1]++;
-        }else {
+        } else {
             a[4][1]++;
         }
     });
@@ -552,14 +558,14 @@ function dataGradesToArray(data){
 }
 
 
-function dataMajorToArray(data){
+function dataMajorToArray(data) {
 
-    const a = [["Специалност","Брой студенти"],["СИ",0],["КН",0],["ИС",0],["И",0],["М",0],["С",0],["х",0]];
+    const a = [["Специалност", "Брой студенти"], ["СИ", 0], ["КН", 0], ["ИС", 0], ["И", 0], ["М", 0], ["С", 0], ["х", 0]];
 
-    let rows=data.users;
-    rows.forEach(row_data =>{
-        switch(row_data.major){
-            case 'СИ': 
+    let rows = data.users;
+    rows.forEach(row_data => {
+        switch (row_data.major) {
+            case 'СИ':
                 a[1][1]++;
                 break;
             case 'КН':
@@ -591,17 +597,17 @@ function dataMajorToArray(data){
 
 
 // Draw the chart and set the chart values
-function drawChart(majorData, id,titleMessage) {
-    
-  var data = google.visualization.arrayToDataTable(majorData);
+function drawChart(majorData, id, titleMessage) {
 
-  // Optional; add a title and set the width and height of the chart
-  var options = {'title':titleMessage, 'width':550, 'height':400};
+    var data = google.visualization.arrayToDataTable(majorData);
 
-  // Display the chart inside the <div> element with id="piechart"
-  var chart = new google.visualization.PieChart(document.getElementById(id));
-  chart.draw(data, options);
-} 
+    // Optional; add a title and set the width and height of the chart
+    var options = { 'title': titleMessage, 'width': 550, 'height': 400 };
+
+    // Display the chart inside the <div> element with id="piechart"
+    var chart = new google.visualization.PieChart(document.getElementById(id));
+    chart.draw(data, options);
+}
 
 function showDiplomaOrderMessage() {
     var order_message = document.getElementById('message-bar-diploma-order');
@@ -631,26 +637,26 @@ function showDiplomaOrderMessage() {
 function displayOrderMessage(data) {
     var text = "Текуща подредба: ";
     for (const [key, value] of Object.entries(data)) {
-        switch(value) {
+        switch (value) {
             case "fn": text = text.concat("ФН, ");
-            break;
+                break;
             case "name": text = text.concat("Име, ");
-            break;
+                break;
             case "degree": text = text.concat("Степен, ");
-            break;
+                break;
             case "major": text = text.concat("Специалност, ");
-            break;
+                break;
             case "group": text = text.concat("Група, ");
-            break;
+                break;
             case "grade": text = text.concat("Успех, ");
-            break;
+                break;
             default:
                 break;
         }
-      }
-      text = text.slice(0, -1);
-      text = text.slice(0, -1);
-      document.getElementById('message-bar-diploma-order').innerText = text;
+    }
+    text = text.slice(0, -1);
+    text = text.slice(0, -1);
+    document.getElementById('message-bar-diploma-order').innerText = text;
 
 }
 
@@ -698,12 +704,12 @@ function submitUsers(event) {
         });
 }
 
-function editStudent(event){
-    
+function editStudent(event) {
+
     event.preventDefault;
-    var form=document.getElementById("edit_students_form");
+    var form = document.getElementById("edit_students_form");
     var usersData = form.editStudentTextarea.value;
-  
+
     fetch('../../services/edit_students.php', {
         method: 'POST',
         headers: {
@@ -712,22 +718,22 @@ function editStudent(event){
         },
         body: JSON.stringify(usersData)
     })
-    .then(response=> response.json())
-    .then((data)=>{
-        var errElem = document.getElementById('message-bar-edit-students');
-        if (!data.success) {
-            errElem.classList.remove(['success']);
-            errElem.classList.add(['error']);
-            errElem.innerHTML = data.message;
-        } else {
-            errElem.classList.remove(['error']);
-            errElem.classList.add(['success']);
-            errElem.innerHTML = data.message;
-            document.getElementById("userTextarea").value = "";
+        .then(response => response.json())
+        .then((data) => {
+            var errElem = document.getElementById('message-bar-edit-students');
+            if (!data.success) {
+                errElem.classList.remove(['success']);
+                errElem.classList.add(['error']);
+                errElem.innerHTML = data.message;
+            } else {
+                errElem.classList.remove(['error']);
+                errElem.classList.add(['success']);
+                errElem.innerHTML = data.message;
+                document.getElementById("userTextarea").value = "";
+            }
         }
-    }
-    );
-    form.editStudentTextarea.valuе=null;
+        );
+    form.editStudentTextarea.valuе = null;
 }
 
 function submitStudents(event) {
@@ -758,7 +764,7 @@ function submitStudents(event) {
                 showStudents();
             }
         });
-       
+
 }
 
 function submitAction(event) {
@@ -897,41 +903,41 @@ function submitDiplomaOrder(event) {
 
 
 //Filters Start
-function filterActivate(){
-    var inputFilterName=document.getElementById("searchByName");
-    var inputFilterFn=document.getElementById("searchByFn");
-    const inputDataName=inputFilterName.value;
-    const inputDataFn=inputFilterFn.value;
-    var i=0;
+function filterActivate() {
+    var inputFilterName = document.getElementById("searchByName");
+    var inputFilterFn = document.getElementById("searchByFn");
+    const inputDataName = inputFilterName.value;
+    const inputDataFn = inputFilterFn.value;
+    var i = 0;
     var tableData = document.getElementById("diploma-table").querySelectorAll("tr");
-    tableData.forEach((element)=>{
-        var toAddHidden=false;
-        if(i!=0){
-        
-        
-       
+    tableData.forEach((element) => {
+        var toAddHidden = false;
+        if (i != 0) {
+
+
+
             //sort by name - check if the data in <td> includes inputDataName
-            if(!element.querySelectorAll("td")[2].innerHTML.includes(inputDataName)){
-                toAddHidden=true;
-            
+            if (!element.querySelectorAll("td")[2].innerHTML.includes(inputDataName)) {
+                toAddHidden = true;
+
             }
 
             //sort by fn - check if the data in <td> includes inputDataFn
-            if(!element.querySelectorAll("td")[1].innerHTML.includes(inputDataFn)){
-                toAddHidden=true;
-            
+            if (!element.querySelectorAll("td")[1].innerHTML.includes(inputDataFn)) {
+                toAddHidden = true;
+
             }
 
-            element.toggleAttribute("hidden",toAddHidden);
+            element.toggleAttribute("hidden", toAddHidden);
 
 
-        }else{
+        } else {
             i++;
         }
 
     })
-    
-   
+
+
 }
 
 //Filters End

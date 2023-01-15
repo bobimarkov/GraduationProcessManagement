@@ -21,17 +21,120 @@ $email = $_SESSION["user"];
 </head>
 
 <body>
-    <img class="logo" src="../../Images/su-logo.png" alt="su-logo">
+</body>
+
+</html>
+
+
+<script>
+    // LOAD USER DATA
+    email = "<?php echo $email ?>";
+    getStudentData(email);
+    var graduation_time;
+
+    function getStudentData(email) {
+        fetch(`../../services/get_student_data.php`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(email)
+        })
+            .then(response => response.json())
+            .then((data) => {
+                // console.log(data);
+                if (data.error) {
+                    /* display error to user */
+                    console.log(data.error);
+                }
+                else if (data.users[0].grade < 3) {
+                    buildContentForNotGraduatingStudent(data.users[0]);
+                }
+                else {
+                    buildContentForGraduatingStudent(data.users[0]);
+                }
+            })
+    }
+
+    const header = `<img class="logo" src="../../Images/su-logo.png" alt="su-logo">
     <p class="su-header">СУ "СВ. КЛИМЕНТ ОХРИДСКИ"</p>
     <div class="navigation">
         <h2 class="navigation_element" id="students_header">ДОБРЕ ДОШЪЛ,</h2>
-        <h2 class="navigation_element active_header" id="users_header"><?php echo $name ?> </h2>
+        <h2 class="navigation_element active_header" id="users_header">
+            <?php echo $name ?>
+        </h2>
         <h2 class="navigation_element"><i class="fas fa-user-graduate"></i></h2>
         <div class="vertical_line"></div>
-        <h2 class="navigation_element" id="logout_header"><a href="../../services/logout.php" class="logout_header_link">ИЗХОД <i class="fas fa-sign-out-alt"></i></a></h2>
-    </div>
-    <div class="row">
+        <h2 class="navigation_element" id="logout_header"><a href="../../services/logout.php"
+                class="logout_header_link">ИЗХОД <i class="fas fa-sign-out-alt"></i></a></h2>
+    </div> `
 
+    const infoUser = `            <div class="profile_info_section">
+                <h3> <i class="fa fa-user-o" aria-hidden="true"></i> Информация за потребителя</h3>
+                <div class="profile_info_section_content">
+                    <div id="profile_info_section_content_1_wrapper">
+                        <div id="profile_info_section_content_1">
+                            <p id="name"></p>
+                            <p id="email"></p>
+                            <p id="phone"></p>
+                        </div>
+                    </div>
+                    <div id="profile_info_section_content_2_wrapper">
+                        <div id="profile_info_section_content_2">
+                            <p id="degree"></p>
+                            <p id="major"></p>
+                            <p id="group"></p>
+                            <p id="fn"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+
+    const infoForAttendance = `  <div id="diploma_info_section_content_3_wrapper">
+                    <div id="diploma_info_section_content_3">
+                        <p>Ще присъствам на дипломирането: <input type="checkbox" id="attendance" onchange="setAttandance('<?php echo $email ?>', this)"></p>
+                        <p>Искам снимки: <input type="checkbox" id="photos_requested" onchange="requestPhotos('<?php echo $email ?>', this)"></p>
+                    </div>
+                </div>`
+
+
+    function buildContentForNotGraduatingStudent(user) {
+        const box = ` 
+        ${header}
+        <div class="row">
+            <div class="notifications_section">
+                <h3> <i class="fa fa-bell-o" aria-hidden="true"></i> Известия</h3>
+                <p>Вие нямате право на диплома!</p>
+            </div>
+
+        ${infoUser}
+            <div class="diploma_info_section">
+            <h3><i class="fa fa-file-text-o" aria-hidden="true"></i> Информация за дипломомирането</h3>
+            ${infoForAttendance}            
+            </div>
+        </div>`
+        document.body.innerHTML = box;
+
+        document.getElementById("name").innerText = 'Имена: ' + user.name;
+        document.getElementById("email").innerText = 'Имейл: ' + user.email;
+        document.getElementById("phone").innerText = 'Телефон: ' + user.phone;
+
+        document.getElementById("degree").innerText = 'Степен: ' + (user.degree == 'Б' ? 'Бакалавър' : (user.degree == 'М' ? 'Магистър' : 'Доктор'));
+        document.getElementById("major").innerText = 'Специалност: ' + user.major;
+        document.getElementById("group").innerText = 'Група: ' + user.group;
+        document.getElementById("fn").innerText = 'Факултетен номер: ' + user.student_fn;
+
+        document.getElementById("attendance").checked = user.attendance == 1 ? true : false;
+        document.getElementById("photos_requested").checked = user.photos_requested == 1 ? true : false;
+
+    }
+
+
+    function buildContentForGraduatingStudent(user) {
+        const box = `
+        ${header}
+        <div class="row">
         <div class="notifications_section">
             <h3> <i class="fa fa-bell-o" aria-hidden="true"></i> Известия</h3>
             <p id="no-notifications">В момента нямате никакви известия.</p>
@@ -45,28 +148,7 @@ $email = $_SESSION["user"];
             </div>
 
         </div>
-
-        <div class="profile_info_section">
-            <h3> <i class="fa fa-user-o" aria-hidden="true"></i> Информация за потребителя</h3>
-            <div class="profile_info_section_content">
-                <div id="profile_info_section_content_1_wrapper">
-                    <div id="profile_info_section_content_1">
-                        <p id="name"></p>
-                        <p id="email"></p>
-                        <p id="phone"></p>
-                    </div>
-                </div>
-                <div id="profile_info_section_content_2_wrapper">
-                    <div id="profile_info_section_content_2">
-                        <p id="degree"></p>
-                        <p id="major"></p>
-                        <p id="group"></p>
-                        <p id="fn"></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        ${infoUser}
         <div class="diploma_info_section">
             <h3><i class="fa fa-file-text-o" aria-hidden="true"></i> Информация за диплома</h3>
             <div class="diploma_info_section_content">
@@ -85,12 +167,7 @@ $email = $_SESSION["user"];
                         <p id="taken_at_time"></p>
                     </div>
                 </div>
-                <div id="diploma_info_section_content_3_wrapper">
-                    <div id="diploma_info_section_content_3">
-                        <p>Ще присъствам на дипломирането: <input type="checkbox" id="attendance" onchange="setAttandance('<?php echo $email ?>', this)"></p>
-                        <p>Искам снимки: <input type="checkbox" id="photos_requested" onchange="requestPhotos('<?php echo $email ?>', this)"></p>
-                    </div>
-                </div>
+                ${infoForAttendance}
                 <div id="diploma_info_section_content_4_wrapper">
                     <div id="diploma_info_section_content_4">
                         <p>Административен коментар:</p>
@@ -153,42 +230,8 @@ $email = $_SESSION["user"];
             <p class="message-bar no-margin" id="order_student">Все още няма пореден списък.</p>
             <p class="message-bar no-margin" id="color_message">Все още няма зададени цветове.</p>
         </div>
-
-    </div>
-
-</body>
-
-</html>
-
-
-<script>
-    // LOAD USER DATA
-    email = "<?php echo $email ?>";
-    getStudentData(email);
-    var graduation_time;
-
-    function getStudentData(email) {
-        fetch(`../../services/get_student_data.php`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(email)
-            })
-            .then(response => response.json())
-            .then((data) => {
-                // console.log(data);
-                if (data.error) {
-                    /* display error to user */
-                    console.log(data.error);
-                } else {
-                    buildContent(data.users[0]);
-                }
-            })
-    }
-
-    function buildContent(user) {
+        </div>`
+        document.body.innerHTML = box;
         document.getElementById("name").innerText = 'Имена: ' + user.name;
         document.getElementById("email").innerText = 'Имейл: ' + user.email;
         document.getElementById("phone").innerText = 'Телефон: ' + user.phone;
@@ -254,21 +297,21 @@ $email = $_SESSION["user"];
         document.getElementById("hat_returned").innerHTML = 'Върната: ' + (user.hat_returned == 1 ? '<i class="far fa-check-square"></i>' : "Не");
         document.getElementById("hat_returned_date").innerHTML = 'Дата/час: ' + (user.hat_returned_date == null || user.grown_taken_date == "" ? "-" : user.grown_taken_date);
     }
-    
+
     getStartHour();
     getDiplomaOrder();
-    
+
 
     function getStartHour() {
         var start_time = document.getElementById('start_time');
 
         fetch('../../services/get_graduation_time.php', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            })
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
             .then(response => response.json())
             .then((data) => {
                 if (!data.success) {
@@ -276,20 +319,20 @@ $email = $_SESSION["user"];
                     window.graduation_time = null;
                 } else {
                     start_time.innerHTML = ("Начален час: ").concat(data.graduation_time[0].start_time);
-                    window.graduation_time =  data.graduation_time[0];
+                    window.graduation_time = data.graduation_time[0];
                     getColorsConfig();
-                }   
+                }
             });
     }
 
     function getDiplomaOrder() {
         fetch('../../services/get_diploma_order.php', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            })
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
             .then(response => response.json())
             .then((data) => {
                 if (!data.success) {
@@ -328,17 +371,17 @@ $email = $_SESSION["user"];
         }
         text = text.slice(0, -1);
         text = text.slice(0, -1);
-         document.getElementById('order_list').innerHTML = text;
+        document.getElementById('order_list').innerHTML = text;
     }
-    
+
     function getColorsConfig() {
         fetch('../../services/get_graduation_colors.php', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            })
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
             .then(response => response.json())
             .then((data) => {
                 if (!data.success) {
@@ -352,17 +395,17 @@ $email = $_SESSION["user"];
     function getStudentsOrder(colors_config) {
         var startTime;
         var interval;
-        if(graduation_time != null) {
+        if (graduation_time != null) {
             startTime = graduation_time.start_time;
             interval = graduation_time.students_interval;
         }
         fetch('../../services/get_students_diploma_simplified.php', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            })
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
             .then(response => response.json())
             .then((data) => {
                 if (!data.success) {
@@ -373,7 +416,7 @@ $email = $_SESSION["user"];
     }
 
     function showGraduationOrder(users, startTime, interval, colors_config) {
-        var user_email = "<?php echo $email?>";
+        var user_email = "<?php echo $email ?>";
         var order_message = document.getElementById('order_student');
         var dummy_date = "2012-12-12"
         var start_object = new Date(`${dummy_date} ${startTime}`);
@@ -393,7 +436,7 @@ $email = $_SESSION["user"];
     }
 
     function getColor(i, n, colors_config) {
-        var part = Math.round((colors_config[0].color_interval/100 * n));
+        var part = Math.round((colors_config[0].color_interval / 100 * n));
         var current_part = part;
         var color_index = 1;
 
@@ -412,7 +455,7 @@ $email = $_SESSION["user"];
     }
 
     function extractColor(color_code) {
-        switch(color_code) {
+        switch (color_code) {
             case "#FF0000": return "червен <i class='fas fa-square' style='color: #FF0000;'></i>"; break;
             case "#FFA500": return "оранжев <i class='fas fa-square' style='color: #FFA500;'></i>"; break;
             case "#FFFF00": return "жълт <i class='fas fa-square' style='color: #FFFF00;'></i>"; break;

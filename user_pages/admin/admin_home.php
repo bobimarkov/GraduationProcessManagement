@@ -69,13 +69,14 @@ if (!isset($_SESSION["user"]) || !isset($_SESSION["role"]) || (isset($_SESSION["
                     <td>Степен</td>
                     <td>Спец.</td>
                     <td>Група</td>
+                    <td>Дипломиращ се</td>
                     <td>Роля</td>
                 </tr>
             </table>
             <h3><i class="fas fa-folder-plus"></i> Въведи нови</h3>
             <p class="message-bar" id='message-bar-students'></p>
             <form id="add_students_form" name="add_students_form" onsubmit="return false">
-                <textarea class="form-input" name="studentTextarea" id="studentTextarea" rows="30" placeholder="Формат: &NewLine;&quot;имейл, парола, имена, телефон, роля, ФН, степен, специалност, група, право на диплома, оценка от диплома&quot;&NewLine;&NewLine;роля=[student]&NewLine;степен=[Б, М, Д]&NewLine;специалност=[КН, СИ, ИС, И, М, ПМ, С], ако степен=Б&NewLine;група=[1, 2, 3, 4, 5, 6, 7, 8], ако degree=Б&NewLine;право на диплома=[0, 1], където 0=НЕ, 1=ДА&NewLine;оценка = число с плаваща запетая"></textarea>
+                <textarea class="form-input" name="studentTextarea" id="studentTextarea" rows="30" placeholder="Формат: &NewLine;&quot;имейл, парола, имена, телефон, роля, ФН, степен, специалност, група, оценка от диплома&quot;&NewLine;&NewLine;роля=[student]&NewLine;степен=[Б, М, Д]&NewLine;специалност=[КН, СИ, ИС, И, М, ПМ, С], ако степен=Б&NewLine;група=[1, 2, 3, 4, 5, 6, 7, 8], ако degree=Б&NewLine;оценка = число с плаваща запетая или '-', ако е студент от долен курс"></textarea>
                 <button type="submit" id="submit-button-users" class="submit-button-users" onclick="submitStudents(event)">Добави <i class="fas fa-solid fa-plus"></i></button>
             </form>
         </div>
