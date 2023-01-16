@@ -175,7 +175,6 @@ function buildStudentsDiplomaTable(users, colors_config) {
         if (user.grade >= 3) {
             var row = table.insertRow(i);
             row.id = 'user' + i;
-            // row.setAttribute("onmousedown", "toggleBorderColor(this)")
             var row_data = [
                 i,
                 user.student_fn,
