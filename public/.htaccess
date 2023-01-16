@@ -1,5 +1,5 @@
 <IfModule mod_rewrite.c>
-    Options -Multiviews
+    Options -Multiviews -Indexes
     RewriteEngine On
     # Долният ред си го оправете, ако е необходимо -> трябва да показва пътя от съдържанието на htdocs до public папката на проекта
     RewriteBase /GraduationProcessManagement/public

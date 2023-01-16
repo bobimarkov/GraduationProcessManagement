@@ -157,6 +157,17 @@ input {
 	min-height: 480px;
 }
 
+.close_button {
+	z-index: 3;
+	cursor: pointer;
+	user-select: none;
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	font-size: 25px;
+	color: #0059fd;
+}
+
 .form-container {
 	position: absolute;
 	top: 0;
