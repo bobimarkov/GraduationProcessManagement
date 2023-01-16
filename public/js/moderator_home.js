@@ -3,7 +3,7 @@ getAllUsers();
 getAllStudents();
 getStudentsDiplomaInfo();
 // Load google charts
-google.charts.load('current', {'packages':['corechart']});
+google.charts.load('current', { 'packages': ['corechart'] });
 
 let logoutHeader = document.getElementById("logout_header");
 logoutHeader.addEventListener("click", (e) => {
@@ -25,7 +25,7 @@ sessionLoader();
 /*---- GET_USERS  START ----*/
 
 function getAllUsers() {
-     fetch(`../../api?endpoint=get_users`, {
+    fetch(`../../api?endpoint=get_users`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -47,8 +47,8 @@ function buildUsersTable(data) {
     let i = 1;
     let users = data.users;
     const number_columns = 5;
-   
-   table.innerHTML=" <tr> <td>ID</td> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>Роля</td> </tr>";
+
+    table.innerHTML = " <tr> <td>ID</td> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>Роля</td> </tr>";
 
     for (const user of users) {
         var row = table.insertRow(i);
@@ -59,9 +59,9 @@ function buildUsersTable(data) {
             user.email,
             user.phone
         ];
-        for(var j = 0; j < number_columns - 1; j++) {
+        for (var j = 0; j < number_columns - 1; j++) {
             row.insertCell(j).innerHTML = row_data[j];
-        } 
+        }
         const index_icon_column = number_columns - 1;
         switch (user.role) {
             case 'admin': row.insertCell(index_icon_column).innerHTML = '<i class="fas fa-user-lock user-role-icon"></i>'; break;
@@ -70,7 +70,6 @@ function buildUsersTable(data) {
         }
         i++;
     }
-
 }
 /*---- GET_USERS  END ----*/
 
@@ -98,10 +97,10 @@ function getAllStudents() {
 function buildStudentsTable(data) {
     var table = document.getElementById("students-table");
     let i = 1;
-    const number_columns = 9;
+    const number_columns = 10;
     let users = data.users;
-    table.innerHTML="<tr> <td>ID</td> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>ФН</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Роля</td> </tr>";
-    
+    table.innerHTML = "<tr> <td>ID</td> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>ФН</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Дипломиращ се</td> <td>Роля</td> </tr>";
+
     for (const user of users) {
         var row = table.insertRow(i);
         row.id = 'user' + i;
@@ -113,20 +112,18 @@ function buildStudentsTable(data) {
             user.fn,
             user.degree,
             user.major,
-            user.group
+            user.group,
+            user.has_diploma_right == 0 ? "Не" : "Да",
+            user.role == 'admin' ?
+             '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
+             '<i class="fas fa-user-cog user-role-icon"></i>' :
+             '<i class="fas fa-user-graduate user-role-icon"></i>'
         ];
-        for(var j = 0; j < number_columns - 1; j++) {
+        for (var j = 0; j < number_columns; j++) {
             row.insertCell(j).innerHTML = row_data[j];
-        } 
-        const index_icon_column = number_columns - 1;
-        switch (user.role) {
-            case 'admin': row.insertCell(index_icon_column).innerHTML = '<i class="fas fa-user-lock user-role-icon"></i>'; break;
-            case 'moderator': row.insertCell(index_icon_column).innerHTML = '<i class="fas fa-user-cog user-role-icon"></i>'; break;
-            case 'student': row.insertCell(index_icon_column).innerHTML = '<i class="fas fa-user-graduate user-role-icon"></i>'; break;
         }
         i++;
     }
-   
 }
 /*---- GET_STUDENTS  END ----*/
 
@@ -153,19 +150,19 @@ function getStudentsDiplomaInfo() {
 
 function getColorsConfig(users) {
     fetch('../../api?endpoint=get_graduation_colors', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        })
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
         .then(response => response.json())
         .then((data) => {
             if (!data.success) {
-                buildStudentsDiplomaTable(users,null);
+                buildStudentsDiplomaTable(users, null);
             } else {
                 var colors_config = data.graduation_colors;
-                buildStudentsDiplomaTable(users,colors_config);
+                buildStudentsDiplomaTable(users, colors_config);
             }
         });
 }
@@ -177,50 +174,52 @@ function buildStudentsDiplomaTable(users, colors_config) {
     const number_columns = 29;
 
     for (const user of users) {
-        var row = table.insertRow(i);
-        row.id = 'user' + i;
-        // row.setAttribute("onmousedown", "toggleBorderColor(this)")
-        var row_data = [
-            i,
-            user.student_fn,
-            user.name.concat(" " + getColor(i, users.length, colors_config)),
-            user.degree,
-            user.major,
-            user.group,
-            user.grade,
-            user.attendance == 0 ? 'Не' : 'Да',
-            user.has_right == 0 ? 'Не' : 'Да',
-            user.is_ready == 0 ? 'Не' : 'Да',
-            user.is_taken == 0 ? 'Не' : 'Да',
-            user.take_in_advance_request == 0 ? 'Не' : 'Да',
-            user.take_in_advance_request_comment == null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.take_in_advance_request_comment}</span></i>`,
-            user.is_taken_in_advance == 0 ? 'Не' : 'Да',
-            user.taken_at_time,
-            user.diploma_comment == null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.diploma_comment}</span></i>`,
-            user.speech_request == 0 ? 'Не' : 'Да',
-            user.speech_response == null ? '-' : user.speech_response,
-            user.photos_requested == 0 ? 'Не' : 'Да',
-            user.grown_requested == 0 ? 'Не' : 'Да',
-            user.grown_taken == 0 ? 'Не' : 'Да',
-            user.grown_taken_date,
-            user.grown_returned == 0 ? 'Не' : 'Да',
-            user.grown_returned_date,
-            user.hat_requested == 0 ? 'Не' : 'Да',
-            user.hat_taken == 0 ? 'Не' : 'Да',
-            user.hat_taken_date,
-            user.hat_returned == 0 ? 'Не' : 'Да',
-            user.hat_returned_date,
+        if (user.grade >= 3) {
+            var row = table.insertRow(i);
+            row.id = 'user' + i;
+            // row.setAttribute("onmousedown", "toggleBorderColor(this)")
+            var row_data = [
+                i,
+                user.student_fn,
+                user.name.concat(" " + getColor(i, users.length, colors_config)),
+                user.degree,
+                user.major,
+                user.group,
+                user.grade,
+                user.attendance == 0 ? 'Не' : 'Да',
+                user.has_right == 0 ? 'Не' : 'Да',
+                user.is_ready == 0 ? 'Не' : 'Да',
+                user.is_taken == 0 ? 'Не' : 'Да',
+                user.take_in_advance_request == 0 ? 'Не' : 'Да',
+                user.take_in_advance_request_comment == null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.take_in_advance_request_comment}</span></i>`,
+                user.is_taken_in_advance == 0 ? 'Не' : 'Да',
+                user.taken_at_time,
+                user.diploma_comment == null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.diploma_comment}</span></i>`,
+                user.speech_request == 0 ? 'Не' : 'Да',
+                user.speech_response == null ? '-' : user.speech_response,
+                user.photos_requested == 0 ? 'Не' : 'Да',
+                user.grown_requested == 0 ? 'Не' : 'Да',
+                user.grown_taken == 0 ? 'Не' : 'Да',
+                user.grown_taken_date,
+                user.grown_returned == 0 ? 'Не' : 'Да',
+                user.grown_returned_date,
+                user.hat_requested == 0 ? 'Не' : 'Да',
+                user.hat_taken == 0 ? 'Не' : 'Да',
+                user.hat_taken_date,
+                user.hat_returned == 0 ? 'Не' : 'Да',
+                user.hat_returned_date,
 
-        ];
-        for(var j = 0; j < number_columns; j++) {
-            row.insertCell(j).innerHTML = row_data[j];
-        } 
-        i++;
+            ];
+            for (var j = 0; j < number_columns; j++) {
+                row.insertCell(j).innerHTML = row_data[j];
+            }
+            i++;
+        }
     }
 }
 
 function getColor(i, n, colors_config) {
-    var part = Math.round((colors_config[0].color_interval/100 * n));
+    var part = Math.round((colors_config[0].color_interval / 100 * n));
     var current_part = part;
     var color_index = 1;
 
@@ -253,35 +252,35 @@ function showStudents() {
     getAllStudents();
 }
 
-function  showAnalyticsSection() {
+function showAnalyticsSection() {
     showGivenSection("analytic_section");
     activeHeader("analytic_header");
 
-        fetch(`../../api?endpoint=get_students_diploma`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
+    fetch(`../../api?endpoint=get_students_diploma`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+    })
+        .then(response => response.json())
+        .then((data) => {
+            if (data.error) {
+                // display error to user 
+                console.log(data.error);
+            } else {
+
+                //build piecharts from data
+                let studentMajorData = dataMajorToArray(data);
+                let studentGradeData = dataGradesToArray(data);
+                let studentDegreeData = dataDegreeToArray(data);
+                let studentHasRightData = dataHasRightToArray(data);
+                google.charts.setOnLoadCallback(drawChart(studentMajorData, "analytics1", "Брой стундети с дадена специалност"));
+                google.charts.setOnLoadCallback(drawChart(studentGradeData, "analytics2", "Брой студенти с дадени оценки"));
+                google.charts.setOnLoadCallback(drawChart(studentDegreeData, "analytics3", "Брой студенти с дадени степени на образование"));
+                google.charts.setOnLoadCallback(drawChart(studentHasRightData, "analytics4", "Студенти имащи право на диплома"));
+            }
         })
-            .then(response => response.json())
-            .then((data) => {
-                if (data.error) {
-                    // display error to user 
-                    console.log(data.error);
-                } else {
-                    
-                    //build piecharts from data
-                    let studentMajorData= dataMajorToArray(data);
-                    let studentGradeData = dataGradesToArray(data); 
-                    let studentDegreeData = dataDegreeToArray(data);
-                    let studentHasRightData = dataHasRightToArray(data);
-                    google.charts.setOnLoadCallback(drawChart(studentMajorData,"analytics1","Брой стундети с дадена специалност"));
-                    google.charts.setOnLoadCallback(drawChart(studentGradeData,"analytics2","Брой студенти с дадени оценки"));
-                    google.charts.setOnLoadCallback(drawChart(studentDegreeData,"analytics3","Брой студенти с дадени степени на образование"));
-                    google.charts.setOnLoadCallback(drawChart(studentHasRightData,"analytics4","Студенти имащи право на диплома"));
-                }
-            })
 
 }
 
@@ -293,14 +292,13 @@ function showDiplomaSection() {
 }
 
 //make section visible, giving only its name
-function showGivenSection(sectionToBeDisplayed){
-   
+function showGivenSection(sectionToBeDisplayed) {
+
     //get all sections
     var sections = [
         'users_section',
         'students_section',
         'diploma_section',
-        'diploma_order_section',
         'analytic_section'];
     sections = sections.map(x => document.getElementById(x));
 
@@ -308,265 +306,88 @@ function showGivenSection(sectionToBeDisplayed){
     //make all style.display = "none"
     //make the element we want style.display=grid
 
-    for(let i=0; i< sections.length ;i++){
-       sections[i].style.display = 'none';
+    for (let i = 0; i < sections.length; i++) {
+        sections[i].style.display = 'none';
 
-       if(sections[i].id.localeCompare(sectionToBeDisplayed)==0){
+        if (sections[i].id.localeCompare(sectionToBeDisplayed) == 0) {
 
-         sections[i].style.display='grid';
-       }
+            sections[i].style.display = 'grid';
+        }
 
     }
 }
 
 /*---- SWITCH_SECTIONS  END ----*/
 //give class "active_header" to only element with elementid
-function activeHeader(elementId){
-
+function activeHeader(elementId) {
+    
     var headers = [
         'users_header',
         'students_header',
         'diploma_header',
         'analytic_header'];
-        
+
     headers = headers.map(x => document.getElementById(x));
 
-    for(let i=0 ; i<headers.length ; i++) {
-        if(headers[i].id.localeCompare(elementId)==0){
+    for (let i = 0; i < headers.length; i++) {
+        if (headers[i].id.localeCompare(elementId) == 0) {
             headers[i].classList.add(['active_header']);
-        }else{
+        } else {
             headers[i].classList.remove(['active_header']);
         }
     }
 
 }
 
-
-function showDiplomaOrderMessage() {
-    var order_message = document.getElementById('message-bar-diploma-order');
-    order_message.classList.remove(['success']);
-    order_message.classList.remove(['error']);
-    order_message.classList.add(['info']);
-    order_message.innerHTML = "";
-
-    fetch('../../api?endpoint=get_diploma_order', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }
-    })
-        .then(response => response.json())
-        .then((data) => {
-            var errElem = document.getElementById('message-bar-diploma');
-            if (!data.success) {
-                order_message.innerHTML = data.message;
-            } else {
-                displayOrderMessage(data.order[0]);
-            }
-        });
-}
-
-function displayOrderMessage(data) {
-    var text = "Текуща подредба: ";
-    for (const [key, value] of Object.entries(data)) {
-        switch(value) {
-            case "fn": text = text.concat("ФН, ");
-            break;
-            case "name": text = text.concat("Име, ");
-            break;
-            case "degree": text = text.concat("Степен, ");
-            break;
-            case "major": text = text.concat("Специалност, ");
-            break;
-            case "group": text = text.concat("Група, ");
-            break;
-            case "grade": text = text.concat("Успех, ");
-            break;
-            default:
-                break;
-        }
-      }
-      text = text.slice(0, -1);
-      text = text.slice(0, -1);
-      document.getElementById('message-bar-diploma-order').innerText = text;
-
-}
-
-
-function submitStudents(event) {
-    event.preventDefault;
-    var form = document.getElementById('add_students_form');
-    var studentsData = form.studentTextarea.value;
-
-    fetch('../../api?endpoint=add_students', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify(studentsData)
-    })
-        .then(response => response.json())
-        .then((data) => {
-            var errElem = document.getElementById('message-bar-students');
-            if (!data.success) {
-                errElem.classList.remove(['success']);
-                errElem.classList.add(['error']);
-                errElem.innerHTML = data.message;
-            } else {
-                errElem.classList.remove(['error']);
-                errElem.classList.add(['success']);
-                errElem.innerHTML = data.message;
-                document.getElementById("studentTextarea").value = "";
-                showStudents();
-            }
-        });
-       
-}
-
-function removeValueFromOtherLists(selectObject) {
-    var value = selectObject.value;
-
-    var selectobject1 = document.getElementById("diploma_order_1");
-    var selectobject2 = document.getElementById("diploma_order_2");
-    var selectobject3 = document.getElementById("diploma_order_3");
-    var selectobject4 = document.getElementById("diploma_order_4");
-    var selectobject5 = document.getElementById("diploma_order_5");
-    var selectobject6 = document.getElementById("diploma_order_6");
-    if (!selectobject1.isEqualNode(selectObject)) {
-        for (var i = 0; i < selectobject1.length; i++) {
-            if (selectobject1.options[i].value == value)
-                selectobject1.remove(i);
-        }
-    }
-    if (!selectobject2.isEqualNode(selectObject)) {
-        for (var i = 0; i < selectobject2.length; i++) {
-            if (selectobject2.options[i].value == value)
-                selectobject2.remove(i);
-        }
-    }
-    if (!selectobject3.isEqualNode(selectObject)) {
-        for (var i = 0; i < selectobject3.length; i++) {
-            if (selectobject3.options[i].value == value)
-                selectobject3.remove(i);
-        }
-    }
-    if (!selectobject4.isEqualNode(selectObject)) {
-        for (var i = 0; i < selectobject4.length; i++) {
-            if (selectobject4.options[i].value == value)
-                selectobject4.remove(i);
-        }
-    }
-    if (!selectobject5.isEqualNode(selectObject)) {
-        for (var i = 0; i < selectobject5.length; i++) {
-            if (selectobject5.options[i].value == value)
-                selectobject5.remove(i);
-        }
-    }
-    if (!selectobject6.isEqualNode(selectObject)) {
-        for (var i = 0; i < selectobject6.length; i++) {
-            if (selectobject6.options[i].value == value)
-                selectobject6.remove(i);
-        }
-    }
-}
-
-function submitDiplomaOrder(event) {
-    event.preventDefault();
-    var form = document.getElementById('diploma_order_form');
-    var v1 = form.diploma_order_1.value;
-    var v2 = form.diploma_order_2.value;
-    var v3 = form.diploma_order_3.value;
-    var v4 = form.diploma_order_4.value;
-    var v5 = form.diploma_order_5.value;
-    var v6 = form.diploma_order_6.value;
-
-    var values = {
-        "v1": v1,
-        "v2": v2,
-        "v3": v3,
-        "v4": v4,
-        "v5": v5,
-        "v6": v6,
-    };
-
-    fetch('../../api?endpoint=submit_diploma_order', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify(values)
-    })
-        .then(response => response.json())
-        .then((data) => {
-            var errElem = document.getElementById('message-bar-diploma-order');
-            if (!data.success) {
-                errElem.classList.remove(['success']);
-                errElem.classList.remove(['info']);
-                errElem.classList.add(['error']);
-                errElem.innerHTML = data.message;
-            } else {
-                errElem.classList.remove(['error']);
-                errElem.classList.remove(['info']);
-                errElem.classList.add(['success']);
-                errElem.innerHTML = data.message;
-            }
-            getStudentsDiplomaInfo();
-        });
-};
-
-
 //Filters Start
-function filterActivate(){
-    var inputFilterName=document.getElementById("searchByName");
-    var inputFilterFn=document.getElementById("searchByFn");
-    const inputDataName=inputFilterName.value;
-    const inputDataFn=inputFilterFn.value;
-    var i=0;
+function filterActivate() {
+    var inputFilterName = document.getElementById("searchByName");
+    var inputFilterFn = document.getElementById("searchByFn");
+    const inputDataName = inputFilterName.value;
+    const inputDataFn = inputFilterFn.value;
+    var i = 0;
     var tableData = document.getElementById("diploma-table").querySelectorAll("tr");
-    tableData.forEach((element)=>{
-        var toAddHidden=false;
-        if(i!=0){
-        
-        
-       
+    tableData.forEach((element) => {
+        var toAddHidden = false;
+        if (i != 0) {
+
+
+
             //sort by name - check if the data in <td> includes inputDataName
-            if(!element.querySelectorAll("td")[2].innerHTML.includes(inputDataName)){
-                toAddHidden=true;
-            
+            if (!element.querySelectorAll("td")[2].innerHTML.includes(inputDataName)) {
+                toAddHidden = true;
+
             }
 
             //sort by fn - check if the data in <td> includes inputDataFn
-            if(!element.querySelectorAll("td")[1].innerHTML.includes(inputDataFn)){
-                toAddHidden=true;
-            
+            if (!element.querySelectorAll("td")[1].innerHTML.includes(inputDataFn)) {
+                toAddHidden = true;
+
             }
 
-            element.toggleAttribute("hidden",toAddHidden);
+            element.toggleAttribute("hidden", toAddHidden);
 
 
-        }else{
+        } else {
             i++;
         }
 
     })
-    
-   
+
+
 }
 
 //Filters End
 
 
 //start of converting differnet data to array
-function dataHasRightToArray(data){
-    const a = [["Имащи право на диплома","Брой студенти"],["Имат право",0],["Нямат право",0]];
+function dataHasRightToArray(data) {
+    const a = [["Имащи право на диплома", "Брой студенти"], ["Имат право", 0], ["Нямат право", 0]];
 
-    let rows=data.users;
-    rows.forEach(row_data =>{
-        switch(row_data.has_right){
-            case 1: 
+    let rows = data.users;
+    rows.forEach(row_data => {
+        switch (row_data.has_right) {
+            case 1:
                 a[1][1]++;
                 break;
             case 0:
@@ -580,17 +401,20 @@ function dataHasRightToArray(data){
 
 }
 
-function dataDegreeToArray(data){
-    const a = [["Степен на образование","Брой студенти"],["Бакалавър",0],["Магистър",0]];
-    
-    let rows=data.users;
-    rows.forEach(row_data =>{
-        switch(row_data.degree){
-            case 'Б': 
+function dataDegreeToArray(data) {
+    const a = [["Степен на образование", "Брой студенти"], ["Бакалавър", 0], ["Магистър", 0],["Доктор", 0]];
+
+    let rows = data.users;
+    rows.forEach(row_data => {
+        switch (row_data.degree) {
+            case 'Б':
                 a[1][1]++;
                 break;
             case 'М':
                 a[2][1]++;
+                break;
+            case 'Д':
+                a[3][1]++;
                 break;
             default:
                 break;
@@ -598,17 +422,17 @@ function dataDegreeToArray(data){
     });
     return a;
 }
-function dataGradesToArray(data){
-    const a=[["Оценка","Брой студенти с такава оценка"],["[2-3)",0],["[3,4)",0],["[4,5)",0],["[5,6]",0]];
-    let rows=data.users;
-    rows.forEach(row_data =>{
-        if(row_data.grade>=2 && row_data.grade<3){
+function dataGradesToArray(data) {
+    const a = [["Оценка", "Брой студенти с такава оценка"], ["[2-3)", 0], ["[3,4)", 0], ["[4,5)", 0], ["[5,6]", 0]];
+    let rows = data.users;
+    rows.forEach(row_data => {
+        if (row_data.grade >= 2 && row_data.grade < 3) {
             a[1][1]++;
-        }else if (row_data.grade>=3 && row_data.grade<4){
+        } else if (row_data.grade >= 3 && row_data.grade < 4) {
             a[2][1]++;
-        }else if (row_data.grade>=4 && row_data.grade<5){
+        } else if (row_data.grade >= 4 && row_data.grade < 5) {
             a[3][1]++;
-        }else {
+        } else {
             a[4][1]++;
         }
     });
@@ -616,14 +440,14 @@ function dataGradesToArray(data){
 }
 
 
-function dataMajorToArray(data){
+function dataMajorToArray(data) {
 
-    const a = [["Специалност","Брой студенти"],["СИ",0],["КН",0],["ИС",0],["И",0],["М",0],["С",0],["х",0]];
+    const a = [["Специалност", "Брой студенти"], ["СИ", 0], ["КН", 0], ["ИС", 0], ["И", 0], ["М", 0], ["С", 0], ["х", 0]];
 
-    let rows=data.users;
-    rows.forEach(row_data =>{
-        switch(row_data.major){
-            case 'СИ': 
+    let rows = data.users;
+    rows.forEach(row_data => {
+        switch (row_data.major) {
+            case 'СИ':
                 a[1][1]++;
                 break;
             case 'КН':
@@ -654,14 +478,14 @@ function dataMajorToArray(data){
 
 
 // Draw the chart and set the chart values
-function drawChart(majorData, id,titleMessage) {
-    
+function drawChart(majorData, id, titleMessage) {
+
     var data = google.visualization.arrayToDataTable(majorData);
-  
+
     // Optional; add a title and set the width and height of the chart
-    var options = {'title':titleMessage, 'width':550, 'height':400};
-  
+    var options = { 'title': titleMessage, 'width': 550, 'height': 400 };
+
     // Display the chart inside the <div> element with id="piechart"
     var chart = new google.visualization.PieChart(document.getElementById(id));
     chart.draw(data, options);
-  } 
+} 
