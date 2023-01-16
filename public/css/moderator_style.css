@@ -23,99 +23,6 @@ body {
     box-shadow: 5px 5px 20px darkslategray;
 }
 
-.submit-button-users {
-    margin-top: 1em;
-    height: 2.5em;
-    width: 100%;
-    border-radius: 5px;
-    border: 1px solid #006199;
-    cursor: pointer;
-    background-color: snow;
-    font-weight: bold;
-    color: darkslategray;
-    font-size: medium;
-}
-
-.submit-button-users:hover {
-    background-color: #006199;
-    color: snow;
-}
-
-.form-input {
-    width: 100%;
-}
-
-textarea {
-    resize: none!important;
-}
-
-.form-input, .dashboard-textarea-fn, .textarea-after-select {
-    background-color:rgb(235, 238, 241);
-    border-color: darkslategray;
-    border-radius: 5px;
-    padding: 5px;
-    box-sizing: border-box;
-    font: 1em sans-serif;
-}
-
-.form-input:focus, .dashboard-textarea-fn:focus, .textarea-after-select:focus,
-.dashboard-action:focus, .boolean-select-after-select:focus {
-    outline: none;
-}
-
-.form-input:active, .dashboard-textarea-fn:active, .textarea-after-select:active,
-.dashboard-action:active, .boolean-select-after-select:active {
-    outline: none;
-}
-
-.dashboard {
-    display: flex;
-    align-items: center;
-}
-
-.dashboard-textarea-fn, .textarea-after-select {
-    width: 25em;
-    height: 5em;
-    /* margin: 1em; */
-    margin-top: 1em;
-}
-
-.dashboard-action, .boolean-select-after-select, .diploma_order_select {
-    margin: auto 1em;
-    height: 2.5em;
-    font: 1em sans-serif;
-    color: darkslategray;
-    background-color: snow;
-    border-radius: 5px;
-}
-
-.boolean-select-after-select {
-    display: none;
-}
-
-.textarea-after-select {
-    display: none;
-} 
-
-.submit-action {
-    height: 2.5em;
-    max-width: 15%;
-    border-radius: 5px;
-    border: 1px solid darkslategray;
-    padding: 0 1em;
-    margin-left: 1em;
-    cursor: pointer;
-    background-color: snow;
-    font-weight: bold;
-    color: darkslategray;
-    font-size: medium;
-}
-
-.submit-action:hover {
-    background-color: #006199;
-    color: snow;
-}
-
 h2, .logout_header_link {
     text-transform: capitalize;
     text-decoration: none;
@@ -155,8 +62,6 @@ h2, .logout_header_link {
     border-radius: 10px;
     font-family: monospace;
 }
-
-
 
 .error {
     background: rgba(255, 20, 20, 0.755);

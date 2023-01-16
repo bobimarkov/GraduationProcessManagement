@@ -46,7 +46,6 @@ function buildUsersTable(data) {
     var table = document.getElementById("users-table");
     let i = 1;
     let users = data.users;
-    const number_columns = 5;
 
     table.innerHTML = " <tr> <td>ID</td> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>Роля</td> </tr>";
 
@@ -57,20 +56,20 @@ function buildUsersTable(data) {
             user.id,
             user.name,
             user.email,
-            user.phone
+            user.phone,
+            user.role == 'admin' ?
+             '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
+             '<i class="fas fa-user-cog user-role-icon"></i>' :
+             '<i class="fas fa-user-graduate user-role-icon"></i>'
         ];
-        for (var j = 0; j < number_columns - 1; j++) {
+        const number_columns = row_data.length;
+        for (var j = 0; j < number_columns; j++) {
             row.insertCell(j).innerHTML = row_data[j];
-        }
-        const index_icon_column = number_columns - 1;
-        switch (user.role) {
-            case 'admin': row.insertCell(index_icon_column).innerHTML = '<i class="fas fa-user-lock user-role-icon"></i>'; break;
-            case 'moderator': row.insertCell(index_icon_column).innerHTML = '<i class="fas fa-user-cog user-role-icon"></i>'; break;
-            case 'student': row.insertCell(index_icon_column).innerHTML = '<i class="fas fa-user-graduate user-role-icon"></i>'; break;
         }
         i++;
     }
 }
+
 /*---- GET_USERS  END ----*/
 
 /*---- GET_STUDENTS  START ----*/
@@ -97,7 +96,6 @@ function getAllStudents() {
 function buildStudentsTable(data) {
     var table = document.getElementById("students-table");
     let i = 1;
-    const number_columns = 10;
     let users = data.users;
     table.innerHTML = "<tr> <td>ID</td> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>ФН</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Дипломиращ се</td> <td>Роля</td> </tr>";
 
@@ -119,6 +117,7 @@ function buildStudentsTable(data) {
              '<i class="fas fa-user-cog user-role-icon"></i>' :
              '<i class="fas fa-user-graduate user-role-icon"></i>'
         ];
+        const number_columns = row_data.length;
         for (var j = 0; j < number_columns; j++) {
             row.insertCell(j).innerHTML = row_data[j];
         }
@@ -171,7 +170,6 @@ function buildStudentsDiplomaTable(users, colors_config) {
     var table = document.getElementById("diploma-table");
     table.innerHTML = "<tr> <td>№</td> <td>ФН</td> <td>Име</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Успех</td> <td>Присъствие</td> <td>Има право</td> <td>Готова</td> <td>Взета</td> <td>Заявка взимане предв.</td> <td>Коментар (студент)</td> <td>Взета предв.</td> <td>Дата/час</td> <td>Коментар (администр.)</td> <td>Покана реч</td> <td>Отговор</td> <td>Снимки</td> <td>Заявена тога</td> <td>Взета</td> <td>Дата/час</td> <td>Върната</td> <td>Дата/час</td> <td>Заявена шапка</td> <td>Взета</td> <td>Дата/час</td> <td>Върната</td> <td>Дата/час</td></tr>";
     let i = 1;
-    const number_columns = 29;
 
     for (const user of users) {
         if (user.grade >= 3) {
@@ -210,6 +208,7 @@ function buildStudentsDiplomaTable(users, colors_config) {
                 user.hat_returned_date,
 
             ];
+            const number_columns = row_data.length;
             for (var j = 0; j < number_columns; j++) {
                 row.insertCell(j).innerHTML = row_data[j];
             }
@@ -350,31 +349,20 @@ function filterActivate() {
     tableData.forEach((element) => {
         var toAddHidden = false;
         if (i != 0) {
-
-
-
             //sort by name - check if the data in <td> includes inputDataName
             if (!element.querySelectorAll("td")[2].innerHTML.includes(inputDataName)) {
                 toAddHidden = true;
-
             }
-
             //sort by fn - check if the data in <td> includes inputDataFn
             if (!element.querySelectorAll("td")[1].innerHTML.includes(inputDataFn)) {
                 toAddHidden = true;
-
             }
-
             element.toggleAttribute("hidden", toAddHidden);
-
-
         } else {
             i++;
         }
 
     })
-
-
 }
 
 //Filters End
