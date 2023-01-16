@@ -94,7 +94,10 @@ CREATE TABLE `diploma_order` (
 CREATE TABLE `graduation_time` ( 
     `id` INT NOT NULL AUTO_INCREMENT , 
     `start_time` TIME NULL DEFAULT NULL , 
-    `students_interval` TIME NULL DEFAULT NULL , 
+    `students_interval` TIME NULL DEFAULT NULL ,
+    `graduation_date` DATE NULL DEFAULT NULL ,
+    `graduation_place` VARCHAR(50) NULL DEFAULT NULL ,
+    `class` INT NULL DEFAULT NULL ,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
