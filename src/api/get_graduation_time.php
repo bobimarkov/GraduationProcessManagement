@@ -8,7 +8,7 @@ include_once '../src/database/db_conf.php';
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $database = new Db();
     $conn = $database->getConnection();
-    $stmt = $conn->prepare("SELECT graduation_time.start_time, graduation_time.students_interval 
+    $stmt = $conn->prepare("SELECT graduation_time.start_time, graduation_time.students_interval, graduation_time.graduation_date, graduation_time.graduation_place, graduation_time.class
                             FROM graduation_time");
     $stmt->execute();
 

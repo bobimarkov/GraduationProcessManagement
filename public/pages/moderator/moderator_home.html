@@ -1,12 +1,125 @@
-<!DOCTYPE html>    
-</body>
-</html>
+<!DOCTYPE html>
 <html>
     <head>
-        <link href="index_style.css" rel="stylesheet">
-        <meta charset="UTF-8">
+        <link href="../../css/moderator_style.css" rel="stylesheet">
+        <script defer src="../../js/moderator_home.js"></script>
+        <script src="https://kit.fontawesome.com/ee112817f8.js" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <meta charset="UTF-8"/>
+        <title>Модератор</title>
     </head>
     <body>
-        MODERATOR
+        <img class="logo" src="../../images/su-logo.png" alt="su-logo"/>
+        <p class="su-header">СУ "СВ. КЛИМЕНТ ОХРИДСКИ"</p>
+        <div class="navigation">
+            <h2 class="navigation_element" id="diploma_header" onclick="showDiplomaSection()">
+                ДИПЛОМИРАНЕ
+            </h2>
+            <div class="vertical_line"></div>
+            <h2 class="navigation_element active_header" id="users_header" onclick="showUsers()">
+                ПОТРЕБИТЕЛИ
+            </h2>
+            <div class="vertical_line"></div>
+            <h2 class="navigation_element" id="students_header" onclick="showStudents()">
+                СТУДЕНТИ
+            </h2>
+            <div class="vertical_line"></div>
+            <h2 class="navigation_element" id="analytic_header" onclick="showAnalyticsSection()">
+                СТАТИСТИКА
+            </h2>
+            <div class="vertical_line"></div>
+
+            <h2 class="navigation_element" id="logout_header">
+                ИЗХОД
+                <i class="fas fa-sign-out-alt"></i>
+            </h2>
+        </div>
+        <div class="row">
+
+            <div id="users_section">
+                <h3>
+                    <i class="fas fa-list"></i>
+                    Списък потребители</h3>
+                <table class="users-table" id="users-table">
+                    <tr>
+                        <td>ID</td>
+                        <td>Име</td>
+                        <td>Имейл</td>
+                        <td>Телефон</td>
+                        <td>Роля</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="students_section">
+                <h3>
+                    <i class="fas fa-list"></i>
+                    Списък студенти</h3>
+                <table class="students-table" id="students-table">
+                    <tr>
+                        <td>ID</td>
+                        <td>Име</td>
+                        <td>Имейл</td>
+                        <td>Телефон</td>
+                        <td>ФН</td>
+                        <td>Степен</td>
+                        <td>Спец.</td>
+                        <td>Група</td>
+                        <td>Дипломиращ се</td>
+                        <td>Роля</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="analytic_section" style="display:flex;">
+                <div id="analytics1" class="analytics"></div>
+                <div id="analytics2" class="analytics"></div>
+                <div id="analytics3" class="analytics"></div>
+                <div id="analytics4" class="analytics"></div>
+            </div>
+
+
+            <div id="diploma_section">
+                <h3>
+                    <i class="fas fa-list"></i>
+                    Списък студенти</h3>
+                <div id="filters">
+                    <input id="searchByName" placeholder="Търсене по име" onchange="filterActivate()"></input>
+                <input id="searchByFn" placeholder="Търсене по факултетен номер" onchange="filterActivate()"></input>
+        </div>
+        <table class="diploma-table" id="diploma-table">
+            <tr>
+                <td>№</td>
+                <td>ФН</td>
+                <td>Име</td>
+                <td>Степен</td>
+                <td>Спец.</td>
+                <td>Група</td>
+                <td>Успех</td>
+                <td>Присъствие</td>
+                <td>Има право</td>
+                <td>Готова</td>
+                <td>Взета</td>
+                <td>Заявка взимане предв.</td>
+                <td>Коментар (студент)</td>
+                <td>Взета предв.</td>
+                <td>Дата/час</td>
+                <td>Коментар (администр.)</td>
+                <td>Покана реч</td>
+                <td>Отговор</td>
+                <td>Снимки</td>
+                <td>Заявена тога</td>
+                <td>Взета</td>
+                <td>Дата/час</td>
+                <td>Върната</td>
+                <td>Дата/час</td>
+                <td>Заявена шапка</td>
+                <td>Взета</td>
+                <td>Дата/час</td>
+                <td>Върната</td>
+                <td>Дата/час</td>
+            </tr>
+        </table>
     </body>
 </html>
+
