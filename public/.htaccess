@@ -1,0 +1,9 @@
+<IfModule mod_rewrite.c>
+    Options -Multiviews
+    RewriteEngine On
+    # Долният ред си го оправете, ако е необходимо -> трябва да показва пътя от съдържанието на htdocs до public папката на проекта
+    RewriteBase /GraduationProcessManagement/public
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ $1.php
+</IfModule>
