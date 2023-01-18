@@ -1,0 +1,382 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color:#33B4FF;
+    background-size: 64px 128px;
+}
+
+.su-header {
+    display: inline;
+    font-size: 4rem;
+    text-align: center;
+    margin: auto;
+    font-weight: bolder;
+    color: #006199;
+}
+
+.row {
+    margin: 2em;
+    padding: 1em;
+    display: grid;
+    height: 100%;
+    background: rgb(195,192,236);
+    background: linear-gradient(90deg, #86CEFA 0%, rgba(226,237,238,1) 75%, rgba(255,255,255,1) 100%);
+    box-shadow: 5px 5px 20px darkslategray;
+}
+
+h2, .logout_header_link {
+    text-transform: capitalize;
+    text-decoration: none;
+    color: darkslategray;
+}
+
+.navigation {
+    padding: 5px;
+    background: rgba(247, 241, 241, 0.3);
+    margin: 1em 0;
+}
+
+.vertical_line {
+    display: inline;
+    border-left: 2px solid darkslategray;
+    height: 2em;
+    margin: 0 1em;
+}
+
+.active_header {
+    color: snow;
+}
+
+.navigation_element {
+    display: inline;
+    cursor: pointer;
+}
+
+.navigation_element:hover, .logout_header_link:hover {
+    color: white;
+}
+
+.message-bar {
+    padding: 10px;
+    margin-bottom: 1em;
+    font-size: 1.2em;
+    border-radius: 10px;
+    font-family: monospace;
+}
+
+.error {
+    background: rgba(255, 20, 20, 0.755);
+}
+
+.success {
+    background: rgba(128, 214, 132, 0.3);
+}
+
+.info {
+    background: #5cc3ff;
+}
+
+table {
+    /*border: 0.5px solid slategray;*/
+    box-shadow: 2px 2px 20px #006199;
+    margin-bottom: 2em;
+    max-height: 50vh;
+    width: 100%;
+    border-collapse: collapse;
+    display: block; 
+    overflow: auto;
+    white-space: nowrap;
+    border-radius: 5px;
+}  
+
+table td {
+    border: 0.5px solid slategray;
+    padding: 0 0.2em;
+}
+
+.users-table td:nth-child(1) {
+    /* id */
+    width: 5%;
+}
+
+.users-table td:nth-child(2) {
+    /* 3 names */
+    width: 50%;
+}
+
+.users-table td:nth-child(3) {
+    /* email */
+    width: 30%;
+}
+
+.users-table td:nth-child(4) {
+    /* phone */
+    width: 20%;
+}
+
+.users-table td:nth-child(5) {
+    /* role */
+    text-align: center;
+    width: 8%;
+}
+
+/*Edit-students-table css-style start*/
+
+.edit-students-table td:nth-child(1){
+    
+    width:5%;
+}
+
+.edit-students-table td:nth-child(2){
+    
+    width:50%;
+}
+.edit-students-table td:nth-child(3){
+    
+    width:25%;
+}
+.edit-students-table td:nth-child(4){
+    
+    width:20%;
+}
+.edit-students-table td:nth-child(5){
+    
+    width:20%;
+}
+
+
+/*Edit-students-table css-style end*/
+.students-table td:nth-child(1) {
+    /* id */
+    width: 5%;
+}
+
+.students-table td:nth-child(2) {
+    /* 3 names */
+    width: 40%;
+}
+
+.students-table td:nth-child(3) {
+    /* email */
+    width: 20%;
+}
+
+.students-table td:nth-child(4) {
+    /* phone */
+    width: 15%;
+}
+
+.students-table td:nth-child(5) {
+    /* fn */
+    /* text-align: center; */
+    width: 15%;
+}
+
+.students-table td:nth-child(6) {
+    /* degree */
+    text-align: center;
+    width: 5%;
+}
+
+.students-table td:nth-child(7) {
+    /* major */
+    text-align: center;
+    width: 5%;
+}
+
+.students-table td:nth-child(8) {
+    /* group */
+    text-align: center;
+    width: 5%;
+}
+
+.students-table td:nth-child(9) {
+    /* role */
+    text-align: center;
+    width: 5%;
+}
+
+.diploma-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.diploma-table td:nth-child(1) {
+    /* fn */
+    min-width: 2em;
+}
+
+.diploma-table td:nth-child(2) {
+    /* fn */
+    min-width: 7em;
+}
+
+.diploma-table td:nth-child(3) {
+    /* names */
+    min-width: 20em;
+    width: 100%;
+}
+
+/*.diploma-table td:nth-child(6), td:nth-child(10), td:nth-child(16), td:nth-child(19), td:nth-child(24) {
+    border-right: 2px solid slategrey;
+}*/
+
+
+/* .diploma-table td:nth-child(10) {
+     max-width: 10em; 
+} */
+
+.diploma_take_columns {
+    background-color: rgb(216, 216, 216)!important;
+}
+
+table tr {
+    height: 1.7em;
+}
+
+tr:hover {
+    background: #006199!important;
+    color: snow;
+}
+
+tr:hover .comment-icon {
+    color: snow;
+}
+
+tr:hover .user-role-icon {
+    color: snow;
+}
+
+table tr:nth-child(1) {
+    position: sticky;
+    top: -1;
+    background: #006199!important;
+    color: snow;
+}
+
+table tr:nth-child(even) {
+    background-color:rgba(47, 79, 79, 0.096)
+}
+
+.user-role-icon {
+    /* background-color: darkslategray; */
+    width: 1em;
+    color: darkslategray;
+}
+
+.comment-icon {
+    color: darkslategray;
+}
+
+.comment-icon:hover {
+    color: snow;
+    cursor: pointer;
+}
+
+.comment-icon:hover {
+    position: relative
+}
+.comment-icon span {
+    display: none;
+}
+.comment-icon:hover span {
+    background-color: snow;
+    padding: 5px;
+    display: block;
+    z-index: 100;
+    left: 0px;
+    margin: 10px;
+    position: absolute;
+    top: 10px;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: small;
+    font-weight: lighter;
+    color: darkslategray;
+    border: 1px solid darkslategray;
+    border-radius: 5px;
+}
+
+.delete-button {
+    height: 1.5em;
+    border: 0.5px solid grey;
+    cursor: pointer;
+    background-color: snow;
+    color: darkslategray;
+}
+
+.delete-button:hover {
+    background-color: darkslategray;
+    color: snow;
+}
+
+::-webkit-scrollbar {
+    width: 7px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+    border-radius: 10px;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #006199;
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #005282; 
+  }
+
+.diploma_order_section {
+    display: none;
+}
+
+h3 {
+    margin-top: 0!important;
+    padding: 5px;
+    border-radius: 5px;
+    width: 100%;
+    background: rgba(247, 241, 241, 0.603);
+    text-transform:uppercase;
+    text-decoration: none;
+    color: #2f4f4f;
+}
+
+
+/* Newly added*/
+
+#analytic_section{
+    height:75rem;
+}
+
+.analytics{
+    margin-top:5rem;
+    margin-left:7rem;
+    margin-right:7rem;
+    border-radius:5px;
+}
+
+body #analytic_section{
+    display:flex ;
+    flex-wrap:wrap;
+    justify-content:space-evenly;
+}
+
+svg{
+    border-radius:5px;
+    border:1px solid grey;
+}
+
+#filters input{
+    width: 10rem;
+   
+    margin-bottom: 1rem;
+    height: 2rem;
+}
+#searchByFn{
+    width:12rem !important;
+}

@@ -149,7 +149,6 @@ function requestGrown(email, value) {
         "email": email,
         "value": value
     };
-    console.log(requestData)
     fetch('../../api?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
@@ -175,7 +174,6 @@ function requestHat(email, value) {
         "email": email,
         "value": value
     };
-    console.log(requestData);
     fetch('../../api?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
