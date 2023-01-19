@@ -24,13 +24,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
         $users_data = trim($data);
     }
-    
-    
+
+
     // махаме всички нови редове >=2
     $users_data_escape_multiple_endlines = preg_replace("/[\r\n]+/", "\n", $users_data);
-    
+
     $users_arr_1d = preg_split("/\r\n|\r|\n/", $users_data_escape_multiple_endlines);
-    
+
     if (count($users_arr_1d) > 0) {
         // всеки потребител го разделяме спрямо , получавайки масив от полетата му $values => 
         // накрая имаме масив от потребители $users_arr_2d, където всеки потребител е масив от стойности
@@ -44,11 +44,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             $values_trimmed = array_map("trim", $values);
             $values_indexed = array_values($values_trimmed);
-            
+
             $users_arr_2d += [$i => $values_trimmed];
             $i++;
         }
-        
+
         exportStudentsToDB($users_arr_2d);
 
         exit;
@@ -157,7 +157,6 @@ function validateInput($values, $user, $i)
         echo json_encode($response);
         die;
     }
-
 
     $grade = $values_indexed[9];
     // echo $grade;
