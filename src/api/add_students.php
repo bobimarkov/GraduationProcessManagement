@@ -257,7 +257,7 @@ function exportStudentsToDB($users_arr_2d)
         }
     }
     if ($success) {
-        $response = array("success" => true, "message" => "Студентите са въведени успешно. Моля, презаредете страницата, за да ги видите.");
+        $response = array("success" => true, "message" => "Студентите са въведени успешно.");
         echo json_encode($response);
         die;
     }

@@ -7,19 +7,23 @@ include_once '../src/database/db_conf.php';
 
 $users_data = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $data = json_decode(file_get_contents("php://input"));
-
-    // Check if username is empty
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (!empty($_FILES['file']['tmp_name'])) {
+        foreach ($_FILES['file']['tmp_name'] as $key => $tmp_name) {
+            $file_handle = fopen($tmp_name, "r");
+            $file_content = fread($file_handle, filesize($tmp_name));
+            fclose($file_handle);
+            $data .= $file_content . "\n";
+        }
+    } 
+    
     if (empty(trim($data))) {
-        $response = array("success" => false, "message" => "Грешка: Моля, въведете данни за потребител(и).");
+        $response = array("success" => false, "message" => "Грешка: Моля, въведете данни за студент(и).");
         echo json_encode($response);
         die;
     } else {
         $users_data = trim($data);
     }
-
-
     // махаме всички нови редове >=2
     $users_data_escape_multiple_endlines = preg_replace("/[\r\n]+/", "\n", $users_data);
 
@@ -131,7 +135,7 @@ function exportUsersToDB($users_arr_2d) {
         ]);
     }
     if ($success) {
-        $response = array("success" => true, "message" => "Потребителите са въведени успешно. Моля, презаредете страницата, за да ги видите.");
+        $response = array("success" => true, "message" => "Потребителите са въведени успешно.");
         echo json_encode($response);
         die;
     }

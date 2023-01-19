@@ -679,8 +679,29 @@ function showDashboardAdditionalInputElement(value) {
     }
 }
 
+function submitUserHelper(bodyData) {
+    fetch('../../api?endpoint=add_users', {
+        method: 'POST',
+        body: bodyData
+    })
+        .then(response => response.json())
+        .then((data) => {
+            var errElem = document.getElementById('message-bar-users');
+            if (!data.success) {
+                errElem.classList.remove(['success']);
+                errElem.classList.add(['error']);
+                errElem.innerHTML = data.message;
+            } else {
+                errElem.classList.remove(['error']);
+                errElem.classList.add(['success']);
+                errElem.innerHTML = data.message;
+                document.getElementById("userTextarea").value = "";
+                getAllUsers();
+            }
+        });
+}
 
-function submitUsers(event) {
+/*function submitUsers(event) {
     event.preventDefault;
     var form = document.getElementById('add_users_form');
     var usersData = form.userTextarea.value;
@@ -708,6 +729,26 @@ function submitUsers(event) {
                 getAllUsers();
             }
         });
+}*/
+
+function submitUsers(event) {
+    event.preventDefault();
+    var form = document.getElementById('add_users_form');
+    var usersData = form.userTextarea.value;
+
+    submitUserHelper(JSON.stringify(usersData));
+
+}
+
+function submitUsersFromFile(event) {
+    event.preventDefault();
+    const files = document.getElementById('fileUsers').files;
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+        formData.append('file[]', files[i]);
+    }
+    submitUserHelper(formData);
+    document.getElementById('fileUsers').value = "";
 }
 
 function editStudent(event) {
@@ -771,18 +812,18 @@ function submitStudents(event) {
     var studentsData = form.studentTextarea.value;
 
     submitStudentHelper(JSON.stringify(studentsData));
-    
+
 }
 
 function submitStudentsFromFile(event) {
     event.preventDefault();
-    const files = document.getElementById('file').files;
+    const files = document.getElementById('fileStudent').files;
     const formData = new FormData();
-    for(let i=0; i<files.length; i++){
+    for (let i = 0; i < files.length; i++) {
         formData.append('file[]', files[i]);
     }
     submitStudentHelper(formData);
-    document.getElementById('file').value = "";    
+    document.getElementById('fileStudent').value = "";
 }
 
 function submitAction(event) {
@@ -958,7 +999,7 @@ function exportStudents() {
     myTable = document.getElementById("students-table");
     myTableBody = myTable.getElementsByTagName("tbody")[0];
     myRow = myTableBody.getElementsByTagName("tr");
-    for (let j = 1; j < myRow.length ; j++) {
+    for (let j = 1; j < myRow.length; j++) {
         myCell = myRow[j].getElementsByTagName("td");
         var students = [];
         for (let i = 0; i < myCell.length - 1; i++) {
@@ -970,26 +1011,90 @@ function exportStudents() {
 
 function downloadExportedStudents(event) {
     event.preventDefault();
-    let form = document.getElementById("export_files");
+    let form = document.getElementById("export_files_student");
     let fileFormat = form.format.value;
 
-    values = {"format": fileFormat}
+    values = { "format": fileFormat }
+    if (fileFormat !== 'pdf' && fileFormat !== 'no') {
+        fetch('../../api?endpoint=export_students', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(values)
+        })
+            .then(response => response.text())
+            .then(response => {
 
-    fetch('../../api?endpoint=export_students', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(values)
-    })
-        .then(response => response.text())
-        .then(response => {
+                const blob = new Blob([response], { type: "application/octet-stream" });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = "data.".concat(fileFormat);
+                link.click();
+                link.remove();
+            });
+    }
+    else if (fileFormat === 'pdf') {
+        fetch('../../api?endpoint=export_students', {
+            method: 'POST',
+            body: JSON.stringify(values)
+        })
+            .then(response => response.blob())
+            .then(blob => {
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = "students.pdf";
 
-            const blob = new Blob([response], { type: "application/octet-stream" });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = "data.".concat(fileFormat);
-            link.click();
-            link.remove();
-    });
+                document.body.appendChild(link);
+                link.click();
+
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(link.href);
+            });
+    }
+}
+
+function downloadExportedUsers(event) {
+    event.preventDefault();
+    let form = document.getElementById("export_files_users");
+    let fileFormat = form.format.value;
+
+    values = { "format": fileFormat }
+    if (fileFormat !== 'pdf' && fileFormat !== 'no') {
+        fetch('../../api?endpoint=export_users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(values)
+        })
+            .then(response => response.text())
+            .then(response => {
+
+                const blob = new Blob([response], { type: "application/octet-stream" });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = "data.".concat(fileFormat);
+                link.click();
+                link.remove();
+            });
+    }
+    else if (fileFormat === 'pdf') {
+        fetch('../../api?endpoint=export_users', {
+            method: 'POST',
+            body: JSON.stringify(values)
+        })
+            .then(response => response.blob())
+            .then(blob => {
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = "users.pdf";
+
+                document.body.appendChild(link);
+                link.click();
+
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(link.href);
+            });
+    }
 }

@@ -4,13 +4,11 @@ $data = (array) $data;
 if (isset($data["format"])) {
     include_once '../src/database/db_conf.php';
     $format = $data["format"];
-    $name = "students." . $format;
+    $name = "users." . $format;
     $database = new Db();
     $conn = $database->getConnection();
-    $stmt = $conn->prepare("SELECT user.name, email, phone, fn, degree, major, student.group, has_diploma_right
-    FROM `user`
-    join student
-    on user_id = id");
+    $stmt = $conn->prepare("SELECT name, email, phone, role FROM `user` 
+    WHERE role='admin' or role='moderator';");
     $stmt->execute();
     if ($format !== 'pdf' && $format !== 'no') {
         header('Content-Type: text/csv; charset=utf-8');
@@ -20,9 +18,8 @@ if (isset($data["format"])) {
         fwrite($output, "\xEF\xBB\xBF");
         fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
-        fputcsv($output, array('Име', 'Имейл', 'Телефон', 'ФН', 'Степен', 'Специалност', 'Група', 'Дипломиране'));
+        fputcsv($output, array('Име', 'Имейл', 'Телефон', 'Роля'));
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $row['has_diploma_right'] = ($row['has_diploma_right'] === 1) ? 'Да' : 'Не';
             if ($format === 'csv' || $format === 'xls') {
                 $row['phone'] = "'{$row['phone']}'";
             }
@@ -39,14 +36,11 @@ if (isset($data["format"])) {
         $pdf->setFontSubsetting(false); //cyrillic
         $pdf->SetFont('dejavusans', '', 11, '', true);
         $pdf->AddPage();
-        $pdf->Cell(0, 0, implode(",", array('Име', 'Имейл', 'Телефон', 'ФН', 'Степен', 'Специалност', 'Група', 'Дипломиране')), 0, 1);
+        $pdf->Cell(0, 0, implode(",", array('Име', 'Имейл', 'Телефон', 'Роля')), 0, 1);
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $row['has_diploma_right'] = ($row['has_diploma_right'] === 1) ? 'Да' : 'Нe';
             $pdf->Cell(0, 0, implode(",", $row), 0, 1);
         }
-
-        $pdf->Output("students.pdf", 'D');
-
+        $pdf->Output("users.pdf", 'D');
     }
 }
 ?>
