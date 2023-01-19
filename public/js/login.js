@@ -17,7 +17,7 @@ loginForm.addEventListener("submit", (e) => {
     const formData = new FormData(loginForm);
     const data = Object.fromEntries(formData.entries());
 
-    fetch(`../api?endpoint=login`, {
+    fetch("../api?endpoint=login", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

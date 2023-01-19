@@ -57,9 +57,9 @@ function buildUsersTable(data) {
             user.email,
             user.phone,
             user.role == 'admin' ?
-             '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
-             '<i class="fas fa-user-cog user-role-icon"></i>' :
-             '<i class="fas fa-user-graduate user-role-icon"></i>'
+                '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
+                    '<i class="fas fa-user-cog user-role-icon"></i>' :
+                    '<i class="fas fa-user-graduate user-role-icon"></i>'
         ];
         const number_columns = row_data.length;
         for (var j = 0; j < number_columns; j++) {
@@ -136,9 +136,9 @@ function buildStudentsTable(data) {
             user.group,
             user.has_diploma_right == 0 ? "Не" : "Да",
             user.role == 'admin' ?
-             '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
-             '<i class="fas fa-user-cog user-role-icon"></i>' :
-             '<i class="fas fa-user-graduate user-role-icon"></i>'
+                '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
+                    '<i class="fas fa-user-cog user-role-icon"></i>' :
+                    '<i class="fas fa-user-graduate user-role-icon"></i>'
         ];
         const number_columns = row_data.length;
         for (var j = 0; j < number_columns; j++) {
@@ -189,7 +189,7 @@ function getColorsConfig(users) {
 
 function buildStudentsDiplomaTable(users, colors_config) {
     var table = document.getElementById("diploma-table");
-    
+
     table.innerHTML = "<tr> <td>№</td> <td>ФН</td> <td>Име</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Успех</td> <td>Присъствие</td> <td>Има право</td> <td>Готова</td> <td>Взета</td> <td>Заявка взимане предв.</td> <td>Коментар (студент)</td> <td>Взета предв.</td> <td>Дата/час</td> <td>Коментар (администр.)</td> <td>Покана реч</td> <td>Отговор</td> <td>Снимки</td> <td>Заявена тога</td> <td>Взета</td> <td>Дата/час</td> <td>Върната</td> <td>Дата/час</td> <td>Заявена шапка</td> <td>Взета</td> <td>Дата/час</td> <td>Върната</td> <td>Дата/час</td></tr>";
     let i = 1;
 
@@ -452,7 +452,7 @@ function dataHasRightToArray(data) {
 }
 
 function dataDegreeToArray(data) {
-    const a = [["Степен на образование", "Брой студенти"], ["Бакалавър", 0], ["Магистър", 0],["Доктор", 0]];
+    const a = [["Степен на образование", "Брой студенти"], ["Бакалавър", 0], ["Магистър", 0], ["Доктор", 0]];
 
     let rows = data.users;
     rows.forEach(row_data => {
@@ -751,12 +751,7 @@ function submitStudentsFromFile(event) {
         formData.append('file[]', files[i]);
     }
     submitStudentHelper(formData);
-<<<<<<< HEAD
     document.getElementById('fileStudent').value = "";
-=======
-    document.getElementById('file').value = "";    
-
->>>>>>> c844c4ab5d032de966e3a226155c9a7516f7e5fd
 }
 
 function submitAction(event) {
@@ -972,7 +967,6 @@ function downloadExportedStudents(event) {
                 link.href = window.URL.createObjectURL(blob);
                 link.download = "students.pdf";
 
-<<<<<<< HEAD
                 document.body.appendChild(link);
                 link.click();
 
@@ -1026,13 +1020,5 @@ function downloadExportedUsers(event) {
             });
     }
 }
-=======
-            const blob = new Blob([response], { type: "application/octet-stream" });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = "data.".concat(fileFormat);
-            link.click();
-            link.remove();
-    });
-}
->>>>>>> c844c4ab5d032de966e3a226155c9a7516f7e5fd
+
+
