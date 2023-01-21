@@ -16,7 +16,7 @@ CREATE TABLE `user` (
 ) ENGINE = InnoDB;
 
 CREATE TABLE `student` ( 
-    `fn` INT NOT NULL , 
+    `fn` VARCHAR(99) NOT NULL , 
     `user_id` INT NOT NULL , 
     `degree` VARCHAR(99) NOT NULL , 
     `major` VARCHAR(99) NOT NULL , 
@@ -30,7 +30,10 @@ ALTER TABLE `student` ADD CONSTRAINT `user_id_fk` FOREIGN KEY (`user_id`) REFERE
 
 CREATE TABLE `student_diploma` ( 
     `id` INT NOT NULL AUTO_INCREMENT , 
-    `student_fn` INT NOT NULL , 
+    `student_fn` VARCHAR(99) NOT NULL , 
+    `color` VARCHAR(99) DEFAULT NULL ,
+    `num_order` INT DEFAULT NULL ,
+    `time_diploma` TIME DEFAULT NULL ,
     `attendance` BOOLEAN NOT NULL DEFAULT 0 , 
     `grade` DOUBLE NULL DEFAULT NULL , 
     `has_right` BOOLEAN NOT NULL DEFAULT 1 , 
@@ -52,7 +55,7 @@ ALTER TABLE `student_diploma` ADD CONSTRAINT `student_fn_fk` FOREIGN KEY (`stude
 
 CREATE TABLE `student_grown` ( 
     `id` INT NOT NULL AUTO_INCREMENT , 
-    `student_fn` INT NOT NULL , 
+    `student_fn` VARCHAR(99) NOT NULL , 
     `grown_requested` BOOLEAN NULL DEFAULT NULL , 
     `grown_taken` BOOLEAN NULL DEFAULT 0 , 
     `grown_taken_date` VARCHAR(99) NULL DEFAULT NULL , 
@@ -66,7 +69,7 @@ ALTER TABLE `student_grown` ADD CONSTRAINT `student_fn_fk_3` FOREIGN KEY (`stude
 
 CREATE TABLE `student_hat` ( 
     `id` INT NOT NULL AUTO_INCREMENT , 
-    `student_fn` INT NOT NULL , 
+    `student_fn` VARCHAR(99) NOT NULL , 
     `hat_requested` BOOLEAN NULL DEFAULT NULL , 
     `hat_taken` BOOLEAN NULL DEFAULT 0 , 
     `hat_taken_date` VARCHAR(99) NULL DEFAULT NULL , 

@@ -12,7 +12,6 @@ session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $data = json_decode(file_get_contents("php://input"));
-
     foreach ($data as $v) {
         if ($v != -1) {
             array_push($data_array, $v);
@@ -83,7 +82,7 @@ function submitDiplomaOrder($parameters)
         ]);
     } else if (count($parameters) == 6) {
         $stmt = $conn->prepare("INSERT INTO `diploma_order` (`param_1`, `param_2`, `param_3`, `param_4`, `param_5`, `param_6`) 
-                                       VALUES (:p1, :p2, :p3, :p4, :p5, p6)");
+                                       VALUES (:p1, :p2, :p3, :p4, :p5, :p6)");
         $success = $stmt->execute([
             "p1" => $parameters[0],
             "p2" => $parameters[1],

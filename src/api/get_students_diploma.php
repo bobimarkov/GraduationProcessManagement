@@ -34,93 +34,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         }
 
         executeQuery($order_values, $conn);
-
-
-        // var_dump($rows);
-
     }
 }
 
 function executeQuery($order_values, $conn)
 {
-    $stmt = new PDOStatement();
-    if(count($order_values) == 0) {
-        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_grown.*, student_hat.*
-        FROM student_diploma
-        RIGHT JOIN student ON student.fn = student_diploma.student_fn 
-        RIGHT JOIN user ON user.id = student.user_id 
-        LEFT JOIN student_grown ON student.fn = student_grown.student_fn 
-        LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
-        WHERE user.role='student'
-        ORDER BY student_diploma.id ASC");
-    } 
-    else if(count($order_values) == 1) {
-        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_grown.*, student_hat.*
-        FROM student_diploma
-        RIGHT JOIN student ON student.fn = student_diploma.student_fn 
-        RIGHT JOIN user ON user.id = student.user_id 
-        LEFT JOIN student_grown ON student.fn = student_grown.student_fn 
-        LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
-        WHERE user.role='student'
-        ORDER BY $order_values[0] ASC");
-    } 
-    else if(count($order_values) == 2) {
-        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_grown.*, student_hat.*
-        FROM student_diploma
-        RIGHT JOIN student ON student.fn = student_diploma.student_fn 
-        RIGHT JOIN user ON user.id = student.user_id 
-        LEFT JOIN student_grown ON student.fn = student_grown.student_fn 
-        LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
-        WHERE user.role='student'
-        ORDER BY $order_values[0] ASC, $order_values[1] ASC");
-    } 
-    else if(count($order_values) == 3) {
-        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_grown.*, student_hat.*
-        FROM student_diploma
-        RIGHT JOIN student ON student.fn = student_diploma.student_fn 
-        RIGHT JOIN user ON user.id = student.user_id 
-        LEFT JOIN student_grown ON student.fn = student_grown.student_fn 
-        LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
-        WHERE user.role='student'
-        ORDER BY $order_values[0] ASC, $order_values[1] ASC, $order_values[2] ASC");
-    } 
-    else if(count($order_values) == 4) {
-        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_grown.*, student_hat.*
-        FROM student_diploma
-        RIGHT JOIN student ON student.fn = student_diploma.student_fn 
-        RIGHT JOIN user ON user.id = student.user_id 
-        LEFT JOIN student_grown ON student.fn = student_grown.student_fn 
-        LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
-        WHERE user.role='student'
-        ORDER BY $order_values[0] ASC, $order_values[1] ASC, $order_values[2] ASC, $order_values[3] ASC ");
-    } 
-    else if(count($order_values) == 5) {
-        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_grown.*, student_hat.*
-        FROM student_diploma
-        RIGHT JOIN student ON student.fn = student_diploma.student_fn 
-        RIGHT JOIN user ON user.id = student.user_id 
-        LEFT JOIN student_grown ON student.fn = student_grown.student_fn 
-        LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
-        WHERE user.role='student'
-        ORDER BY $order_values[0] ASC, $order_values[1] ASC, $order_values[2] ASC, $order_values[3] ASC, $order_values[4] ASC ");
-    } 
-    else if(count($order_values) == 6) {
-        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_grown.*, student_hat.*
-        FROM student_diploma
-        RIGHT JOIN student ON student.fn = student_diploma.student_fn 
-        RIGHT JOIN user ON user.id = student.user_id 
-        LEFT JOIN student_grown ON student.fn = student_grown.student_fn 
-        LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
-        WHERE user.role='student'
-        ORDER BY $order_values[0] ASC, $order_values[1] ASC, $order_values[2] ASC, $order_values[3] ASC, $order_values[4] ASC, $order_values[5] ASC");
-    }
+    $query = new PDOStatement();
+    $query = "SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_grown.*, student_hat.*
+    FROM student_diploma
+    RIGHT JOIN student ON student.fn = student_diploma.student_fn 
+    RIGHT JOIN user ON user.id = student.user_id 
+    LEFT JOIN student_grown ON student.fn = student_grown.student_fn 
+    LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
+    WHERE user.role='student'";
 
+    if (count($order_values) > 0) {
+        $query .= " ORDER BY ";
+        for ($i = 0; $i < count($order_values); $i++) {
+            switch ($order_values[$i]) {
+                case 'name':
+                    $type = 'user.name';
+                    break;
+                case 'fn':
+                    $type = 'student.fn';
+                    break;
+                case 'degree':
+                    $type = 'student.degree';
+                    break;
+                case 'major':
+                    $type = 'student.major';
+                    break;
+                case 'grade':
+                    $type = 'student_diploma.grade';
+                    break;
+                case 'group':
+                    $type = 'student.group';
+                    break;
+            }
+            $query .= $type . " ASC";
+            if ($i < count($order_values) - 1) {
+                $query .= ", ";
+            }
+        }
+    }
+    $stmt = $conn->prepare($query);
     $stmt->execute();
 
     $rows = $stmt->fetchAll();
-
-    // var_dump($rows);
-
     $response = array("success" => true, "users" => $rows);
     echo json_encode($response);
     http_response_code(200);

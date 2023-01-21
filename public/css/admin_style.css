@@ -315,31 +315,6 @@ table td {
     white-space: nowrap;
 }
 
-.diploma-table td:nth-child(1) {
-    /* fn */
-    min-width: 2em;
-}
-
-.diploma-table td:nth-child(2) {
-    /* fn */
-    min-width: 7em;
-}
-
-.diploma-table td:nth-child(3) {
-    /* names */
-    min-width: 20em;
-    width: 100%;
-}
-
-/*.diploma-table td:nth-child(6), td:nth-child(10), td:nth-child(16), td:nth-child(19), td:nth-child(24) {
-    border-right: 2px solid slategrey;
-}*/
-
-
-/* .diploma-table td:nth-child(10) {
-     max-width: 10em; 
-} */
-
 .diploma_take_columns {
     background-color: rgb(216, 216, 216) !important;
 }
@@ -495,12 +470,13 @@ svg {
     border: 1px solid grey;
 }
 
-#filters input {
+#searchByName, #searchByFn{
     width: 20rem;
-    margin-bottom: 1rem;
+    
+    margin-top: 1rem;
     height: 2.5rem;
-
 }
+
 
 #searchByName {
     margin-right: 1rem;
@@ -508,6 +484,20 @@ svg {
 
 #export-graduated {
     margin-top: 2rem;
+    width: 20rem;
+    margin-left: 0;
 }
 
+#export_files_graduated{
+    
+    margin-bottom: 1rem;
+}
 
+#export_files_graduated > .dashboard-action{
+    width: 20rem;
+    margin-left: 0;
+}
+
+#header-table{
+    cursor: pointer;
+}
