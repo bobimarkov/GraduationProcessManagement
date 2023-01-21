@@ -59,8 +59,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 die;
             }
             $role = $values_indexed[3];
-            if ($role != "admin" && $role != "moderator") {
-                $_SESSION["error"] = "Грешка за потребител $i ($user) - ролята може да е или admin, или moderator!";
+            if ($role != "admin" && $role != "moderator-hat" && $role != "moderator-gown" && $role != "moderator-signature") {
+                $_SESSION["error"] = "Грешка за потребител $i ($user) - ролята може да е или admin, или moderator-hat, или moderator-gown, или moderator-signature!";
                 redirectHome();
                 die;
             }
@@ -120,13 +120,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 function redirectHome()
 {
     $role = $_SESSION["role"];
-    switch ($role) {
-        case "admin":
-            echo "here";
-            header("Location: ../user_pages/admin/admin_home.php");
-            break;
-        case "moderator":
-            header("Location: ../user_pages/admin/moderator_home.php");
-            break;
+    if($role == "admin") {
+        header("Location: ../user_pages/admin/admin_home.php");
+    }
+    else if ( in_array(array("moderator-hat","moderator-gown","moderator-signature"),$role)) {
+        header("Location: ../user_pages/admin/moderator_home.php");
     }
 };

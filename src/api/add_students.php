@@ -159,7 +159,6 @@ function validateInput($values, $user, $i)
     }
 
     $grade = $values_indexed[9];
-    // echo $grade;
     if (!is_numeric($grade) && $grade != '-') {
         $response = array("success" => false, "message" => "Грешка за потребител $i ($user) - оценката трябва да е двоично число със запетая!");
         echo json_encode($response);

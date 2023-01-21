@@ -1,0 +1,3 @@
+kboyazhieva@gmail.com   , Password1, Калина Иванова Бояджиева       , 0890202031, moderator-gown
+mivanva@gmail.com       , Password1, Мариела Костадинова Иванова    , 0890132032, moderator-signature 
+iivanov@gmail.com        , Password1, Иван Петров Иванов             , 0890402030, moderator-hat   

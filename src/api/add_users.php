@@ -98,8 +98,8 @@ function validateInput($values, $user, $i) {
     }
 
     $role = $values_indexed[4];
-    if ($role != "admin" && $role != "moderator") {
-        $response = array("success" => false, "message" => "Грешка за потребител $i ($user) - ролята може да е или admin, или moderator!");
+    if ($role != "admin" && $role != "moderator-hat" && $role != "moderator-gown" && $role != "moderator-signature")  {
+        $response = array("success" => false, "message" => "Грешка за потребител $i ($user) - ролята може да е или admin, или moderator-hat, или moderator-gown, или moderator-signature!");
         echo json_encode($response);
         die;
     }

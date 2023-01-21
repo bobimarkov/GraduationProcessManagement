@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $conn = $database->getConnection();
     $stmt = $conn->prepare("SELECT id, email, name, role, phone 
                                 FROM user 
-                                WHERE role='admin' OR role='moderator'
+                                WHERE role='admin' OR role in ('moderator-hat', 'moderator-gown', 'moderator-signature')
                                 ORDER BY id DESC");
     $stmt->execute();
 

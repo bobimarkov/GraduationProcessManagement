@@ -13,7 +13,8 @@ logoutHeader.addEventListener("click", (e) => {
 });
 
 function sessionLoader() {
-    if (!sessionStorage.getItem("user") || !sessionStorage.getItem("role") || (sessionStorage.getItem("role") && sessionStorage.getItem("role") !== "moderator")) {
+    if (!sessionStorage.getItem("user") || !sessionStorage.getItem("role") || (sessionStorage.getItem("role") &&
+     (!["moderator-hat","moderator-gown","moderator-signature"].includes(sessionStorage.getItem("role"))))) {
         sessionStorage.clear();
 
         window.location.replace("../../index.html");
@@ -57,10 +58,11 @@ function buildUsersTable(data) {
             user.name,
             user.email,
             user.phone,
-            user.role == 'admin' ?
-             '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
-             '<i class="fas fa-user-cog user-role-icon"></i>' :
-             '<i class="fas fa-user-graduate user-role-icon"></i>'
+            user.role == 'admin' ? '<i class="fas fa-user-lock user-role-icon"></i>' :
+            user.role == 'moderator-hat' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-graduation-cap user-role-icon"></i>' :
+            user.role == 'moderator-gown' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-pen user-role-icon"></i>' :
+            user.role == 'moderator-signature' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-tshirt user-role-icon"></i>' :
+            '<i class="fas fa-user-graduate user-role-icon"></i>'
         ];
         const number_columns = row_data.length;
         for (var j = 0; j < number_columns; j++) {
@@ -112,10 +114,7 @@ function buildStudentsTable(data) {
             user.major,
             user.group,
             user.has_diploma_right == 0 ? "Не" : "Да",
-            user.role == 'admin' ?
-             '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
-             '<i class="fas fa-user-cog user-role-icon"></i>' :
-             '<i class="fas fa-user-graduate user-role-icon"></i>'
+            '<i class="fas fa-user-graduate user-role-icon"></i>'
         ];
         const number_columns = row_data.length;
         for (var j = 0; j < number_columns; j++) {
@@ -168,7 +167,7 @@ function getColorsConfig(users) {
 
 function buildStudentsDiplomaTable(users, colors_config) {
     var table = document.getElementById("diploma-table");
-    table.innerHTML = "<tr> <td>№</td> <td>ФН</td> <td>Име</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Успех</td> <td>Присъствие</td> <td>Има право</td> <td>Готова</td> <td>Взета</td> <td>Заявка взимане предв.</td> <td>Коментар (студент)</td> <td>Взета предв.</td> <td>Дата/час</td> <td>Коментар (администр.)</td> <td>Покана реч</td> <td>Отговор</td> <td>Снимки</td> <td>Заявена тога</td> <td>Взета</td> <td>Дата/час</td> <td>Върната</td> <td>Дата/час</td> <td>Заявена шапка</td> <td>Взета</td> <td>Дата/час</td> <td>Върната</td> <td>Дата/час</td></tr>";
+    table.innerHTML = "<tr> <td>№</td> <td>ФН</td> <td>Име</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Успех</td> <td>Присъствие</td> <td>Има право</td> <td>Готова</td> <td>Взета</td> <td>Заявка взимане предв.</td> <td>Коментар (студент)</td> <td>Взета предв.</td> <td>Дата/час</td> <td>Коментар (администр.)</td> <td>Покана реч</td> <td>Отговор</td> <td>Снимки</td> <td>Заявена тога</td> <td>Взета</td> <td>Дата/час</td> <td>Върната</td> <td>Дата/час</td> <td>Заявена шапка</td> <td>Взета</td> <td>Дата/час</td></tr>";
     let i = 1;
 
     for (const user of users) {
@@ -195,17 +194,19 @@ function buildStudentsDiplomaTable(users, colors_config) {
                 user.speech_request == 0 ? 'Не' : 'Да',
                 user.speech_response == null ? '-' : user.speech_response,
                 user.photos_requested == 0 ? 'Не' : 'Да',
-                user.grown_requested == 0 ? 'Не' : 'Да',
-                user.grown_taken == 0 ? 'Не' : 'Да',
+                //grown_requested
+                user.grown_requested == null ? '' : user.grown_requested == 0 ? 'Не' : 'Да',
+                //grown_taken
+                user.grown_requested != 1 ? '' : user.grown_taken == 0 || user.grown_taken == null ? 'Не' : 'Да',
                 user.grown_taken_date,
-                user.grown_returned == 0 ? 'Не' : 'Да',
+                //grown_returned
+                user.grown_taken != 1 ? '' : user.grown_returned == 0 || user.grown_returned == null ? 'Не' : 'Да',
                 user.grown_returned_date,
-                user.hat_requested == 0 ? 'Не' : 'Да',
-                user.hat_taken == 0 ? 'Не' : 'Да',
-                user.hat_taken_date,
-                user.hat_returned == 0 ? 'Не' : 'Да',
-                user.hat_returned_date,
-
+                //hat_requested
+                user.hat_requested == null ? '' : user.hat_requested == 0 ? 'Не' : 'Да',
+                //hat_taken
+                user.hat_requested != 1 ? '' : user.hat_taken == 0 || user.hat_taken == null ? 'Не' : 'Да',
+                user.hat_taken_date
             ];
             const number_columns = row_data.length;
             for (var j = 0; j < number_columns; j++) {
@@ -297,7 +298,8 @@ function showGivenSection(sectionToBeDisplayed) {
         'users_section',
         'students_section',
         'diploma_section',
-        'analytic_section'];
+        'analytic_section',
+        'responsibilities_section'];
     sections = sections.map(x => document.getElementById(x));
 
     //iterate all sections
@@ -318,12 +320,13 @@ function showGivenSection(sectionToBeDisplayed) {
 /*---- SWITCH_SECTIONS  END ----*/
 //give class "active_header" to only element with elementid
 function activeHeader(elementId) {
-    
+
     var headers = [
         'users_header',
         'students_header',
         'diploma_header',
-        'analytic_header'];
+        'analytic_header',
+        'responsibilities_header'];
 
     headers = headers.map(x => document.getElementById(x));
 
@@ -389,7 +392,7 @@ function dataHasRightToArray(data) {
 }
 
 function dataDegreeToArray(data) {
-    const a = [["Степен на образование", "Брой студенти"], ["Бакалавър", 0], ["Магистър", 0],["Доктор", 0]];
+    const a = [["Степен на образование", "Брой студенти"], ["Бакалавър", 0], ["Магистър", 0], ["Доктор", 0]];
 
     let rows = data.users;
     rows.forEach(row_data => {
@@ -476,3 +479,31 @@ function drawChart(majorData, id, titleMessage) {
     var chart = new google.visualization.PieChart(document.getElementById(id));
     chart.draw(data, options);
 } 
+
+
+function responsibilitiesByModeratorRole() {
+    switch(sessionStorage.getItem("role")) {
+        case "moderator-hat" :
+            responsibilitiesForModeratorHat();
+            break;
+        case "moderator-gown" :
+            responsibilitiesForModeratorGrown();
+            break;
+        case "moderator-signature" :
+            responsibilitiesForModeratorSignature();
+            break;
+    }
+}
+
+function responsibilitiesForModeratorHat() {
+    let responsibilities_body = document.getElementById("responsibilities_header");
+    responsibilities_body.innerHTML += "Moderator-Hat";
+}
+function responsibilitiesForModeratorGrown() {
+    let responsibilities_body = document.getElementById("responsibilities_header");
+    responsibilities_body.innerHTML += "Moderator-gown";
+}
+function responsibilitiesForModeratorSignature() {
+    let responsibilities_body = document.getElementById("responsibilities_header");
+    responsibilities_body.innerHTML += "Moderator-Signature";
+}

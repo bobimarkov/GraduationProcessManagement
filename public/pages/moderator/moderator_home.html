@@ -29,6 +29,11 @@
             </h2>
             <div class="vertical_line"></div>
 
+            <h2 class="navigation_element" id="responsibilities_header" onclick="responsibilitiesByModeratorRole()">
+                ОТГОВОРНОСТ
+            </h2>
+            <div class="vertical_line"></div>
+
             <h2 class="navigation_element" id="logout_header">
                 ИЗХОД
                 <i class="fas fa-sign-out-alt"></i>
@@ -85,41 +90,47 @@
                     Списък студенти</h3>
                 <div id="filters">
                     <input id="searchByName" placeholder="Търсене по име" onchange="filterActivate()"></input>
-                <input id="searchByFn" placeholder="Търсене по факултетен номер" onchange="filterActivate()"></input>
+                    <input id="searchByFn" placeholder="Търсене по факултетен номер" onchange="filterActivate()"></input>
+                </div>
+            
+                <table class="diploma-table" id="diploma-table">
+                    <tr>
+                        <td>№</td>
+                        <td>ФН</td>
+                        <td>Име</td>
+                        <td>Степен</td>
+                        <td>Спец.</td>
+                        <td>Група</td>
+                        <td>Успех</td>
+                        <td>Присъствие</td>
+                        <td>Има право</td>
+                        <td>Готова</td>
+                        <td>Взета</td>
+                        <td>Заявка взимане предв.</td>
+                        <td>Коментар (студент)</td>
+                        <td>Взета предв.</td>
+                        <td>Дата/час</td>
+                        <td>Коментар (администр.)</td>
+                        <td>Покана реч</td>
+                        <td>Отговор</td>
+                        <td>Снимки</td>
+                        <td>Заявена тога</td>
+                        <td>Взета</td>
+                        <td>Дата/час</td>
+                        <td>Върната</td>
+                        <td>Дата/час</td>
+                        <td>Заявена шапка</td>
+                        <td>Взета</td>
+                        <td>Дата/час</td>
+                        <td>Върната</td>
+                        <td>Дата/час</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="responsibilities_section">
+            </div>
         </div>
-        <table class="diploma-table" id="diploma-table">
-            <tr>
-                <td>№</td>
-                <td>ФН</td>
-                <td>Име</td>
-                <td>Степен</td>
-                <td>Спец.</td>
-                <td>Група</td>
-                <td>Успех</td>
-                <td>Присъствие</td>
-                <td>Има право</td>
-                <td>Готова</td>
-                <td>Взета</td>
-                <td>Заявка взимане предв.</td>
-                <td>Коментар (студент)</td>
-                <td>Взета предв.</td>
-                <td>Дата/час</td>
-                <td>Коментар (администр.)</td>
-                <td>Покана реч</td>
-                <td>Отговор</td>
-                <td>Снимки</td>
-                <td>Заявена тога</td>
-                <td>Взета</td>
-                <td>Дата/час</td>
-                <td>Върната</td>
-                <td>Дата/час</td>
-                <td>Заявена шапка</td>
-                <td>Взета</td>
-                <td>Дата/час</td>
-                <td>Върната</td>
-                <td>Дата/час</td>
-            </tr>
-        </table>
     </body>
 </html>
 

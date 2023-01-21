@@ -8,7 +8,7 @@ if (isset($data["format"])) {
     $database = new Db();
     $conn = $database->getConnection();
     $stmt = $conn->prepare("SELECT name, email, phone, role FROM `user` 
-    WHERE role='admin' or role='moderator';");
+    WHERE role='admin' or role in ('moderator-hat', 'moderator-gown', 'moderator-signature');");
     $stmt->execute();
     if ($format !== 'pdf' && $format !== 'no') {
         header('Content-Type: text/csv; charset=utf-8');

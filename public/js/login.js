@@ -29,7 +29,13 @@ loginForm.addEventListener("submit", (e) => {
         .then((response) => {
             if (response["success"]) {
                 loadSession(response["user"]);
-                window.location.replace(`./${response["user"].role}/${response["user"].role}_home.html`);
+                const moderator_roles = ["moderator-hat", "moderator-gown", "moderator-signature"];
+                if (moderator_roles.includes(response["user"].role )) {
+                    window.location.replace(`./moderator/moderator_home.html`);
+                }
+                else {
+                    window.location.replace(`./${response["user"].role}/${response["user"].role}_home.html`);
+                }
             }
             else {
                 document.querySelector("#message-bar-users").innerHTML = response["error"];

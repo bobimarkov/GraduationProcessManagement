@@ -1,7 +1,7 @@
 admin@gmail.com          , Password1, Admin Admin Admin              , 0870102030, admin       
-iivanov@gmail.com        , Password1, Иван Петров Иванов             , 0890102030, moderator   
-kboyadzhieva@gmail.com   , Password1, Калина Иванова Бояджиева       , 0890102031, moderator   
-mivanova@gmail.com       , Password1, Мариела Костадинова Иванова    , 0890102032, moderator   
+iivanov@gmail.com        , Password1, Иван Петров Иванов             , 0890102030, moderator-hat  
+kboyadzhieva@gmail.com   , Password1, Калина Иванова Бояджиева       , 0890102031, moderator-signature   
+mivanova@gmail.com       , Password1, Мариела Костадинова Иванова    , 0890102032, moderator-gown  
 
 imanushev@gmail.com      , Password1, Ивайло Людмилов Манушев        , 0880102030, student, 81808, Б, КН, 3, 6.00
 pkostadinov@gmail.com    , Password1, Пресиян Мартинов Костадинов    , 0880102031, student, 81801, Б, КН, 3, 5.20
