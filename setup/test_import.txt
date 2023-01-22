@@ -13,5 +13,5 @@ zhpencheva@gmail.com     , Password1, Жаклин Йорданова Пенче
 tstrendafilov@gmail.com  , Password1, Цветомир Ивайлов Трендафилов   , 0880102042, student, 81812, Б, СИ, 5, 5.40
 syodanova@gmail.com      , Password1, Стела Йорданова Йорданова      , 0880102043, student, 81813, Б, СИ, 5, 4.93
 nboyadzhieva@gmail.com   , Password1, Никол Миленова Бояджиева       , 0880102044, student, 81814, Б, СИ, 5, 4.65
-bvelichkov@gmail.com     , Password1, Боян Йорданов Величков         , 0880102045, student, 81815, Б, СИ, 4, 5.12
+bvelichkov@gmail.com     , Password1, Борис Йорданов Величков         , 0880102045, student, 81815, Б, СИ, 4, 6.00
 dyordanow@gmail.com      , Password1, Димитър Александров Йорданов 	 , 0880102046, student, 81816, Б, СИ, 4, 2.00

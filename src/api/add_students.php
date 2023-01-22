@@ -193,7 +193,7 @@ function exportStudentsToDB($users_arr_2d)
                                              VALUES (:fn, :user_id, :degree, :major, :group, :has_diploma_right)");
     $stmt_register_student_diploma = $conn->prepare("INSERT INTO `student_diploma` (`student_fn`, `has_right`, `grade`) 
                                              VALUES (:student_fn, :has_right, :grade)");
-    $stmt_register_student_grown = $conn->prepare("INSERT INTO `student_grown` (`student_fn`) 
+    $stmt_register_student_gown = $conn->prepare("INSERT INTO `student_gown` (`student_fn`) 
                                              VALUES (:student_fn)");
     $stmt_register_student_hat = $conn->prepare("INSERT INTO `student_hat` (`student_fn`) 
                                              VALUES (:student_fn)");
@@ -246,7 +246,7 @@ function exportStudentsToDB($users_arr_2d)
                 "has_right" => $has_diploma_right,
                 "grade" => $values[9],
             ]);
-            $stmt_register_student_grown->execute([
+            $stmt_register_student_gown->execute([
                 "student_fn" => $values[5]
             ]);
             $success = $stmt_register_student_hat->execute([

@@ -45,71 +45,71 @@ function executeQuery($order_values, $conn)
 {
     $stmt = new PDOStatement();
     if(count($order_values) == 0) {
-        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_grown.*, student_hat.*
+        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_gown.*, student_hat.*
         FROM student_diploma
         RIGHT JOIN student ON student.fn = student_diploma.student_fn 
         RIGHT JOIN user ON user.id = student.user_id 
-        LEFT JOIN student_grown ON student.fn = student_grown.student_fn 
+        LEFT JOIN student_gown ON student.fn = student_gown.student_fn 
         LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
         WHERE user.role='student'
         ORDER BY student_diploma.id ASC");
     } 
     else if(count($order_values) == 1) {
-        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_grown.*, student_hat.*
+        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_gown.*, student_hat.*
         FROM student_diploma
         RIGHT JOIN student ON student.fn = student_diploma.student_fn 
         RIGHT JOIN user ON user.id = student.user_id 
-        LEFT JOIN student_grown ON student.fn = student_grown.student_fn 
+        LEFT JOIN student_gown ON student.fn = student_gown.student_fn 
         LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
         WHERE user.role='student'
         ORDER BY $order_values[0] ASC");
     } 
     else if(count($order_values) == 2) {
-        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_grown.*, student_hat.*
+        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_gown.*, student_hat.*
         FROM student_diploma
         RIGHT JOIN student ON student.fn = student_diploma.student_fn 
         RIGHT JOIN user ON user.id = student.user_id 
-        LEFT JOIN student_grown ON student.fn = student_grown.student_fn 
+        LEFT JOIN student_gown ON student.fn = student_gown.student_fn 
         LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
         WHERE user.role='student'
         ORDER BY $order_values[0] ASC, $order_values[1] ASC");
     } 
     else if(count($order_values) == 3) {
-        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_grown.*, student_hat.*
+        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_gown.*, student_hat.*
         FROM student_diploma
         RIGHT JOIN student ON student.fn = student_diploma.student_fn 
         RIGHT JOIN user ON user.id = student.user_id 
-        LEFT JOIN student_grown ON student.fn = student_grown.student_fn 
+        LEFT JOIN student_gown ON student.fn = student_gown.student_fn 
         LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
         WHERE user.role='student'
         ORDER BY $order_values[0] ASC, $order_values[1] ASC, $order_values[2] ASC");
     } 
     else if(count($order_values) == 4) {
-        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_grown.*, student_hat.*
+        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_gown.*, student_hat.*
         FROM student_diploma
         RIGHT JOIN student ON student.fn = student_diploma.student_fn 
         RIGHT JOIN user ON user.id = student.user_id 
-        LEFT JOIN student_grown ON student.fn = student_grown.student_fn 
+        LEFT JOIN student_gown ON student.fn = student_gown.student_fn 
         LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
         WHERE user.role='student'
         ORDER BY $order_values[0] ASC, $order_values[1] ASC, $order_values[2] ASC, $order_values[3] ASC ");
     } 
     else if(count($order_values) == 5) {
-        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_grown.*, student_hat.*
+        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_gown.*, student_hat.*
         FROM student_diploma
         RIGHT JOIN student ON student.fn = student_diploma.student_fn 
         RIGHT JOIN user ON user.id = student.user_id 
-        LEFT JOIN student_grown ON student.fn = student_grown.student_fn 
+        LEFT JOIN student_gown ON student.fn = student_gown.student_fn 
         LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
         WHERE user.role='student'
         ORDER BY $order_values[0] ASC, $order_values[1] ASC, $order_values[2] ASC, $order_values[3] ASC, $order_values[4] ASC ");
     } 
     else if(count($order_values) == 6) {
-        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_grown.*, student_hat.*
+        $stmt = $conn->prepare("SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_gown.*, student_hat.*
         FROM student_diploma
         RIGHT JOIN student ON student.fn = student_diploma.student_fn 
         RIGHT JOIN user ON user.id = student.user_id 
-        LEFT JOIN student_grown ON student.fn = student_grown.student_fn 
+        LEFT JOIN student_gown ON student.fn = student_gown.student_fn 
         LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
         WHERE user.role='student'
         ORDER BY $order_values[0] ASC, $order_values[1] ASC, $order_values[2] ASC, $order_values[3] ASC, $order_values[4] ASC, $order_values[5] ASC");

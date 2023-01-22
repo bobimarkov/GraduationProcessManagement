@@ -58,8 +58,8 @@ function buildUsersTable(data) {
             user.phone,
             user.role == 'admin' ? '<i class="fas fa-user-lock user-role-icon"></i>' :
             user.role == 'moderator-hat' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-graduation-cap user-role-icon"></i>' :
-            user.role == 'moderator-gown' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-pen user-role-icon"></i>' :
-            user.role == 'moderator-signature' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-tshirt user-role-icon"></i>' :
+            user.role == 'moderator-gown' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-tshirt user-role-icon"></i>' :
+            user.role == 'moderator-signature' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-pen user-role-icon"></i>' :
             '<i class="fas fa-user-graduate user-role-icon"></i>'
         ];
         const number_columns = row_data.length;
@@ -216,14 +216,14 @@ function buildStudentsDiplomaTable(users, colors_config) {
                 user.speech_request == 0 ? 'Не' : 'Да',
                 user.speech_response == null ? '-' : user.speech_response,
                 user.photos_requested == 0 ? 'Не' : 'Да',
-                //grown_requested
-                user.grown_requested == null ? '' : user.grown_requested == 0 ? 'Не' : 'Да',
-                //grown_taken
-                user.grown_requested != 1 ? '' : user.grown_taken == 0 || user.grown_taken == null ? 'Не' : 'Да',
-                user.grown_taken_date,
-                //grown_returned
-                user.grown_taken != 1 ? '' : user.grown_returned == 0 || user.grown_returned == null ? 'Не' : 'Да',
-                user.grown_returned_date,
+                //gown_requested
+                user.gown_requested == null ? '' : user.gown_requested == 0 ? 'Не' : 'Да',
+                //gown_taken
+                user.gown_requested != 1 ? '' : user.gown_taken == 0 || user.gown_taken == null ? 'Не' : 'Да',
+                user.gown_taken_date,
+                //gown_returned
+                user.gown_taken != 1 ? '' : user.gown_returned == 0 || user.gown_returned == null ? 'Не' : 'Да',
+                user.gown_returned_date,
                 //hat_requested
                 user.hat_requested == null ? '' : user.hat_requested == 0 ? 'Не' : 'Да',
                 //hat_taken
