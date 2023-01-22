@@ -24,8 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $rows = $stmt->fetchAll();
 
-    // var_dump($rows);
-
     $response = array("success" => true, "users" => $rows);
     echo json_encode($response);
     http_response_code(200);
