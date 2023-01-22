@@ -46,7 +46,7 @@ function buildUsersTable(data) {
     let i = 1;
     let users = data.users;
 
-    table.innerHTML = " <tr> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>Роля</td> </tr>";
+    table.innerHTML = '<tr id="header-table-users"> <td onclick="sortByUsers(0)">Име</td> <td onclick="sortByUsers(1)">Имейл</td> <td onclick="sortByUsers(2)">Телефон</td> <td onclick="sortByUsers(3)">Роля</td> </tr>';
 
     for (const user of users) {
         var row = table.insertRow(i);
@@ -96,7 +96,7 @@ function buildEditStudentsTable(data) {
     let i = 1;
     let users = data.users;
 
-    table.innerHTML = "<tr><td>Име</td><td>Имейл</td><td>Телефон</td><td>ФН</td></tr>";
+    table.innerHTML = '<tr id="header-table-edit"><td onclick="sortByEdit(0)">Име</td><td onclick="sortByEdit(1)">Имейл</td><td onclick="sortByEdit(2)">Телефон</td><td onclick="sortByEdit(3)">ФН</td></tr>';
 
     for (const user of users) {
         var row = table.insertRow(i);
@@ -120,7 +120,7 @@ function buildStudentsTable(data) {
     var table = document.getElementById("students-table");
     let i = 1;
     let users = data.users;
-    table.innerHTML = "<tr> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>ФН</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Дипломиращ се</td> <td>Роля</td> </tr>";
+    table.innerHTML = '<tr id="header-table-students"> <td onclick="sortByStudents(0)">Име</td> <td onclick="sortByStudents(1)">Имейл</td> <td onclick="sortByStudents(2)">Телефон</td> <td onclick="sortByStudents(3)">ФН</td> <td onclick="sortByStudents(4)">Степен</td> <td onclick="sortByStudents(5)">Спец.</td> <td onclick="sortByStudents(6)">Група</td> <td onclick="sortByStudents(7)">Дипломиращ се</td> <td onclick="sortByStudents(8)">Роля</td> </tr>';
 
     for (const user of users) {
         var row = table.insertRow(i);
@@ -190,7 +190,7 @@ function getColorsConfig(users) {
 function buildStudentsDiplomaTable(users, colors_config) {
     var table = document.getElementById("diploma-table");
 
-    table.innerHTML = '<tr id="header-table"> <td onclick="sortBy(0)">ФН</td> <td onclick="sortBy(1)">Име</td> <td onclick="sortBy(2)">Цвят</td> <td onclick="sortBy(3)">Ред на връчване</td> <td onclick="sortBy(4)">Час на връчване</td> <td onclick="sortBy(5)">Степен</td> <td onclick="sortBy(6)">Спец.</td> <td onclick="sortBy(7)">Група</td> <td onclick="sortBy(8)">Успех</td> <td onclick="sortBy(9)">Присъствие</td> <td onclick="sortBy(10)">Има право</td> <td onclick="sortBy(11)">Готова</td> <td onclick="sortBy(12)">Взета</td> <td onclick="sortBy(13)">Заявка взимане предв.</td> <td onclick="sortBy(14)">Коментар (студент)</td> <td onclick="sortBy(15)">Взета предв.</td> <td onclick="sortBy(16)">Дата/час</td> <td onclick="sortBy(17)">Коментар (администр.)</td> <td onclick="sortBy(18)">Покана реч</td> <td onclick="sortBy(19)">Отговор</td> <td onclick="sortBy(20)">Снимки</td> <td onclick="sortBy(21)">Заявена тога</td> <td onclick="sortBy(22)">Взета</td> <td onclick="sortBy(23)">Дата/час</td> <td onclick="sortBy(24)">Върната</td> <td>Дата/час</td> <td onclick="sortBy(25)">Заявена шапка</td> <td onclick="sortBy(26)">Взета</td> <td onclick="sortBy(27)">Дата/час</td> <td onclick="sortBy(28)">Върната</td> <td onclick="sortBy(29)">Дата/час</td></tr>';
+    table.innerHTML = '<tr id="header-table"> <td onclick="sortByGraduated(0)">ФН</td> <td onclick="sortByGraduated(1)">Име</td> <td onclick="sortByGraduated(2)">Цвят</td> <td onclick="sortByGraduated(3)">Ред на връчване</td> <td onclick="sortByGraduated(4)">Час на връчване</td> <td onclick="sortByGraduated(5)">Степен</td> <td onclick="sortByGraduated(6)">Спец.</td> <td onclick="sortByGraduated(7)">Група</td> <td onclick="sortByGraduated(8)">Успех</td> <td onclick="sortByGraduated(9)">Присъствие</td> <td onclick="sortByGraduated(10)">Има право</td> <td onclick="sortByGraduated(11)">Готова</td> <td onclick="sortByGraduated(12)">Взета</td> <td onclick="sortByGraduated(13)">Заявка взимане предв.</td> <td onclick="sortByGraduated(14)">Коментар (студент)</td> <td onclick="sortByGraduated(15)">Взета предв.</td> <td onclick="sortByGraduated(16)">Дата/час</td> <td onclick="sortByGraduated(17)">Коментар (администр.)</td> <td onclick="sortByGraduated(18)">Покана реч</td> <td onclick="sortByGraduated(19)">Отговор</td> <td onclick="sortByGraduated(20)">Снимки</td> <td onclick="sortByGraduated(21)">Заявена тога</td> <td onclick="sortByGraduated(22)">Взета</td> <td onclick="sortByGraduated(23)">Дата/час</td> <td onclick="sortByGraduated(24)">Върната</td> <td>Дата/час</td> <td onclick="sortByGraduated(25)">Заявена шапка</td> <td onclick="sortByGraduated(26)">Взета</td> <td onclick="sortByGraduated(27)">Дата/час</td> <td onclick="sortByGraduated(28)">Върната</td> <td onclick="sortByGraduated(29)">Дата/час</td></tr>';
     let i = 1;
 
     for (const user of users) {
@@ -201,7 +201,7 @@ function buildStudentsDiplomaTable(users, colors_config) {
             var row_data = [
                 //i,
                 user.student_fn,
-                user.name.concat(" " + getColor(i, users.length, colors_config)),
+                user.name,//.concat(" " + getColor(i, users.length, colors_config)),
                 user.color = "",
                 user.num_order = "",
                 user.time_diploma = "",
@@ -214,10 +214,10 @@ function buildStudentsDiplomaTable(users, colors_config) {
                 user.is_ready == 0 ? 'Не' : 'Да',
                 user.is_taken == 0 ? 'Не' : 'Да',
                 user.take_in_advance_request == 0 ? 'Не' : 'Да',
-                user.take_in_advance_request_comment == null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.take_in_advance_request_comment}</span></i>`,
+                user.take_in_advance_request_comment == null ? "<i class='far fa-comment-alt comment-icon'><span class='studentComm'>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span class='studentComm'>${user.take_in_advance_request_comment}</span></i>`,
                 user.is_taken_in_advance == 0 ? 'Не' : 'Да',
                 user.taken_at_time,
-                user.diploma_comment == null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.diploma_comment}</span></i>`,
+                user.diploma_comment == null ? "<i class='far fa-comment-alt comment-icon'><span class='userComm'>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span class='userComm'>${user.diploma_comment}</span></i>`,
                 user.speech_request == 0 ? 'Не' : 'Да',
                 user.speech_response == null ? '-' : user.speech_response,
                 user.photos_requested == 0 ? 'Не' : 'Да',
@@ -312,7 +312,6 @@ function showEditSection() {
     showGivenSection("edit_section");
     activeHeader("edit_header");
     getAllUsers();
-
 }
 
 
@@ -627,36 +626,6 @@ function submitUserHelper(bodyData) {
         });
 }
 
-/*function submitUsers(event) {
-    event.preventDefault;
-    var form = document.getElementById('add_users_form');
-    var usersData = form.userTextarea.value;
-
-    fetch('../../api?endpoint=add_users', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify(usersData)
-    })
-        .then(response => response.json())
-        .then((data) => {
-            var errElem = document.getElementById('message-bar-users');
-            if (!data.success) {
-                errElem.classList.remove(['success']);
-                errElem.classList.add(['error']);
-                errElem.innerHTML = data.message;
-            } else {
-                errElem.classList.remove(['error']);
-                errElem.classList.add(['success']);
-                errElem.innerHTML = data.message;
-                document.getElementById("userTextarea").value = "";
-                getAllUsers();
-            }
-        });
-}*/
-
 function submitUsers(event) {
     event.preventDefault();
     var form = document.getElementById('add_users_form');
@@ -794,52 +763,6 @@ function submitAction(event) {
             }
         });
 }
-
-/*function removeValueFromOtherLists(selectObject) {
-    var value = selectObject.value;
-    var selectobject1 = document.getElementById("diploma_order_1");
-    var selectobject2 = document.getElementById("diploma_order_2");
-    var selectobject3 = document.getElementById("diploma_order_3");
-    var selectobject4 = document.getElementById("diploma_order_4");
-    var selectobject5 = document.getElementById("diploma_order_5");
-    var selectobject6 = document.getElementById("diploma_order_6");
-    if (!selectobject1.isEqualNode(selectObject)) {
-        for (var i = 0; i < selectobject1.length; i++) {
-            if (selectobject1.options[i].value == value)
-                selectobject1.remove(i);
-        }
-    }
-    if (!selectobject2.isEqualNode(selectObject)) {
-        for (var i = 0; i < selectobject2.length; i++) {
-            if (selectobject2.options[i].value == value)
-                selectobject2.remove(i);
-        }
-    }
-    if (!selectobject3.isEqualNode(selectObject)) {
-        for (var i = 0; i < selectobject3.length; i++) {
-            if (selectobject3.options[i].value == value)
-                selectobject3.remove(i);
-        }
-    }
-    if (!selectobject4.isEqualNode(selectObject)) {
-        for (var i = 0; i < selectobject4.length; i++) {
-            if (selectobject4.options[i].value == value)
-                selectobject4.remove(i);
-        }
-    }
-    if (!selectobject5.isEqualNode(selectObject)) {
-        for (var i = 0; i < selectobject5.length; i++) {
-            if (selectobject5.options[i].value == value)
-                selectobject5.remove(i);
-        }
-    }
-    if (!selectobject6.isEqualNode(selectObject)) {
-        for (var i = 0; i < selectobject6.length; i++) {
-            if (selectobject6.options[i].value == value)
-                selectobject6.remove(i);
-        }
-    }
-}*/
 
 var saveCurrOption;
 
@@ -1134,9 +1057,9 @@ function downloadExportedUsers(event) {
     }
 }
 
-function downloadExportedGradStudents(event) {
+function downloadExportedGraduated(event) {
     event.preventDefault();
-    let form = document.getElementById("export_files_graduated");
+    let form = document.getElementById("export_graduated");
     let fileFormat = form.format.value;
 
     values = { "format": fileFormat }
@@ -1181,9 +1104,9 @@ function downloadExportedGradStudents(event) {
 
 
 var cPrev = -1;
-function sortBy(c) {
-    rows = document.getElementById("diploma-table").rows.length;
-    columns = document.getElementById("diploma-table").rows[0].cells.length;
+function sortByGraduated(c) {
+    let rows = document.getElementById("diploma-table").rows.length;
+    let columns = document.getElementById("diploma-table").rows[0].cells.length;
     let arrTable = new Array(rows);
     for (let i = 0; i < arrTable.length; i++) {
         arrTable[i] = new Array(columns);
@@ -1193,7 +1116,7 @@ function sortBy(c) {
             arrTable[row][col] = document.getElementById("diploma-table").rows[row].cells[col].innerHTML;
         }
     }
-    firstLine = arrTable.shift();
+    let firstLine = arrTable.shift();
 
     if (c !== cPrev) {
         arrTable.sort(
@@ -1216,3 +1139,143 @@ function sortBy(c) {
         }
     }
 }
+
+function sortByUsers(c) {
+    let rows = document.getElementById("users-table").rows.length;
+    let columns = document.getElementById("users-table").rows[0].cells.length;
+    let arrTable = new Array(rows);
+    for (let i = 0; i < arrTable.length; i++) {
+        arrTable[i] = new Array(columns);
+    }
+    for (let row = 0; row < rows; row++) {
+        for (col = 0; col < columns; col++) {
+            arrTable[row][col] = document.getElementById("users-table").rows[row].cells[col].innerHTML;
+        }
+    }
+    let firstLine = arrTable.shift();
+
+    if (c !== cPrev) {
+        arrTable.sort(
+            function (a, b) {
+                if (a[c] === b[c]) {
+                    return 0;
+                } else {
+                    return (a[c] < b[c]) ? -1 : 1;
+                }
+            }
+        );
+    } else {
+        arrTable.reverse();
+    }
+    cPrev = c;
+    arrTable.unshift(firstLine);
+    for (let row = 0; row < rows; row++) {
+        for (col = 0; col < columns; col++) {
+            document.getElementById("users-table").rows[row].cells[col].innerHTML = arrTable[row][col];
+        }
+    }
+}
+
+function sortByStudents(c) {
+    let rows = document.getElementById("students-table").rows.length;
+    let columns = document.getElementById("students-table").rows[0].cells.length;
+    let arrTable = new Array(rows);
+    for (let i = 0; i < arrTable.length; i++) {
+        arrTable[i] = new Array(columns);
+    }
+    for (let row = 0; row < rows; row++) {
+        for (col = 0; col < columns; col++) {
+            arrTable[row][col] = document.getElementById("students-table").rows[row].cells[col].innerHTML;
+        }
+    }
+    let firstLine = arrTable.shift();
+
+    if (c !== cPrev) {
+        arrTable.sort(
+            function (a, b) {
+                if (a[c] === b[c]) {
+                    return 0;
+                } else {
+                    return (a[c] < b[c]) ? -1 : 1;
+                }
+            }
+        );
+    } else {
+        arrTable.reverse();
+    }
+    cPrev = c;
+    arrTable.unshift(firstLine);
+    for (let row = 0; row < rows; row++) {
+        for (col = 0; col < columns; col++) {
+            document.getElementById("students-table").rows[row].cells[col].innerHTML = arrTable[row][col];
+        }
+    }
+}
+
+function sortByEdit(c) {
+    let rows = document.getElementById('edit-students-table').rows.length;
+    let columns = document.getElementById('edit-students-table').rows[0].cells.length;
+    let arrTable = new Array(rows);
+    for (let i = 0; i < arrTable.length; i++) {
+        arrTable[i] = new Array(columns);
+    }
+    for (let row = 0; row < rows; row++) {
+        for (col = 0; col < columns; col++) {
+            arrTable[row][col] = document.getElementById('edit-students-table').rows[row].cells[col].innerHTML;
+        }
+    }
+    let firstLine = arrTable.shift();
+
+    if (c !== cPrev) {
+        arrTable.sort(
+            function (a, b) {
+                if (a[c] === b[c]) {
+                    return 0;
+                } else {
+                    return (a[c] < b[c]) ? -1 : 1;
+                }
+            }
+        );
+    } else {
+        arrTable.reverse();
+    }
+    cPrev = c;
+    arrTable.unshift(firstLine);
+    for (let row = 0; row < rows; row++) {
+        for (col = 0; col < columns; col++) {
+            document.getElementById('edit-students-table').rows[row].cells[col].innerHTML = arrTable[row][col];
+        }
+    }
+}
+
+function searchInTable() {
+    const table = document.getElementById('diploma-table');
+    const input = document.getElementById('search');
+    const filter = input.value.toUpperCase();
+
+    let txtValue;
+    const rows = table.rows.length;
+    const columns = table.rows[0].cells.length;
+
+    let tr = table.getElementsByTagName('tr');//all rows
+    for (let row = 1; row < rows; row++) {
+        let td = tr[row].getElementsByTagName('td');//all columns of each row
+        for (let col = 0; col < columns; col++) {
+            if (td) {
+                txtValue = td[col].textContent || td[col].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[row].style.display = "";
+                    break;
+                } else {
+                    tr[row].style.display = "none";
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+

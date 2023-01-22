@@ -51,8 +51,7 @@ textarea {
 
 .form-input,
 .dashboard-textarea-fn,
-.textarea-after-select,
-.searchGrad {
+.textarea-after-select {
     background-color: rgb(235, 238, 241);
     border-color: darkslategray;
     border-radius: 5px;
@@ -90,10 +89,14 @@ textarea {
     margin-top: 1em;
 }
 
+#diploma_section .dashboard-action {
+    margin: auto 1em;
+}
+
 .dashboard-action,
 .boolean-select-after-select,
 .diploma_order_select {
-    margin: auto 1em;
+    margin-top: 1em;
     height: 2.5em;
     font: 1em sans-serif;
     color: darkslategray;
@@ -437,6 +440,10 @@ h3 {
     color: #2f4f4f;
 }
 
+#diploma_section > h3{
+    margin-bottom: 0;
+}
+
 #import_files,
 #export_files {
     border-radius: 5px;
@@ -470,16 +477,14 @@ svg {
     border: 1px solid grey;
 }
 
-#searchByName, #searchByFn{
-    width: 20rem;
-    
-    margin-top: 1rem;
+#search{
+    margin-top: 2rem;
     height: 2.5rem;
-}
-
-
-#searchByName {
-    margin-right: 1rem;
+    background-color: rgb(235, 238, 241);
+    border-radius: 5px;
+    padding: 5px;
+    box-sizing: border-box;
+    font: 1em sans-serif;
 }
 
 #export-graduated {
@@ -488,16 +493,10 @@ svg {
     margin-left: 0;
 }
 
-#export_files_graduated{
-    
-    margin-bottom: 1rem;
-}
-
-#export_files_graduated > .dashboard-action{
-    width: 20rem;
-    margin-left: 0;
-}
-
-#header-table{
+#header-table, #header-table-students, #header-table-users, #header-table-edit{
     cursor: pointer;
+}
+
+#filters {
+    display: flex;
 }

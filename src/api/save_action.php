@@ -148,7 +148,7 @@ function updateUserToDB($fns, $column_name, $content) {
         $success = $update_stmt->execute(["fn" => $fn]);
     }
     if ($success) {
-        $response = array("success" => true, "message" => "Промените са запаметени успешно. Моля, презаредете страницата, за да ги видите.");
+        $response = array("success" => true, "message" => "Промените са запаметени успешно.");
         echo json_encode($response);
         die;
     }

@@ -22,8 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     submitDiplomaOrder($data_array);
 }
 
-
-
 function submitDiplomaOrder($parameters)
 {
     $database = new Db();
@@ -93,9 +91,8 @@ function submitDiplomaOrder($parameters)
         ]);
     }
 
-
     if ($success) {
-        $response = array("success" => true, "message" => "Подредбата е записана успешно. Моля, презаредете страницата, за да се сортира таблицата.");
+        $response = array("success" => true, "message" => "Подредбата е записана успешно.");
         echo json_encode($response);
         die;
     }
