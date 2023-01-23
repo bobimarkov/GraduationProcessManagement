@@ -52,7 +52,6 @@ function buildUsersTable(data) {
         var row = table.insertRow(i);
         row.id = 'user' + i;
         let row_data = [
-            //user.id,
             user.name,
             user.email,
             user.phone,
@@ -102,7 +101,6 @@ function buildEditStudentsTable(data) {
         var row = table.insertRow(i);
         row.id = 'user' + i;
         let row_data = [
-            //user.id,
             user.name,
             user.email,
             user.phone,
@@ -126,7 +124,6 @@ function buildStudentsTable(data) {
         var row = table.insertRow(i);
         row.id = 'user' + i;
         let row_data = [
-            //user.id,
             user.name,
             user.email,
             user.phone,
@@ -163,31 +160,12 @@ function getStudentsDiplomaInfo() {
             if (data.error) {
                 console.log(data.error);
             } else {
-                getColorsConfig(data.users);
+                buildStudentsDiplomaTable(data.users);
             }
         })
 }
 
-function getColorsConfig(users) {
-    fetch('../../api?endpoint=get_graduation_colors', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }
-    })
-        .then(response => response.json())
-        .then((data) => {
-            if (!data.success) {
-                buildStudentsDiplomaTable(users, null);
-            } else {
-                var colors_config = data.graduation_colors;
-                buildStudentsDiplomaTable(users, colors_config);
-            }
-        });
-}
-
-function buildStudentsDiplomaTable(users, colors_config) {
+function buildStudentsDiplomaTable(users) {
     var table = document.getElementById("diploma-table");
 
     table.innerHTML = '<tr id="header-table"> <td onclick="sortByGraduated(0)">ФН</td> <td onclick="sortByGraduated(1)">Име</td> <td onclick="sortByGraduated(2)">Цвят</td> <td onclick="sortByGraduated(3)">Ред на връчване</td> <td onclick="sortByGraduated(4)">Час на връчване</td> <td onclick="sortByGraduated(5)">Степен</td> <td onclick="sortByGraduated(6)">Спец.</td> <td onclick="sortByGraduated(7)">Група</td> <td onclick="sortByGraduated(8)">Успех</td> <td onclick="sortByGraduated(9)">Присъствие</td> <td onclick="sortByGraduated(10)">Има право</td> <td onclick="sortByGraduated(11)">Готова</td> <td onclick="sortByGraduated(12)">Взета</td> <td onclick="sortByGraduated(13)">Заявка взимане предв.</td> <td onclick="sortByGraduated(14)">Коментар (студент)</td> <td onclick="sortByGraduated(15)">Взета предв.</td> <td onclick="sortByGraduated(16)">Дата/час</td> <td onclick="sortByGraduated(17)">Коментар (администр.)</td> <td onclick="sortByGraduated(18)">Покана реч</td> <td onclick="sortByGraduated(19)">Отговор</td> <td onclick="sortByGraduated(20)">Снимки</td> <td onclick="sortByGraduated(21)">Заявена тога</td> <td onclick="sortByGraduated(22)">Взета</td> <td onclick="sortByGraduated(23)">Дата/час</td> <td onclick="sortByGraduated(24)">Върната</td> <td>Дата/час</td> <td onclick="sortByGraduated(25)">Заявена шапка</td> <td onclick="sortByGraduated(26)">Взета</td> <td onclick="sortByGraduated(27)">Дата/час</td> <td onclick="sortByGraduated(28)">Върната</td> <td onclick="sortByGraduated(29)">Дата/час</td></tr>';
@@ -197,14 +175,12 @@ function buildStudentsDiplomaTable(users, colors_config) {
         if (user.grade >= 3) {
             var row = table.insertRow(i);
             row.id = 'user' + i;
-            // row.setAttribute("onmousedown", "toggleBorderColor(this)")
             var row_data = [
-                //i,
                 user.student_fn,
-                user.name,//.concat(" " + getColor(i, users.length, colors_config)),
-                user.color = "",
-                user.num_order = "",
-                user.time_diploma = "",
+                user.name,
+                user.color = "<i class='fas fa-square' style='color:" + user.color + ";'></i>",
+                user.num_order,
+                user.time_diploma,
                 user.degree,
                 user.major,
                 user.group,
@@ -242,44 +218,6 @@ function buildStudentsDiplomaTable(users, colors_config) {
     }
 }
 
-
-function getColor(i, n, colors_config) {
-    var part = Math.round((colors_config[0].color_interval / 100 * n));
-    var current_part = part;
-    var color_index = 1;
-
-    while (current_part < n + part) {
-        if (i <= current_part) {
-            var color = "color".concat(color_index);
-            return extractColor(colors_config[0][`${color}`]);
-        }
-        color_index++;
-        current_part += part;
-    }
-    return extractColor("silver");
-}
-
-function extractColor(color_code) {
-    return "<i class='fas fa-square' style='color:" + color_code + ";'></i>";
-}
-
-function toggleBorderColor(c) {
-    var fn = c.cells[1].innerHTML;
-    var fnTextArea = document.getElementById('dashboard_textarea');
-    var currentFns = fnTextArea.value;
-
-    if (c.style.backgroundColor == "slategray") {
-        c.style.backgroundColor = "transparent";
-        c.style.color = "black";
-        currentFns = currentFns.replace(`${fn},`, "");
-        fnTextArea.value = currentFns
-    } else {
-        c.style.backgroundColor = "slategray";
-        c.style.color = "snow";
-        currentFns = currentFns.concat(`${fn},`);
-        fnTextArea.value = currentFns
-    }
-}
 /*---- GET_STUDENTS_DIPLOMA  END ----*/
 
 /*---- SWITCH_SECTIONS  START ----*/

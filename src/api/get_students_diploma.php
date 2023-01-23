@@ -39,14 +39,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 function executeQuery($order_values, $conn)
 {
-    $query = new PDOStatement();
+    $database = new Db();
+    $query = $database->getConnection();
     $query = "SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_grown.*, student_hat.*
     FROM student_diploma
     RIGHT JOIN student ON student.fn = student_diploma.student_fn 
     RIGHT JOIN user ON user.id = student.user_id 
     LEFT JOIN student_grown ON student.fn = student_grown.student_fn 
     LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
-    WHERE user.role='student'";
+    WHERE user.role='student' and student_diploma.grade >= 3";
 
     if (count($order_values) > 0) {
         $query .= " ORDER BY ";
@@ -80,8 +81,115 @@ function executeQuery($order_values, $conn)
     $stmt = $conn->prepare($query);
     $stmt->execute();
 
-    $rows = $stmt->fetchAll();
-    $response = array("success" => true, "users" => $rows);
+    $allRows = $stmt->fetchAll();
+    $n = count($allRows);
+
+    //Colors
+    $database = new Db();
+    $connCol = $database->getConnection();
+    $stmtCol = $connCol->prepare("SELECT * 
+                            FROM graduation_colors");
+    $stmtCol->execute();
+    $rowsColors = $stmtCol->fetchAll();
+
+    if (count($rowsColors) != 1) {
+        $response = array("success" => false, "message" => "Все още няма зададени цветове.");
+        echo json_encode($response);
+        http_response_code(404);
+        die;
+    }
+
+    //Graduation_time
+    $databaseGrad = new Db();
+    $connGrad = $databaseGrad->getConnection();
+    $stmtGrad = $connGrad->prepare("SELECT * 
+                            FROM graduation_time");
+    $stmtGrad->execute();
+    $gradTime = $stmtGrad->fetchAll();
+    $startTime = new DateTime($gradTime[0]['start_time']);
+    $interval = new DateTime($gradTime[0]['students_interval']);
+
+    $update_stmt = new PDOStatement();
+    $num = 0;
+    while ($num < $n) {
+        $fn = $allRows[$num]['student_fn'];
+        $color = getColor($num, $n, $rowsColors[0], $rowsColors[0]['color_interval']);
+        $update_stmt = $conn->prepare("UPDATE student_diploma
+                                        SET color = :color, num_order = :num_order, time_diploma = :time_diploma
+                                        WHERE student_fn = :fn");
+
+        $update_stmt->execute(["color" => $color, "num_order" => $num + 1, "time_diploma" => $startTime->format('H:i:s'), "fn" => $fn]);
+        $sec = $interval->format('s');
+        if ($sec == 0) {
+            $min = $interval->format('i');
+            $startTime->modify("+$min minutes");
+
+        } else {
+            $startTime->modify("+$sec seconds");
+        }
+        $num++;
+    }
+
+    $query = "SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_grown.*, student_hat.*
+    FROM student_diploma
+    RIGHT JOIN student ON student.fn = student_diploma.student_fn 
+    RIGHT JOIN user ON user.id = student.user_id 
+    LEFT JOIN student_grown ON student.fn = student_grown.student_fn 
+    LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
+    WHERE user.role='student' and student_diploma.grade >= 3";
+
+    if (count($order_values) > 0) {
+        $query .= " ORDER BY ";
+        for ($i = 0; $i < count($order_values); $i++) {
+            switch ($order_values[$i]) {
+                case 'name':
+                    $type = 'user.name';
+                    break;
+                case 'fn':
+                    $type = 'student.fn';
+                    break;
+                case 'degree':
+                    $type = 'student.degree';
+                    break;
+                case 'major':
+                    $type = 'student.major';
+                    break;
+                case 'grade':
+                    $type = 'student_diploma.grade';
+                    break;
+                case 'group':
+                    $type = 'student.group';
+                    break;
+            }
+            $query .= $type . " ASC";
+            if ($i < count($order_values) - 1) {
+                $query .= ", ";
+            }
+        }
+    }
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+
+    $allRows = $stmt->fetchAll();
+
+    $response = array("success" => true, "users" => $allRows);
     echo json_encode($response);
     http_response_code(200);
+}
+
+
+function getColor($i, $n, $rowColors, $colorInterval)
+{
+    $part = round(($colorInterval / 100 * $n));
+    $current_part = $part;
+    $color_index = 1;
+
+    while ($current_part < $n + $part) {
+        if ($i <= $current_part) {
+            $color = "color$color_index";
+            return $rowColors[$color];
+        }
+        $color_index++;
+        $current_part += $part;
+    }
 }

@@ -57,9 +57,9 @@ CREATE TABLE `student_grown` (
     `id` INT NOT NULL AUTO_INCREMENT , 
     `student_fn` VARCHAR(99) NOT NULL , 
     `grown_requested` BOOLEAN NULL DEFAULT NULL , 
-    `grown_taken` BOOLEAN NULL DEFAULT 0 , 
-    `grown_taken_date` VARCHAR(99) NULL DEFAULT NULL , 
-    `grown_returned` BOOLEAN NULL DEFAULT 0 , 
+    `grown_taken` BOOLEAN NULL DEFAULT NULL , 
+    `grown_taken_date` DATE NULL DEFAULT NULL , 
+    `grown_returned` BOOLEAN NULL DEFAULT NULL , 
     `grown_returned_date` DATE NULL DEFAULT NULL , 
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
@@ -71,9 +71,9 @@ CREATE TABLE `student_hat` (
     `id` INT NOT NULL AUTO_INCREMENT , 
     `student_fn` VARCHAR(99) NOT NULL , 
     `hat_requested` BOOLEAN NULL DEFAULT NULL , 
-    `hat_taken` BOOLEAN NULL DEFAULT 0 , 
-    `hat_taken_date` VARCHAR(99) NULL DEFAULT NULL , 
-    `hat_returned` BOOLEAN NULL DEFAULT 0 , 
+    `hat_taken` BOOLEAN NULL DEFAULT NULL , 
+    `hat_taken_date` DATE NULL DEFAULT NULL , 
+    `hat_returned` BOOLEAN NULL DEFAULT NULL , 
     `hat_returned_date` DATE NULL DEFAULT NULL , 
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;

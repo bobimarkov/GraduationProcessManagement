@@ -32,7 +32,7 @@ if (isset($data["format"])) {
     RIGHT JOIN user ON user.id = student.user_id 
     LEFT JOIN student_grown ON student.fn = student_grown.student_fn 
     LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
-    WHERE user.role='student'";
+    WHERE user.role='student' and student_diploma.grade >= 3";
 
     if (count($order_values) > 0) {
         $query .= " ORDER BY ";
@@ -75,6 +75,39 @@ if (isset($data["format"])) {
 
         fputcsv($output, array('ФН', 'Име', 'Цвят', 'Ред на връчване', 'Час на връчване', 'Степен', 'Спец.', 'Група', 'Успех', 'Присъствие', 'Има право', 'Готова', 'Взета', 'Заявка взимане предв.', 'Коментар(студент)', 'Взета предв.', 'Дата/час', 'Коментар(администр.)', 'Покана реч', 'Отговор', 'Снимки', 'Заявена тога', 'Взета', 'Дата/час', 'Върната', 'Дата/час', 'Заявена шапка', 'Взета', 'Дата/час', 'Върната', 'Дата/час'));
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            switch ($row['color']) {
+                case '#FF0000':
+                    $color = 'Червен';
+                    break;
+                case '#FFA500':
+                    $color = 'Оранжев';
+                    break;
+                case '#FFFF00':
+                    $color = 'Жълт';
+                    break;
+                case '#228B22':
+                    $color = 'Зелен';
+                    break;
+                case '#0000FF':
+                    $color = 'Син';
+                    break;
+                case '#FF1493':
+                    $color = 'Розов';
+                    break;
+                case '#663399':
+                    $color = 'Лилав';
+                    break;
+                case '#8B4513':
+                    $color = 'Кафяв';
+                    break;
+                case '#000000':
+                    $color = 'Черен';
+                    break;
+                case '#F0FFFF':
+                    $color = 'Сив';
+                    break;
+            }
+            $row['color'] = $color;
             $row['attendance'] = ($row['attendance'] == 0) ? 'Не' : 'Да';
             $row['has_right'] = ($row['has_right'] == 0) ? 'Не' : 'Да';
             $row['is_ready'] = ($row['is_ready'] == 0) ? 'Не' : 'Да';
@@ -107,6 +140,39 @@ if (isset($data["format"])) {
         $pdf->Cell(0, 0, implode(",", array('Заявка взимане предв.', 'Коментар(студент)', 'Взета предв.', 'Дата/час', 'Коментар(администр.)', 'Покана реч', 'Отговор', 'Снимки')), 0, 1);
         $pdf->Cell(0, 0, implode(",", array('Заявена тога', 'Взета', 'Дата/час', 'Върната', 'Дата/час', 'Заявена шапка', 'Взета', 'Дата/час', 'Върната', 'Дата/час')), 0, 1);
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            switch ($row['color']) {
+                case '#FF0000':
+                    $color = 'Червен';
+                    break;
+                case '#FFA500':
+                    $color = 'Оранжев';
+                    break;
+                case '#FFFF00':
+                    $color = 'Жълт';
+                    break;
+                case '#228B22':
+                    $color = 'Зелен';
+                    break;
+                case '#0000FF':
+                    $color = 'Син';
+                    break;
+                case '#FF1493':
+                    $color = 'Розов';
+                    break;
+                case '#663399':
+                    $color = 'Лилав';
+                    break;
+                case '#8B4513':
+                    $color = 'Кафяв';
+                    break;
+                case '#000000':
+                    $color = 'Черен';
+                    break;
+                case '#F0FFFF':
+                    $color = 'Сив';
+                    break;
+            }
+            $row['color'] = $color;
             $row['attendance'] = ($row['attendance'] == 0) ? 'Не' : 'Да';
             $row['has_right'] = ($row['has_right'] == 0) ? 'Не' : 'Да';
             $row['is_ready'] = ($row['is_ready'] == 0) ? 'Не' : 'Да';

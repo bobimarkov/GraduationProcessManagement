@@ -256,7 +256,7 @@ function buildContentForGraduatingStudent(user) {
 
     document.getElementById("has_right").innerHTML = 'Право на диплома: ' + (user.has_right === 1 ? '<i class="far fa-check-square"></i>' : "Не");
     document.getElementById("is_ready").innerHTML = 'Готова диплома: ' + (user.is_ready === 1 ? '<i class="far fa-check-square"></i>' : "Не");
-    document.getElementById("grade").innerHTML = 'Оценка: ' + (user.grade === 1 ? '<i class="far fa-check-square"></i>' : "Не");
+    document.getElementById("grade").innerHTML = 'Оценка: ' + user.grade;
 
     document.getElementById("is_taken").innerText = 'Взета: ' + (user.is_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
     document.getElementById("take_in_advance_request").innerHTML = 'Заявена предварително: ' + (user.take_in_advance_request === 1 ? '<i class="far fa-check-square"></i>' : "Не");
@@ -316,7 +316,10 @@ getDiplomaOrder();
 
 
 function getStartHour() {
+    var start_date = document.getElementById('start_date');
     var start_time = document.getElementById('start_time');
+    var auditory = document.getElementById('auditory');
+
 
     fetch('../../api?endpoint=get_graduation_time', {
         method: 'GET',
@@ -331,9 +334,34 @@ function getStartHour() {
                 // order_message.innerHTML = order_message.innerHTML.concat("Начален час: ").concat(data.message).concat('</br>');
                 window.graduation_time = null;
             } else {
+                start_date.innerHTML = ("Дата: ").concat(data.graduation_time[0].graduation_date);
                 start_time.innerHTML = ("Начален час: ").concat(data.graduation_time[0].start_time);
+                auditory.innerHTML = ("Аудитория: ").concat(data.graduation_time[0].graduation_place);
                 window.graduation_time = data.graduation_time[0];
-                getColorsConfig();
+                getStudentsOrder();
+            }
+        });
+}
+
+function getStudentsOrder() {
+    fetch('../../api?endpoint=get_students_diploma_simplified', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then((data) => {
+            if (!data.success) { }
+            else {
+                data.users.forEach(user => {
+                    if (email === user['email']) {
+                        document.getElementById('order_student').innerHTML = ("Вашият ред е: ").concat(user['num_order']).concat(", около ").concat(user['time_diploma']);
+                        document.getElementById('color_message').innerHTML = ("Вашият цвят е: ").concat("<i class='fas fa-square' style='color:" + user.color + ";'></i>");
+
+                    }
+                })
             }
         });
 }
@@ -385,123 +413,4 @@ function displayOrderMessage(data) {
     text = text.slice(0, -1);
     text = text.slice(0, -1);
     document.getElementById('order_list').innerHTML = text;
-}
-
-function getColorsConfig() {
-    fetch('../../api?endpoint=get_graduation_colors', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }
-    })
-        .then(response => response.json())
-        .then((data) => {
-            if (!data.success) { } else {
-                var colors_config = data.graduation_colors;
-                getStudentsOrder(colors_config);
-            }
-        });
-}
-
-// ОТ ТУК НАТАТЪК Е КОД, КОЙТО ТРЯБВА ДА СЕ ИЗПЪЛНЯВА В БЕКЕНДА
-// ВЪЗМОЖНИЯТ ВАРИАНТ Е АДМИНЪТ ДА ЗАДАВА КОГА ДА СЕ РАЗПРЕДЕЛЯ РЕД И СПИСЪЦИ, ЦВЕТОВЕ
-// В ТАКЪВ СЛУЧАЙ ТОВА СЕ ВОДИ НОВА ФУНКЦИОНАЛНОСТ ЗА АДМИНЪТ И ЩЕ БЪДЕ НАПРАВЕНО ДОПЪЛНИТЕЛНО
-
-function getStudentsOrder(colors_config) {
-    var startTime;
-    var interval;
-    if (graduation_time !== null) {
-        startTime = graduation_time.start_time;
-        interval = graduation_time.students_interval;
-    }
-    fetch('../../api?endpoint=get_students_diploma_simplified', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }
-    })
-        .then(response => response.json())
-        .then((data) => {
-            if (!data.success) { } else {
-                showGraduationOrder(data.users, startTime, interval, colors_config);
-            }
-        });
-}
-
-function showGraduationOrder(users, startTime, interval, colors_config) {
-    var user_email = email;
-    var order_message = document.getElementById('order_student');
-    var dummy_date = "2012-12-12"
-    var start_object = new Date(`${dummy_date} ${startTime}`);
-    var interval_object = new Date(`${dummy_date} ${interval}`);
-    var i = 1;
-
-    users.forEach(user => {
-        var next = interval_object.getSeconds();
-        start_object.setSeconds(start_object.getSeconds() + next);
-        if (user_email === user.email) {
-            order_message.innerHTML = ("Вашият ред е: ").concat(i).concat(", около ").concat(start_object.toTimeString().split(' ')[0]);
-
-            getColor(i, users.length, colors_config);
-        }
-        i++;
-    })
-}
-
-function getColor(i, n, colors_config) {
-    var part = Math.round((colors_config[0].color_interval / 100 * n));
-    var current_part = part;
-    var color_index = 1;
-
-    while (current_part < n + part) {
-        if (i <= current_part) {
-            var color = "color".concat(color_index);
-            document.getElementById('color_message').innerHTML = "Вашият цвят е: ".concat(extractColor(colors_config[0][`${color}`]));
-            break;
-        }
-        color_index++;
-        current_part += part;
-    }
-    if (current_part > n + part) {
-        document.getElementById('color_message').innerHTML = "Вашият цвят е: ".concat(extractColor("silver"));
-    }
-}
-
-function extractColor(color_code) {
-    switch (color_code) {
-        case "#FF0000":
-            return "червен <i class='fas fa-square' style='color: #FF0000;'></i>";
-            break;
-        case "#FFA500":
-            return "оранжев <i class='fas fa-square' style='color: #FFA500;'></i>";
-            break;
-        case "#FFFF00":
-            return "жълт <i class='fas fa-square' style='color: #FFFF00;'></i>";
-            break;
-        case "#228B22":
-            return "зелен <i class='fas fa-square' style='color: #228B22;'></i>";
-            break;
-        case "#0000FF":
-            return "син <i class='fas fa-square' style='color: #0000FF;'></i>";
-            break;
-        case "#FF1493":
-            return "розов <i class='fas fa-square' style='color: #FF1493;'></i>";
-            break;
-        case "#663399":
-            return "лилав <i class='fas fa-square' style='color: #663399;'></i>";
-            break;
-        case "#8B4513":
-            return "кафяв <i class='fas fa-square' style='color: #8B4513;'></i>";
-            break;
-        case "#000000":
-            return "черен <i class='fas fa-square' style='color: #000000;'></i>";
-            break;
-        case "#F0FFFF":
-            return "бял <i class='fas fa-square' style='color: #F0FFFF;'></i>";
-            break;
-        default:
-            return "сив <i class='fas fa-square' style='color: #A9A9A9;'></i>"
-    }
 }
