@@ -57,9 +57,9 @@ function buildUsersTable(data) {
             user.email,
             user.phone,
             user.role == 'admin' ?
-             '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
-             '<i class="fas fa-user-cog user-role-icon"></i>' :
-             '<i class="fas fa-user-graduate user-role-icon"></i>'
+                '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
+                    '<i class="fas fa-user-cog user-role-icon"></i>' :
+                    '<i class="fas fa-user-graduate user-role-icon"></i>'
         ];
         const number_columns = row_data.length;
         for (var j = 0; j < number_columns; j++) {
@@ -114,7 +114,6 @@ function buildEditStudentsTable(data) {
         }
         i++;
     }
-
 }
 
 function buildStudentsTable(data) {
@@ -137,9 +136,9 @@ function buildStudentsTable(data) {
             user.group,
             user.has_diploma_right == 0 ? "Не" : "Да",
             user.role == 'admin' ?
-             '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
-             '<i class="fas fa-user-cog user-role-icon"></i>' :
-             '<i class="fas fa-user-graduate user-role-icon"></i>'
+                '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
+                    '<i class="fas fa-user-cog user-role-icon"></i>' :
+                    '<i class="fas fa-user-graduate user-role-icon"></i>'
         ];
         const number_columns = row_data.length;
         for (var j = 0; j < number_columns; j++) {
@@ -190,6 +189,7 @@ function getColorsConfig(users) {
 
 function buildStudentsDiplomaTable(users, colors_config) {
     var table = document.getElementById("diploma-table");
+
     table.innerHTML = "<tr> <td>№</td> <td>ФН</td> <td>Име</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Успех</td> <td>Присъствие</td> <td>Има право</td> <td>Готова</td> <td>Взета</td> <td>Заявка взимане предв.</td> <td>Коментар (студент)</td> <td>Взета предв.</td> <td>Дата/час</td> <td>Коментар (администр.)</td> <td>Покана реч</td> <td>Отговор</td> <td>Снимки</td> <td>Заявена тога</td> <td>Взета</td> <td>Дата/час</td> <td>Върната</td> <td>Дата/час</td> <td>Заявена шапка</td> <td>Взета</td> <td>Дата/час</td> <td>Върната</td> <td>Дата/час</td></tr>";
     let i = 1;
 
@@ -411,7 +411,6 @@ function showGivenSection(sectionToBeDisplayed) {
 /*---- SWITCH_SECTIONS  END ----*/
 //give class "active_header" to only element with elementid
 function activeHeader(elementId) {
-    
     var headers = [
         'users_header',
         'edit_header',
@@ -453,7 +452,7 @@ function dataHasRightToArray(data) {
 }
 
 function dataDegreeToArray(data) {
-    const a = [["Степен на образование", "Брой студенти"], ["Бакалавър", 0], ["Магистър", 0],["Доктор", 0]];
+    const a = [["Степен на образование", "Брой студенти"], ["Бакалавър", 0], ["Магистър", 0], ["Доктор", 0]];
 
     let rows = data.users;
     rows.forEach(row_data => {
@@ -607,8 +606,29 @@ function showDashboardAdditionalInputElement(value) {
     }
 }
 
+function submitUserHelper(bodyData) {
+    fetch('../../api?endpoint=add_users', {
+        method: 'POST',
+        body: bodyData
+    })
+        .then(response => response.json())
+        .then((data) => {
+            var errElem = document.getElementById('message-bar-users');
+            if (!data.success) {
+                errElem.classList.remove(['success']);
+                errElem.classList.add(['error']);
+                errElem.innerHTML = data.message;
+            } else {
+                errElem.classList.remove(['error']);
+                errElem.classList.add(['success']);
+                errElem.innerHTML = data.message;
+                document.getElementById("userTextarea").value = "";
+                getAllUsers();
+            }
+        });
+}
 
-function submitUsers(event) {
+/*function submitUsers(event) {
     event.preventDefault;
     var form = document.getElementById('add_users_form');
     var usersData = form.userTextarea.value;
@@ -636,6 +656,26 @@ function submitUsers(event) {
                 getAllUsers();
             }
         });
+}*/
+
+function submitUsers(event) {
+    event.preventDefault();
+    var form = document.getElementById('add_users_form');
+    var usersData = form.userTextarea.value;
+
+    submitUserHelper(JSON.stringify(usersData));
+
+}
+
+function submitUsersFromFile(event) {
+    event.preventDefault();
+    const files = document.getElementById('fileUsers').files;
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+        formData.append('file[]', files[i]);
+    }
+    submitUserHelper(formData);
+    document.getElementById('fileUsers').value = "";
 }
 
 function editStudent(event) {
@@ -670,18 +710,11 @@ function editStudent(event) {
     form.editStudentTextarea.valuе = null;
 }
 
-function submitStudents(event) {
-    event.preventDefault;
-    var form = document.getElementById('add_students_form');
-    var studentsData = form.studentTextarea.value;
-
+function submitStudentHelper(bodyData) {
     fetch('../../api?endpoint=add_students', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify(studentsData)
+        body: bodyData
+
     })
         .then(response => response.json())
         .then((data) => {
@@ -698,7 +731,27 @@ function submitStudents(event) {
                 showStudents();
             }
         });
+}
 
+
+function submitStudents(event) {
+    event.preventDefault();
+    var form = document.getElementById('add_students_form');
+    var studentsData = form.studentTextarea.value;
+
+    submitStudentHelper(JSON.stringify(studentsData));
+
+}
+
+function submitStudentsFromFile(event) {
+    event.preventDefault();
+    const files = document.getElementById('fileStudent').files;
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+        formData.append('file[]', files[i]);
+    }
+    submitStudentHelper(formData);
+    document.getElementById('fileStudent').value = "";
 }
 
 function submitAction(event) {
@@ -836,7 +889,6 @@ function submitDiplomaOrder(event) {
 };
 
 
-//Filters Start
 function filterActivate() {
     var inputFilterName = document.getElementById("searchByName");
     var inputFilterFn = document.getElementById("searchByFn");
@@ -864,4 +916,109 @@ function filterActivate() {
 }
 
 
-//Filters End
+function exportStudents() {
+    var allStudentsFromTable = [];
+    myTable = document.getElementById("students-table");
+    myTableBody = myTable.getElementsByTagName("tbody")[0];
+    myRow = myTableBody.getElementsByTagName("tr");
+    for (let j = 1; j < myRow.length; j++) {
+        myCell = myRow[j].getElementsByTagName("td");
+        var students = [];
+        for (let i = 0; i < myCell.length - 1; i++) {
+            students.push(myCell[i].innerHTML);
+        }
+        allStudentsFromTable.push(students);
+    }
+}
+
+function downloadExportedStudents(event) {
+    event.preventDefault();
+    let form = document.getElementById("export_files_student");
+    let fileFormat = form.format.value;
+
+    values = { "format": fileFormat }
+    if (fileFormat !== 'pdf' && fileFormat !== 'no') {
+        fetch('../../api?endpoint=export_students', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(values)
+        })
+            .then(response => response.text())
+            .then(response => {
+
+                const blob = new Blob([response], { type: "application/octet-stream" });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = "data.".concat(fileFormat);
+                link.click();
+                link.remove();
+            });
+    }
+    else if (fileFormat === 'pdf') {
+        fetch('../../api?endpoint=export_students', {
+            method: 'POST',
+            body: JSON.stringify(values)
+        })
+            .then(response => response.blob())
+            .then(blob => {
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = "students.pdf";
+
+                document.body.appendChild(link);
+                link.click();
+
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(link.href);
+            });
+    }
+}
+
+function downloadExportedUsers(event) {
+    event.preventDefault();
+    let form = document.getElementById("export_files_users");
+    let fileFormat = form.format.value;
+
+    values = { "format": fileFormat }
+    if (fileFormat !== 'pdf' && fileFormat !== 'no') {
+        fetch('../../api?endpoint=export_users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(values)
+        })
+            .then(response => response.text())
+            .then(response => {
+
+                const blob = new Blob([response], { type: "application/octet-stream" });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = "data.".concat(fileFormat);
+                link.click();
+                link.remove();
+            });
+    }
+    else if (fileFormat === 'pdf') {
+        fetch('../../api?endpoint=export_users', {
+            method: 'POST',
+            body: JSON.stringify(values)
+        })
+            .then(response => response.blob())
+            .then(blob => {
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = "users.pdf";
+
+                document.body.appendChild(link);
+                link.click();
+
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(link.href);
+            });
+    }
+}
+
+

@@ -174,6 +174,7 @@ function requestHat(email, value) {
         "email": email,
         "value": value
     };
+
     fetch('../../api?endpoint=submit_student_action', {
         method: 'POST',
         headers: {

@@ -12,8 +12,6 @@ CREATE TABLE `user` (
     `name` VARCHAR(99) NOT NULL , 
     `phone` VARCHAR(99) NOT NULL ,
     `role` VARCHAR(20) NOT NULL ,
-    `blocked` BOOLEAN NULL DEFAULT NULL ,
-    `blocked_reason` TEXT NULL DEFAULT NULL ,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 

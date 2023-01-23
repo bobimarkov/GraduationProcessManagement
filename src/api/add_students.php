@@ -7,9 +7,16 @@ include_once '../src/database/db_conf.php';
 
 $users_data = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $data = json_decode(file_get_contents("php://input"));
-
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (!empty($_FILES['file']['tmp_name'])) {
+        foreach ($_FILES['file']['tmp_name'] as $key => $tmp_name) {
+            $file_handle = fopen($tmp_name, "r");
+            $file_content = fread($file_handle, filesize($tmp_name));
+            fclose($file_handle);
+            $data .= $file_content . "\n";
+        }
+    } 
+    
     if (empty(trim($data))) {
         $response = array("success" => false, "message" => "Грешка: Моля, въведете данни за студент(и).");
         echo json_encode($response);
@@ -151,16 +158,6 @@ function validateInput($values, $user, $i)
         die;
     }
 
-    /*$has_diploma_right = $values_indexed[9];
-    if ($has_diploma_right != "" && $has_diploma_right != 0 && $has_diploma_right != 1) {
-        $response = array("success" => false, "message" => "Грешка за потребител $i ($user) - правото на диплома може да е само 0(НЕ) или 1(ДА)!");
-        echo json_encode($response);
-        die;
-    }
-    if ($has_diploma_right != "") {
-        $values_indexed[9] = 0;
-    }*/
-
     $grade = $values_indexed[9];
     // echo $grade;
     if (!is_numeric($grade) && $grade != '-') {
@@ -230,13 +227,8 @@ function exportStudentsToDB($users_arr_2d)
             "role" => $values[4]
         ]);
 
-        if (floatval($values[9]) < 3 || $values[9] === '-') {
-            $has_diploma_right = 0;
-        }
-        else {
-            $has_diploma_right = 1;
-        }
-
+        $has_diploma_right = (floatval($values[9]) < 3 || $values[9] === '-') ? 0 : 1;
+        
         //get the id of the registered user
         $stmt_id_extract->execute(["email" => $values[0]]);
         $id = $stmt_id_extract->fetchAll();
@@ -264,7 +256,7 @@ function exportStudentsToDB($users_arr_2d)
         }
     }
     if ($success) {
-        $response = array("success" => true, "message" => "Студентите са въведени успешно. Моля, презаредете страницата, за да ги видите.");
+        $response = array("success" => true, "message" => "Студентите са въведени успешно.");
         echo json_encode($response);
         die;
     }
