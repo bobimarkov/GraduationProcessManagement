@@ -64,10 +64,10 @@ function getColumnByOptionNumber(&$column_name, $action) {
             $column_name = "speech_request";
             break;
         case "7":
-            $column_name = "grown_taken";
+            $column_name = "gown_taken";
             break;
         case "8":
-            $column_name = "grown_returned";
+            $column_name = "gown_returned";
             break;
         case "9":
             $column_name = "hat_taken";
@@ -111,8 +111,8 @@ function validateFns(&$fns) {
 
 function updateUserToDB($fns, $column_name, $content) {
     $table_name = "";
-    if ($column_name == "grown_taken" || $column_name == "grown_returned") {
-        $table_name = "student_grown";
+    if ($column_name == "gown_taken" || $column_name == "gown_returned") {
+        $table_name = "student_gown";
     } else if ($column_name == "hat_taken" || $column_name == "hat_returned") {
         $table_name = "student_hat";
     } else {
