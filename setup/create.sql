@@ -55,10 +55,10 @@ ALTER TABLE `student_diploma` ADD CONSTRAINT `student_fn_fk` FOREIGN KEY (`stude
 CREATE TABLE `student_gown` ( 
     `id` INT NOT NULL AUTO_INCREMENT , 
     `student_fn` INT NOT NULL , 
-    `gown_requested` BOOLEAN NULL DEFAULT NULL , 
-    `gown_taken` BOOLEAN NULL DEFAULT 0 , 
-    `gown_taken_date` VARCHAR(99) NULL DEFAULT NULL , 
-    `gown_returned` BOOLEAN NULL DEFAULT 0 , 
+    `gown_requested` BOOLEAN NULL DEFAULT NULL, 
+    `gown_taken` BOOLEAN NULL DEFAULT NULL, 
+    `gown_taken_date` DATE NULL DEFAULT NULL , 
+    `gown_returned` BOOLEAN NULL DEFAULT NULL, 
     `gown_returned_date` DATE NULL DEFAULT NULL , 
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
@@ -70,9 +70,9 @@ CREATE TABLE `student_hat` (
     `id` INT NOT NULL AUTO_INCREMENT , 
     `student_fn` INT NOT NULL , 
     `hat_requested` BOOLEAN NULL DEFAULT NULL , 
-    `hat_taken` BOOLEAN NULL DEFAULT 0 , 
-    `hat_taken_date` VARCHAR(99) NULL DEFAULT NULL , 
-    `hat_returned` BOOLEAN NULL DEFAULT 0 , 
+    `hat_taken` BOOLEAN NULL DEFAULT NULL , 
+    `hat_taken_date` DATE NULL DEFAULT NULL , 
+    `hat_returned` BOOLEAN NULL DEFAULT NULL , 
     `hat_returned_date` DATE NULL DEFAULT NULL , 
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
