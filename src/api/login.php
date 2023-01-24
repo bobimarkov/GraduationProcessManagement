@@ -4,6 +4,7 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 
 include_once '../src/database/db_conf.php';
+include_once '../src/utils/JWTUtils.php';
 
 $data = (array) $data;
 $email = $password = "";
@@ -45,16 +46,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt->execute(["email" => $email, "password" => $hashed_password]);
         $rows = $stmt->fetchAll();
 
-        if(count($rows) == 1) {
+        if(count($rows) === 1) {
             $role = $rows[0]["role"];
-            $name = $rows[0]["name"];
 
-            $user['email'] = $email;
-            $user['role'] = $role;    
-            $user['name'] = $name;    
-
-            $response["user"] = $user;
-            
+            $response["role"] = $role;
+            $response["jwt"] = generateJWT($email, $role);
         } else {
             $error = "Грешно потребителско име или парола!";
             $response["error"] = $error;
@@ -69,3 +65,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         die;
     } 
 }
+
+?>

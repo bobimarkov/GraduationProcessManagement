@@ -4,11 +4,13 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 
 include_once '../src/database/db_conf.php';
+include_once '../src/utils/JWTUtils.php';
 
 $data_array = array();
 $errors = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    validateJWT($jwt, ["admin", "moderator", "student"]);
 
     if ($errors) {
         $response = array("success" => false, "errors:" => json_encode($errors, JSON_UNESCAPED_UNICODE));

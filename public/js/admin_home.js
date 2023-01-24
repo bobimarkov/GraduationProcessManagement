@@ -1,3 +1,4 @@
+tokenRefresher();
 showDiplomaSection();
 getAllUsers();
 getAllStudents();
@@ -7,31 +8,51 @@ google.charts.load('current', { 'packages': ['corechart'] });
 
 let logoutHeader = document.getElementById("logout_header");
 logoutHeader.addEventListener("click", (e) => {
-    sessionStorage.clear();
+    localStorage.removeItem('token')
 
-    window.location.replace("../../");
+    window.location.replace("../../")
 });
 
-function sessionLoader() {
-    if (!sessionStorage.getItem("user") || !sessionStorage.getItem("role") || (sessionStorage.getItem("role") && sessionStorage.getItem("role") !== "admin")) {
-        sessionStorage.clear();
 
-        window.location.replace("../../");
-    }
+function tokenRefresher() {
+    fetch('../../api?endpoint=refresh_token', {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then(response => {
+            localStorage.setItem('token', response.jwt);
+        })
 }
-
-sessionLoader();
 
 /*---- GET_USERS  START ----*/
 function getAllUsers() {
     fetch(`../../api?endpoint=get_users`, {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (data.error) {
                 console.log(data.error);
@@ -76,11 +97,19 @@ function getAllStudents() {
     fetch(`../../api?endpoint=get_students`, {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (data.error) {
                 console.log(data.error);
@@ -154,11 +183,19 @@ function getStudentsDiplomaInfo() {
     fetch(`../../api?endpoint=get_students_diploma`, {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (data.error) {
                 console.log(data.error);
@@ -172,11 +209,19 @@ function getColorsConfig(users) {
     fetch('../../api?endpoint=get_graduation_colors', {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (!data.success) {
                 buildStudentsDiplomaTable(users, null);
@@ -281,7 +326,7 @@ function toggleBorderColor(c) {
 
 /*---- SWITCH_SECTIONS  START ----*/
 function showUsers() {
-
+    tokenRefresher();
     showGivenSection("users_section");
     activeHeader("users_header");
 
@@ -293,7 +338,7 @@ function showUsers() {
 }
 
 function showStudents() {
-
+    tokenRefresher();
     showGivenSection("students_section");
     activeHeader("students_header");
     getAllStudents();
@@ -305,7 +350,7 @@ function showStudents() {
 }
 
 function showEditSection() {
-
+    tokenRefresher();
     showGivenSection("edit_section");
     activeHeader("edit_header");
     getAllUsers();
@@ -314,18 +359,26 @@ function showEditSection() {
 
 
 function showAnalyticsSection() {
-
+    tokenRefresher();
     showGivenSection("analytic_section");
     activeHeader("analytic_header");
 
     fetch(`../../api?endpoint=get_students_diploma`, {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (data.error) {
                 // display error to user 
@@ -350,7 +403,7 @@ function showAnalyticsSection() {
 
 
 function showDiplomaSection() {
-
+    tokenRefresher();
     showGivenSection("diploma_section");
     activeHeader("diploma_header");
     getStudentsDiplomaInfo();
@@ -552,11 +605,19 @@ function showDiplomaOrderMessage() {
     fetch('../../api?endpoint=get_diploma_order', {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             var errElem = document.getElementById('message-bar-diploma');
             if (!data.success) {
@@ -636,12 +697,20 @@ function submitUserHelper(bodyData) {
     fetch('../../api?endpoint=add_users', {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
         body: JSON.stringify(usersData)
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             var errElem = document.getElementById('message-bar-users');
             if (!data.success) {
@@ -687,12 +756,20 @@ function editStudent(event) {
     fetch('../../api?endpoint=edit_students', {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
         body: JSON.stringify(usersData)
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             var errElem = document.getElementById('message-bar-edit-students');
             if (!data.success) {
@@ -713,10 +790,19 @@ function editStudent(event) {
 function submitStudentHelper(bodyData) {
     fetch('../../api?endpoint=add_students', {
         method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
         body: bodyData
-
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             var errElem = document.getElementById('message-bar-students');
             if (!data.success) {
@@ -770,12 +856,20 @@ function submitAction(event) {
     fetch('../../api?endpoint=save_action', {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
         body: JSON.stringify(action)
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             var errElem = document.getElementById('message-bar-diploma');
             if (!data.success) {
@@ -865,12 +959,20 @@ function submitDiplomaOrder(event) {
     fetch('../../api?endpoint=submit_diploma_order', {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
         body: JSON.stringify(values)
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             var errElem = document.getElementById('message-bar-diploma-order');
             if (!data.success) {

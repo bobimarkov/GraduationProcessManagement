@@ -1,27 +1,36 @@
+tokenRefresher();
+getStudentData();
 var email;
 
 let logoutHeader = document.getElementById("logout_header");
 logoutHeader.addEventListener("click", (e) => {
-    sessionStorage.clear();
+    localStorage.removeItem('token');
 
     window.location.replace("../../");
 });
 
-function sessionLoader() {
-    if (!sessionStorage.getItem("user") || !sessionStorage.getItem("role") || (sessionStorage.getItem("role") && sessionStorage.getItem("role") !== "student")) {
-        sessionStorage.clear();
-
-        window.location.replace("../../");
-        return;
-    }
-    email = sessionStorage.getItem("user");
-    document.getElementById("users_header").innerHTML = sessionStorage.getItem("name");
+function tokenRefresher() {
+    fetch('../../api?endpoint=refresh_token', {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then(response => {
+            localStorage.setItem('token', response.jwt);
+        })
 }
 
-sessionLoader();
-
 function submitRequestSpeechAnswer(email, value) {
-    // value = 1, 0
     var requestData = {
         "column_name": "speech_response",
         "email": email,
@@ -30,12 +39,20 @@ function submitRequestSpeechAnswer(email, value) {
     fetch('../../api?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
         body: JSON.stringify(requestData)
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (!data.success) {
 
@@ -55,12 +72,20 @@ function setAttandance(email, checkbox) {
     fetch('../../api?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
         body: JSON.stringify(requestData)
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (!data.success) {
 
@@ -80,12 +105,20 @@ function requestPhotos(email, checkbox) {
     fetch('../../api?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
         body: JSON.stringify(requestData)
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (!data.success) {
 
@@ -111,12 +144,20 @@ function requestDiplomaInAdvance(email, event, value) {
     fetch('../../api?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
         body: JSON.stringify(requestData)
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             var errElem = document.getElementById('message-bar-diploma-request');
             if (!data.success) {
@@ -152,12 +193,20 @@ function requestGrown(email, value) {
     fetch('../../api?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
         body: JSON.stringify(requestData)
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (!data.success) {
 
@@ -178,12 +227,20 @@ function requestHat(email, value) {
     fetch('../../api?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
         body: JSON.stringify(requestData)
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (!data.success) {
 
@@ -194,28 +251,39 @@ function requestHat(email, value) {
 }
 
 // LOAD USER DATA
-getStudentData(email);
 var graduation_time;
 
-function getStudentData(email) {
+function getStudentData() {
     fetch(`../../api?endpoint=get_student_data`, {
-        method: 'POST',
+        method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
-        },
-        body: JSON.stringify(email)
+        }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (data.error) {
                 /* display error to user */
                 console.log(data.error);
-            } else if (data.users[0].grade < 3) {
+            } else {
+                email = data.users[0].email;
+                document.getElementById("users_header").innerHTML = data.users[0].name;
+
+                if (data.users[0].grade < 3) {
                 buildContentForNotGraduatingStudent(data.users[0]);
             } else {
                 buildContentForGraduatingStudent(data.users[0]);
             }
+        }
         })
 }
 
@@ -321,11 +389,19 @@ function getStartHour() {
     fetch('../../api?endpoint=get_graduation_time', {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (!data.success) {
                 // order_message.innerHTML = order_message.innerHTML.concat("Начален час: ").concat(data.message).concat('</br>');
@@ -342,11 +418,19 @@ function getDiplomaOrder() {
     fetch('../../api?endpoint=get_diploma_order', {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (!data.success) {
                 // няма наредба все още
@@ -391,11 +475,19 @@ function getColorsConfig() {
     fetch('../../api?endpoint=get_graduation_colors', {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (!data.success) { } else {
                 var colors_config = data.graduation_colors;
@@ -418,11 +510,19 @@ function getStudentsOrder(colors_config) {
     fetch('../../api?endpoint=get_students_diploma_simplified', {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (!data.success) { } else {
                 showGraduationOrder(data.users, startTime, interval, colors_config);

@@ -4,6 +4,7 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 
 include_once '../src/database/db_conf.php';
+include_once '../src/utils/JWTUtils.php';
 
 $data_array = array();
 
@@ -11,6 +12,8 @@ $users_data = "";
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    validateJWT($jwt, ["admin"]);
+
     $data = json_decode(file_get_contents("php://input"));
 
     foreach ($data as $v) {
