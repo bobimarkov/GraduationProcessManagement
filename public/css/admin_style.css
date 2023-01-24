@@ -509,3 +509,27 @@ svg {
 #diploma-table>tbody>tr :nth-child(5) {
     text-align: center;
 }
+
+#export-excellent {
+    height: 2.5em;
+    width: 50%;
+    border-radius: 5px;
+    border: 1px solid darkslategray;
+    padding: 0 1em;
+    margin-left: 1em;
+    cursor: pointer;
+    background-color: snow;
+    font-weight: bold;
+    color: darkslategray;
+    font-size: medium;
+}
+
+.dashboard-excellent {
+    margin-top: 1em;
+    margin-bottom: 2em;
+    height: 2.5em;
+    font: 1em sans-serif;
+    color: darkslategray;
+    background-color: snow;
+    border-radius: 5px;
+}

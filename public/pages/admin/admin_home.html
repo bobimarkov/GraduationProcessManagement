@@ -185,7 +185,7 @@
                         <option value="pdf">PDF</option>
                     </select>
                     <button type="submit" id="export-graduated" class="submit-action"
-                        onclick="downloadExportedGraduated(event)">Изтегли <i class="fas fa-file-export"></i>
+                        onclick="downloadExportedGraduated(event)">Изтегли  <i class="fas fa-file-export"></i>
                     </button>
                 </form>
 
@@ -225,6 +225,7 @@
                     <td>Дата/час</td>
                 </tr>
             </table>
+
             <h3><i class="fas fa-user-edit"></i> Редактиране</h3>
             <form class="dashboard" id="dashboard">
                 <textarea class="dashboard-textarea-fn" name="dashboard-textarea" id="dashboard_textarea"
@@ -255,6 +256,22 @@
             </form>
             <p class="message-bar" id="message-bar-diploma"></p>
         </div>
+    </div>
+    <div class="row">
+        <h3><i class="fas fa-list"></i> Списък със студенти, които ще бъдат наградени</h3>
+        <form id="export_excellent">
+            <select class="dashboard-excellent" name="format">
+                <option value="no" selected disabled hidden>Изберете файлов формат...</option>
+                <option value="csv">CSV</option>
+                <option value="txt">TextFile</option>
+                <option value="doc">MsWord</option>
+                <option value="xls">Excel</option>
+                <option value="pdf">PDF</option>
+            </select>
+            <button type="submit" id="export-excellent" class="submit-action"
+                onclick="downloadExcellentStudent(event)">Изтегли списък с отличници   <i class="fas fa-file-export"></i>
+            </button>
+        </form>
     </div>
     <div class="row diploma_order_section" id="diploma_order_section">
         <h3><i class="fas fa-user-graduate"></i> Пореден списък за връчване на дипломи</h3>

@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 function executeQuery($order_values, $conn)
 {
     $database = new Db();
-    $query = $database->getConnection();
+    $conn = $database->getConnection();
     $query = "SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_grown.*, student_hat.*
     FROM student_diploma
     RIGHT JOIN student ON student.fn = student_diploma.student_fn 
@@ -72,7 +72,11 @@ function executeQuery($order_values, $conn)
                     $type = 'student.group';
                     break;
             }
-            $query .= $type . " ASC";
+            if ($type == 'student_diploma.grade') {
+                $query .= $type . " DESC";
+            } else {
+                $query .= $type . " ASC";
+            }
             if ($i < count($order_values) - 1) {
                 $query .= ", ";
             }
@@ -85,9 +89,7 @@ function executeQuery($order_values, $conn)
     $n = count($allRows);
 
     //Colors
-    $database = new Db();
-    $connCol = $database->getConnection();
-    $stmtCol = $connCol->prepare("SELECT * 
+    $stmtCol = $conn->prepare("SELECT * 
                             FROM graduation_colors");
     $stmtCol->execute();
     $rowsColors = $stmtCol->fetchAll();
@@ -100,9 +102,7 @@ function executeQuery($order_values, $conn)
     }
 
     //Graduation_time
-    $databaseGrad = new Db();
-    $connGrad = $databaseGrad->getConnection();
-    $stmtGrad = $connGrad->prepare("SELECT * 
+    $stmtGrad = $conn->prepare("SELECT * 
                             FROM graduation_time");
     $stmtGrad->execute();
     $gradTime = $stmtGrad->fetchAll();
@@ -161,7 +161,11 @@ function executeQuery($order_values, $conn)
                     $type = 'student.group';
                     break;
             }
-            $query .= $type . " ASC";
+            if ($type == 'student_diploma.grade') {
+                $query .= $type . " DESC";
+            } else {
+                $query .= $type . " ASC";
+            }
             if ($i < count($order_values) - 1) {
                 $query .= ", ";
             }

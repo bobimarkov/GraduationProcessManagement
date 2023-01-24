@@ -45,7 +45,7 @@ CREATE TABLE `student_diploma` (
     `taken_at_time` DATETIME NULL DEFAULT NULL , 
     `diploma_comment` TEXT NULL DEFAULT NULL , 
     `speech_request` BOOLEAN NOT NULL DEFAULT 0 , 
-    `speech_response` VARCHAR(99) NULL DEFAULT NULL, 
+    `speech_response` BOOLEAN NULL DEFAULT NULL, 
     `photos_requested` BOOLEAN NOT NULL DEFAULT 0 , 
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;

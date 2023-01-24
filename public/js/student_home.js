@@ -271,8 +271,8 @@ function buildContentForGraduatingStudent(user) {
     if (user.speech_request === 1) {
         document.getElementById("speech_request_section").style.display = "flex";
         document.getElementById("speech_request").innerText = 'Поканен сте да изнесете реч по време на дипломирането. Моля, изберете от падащото меню дали приемате или отказвате поканата.'
-        if (user.speech_response !== -1) {
-            user.speech_response === 1 ? document.getElementById("speech_request_select").value = 1 : 0;
+        if (user.speech_response !== null) {
+            user.speech_response === 1 ? document.getElementById("speech_request_select").value = 1 : document.getElementById("speech_request_select").value = 0;
         }
     } else {
         document.getElementById("speech_request_section").style.display = "none";

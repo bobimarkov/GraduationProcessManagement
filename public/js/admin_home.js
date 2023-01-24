@@ -168,13 +168,19 @@ function getStudentsDiplomaInfo() {
 function buildStudentsDiplomaTable(users) {
     var table = document.getElementById("diploma-table");
 
-    table.innerHTML = '<tr id="header-table"> <td onclick="sortByGraduated(0)">ФН</td> <td onclick="sortByGraduated(1)">Име</td> <td onclick="sortByGraduated(2)">Цвят</td> <td onclick="sortByGraduated(3)">Ред на връчване</td> <td onclick="sortByGraduated(4)">Час на връчване</td> <td onclick="sortByGraduated(5)">Степен</td> <td onclick="sortByGraduated(6)">Спец.</td> <td onclick="sortByGraduated(7)">Група</td> <td onclick="sortByGraduated(8)">Успех</td> <td onclick="sortByGraduated(9)">Присъствие</td> <td onclick="sortByGraduated(10)">Има право</td> <td onclick="sortByGraduated(11)">Готова</td> <td onclick="sortByGraduated(12)">Взета</td> <td onclick="sortByGraduated(13)">Заявка взимане предв.</td> <td onclick="sortByGraduated(14)">Коментар (студент)</td> <td onclick="sortByGraduated(15)">Взета предв.</td> <td onclick="sortByGraduated(16)">Дата/час</td> <td onclick="sortByGraduated(17)">Коментар (администр.)</td> <td onclick="sortByGraduated(18)">Покана реч</td> <td onclick="sortByGraduated(19)">Отговор</td> <td onclick="sortByGraduated(20)">Снимки</td> <td onclick="sortByGraduated(21)">Заявена тога</td> <td onclick="sortByGraduated(22)">Взета</td> <td onclick="sortByGraduated(23)">Дата/час</td> <td onclick="sortByGraduated(24)">Върната</td> <td>Дата/час</td> <td onclick="sortByGraduated(25)">Заявена шапка</td> <td onclick="sortByGraduated(26)">Взета</td> <td onclick="sortByGraduated(27)">Дата/час</td> <td onclick="sortByGraduated(28)">Върната</td> <td onclick="sortByGraduated(29)">Дата/час</td></tr>';
+    table.innerHTML = '<tr id="header-table"> <td onclick="sortByGraduated(0)">ФН</td> <td onclick="sortByGraduated(1)">Име</td> <td onclick="sortByGraduated(2)">Цвят</td> <td onclick="sortByGraduated(4)">Ред на връчване</td> <td onclick="sortByGraduated(4)">Час на връчване</td> <td onclick="sortByGraduated(5)">Степен</td> <td onclick="sortByGraduated(6)">Спец.</td> <td onclick="sortByGraduated(7)">Група</td> <td onclick="sortByGraduated(8)">Успех</td> <td onclick="sortByGraduated(9)">Присъствие</td> <td onclick="sortByGraduated(10)">Има право</td> <td onclick="sortByGraduated(11)">Готова</td> <td onclick="sortByGraduated(12)">Взета</td> <td onclick="sortByGraduated(13)">Заявка взимане предв.</td> <td onclick="sortByGraduated(14)">Коментар (студент)</td> <td onclick="sortByGraduated(15)">Взета предв.</td> <td onclick="sortByGraduated(16)">Дата/час</td> <td onclick="sortByGraduated(17)">Коментар (администр.)</td> <td onclick="sortByGraduated(18)">Покана реч</td> <td onclick="sortByGraduated(19)">Отговор</td> <td onclick="sortByGraduated(20)">Снимки</td> <td onclick="sortByGraduated(21)">Заявена тога</td> <td onclick="sortByGraduated(22)">Взета</td> <td onclick="sortByGraduated(23)">Дата/час</td> <td onclick="sortByGraduated(24)">Върната</td> <td>Дата/час</td> <td onclick="sortByGraduated(25)">Заявена шапка</td> <td onclick="sortByGraduated(26)">Взета</td> <td onclick="sortByGraduated(27)">Дата/час</td> <td onclick="sortByGraduated(28)">Върната</td> <td onclick="sortByGraduated(29)">Дата/час</td></tr>';
     let i = 1;
 
     for (const user of users) {
         if (user.grade >= 3) {
             var row = table.insertRow(i);
             row.id = 'user' + i;
+            let response;
+            switch (user.speech_response) {
+                case null : response = '-'; break;
+                case 0: response = 'Отказва'; break;
+                case 1: response = 'Приема'; break;
+            }
             var row_data = [
                 user.student_fn,
                 user.name,
@@ -194,8 +200,8 @@ function buildStudentsDiplomaTable(users) {
                 user.is_taken_in_advance == 0 ? 'Не' : 'Да',
                 user.taken_at_time,
                 user.diploma_comment == null ? "<i class='far fa-comment-alt comment-icon'><span class='userComm'>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span class='userComm'>${user.diploma_comment}</span></i>`,
-                user.speech_request == 0 ? 'Не' : 'Да',
-                user.speech_response == null ? '-' : user.speech_response,
+                user.speech_request = (user.speech_request == 1) ? 'Да' : 'Не',
+                user.speech_response = response,
                 user.photos_requested == 0 ? 'Не' : 'Да',
                 user.grown_requested == 0 ? 'Не' : 'Да',
                 user.grown_taken == 0 ? 'Не' : 'Да',
@@ -832,8 +838,6 @@ function removeValueFromOtherLists(selectObject) {
 }
 
 
-
-
 function submitDiplomaOrder(event) {
     event.preventDefault();
     var form = document.getElementById('diploma_order_form');
@@ -920,9 +924,9 @@ function downloadExportedStudents(event) {
             body: JSON.stringify(values)
         })
             .then(response => response.text())
-            .then(response => {
+            .then(data => {
 
-                const blob = new Blob([response], { type: "application/octet-stream" });
+                const blob = new Blob([data], { type: "application/octet-stream" });
                 const link = document.createElement("a");
                 link.href = URL.createObjectURL(blob);
                 link.download = "students.".concat(fileFormat);
@@ -965,9 +969,9 @@ function downloadExportedUsers(event) {
             body: JSON.stringify(values)
         })
             .then(response => response.text())
-            .then(response => {
+            .then(data => {
 
-                const blob = new Blob([response], { type: "application/octet-stream" });
+                const blob = new Blob([data], { type: "application/octet-stream" });
                 const link = document.createElement("a");
                 link.href = URL.createObjectURL(blob);
                 link.download = "users.".concat(fileFormat);
@@ -1010,9 +1014,9 @@ function downloadExportedGraduated(event) {
             body: JSON.stringify(values)
         })
             .then(response => response.text())
-            .then(response => {
+            .then(data => {
 
-                const blob = new Blob([response], { type: "application/octet-stream" });
+                const blob = new Blob([data], { type: "application/octet-stream" });
                 const link = document.createElement("a");
                 link.href = URL.createObjectURL(blob);
                 link.download = "graduated.".concat(fileFormat);
@@ -1040,6 +1044,50 @@ function downloadExportedGraduated(event) {
     }
 }
 
+function downloadExcellentStudent(event) {
+    event.preventDefault();
+    let form = document.getElementById("export_excellent");
+    let fileFormat = form.format.value;
+
+    values = { "format": fileFormat }
+    if (fileFormat !== 'pdf' && fileFormat !== 'no') {
+        fetch('../../api?endpoint=export_excellent', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(values)
+        })
+            .then(response => response.text())
+            .then(data => {
+
+                const blob = new Blob([data], { type: "application/octet-stream" });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = "excellent.".concat(fileFormat);
+                link.click();
+                link.remove();
+            });
+    }
+    else if (fileFormat === 'pdf') {
+        fetch('../../api?endpoint=export_excellent', {
+            method: 'POST',
+            body: JSON.stringify(values)
+        })
+            .then(response => response.blob())
+            .then(blob => {
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = "excellent.pdf";
+
+                document.body.appendChild(link);
+                link.click();
+
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(link.href);
+            });
+    }
+}
 
 var cPrev = -1;
 function sortByGraduated(c) {
@@ -1050,7 +1098,7 @@ function sortByGraduated(c) {
         arrTable[i] = new Array(columns);
     }
     for (let row = 0; row < rows; row++) {
-        for (col = 0; col < columns; col++) {
+        for (let col = 0; col < columns; col++) {
             arrTable[row][col] = document.getElementById("diploma-table").rows[row].cells[col].innerHTML;
         }
     }
@@ -1072,7 +1120,7 @@ function sortByGraduated(c) {
     cPrev = c;
     arrTable.unshift(firstLine);
     for (let row = 0; row < rows; row++) {
-        for (col = 0; col < columns; col++) {
+        for (let col = 0; col < columns; col++) {
             document.getElementById("diploma-table").rows[row].cells[col].innerHTML = arrTable[row][col];
         }
     }
