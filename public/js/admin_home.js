@@ -670,6 +670,9 @@ function showDashboardAdditionalInputElement(value) {
 function submitUserHelper(bodyData) {
     fetch('../../api?endpoint=add_users', {
         method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
         body: bodyData
     })
         .then(response => response.json())
@@ -1043,11 +1046,20 @@ function downloadExportedStudents(event) {
         fetch('../../api?endpoint=export_students', {
             method: 'POST',
             headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(values)
         })
-            .then(response => response.text())
+            .then(response => {
+                if (response.ok) {
+                    return response.text()
+                }
+                else {
+                    localStorage.removeItem('token');
+                    window.location.replace("../../");
+                }
+            })
             .then(response => {
 
                 const blob = new Blob([response], { type: "application/octet-stream" });
@@ -1061,9 +1073,20 @@ function downloadExportedStudents(event) {
     else if (fileFormat === 'pdf') {
         fetch('../../api?endpoint=export_students', {
             method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
             body: JSON.stringify(values)
         })
-            .then(response => response.blob())
+            .then(response => {
+                if (response.ok) {
+                    return response.blob()
+                }
+                else {
+                    localStorage.removeItem('token');
+                    window.location.replace("../../");
+                }
+            })
             .then(blob => {
                 var link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
@@ -1088,11 +1111,20 @@ function downloadExportedUsers(event) {
         fetch('../../api?endpoint=export_users', {
             method: 'POST',
             headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(values)
         })
-            .then(response => response.text())
+            .then(response => {
+                if (response.ok) {
+                    return response.text()
+                }
+                else {
+                    localStorage.removeItem('token');
+                    window.location.replace("../../");
+                }
+            })
             .then(response => {
 
                 const blob = new Blob([response], { type: "application/octet-stream" });
@@ -1106,9 +1138,20 @@ function downloadExportedUsers(event) {
     else if (fileFormat === 'pdf') {
         fetch('../../api?endpoint=export_users', {
             method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
             body: JSON.stringify(values)
         })
-            .then(response => response.blob())
+            .then(response => {
+                if (response.ok) {
+                    return response.blob()
+                }
+                else {
+                    localStorage.removeItem('token');
+                    window.location.replace("../../");
+                }
+            })
             .then(blob => {
                 var link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
