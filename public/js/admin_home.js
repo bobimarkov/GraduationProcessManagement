@@ -1045,11 +1045,20 @@ function downloadExportedStudents(event) {
             fetch('../../api?endpoint=export_students', {
                 method: 'POST',
                 headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(values)
             })
-                .then(response => response.text())
+                .then(response => {
+                    if (response.ok) {
+                        return response.text()
+                    }
+                    else {
+                        localStorage.removeItem('token');
+                        window.location.replace("../../");
+                    }
+                })
                 .then(data => {
 
                     const blob = new Blob([data], { type: "application/octet-stream" });
@@ -1063,9 +1072,20 @@ function downloadExportedStudents(event) {
         else {
             fetch('../../api?endpoint=export_students', {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
                 body: JSON.stringify(values)
             })
-                .then(response => response.blob())
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob()
+                    }
+                    else {
+                        localStorage.removeItem('token');
+                        window.location.replace("../../");
+                    }
+                })
                 .then(blob => {
                     var link = document.createElement('a');
                     link.href = window.URL.createObjectURL(blob);
@@ -1099,12 +1119,22 @@ function downloadExportedUsers(event) {
             fetch('../../api?endpoint=export_users', {
                 method: 'POST',
                 headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(values)
             })
-                .then(response => response.text())
+                .then(response => {
+                    if (response.ok) {
+                        return response.text()
+                    }
+                    else {
+                        localStorage.removeItem('token');
+                        window.location.replace("../../");
+                    }
+                })
                 .then(data => {
+
 
                     const blob = new Blob([data], { type: "application/octet-stream" });
                     const link = document.createElement("a");
@@ -1117,9 +1147,20 @@ function downloadExportedUsers(event) {
         else {
             fetch('../../api?endpoint=export_users', {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
                 body: JSON.stringify(values)
             })
-                .then(response => response.blob())
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob();
+                    }
+                    else {
+                        localStorage.removeItem('token');
+                        window.location.replace("../../");
+                    }
+                })
                 .then(blob => {
                     var link = document.createElement('a');
                     link.href = window.URL.createObjectURL(blob);
