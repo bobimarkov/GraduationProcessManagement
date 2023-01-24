@@ -2,7 +2,7 @@ getGraduationInfo();
 
 button = document.getElementById("to_login_button");
 button.addEventListener("click", (e) => {
-    window.location.replace("./pages/login.html");
+    window.location.href = "./pages/login.html";
 });
 
 function getWeekDay(weekDay) {

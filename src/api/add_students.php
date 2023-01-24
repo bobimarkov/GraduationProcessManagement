@@ -4,10 +4,15 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 
 include_once '../src/database/db_conf.php';
+include_once '../src/utils/JWTUtils.php';
 
 $users_data = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    validateJWT($jwt, ["admin"]);
+
+    $data = json_decode(file_get_contents("php://input"));
+
     if (!empty($_FILES['file']['tmp_name'])) {
         foreach ($_FILES['file']['tmp_name'] as $key => $tmp_name) {
             $file_handle = fopen($tmp_name, "r");
@@ -16,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $data .= $file_content . "\n";
         }
     } 
-    
+
     if (empty(trim($data))) {
         $response = array("success" => false, "message" => "Грешка: Моля, въведете данни за студент(и).");
         echo json_encode($response);

@@ -1,13 +1,27 @@
-if (sessionStorage.getItem("user") && sessionStorage.getItem("role")) {
-    window.location.replace(`./${sessionStorage.getItem("role")}/${sessionStorage.getItem("role")}_home.html`);
-}
+checkAlreadyLoggedIn();
 
-// ЗАДЪЛЖИТЕЛНО ТРЯБВА ДА ГО ПРЕРАБОТИМ, ИЗПОЛЗВАЙКИ JWT, ЧЕ ИНАЧЕ ИМАМЕ МОЩНО SECURITY VULNERABILITY.
-// ЗА МОМЕНТА ТОЗИ ВАРИАНТ Е КОЛКОТО ДА ИМАМЕ ЛОГВАНЕ НЯКАКВО И СВОБОДА ЗА ЗАНИМАВАНЕ С ДРУГИТЕ ФУНКЦИОНАЛНОСТИ
-function loadSession(user) {
-    sessionStorage.setItem("user", user.email);
-    sessionStorage.setItem("role", user.role);
-    sessionStorage.setItem("name", user.name);
+function checkAlreadyLoggedIn() {
+    if (localStorage.getItem('token') !== null) {
+        fetch(`../api?endpoint=get_user_role`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+            .then(response => {
+                if (response.ok)
+                    return response.json()
+                else {
+                    localStorage.removeItem('token');
+                }
+            })
+            .then(data => {
+                window.location.replace(`./${data.role}/${data.role}_home.html`);
+            })
+
+    }
 }
 
 const loginForm = document.getElementById("login_form");
@@ -25,19 +39,19 @@ loginForm.addEventListener("submit", (e) => {
         },
         body: JSON.stringify(data)
     })
-        .then((response) => response.json())
-        .then((response) => {
-            if (response["success"]) {
-                loadSession(response["user"]);
-                window.location.replace(`./${response["user"].role}/${response["user"].role}_home.html`);
+        .then(response => response.json())
+        .then(response => {
+            if (response.success) {
+                localStorage.setItem("token", response.jwt);
+                window.location.replace(`./${response.role}/${response.role}_home.html`);
             }
             else {
-                document.querySelector("#message-bar-users").innerHTML = response["error"];
+                document.querySelector("#message-bar-users").innerHTML = response.error;
             }
         });
 });
 
 const closeButton = document.querySelector(".close_button");
 closeButton.addEventListener("click", (e) => {
-    window.location.replace("../");
+    window.location.href = "../";
 });
