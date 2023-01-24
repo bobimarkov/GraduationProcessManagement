@@ -1,7 +1,7 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     color: rgb(33, 54, 54);
-    background-color:#33B4FF;
+    background-color: #33B4FF;
     background-size: 64px 128px;
     font-size: 1em;
 }
@@ -13,26 +13,28 @@ body {
     margin: auto;
     font-weight: bolder;
     color: #006199;
-    font-family: Arial, Helvetica, sans-serif !important; 
+    font-family: Arial, Helvetica, sans-serif !important;
 }
 
 .row {
     margin: 2em;
     padding: 1em;
     display: grid;
-    background: rgb(195,192,236);
-    background: linear-gradient(90deg, #86CEFA 0%, rgba(226,237,238,1) 75%, rgba(255,255,255,1) 100%);
+    background: rgb(195, 192, 236);
+    background: linear-gradient(90deg, #86CEFA 0%, rgba(226, 237, 238, 1) 75%, rgba(255, 255, 255, 1) 100%);
     box-shadow: 5px 5px 20px darkslategray;
 }
 
-h2, h3, .logout_header_link {
-    text-transform:uppercase;
+h2,
+h3,
+.logout_header_link {
+    text-transform: uppercase;
     text-decoration: none;
     color: #2f4f4f;
 }
 
 h3 {
-    margin-top: 0!important;
+    margin-top: 0 !important;
     padding: 5px;
     border-radius: 5px;
     background: rgba(247, 241, 241, 0.603);
@@ -76,8 +78,14 @@ input[type=checkbox] {
     color: #006199 !important;
 }
 
-.profile_info_section, .diploma_info_section, .notifications_section, .non_graduating_warning_section, .graduation_info_section,
-.request_diploma_in_advance_section, .request_grown_hat_section, .diploma_order_section {
+.profile_info_section,
+.diploma_info_section,
+.notifications_section,
+.non_graduating_warning_section,
+.graduation_info_section,
+.request_diploma_in_advance_section,
+.request_grown_hat_section,
+.diploma_order_section {
     box-shadow: 5px 5px 20px darkslategray;
     /* border: 1px solid rgba(47, 79, 79, 0.603); */
     border-radius: 5px;
@@ -85,7 +93,10 @@ input[type=checkbox] {
     margin: 1em 0;
 }
 
-.profile_info_section_content, .diploma_info_section_content, .request_diploma_in_advance_content, .request_grown_hat_content {
+.profile_info_section_content,
+.diploma_info_section_content,
+.request_diploma_in_advance_content,
+.request_grown_hat_content {
     display: flex;
 }
 
@@ -94,20 +105,25 @@ input[type=checkbox] {
     align-items: center;
 }
 
-#profile_info_section_content_1_wrapper, #diploma_info_section_content_1_wrapper, #request_grown_hat_content_1_wrapper {
+#profile_info_section_content_1_wrapper,
+#diploma_info_section_content_1_wrapper,
+#request_grown_hat_content_1_wrapper {
     padding-left: 1em;
     border-left: 1px solid rgba(47, 79, 79, 0.603);
 }
 
-#profile_info_section_content_2_wrapper, #diploma_info_section_content_2_wrapper, #diploma_info_section_content_3_wrapper, 
-#diploma_info_section_content_4_wrapper, #request_grown_hat_content_2_wrapper {
+#profile_info_section_content_2_wrapper,
+#diploma_info_section_content_2_wrapper,
+#diploma_info_section_content_3_wrapper,
+#diploma_info_section_content_4_wrapper,
+#request_grown_hat_content_2_wrapper {
     margin-left: 3em;
     padding-left: 1em;
     border-left: 1px solid rgba(47, 79, 79, 0.603);
 }
 
 textarea {
-    resize: none!important;
+    resize: none !important;
     border-radius: 5px;
     border: 1px solid darkslategray;
     padding: 5px;
@@ -125,7 +141,9 @@ textarea {
     justify-content: space-between;
 }
 
-.speech_request_select, .grown_request_select, .hat_request_select {
+.speech_request_select,
+.grown_request_select,
+.hat_request_select {
     width: 200px;
     height: 2.5em;
     font: 1em sans-serif;
@@ -135,9 +153,12 @@ textarea {
     margin-right: 1em;
 }
 
-.speech_request_select:focus, .speech_request_select:active, 
-.request_diploma_in_advance_comment:focus, .request_diploma_in_advance_comment:active, 
-.grown_request_select:focus, .hat_request_select:focus {
+.speech_request_select:focus,
+.speech_request_select:active,
+.request_diploma_in_advance_comment:focus,
+.request_diploma_in_advance_comment:active,
+.grown_request_select:focus,
+.hat_request_select:focus {
     outline: none;
 }
 
@@ -175,7 +196,7 @@ textarea {
 }
 
 p {
-    font-family: monospace!important;
+    font-family: monospace !important;
     font-size: 1.2em;
 }
 
@@ -198,11 +219,11 @@ p {
 table {
     margin-bottom: 2em;
     border-collapse: collapse;
-    display: block; 
+    display: block;
     overflow: auto;
     white-space: nowrap;
     border-radius: 5px;
-}  
+}
 
 table td {
     border: 0.5px solid slategray;
@@ -210,7 +231,7 @@ table td {
 }
 
 table tr:nth-child(even) {
-    background-color:rgba(47, 79, 79, 0.096)
+    background-color: rgba(47, 79, 79, 0.096)
 }
 
 table tr {

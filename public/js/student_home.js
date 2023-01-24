@@ -316,10 +316,12 @@ getDiplomaOrder();
 
 
 function getStartHour() {
-    var start_date = document.getElementById('start_date');
-    var start_time = document.getElementById('start_time');
-    var auditory = document.getElementById('auditory');
-
+    var start_date_grad = document.getElementById('start_date');
+    var start_time_grad = document.getElementById('start_time');
+    var auditory_grad = document.getElementById('auditory');
+    var start_date_nograd = document.getElementById('start_date_no');
+    var start_time_nograd = document.getElementById('start_time_no');
+    var auditory_nograd = document.getElementById('auditory_no');
 
     fetch('../../api?endpoint=get_graduation_time', {
         method: 'GET',
@@ -334,9 +336,12 @@ function getStartHour() {
                 // order_message.innerHTML = order_message.innerHTML.concat("Начален час: ").concat(data.message).concat('</br>');
                 window.graduation_time = null;
             } else {
-                start_date.innerHTML = ("Дата: ").concat(data.graduation_time[0].graduation_date);
-                start_time.innerHTML = ("Начален час: ").concat(data.graduation_time[0].start_time);
-                auditory.innerHTML = ("Аудитория: ").concat(data.graduation_time[0].graduation_place);
+                start_date_grad.innerHTML = ("Дата: ").concat(data.graduation_time[0].graduation_date);
+                start_time_grad.innerHTML = ("Начален час: ").concat(data.graduation_time[0].start_time);
+                auditory_grad.innerHTML = ("Аудитория: ").concat(data.graduation_time[0].graduation_place);
+                start_date_nograd.innerHTML = ("Дата: ").concat(data.graduation_time[0].graduation_date);
+                start_time_nograd.innerHTML = ("Начален час: ").concat(data.graduation_time[0].start_time);
+                auditory_nograd.innerHTML = ("Аудитория: ").concat(data.graduation_time[0].graduation_place);
                 window.graduation_time = data.graduation_time[0];
                 getStudentsOrder();
             }

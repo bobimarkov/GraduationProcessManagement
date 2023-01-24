@@ -5,6 +5,7 @@ getStudentsDiplomaInfo();
 // Load google charts
 google.charts.load('current', { 'packages': ['corechart'] });
 
+
 let logoutHeader = document.getElementById("logout_header");
 logoutHeader.addEventListener("click", (e) => {
     sessionStorage.clear();
@@ -177,7 +178,7 @@ function buildStudentsDiplomaTable(users) {
             row.id = 'user' + i;
             let response;
             switch (user.speech_response) {
-                case null : response = '-'; break;
+                case null: response = '-'; break;
                 case 0: response = 'Отказва'; break;
                 case 1: response = 'Приема'; break;
             }
@@ -320,6 +321,7 @@ function showGivenSection(sectionToBeDisplayed) {
         'students_section',
         'edit_section',
         'diploma_section',
+        'excellent_order',
         'diploma_order_section',
         'analytic_section'];
 
@@ -341,11 +343,12 @@ function showGivenSection(sectionToBeDisplayed) {
 
 
     //the corner cases for flex and make 2 grids at the same time
-    if (sectionToBeDisplayed.localeCompare(sections[5].id) == 0) {
-        sections[5].style.display = 'flex';
+    if (sectionToBeDisplayed.localeCompare(sections[6].id) == 0) {
+        sections[6].style.display = 'flex';
     } else if (sectionToBeDisplayed.localeCompare(sections[3].id) == 0) {
         sections[3].style.display = 'grid';
         sections[4].style.display = 'grid';
+        sections[5].style.display = 'grid';
     }
 
 }
@@ -589,6 +592,32 @@ function submitUsersFromFile(event) {
     submitUserHelper(formData);
     document.getElementById('fileUsers').value = "";
 }
+
+const fileNameUsers = document.getElementById('file-name1');
+document.getElementById('fileUsers').addEventListener('change', function () {
+    if (this.files.length > 0) {
+        let fileNames = [];
+        for (let i = 0; i < this.files.length; i++) {
+            fileNames.push(this.files[i].name);
+        }
+        fileNameUsers.innerText = fileNames.join(', ');
+    } else {
+        fileNameUsers.innerText = "Все още няма избрани файлове";
+    }
+});
+
+const fileNameStudents = document.getElementById('file-name2');
+document.getElementById('fileStudent').addEventListener('change', function () {
+    if (this.files.length > 0) {
+        let fileNames = [];
+        for (let i = 0; i < this.files.length; i++) {
+            fileNames.push(this.files[i].name);
+        }
+        fileNameStudents.innerText = fileNames.join(', ');
+    } else {
+        fileNameStudents.innerText = "Все още няма избрани файлове";
+    }
+});
 
 function editStudent(event) {
 
@@ -913,44 +942,53 @@ function downloadExportedStudents(event) {
     event.preventDefault();
     let form = document.getElementById("export_files_student");
     let fileFormat = form.format.value;
-
-    values = { "format": fileFormat }
-    if (fileFormat !== 'pdf' && fileFormat !== 'no') {
-        fetch('../../api?endpoint=export_students', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(values)
-        })
-            .then(response => response.text())
-            .then(data => {
-
-                const blob = new Blob([data], { type: "application/octet-stream" });
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.download = "students.".concat(fileFormat);
-                link.click();
-                link.remove();
-            });
+    let errElem = document.getElementById('message-bar-export-student');
+    if (fileFormat === 'no') {
+        errElem.classList.remove(['success']);
+        errElem.classList.add(['error']);
+        errElem.innerHTML = "Не сте избрали файлов формат!"
     }
-    else if (fileFormat === 'pdf') {
-        fetch('../../api?endpoint=export_students', {
-            method: 'POST',
-            body: JSON.stringify(values)
-        })
-            .then(response => response.blob())
-            .then(blob => {
-                var link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = "students.pdf";
+    else {
+        errElem.classList.remove(['error']);
+        errElem.innerHTML = "";
+        values = { "format": fileFormat }
+        if (fileFormat !== 'pdf') {
+            fetch('../../api?endpoint=export_students', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(values)
+            })
+                .then(response => response.text())
+                .then(data => {
 
-                document.body.appendChild(link);
-                link.click();
+                    const blob = new Blob([data], { type: "application/octet-stream" });
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "students.".concat(fileFormat);
+                    link.click();
+                    link.remove();
+                });
+        }
+        else {
+            fetch('../../api?endpoint=export_students', {
+                method: 'POST',
+                body: JSON.stringify(values)
+            })
+                .then(response => response.blob())
+                .then(blob => {
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = "students.pdf";
 
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(link.href);
-            });
+                    document.body.appendChild(link);
+                    link.click();
+
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(link.href);
+                });
+        }
     }
 }
 
@@ -958,44 +996,53 @@ function downloadExportedUsers(event) {
     event.preventDefault();
     let form = document.getElementById("export_files_users");
     let fileFormat = form.format.value;
-
-    values = { "format": fileFormat }
-    if (fileFormat !== 'pdf' && fileFormat !== 'no') {
-        fetch('../../api?endpoint=export_users', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(values)
-        })
-            .then(response => response.text())
-            .then(data => {
-
-                const blob = new Blob([data], { type: "application/octet-stream" });
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.download = "users.".concat(fileFormat);
-                link.click();
-                link.remove();
-            });
+    let errElem = document.getElementById('message-bar-export-users');
+    if (fileFormat === 'no') {
+        errElem.classList.remove(['success']);
+        errElem.classList.add(['error']);
+        errElem.innerHTML = "Не сте избрали файлов формат!"
     }
-    else if (fileFormat === 'pdf') {
-        fetch('../../api?endpoint=export_users', {
-            method: 'POST',
-            body: JSON.stringify(values)
-        })
-            .then(response => response.blob())
-            .then(blob => {
-                var link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = "users.pdf";
+    else {
+        errElem.classList.remove(['error']);
+        errElem.innerHTML = "";
+        values = { "format": fileFormat }
+        if (fileFormat !== 'pdf') {
+            fetch('../../api?endpoint=export_users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(values)
+            })
+                .then(response => response.text())
+                .then(data => {
 
-                document.body.appendChild(link);
-                link.click();
+                    const blob = new Blob([data], { type: "application/octet-stream" });
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "users.".concat(fileFormat);
+                    link.click();
+                    link.remove();
+                });
+        }
+        else {
+            fetch('../../api?endpoint=export_users', {
+                method: 'POST',
+                body: JSON.stringify(values)
+            })
+                .then(response => response.blob())
+                .then(blob => {
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = "users.pdf";
 
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(link.href);
-            });
+                    document.body.appendChild(link);
+                    link.click();
+
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(link.href);
+                });
+        }
     }
 }
 
@@ -1003,44 +1050,53 @@ function downloadExportedGraduated(event) {
     event.preventDefault();
     let form = document.getElementById("export_graduated");
     let fileFormat = form.format.value;
-
-    values = { "format": fileFormat }
-    if (fileFormat !== 'pdf' && fileFormat !== 'no') {
-        fetch('../../api?endpoint=export_graduated', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(values)
-        })
-            .then(response => response.text())
-            .then(data => {
-
-                const blob = new Blob([data], { type: "application/octet-stream" });
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.download = "graduated.".concat(fileFormat);
-                link.click();
-                link.remove();
-            });
+    let errElem = document.getElementById('message-bar-export-graduated');
+    if (fileFormat === 'no') {
+        errElem.classList.remove(['success']);
+        errElem.classList.add(['error']);
+        errElem.innerHTML = "Не сте избрали файлов формат!"
     }
-    else if (fileFormat === 'pdf') {
-        fetch('../../api?endpoint=export_graduated', {
-            method: 'POST',
-            body: JSON.stringify(values)
-        })
-            .then(response => response.blob())
-            .then(blob => {
-                var link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = "graduated.pdf";
+    else {
+        errElem.classList.remove(['error']);
+        errElem.innerHTML = "";
+        values = { "format": fileFormat }
+        if (fileFormat !== 'pdf') {
+            fetch('../../api?endpoint=export_graduated', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(values)
+            })
+                .then(response => response.text())
+                .then(data => {
 
-                document.body.appendChild(link);
-                link.click();
+                    const blob = new Blob([data], { type: "application/octet-stream" });
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "graduated.".concat(fileFormat);
+                    link.click();
+                    link.remove();
+                });
+        }
+        else {
+            fetch('../../api?endpoint=export_graduated', {
+                method: 'POST',
+                body: JSON.stringify(values)
+            })
+                .then(response => response.blob())
+                .then(blob => {
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = "graduated.pdf";
 
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(link.href);
-            });
+                    document.body.appendChild(link);
+                    link.click();
+
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(link.href);
+                });
+        }
     }
 }
 
@@ -1048,44 +1104,53 @@ function downloadExcellentStudent(event) {
     event.preventDefault();
     let form = document.getElementById("export_excellent");
     let fileFormat = form.format.value;
-
-    values = { "format": fileFormat }
-    if (fileFormat !== 'pdf' && fileFormat !== 'no') {
-        fetch('../../api?endpoint=export_excellent', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(values)
-        })
-            .then(response => response.text())
-            .then(data => {
-
-                const blob = new Blob([data], { type: "application/octet-stream" });
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.download = "excellent.".concat(fileFormat);
-                link.click();
-                link.remove();
-            });
+    let errElem = document.getElementById('message-bar-export-excellent');
+    if (fileFormat === 'no') {
+        errElem.classList.remove(['success']);
+        errElem.classList.add(['error']);
+        errElem.innerHTML = "Не сте избрали файлов формат!"
     }
-    else if (fileFormat === 'pdf') {
-        fetch('../../api?endpoint=export_excellent', {
-            method: 'POST',
-            body: JSON.stringify(values)
-        })
-            .then(response => response.blob())
-            .then(blob => {
-                var link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = "excellent.pdf";
+    else {
+        errElem.classList.remove(['error']);
+        errElem.innerHTML = "";
+        values = { "format": fileFormat }
+        if (fileFormat !== 'pdf') {
+            fetch('../../api?endpoint=export_excellent', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(values)
+            })
+                .then(response => response.text())
+                .then(data => {
 
-                document.body.appendChild(link);
-                link.click();
+                    const blob = new Blob([data], { type: "application/octet-stream" });
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "excellent.".concat(fileFormat);
+                    link.click();
+                    link.remove();
+                });
+        }
+        else {
+            fetch('../../api?endpoint=export_excellent', {
+                method: 'POST',
+                body: JSON.stringify(values)
+            })
+                .then(response => response.blob())
+                .then(blob => {
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = "excellent.pdf";
 
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(link.href);
-            });
+                    document.body.appendChild(link);
+                    link.click();
+
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(link.href);
+                });
+        }
     }
 }
 

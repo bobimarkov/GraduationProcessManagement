@@ -127,6 +127,9 @@ function executeQuery($order_values, $conn)
         } else {
             $startTime->modify("+$sec seconds");
         }
+        if($allRows[$num]['speech_response'] == 1) {
+            $startTime->modify("+ 90 seconds");
+        }
         $num++;
     }
 
