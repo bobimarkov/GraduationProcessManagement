@@ -87,7 +87,6 @@ input[type=checkbox] {
 .request_grown_hat_section,
 .diploma_order_section {
     box-shadow: 5px 5px 20px darkslategray;
-    /* border: 1px solid rgba(47, 79, 79, 0.603); */
     border-radius: 5px;
     padding: 1em;
     margin: 1em 0;
@@ -108,6 +107,7 @@ input[type=checkbox] {
 #profile_info_section_content_1_wrapper,
 #diploma_info_section_content_1_wrapper,
 #request_grown_hat_content_1_wrapper {
+
     padding-left: 1em;
     border-left: 1px solid rgba(47, 79, 79, 0.603);
 }

@@ -73,8 +73,8 @@ function updateUserToDB($content) {
         $update_stmt = $conn->prepare("UPDATE student_diploma 
                                        SET $column = \"$value\" 
                                        WHERE student_fn = :fn");
-    } else if ($column == "grown_requested") {
-        $update_stmt = $conn->prepare("UPDATE student_grown
+    } else if ($column == "gown_requested") {
+        $update_stmt = $conn->prepare("UPDATE student_gown
                                        SET $column = \"$value\" 
                                        WHERE student_fn = :fn");
     } else if ($column == "hat_requested") {

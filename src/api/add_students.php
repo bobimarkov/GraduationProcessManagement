@@ -193,9 +193,10 @@ function exportStudentsToDB($users_arr_2d)
                                           VALUES (:email, :password, :name, :phone, :role)");
     $stmt_register_student = $conn->prepare("INSERT INTO `student` (`fn`, `user_id`, `degree`, `major`, `group`, `has_diploma_right`) 
                                              VALUES (:fn, :user_id, :degree, :major, :group, :has_diploma_right)");
-    $stmt_register_student_diploma = $conn->prepare("INSERT INTO `student_diploma` (`student_fn`, `has_right`, `grade`, `speech_request`) 
-                                             VALUES (:student_fn, :has_right, :grade, :speech_request)");
-    $stmt_register_student_grown = $conn->prepare("INSERT INTO `student_grown` (`student_fn`) 
+
+    $stmt_register_student_diploma = $conn->prepare("INSERT INTO `student_diploma` (`student_fn`, `has_right`, `grade`) 
+                                             VALUES (:student_fn, :has_right, :grade)");
+    $stmt_register_student_gown = $conn->prepare("INSERT INTO `student_gown` (`student_fn`) 
                                              VALUES (:student_fn)");
     $stmt_register_student_hat = $conn->prepare("INSERT INTO `student_hat` (`student_fn`) 
                                              VALUES (:student_fn)");
@@ -250,7 +251,7 @@ function exportStudentsToDB($users_arr_2d)
                 "grade" => $values[9],
                 "speech_request" => $has_speech_right,
             ]);
-            $stmt_register_student_grown->execute([
+            $stmt_register_student_gown->execute([
                 "student_fn" => $values[5]
             ]);
             $success = $stmt_register_student_hat->execute([

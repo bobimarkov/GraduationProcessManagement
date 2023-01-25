@@ -41,11 +41,11 @@ function executeQuery($order_values, $conn)
 {
     $database = new Db();
     $conn = $database->getConnection();
-    $query = "SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_grown.*, student_hat.*
+    $query = "SELECT student_diploma.*, user.name, student.degree, student.major, student.group, student_gown.*, student_hat.*
     FROM student_diploma
     RIGHT JOIN student ON student.fn = student_diploma.student_fn 
     RIGHT JOIN user ON user.id = student.user_id 
-    LEFT JOIN student_grown ON student.fn = student_grown.student_fn 
+    LEFT JOIN student_gown ON student.fn = student_gown.student_fn 
     LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
     WHERE user.role='student' and student_diploma.grade >= 3";
 
@@ -81,6 +81,7 @@ function executeQuery($order_values, $conn)
                 $query .= ", ";
             }
         }
+
     }
     $stmt = $conn->prepare($query);
     $stmt->execute();
