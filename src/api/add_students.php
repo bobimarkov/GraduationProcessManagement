@@ -4,10 +4,15 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 
 include_once '../src/database/db_conf.php';
+include_once '../src/utils/JWTUtils.php';
 
 $users_data = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    validateJWT($jwt, ["admin"]);
+
+    $data = json_decode(file_get_contents("php://input"));
+
     if (!empty($_FILES['file']['tmp_name'])) {
         foreach ($_FILES['file']['tmp_name'] as $key => $tmp_name) {
             $file_handle = fopen($tmp_name, "r");
@@ -16,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $data .= $file_content . "\n";
         }
     } 
-    
+
     if (empty(trim($data))) {
         $response = array("success" => false, "message" => "Грешка: Моля, въведете данни за студент(и).");
         echo json_encode($response);
@@ -194,8 +199,8 @@ function exportStudentsToDB($users_arr_2d)
     $stmt_register_student = $conn->prepare("INSERT INTO `student` (`fn`, `user_id`, `degree`, `major`, `group`, `has_diploma_right`) 
                                              VALUES (:fn, :user_id, :degree, :major, :group, :has_diploma_right)");
 
-    $stmt_register_student_diploma = $conn->prepare("INSERT INTO `student_diploma` (`student_fn`, `has_right`, `grade`) 
-                                             VALUES (:student_fn, :has_right, :grade)");
+    $stmt_register_student_diploma = $conn->prepare("INSERT INTO `student_diploma` (`student_fn`, `has_right`, `grade`, `speech_request`) 
+                                             VALUES (:student_fn, :has_right, :grade, :speech_request)");
     $stmt_register_student_gown = $conn->prepare("INSERT INTO `student_gown` (`student_fn`) 
                                              VALUES (:student_fn)");
     $stmt_register_student_hat = $conn->prepare("INSERT INTO `student_hat` (`student_fn`) 

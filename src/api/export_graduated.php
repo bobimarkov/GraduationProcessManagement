@@ -1,8 +1,13 @@
 <?php
 
+include_once '../src/database/db_conf.php';
+include_once '../src/utils/JWTUtils.php';
+
+validateJWT($jwt, ["admin", "moderator"]);
+
 $data = (array) $data;
+
 if (isset($data["format"])) {
-    include_once '../src/database/db_conf.php';
     $format = $data["format"];
     $name = "students." . $format;
 

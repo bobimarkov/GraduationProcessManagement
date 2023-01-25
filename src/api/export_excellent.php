@@ -1,12 +1,20 @@
 <?php
 
 $data = (array) $data;
+
+include_once '../src/database/db_conf.php';
+include_once '../src/utils/JWTUtils.php';
+
+validateJWT($jwt, ["admin", "moderator"]);
+
 if (isset($data["format"])) {
-    include_once '../src/database/db_conf.php';
+
     $format = $data["format"];
     $name = "excellent." . $format;
+    
     $database = new Db();
     $conn = $database->getConnection();
+
     $stmt = $conn->prepare("SELECT student.fn, user.name, student_diploma.color, student_diploma.num_order, student_diploma.time_diploma, student.degree, student.major, student.group, student_diploma.grade, student_diploma.attendance, student_diploma.has_right, student_diploma.is_ready, student_diploma.is_taken, student_diploma.take_in_advance_request, student_diploma.take_in_advance_request_comment, student_diploma.is_taken_in_advance, student_diploma.taken_at_time, student_diploma.diploma_comment, student_diploma.speech_request, student_diploma.speech_response, student_diploma.photos_requested, student_gown.gown_requested, student_gown.gown_taken, student_gown.gown_taken_date, student_gown.gown_returned, student_gown.gown_returned_date, student_hat.hat_requested, student_hat.hat_taken, student_hat.hat_taken_date, student_hat.hat_returned, student_hat.hat_returned_date  
     FROM student_diploma
     RIGHT JOIN student ON student.fn = student_diploma.student_fn 
@@ -15,8 +23,11 @@ if (isset($data["format"])) {
     LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
     WHERE user.role='student' and student_diploma.grade >= 5.5
     ORDER BY student_diploma.grade DESC");
+
     $stmt->execute();
+
     if ($format !== 'pdf' && $format !== 'no') {
+        
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename="' . basename($name));
         $output = fopen($name, "w");

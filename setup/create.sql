@@ -5,6 +5,7 @@ GO
 
 ----- Create Tables -----
 
+
 CREATE TABLE `user` ( 
     `id` INT NOT NULL AUTO_INCREMENT , 
     `email` VARCHAR(99) NOT NULL UNIQUE ,
@@ -55,7 +56,7 @@ ALTER TABLE `student_diploma` ADD CONSTRAINT `student_fn_fk` FOREIGN KEY (`stude
 
 CREATE TABLE `student_gown` ( 
     `id` INT NOT NULL AUTO_INCREMENT , 
-    `student_fn` INT NOT NULL , 
+    `student_fn` VARCHAR(99) NOT NULL , 
     `gown_requested` BOOLEAN NULL DEFAULT NULL, 
     `gown_taken` BOOLEAN NULL DEFAULT NULL, 
     `gown_taken_date` DATE NULL DEFAULT NULL , 
@@ -65,7 +66,7 @@ CREATE TABLE `student_gown` (
 ) ENGINE = InnoDB;
 
 ALTER TABLE `student_gown` ADD INDEX(`student_fn`);
-ALTER TABLE `student_gown` ADD CONSTRAINT `student_fn_fk_3` FOREIGN KEY (`student_fn`) REFERENCES `student`(`fn`) ON DELETE CASCADE ON UPDATE RESTRICT;
+ALTER TABLE `student_gown` ADD CONSTRAINT `student_fn_fk_2` FOREIGN KEY (`student_fn`) REFERENCES `student`(`fn`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
 CREATE TABLE `student_hat` ( 
     `id` INT NOT NULL AUTO_INCREMENT , 
@@ -117,6 +118,30 @@ CREATE TABLE `graduation_colors` (
     `color10` VARCHAR(99) NULL DEFAULT NULL , 
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

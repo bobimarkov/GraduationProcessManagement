@@ -1,3 +1,4 @@
+tokenRefresher();
 showDiplomaSection();
 getAllUsers();
 getAllStudents();
@@ -7,20 +8,31 @@ google.charts.load('current', { 'packages': ['corechart'] });
 
 let logoutHeader = document.getElementById("logout_header");
 logoutHeader.addEventListener("click", (e) => {
-    sessionStorage.clear();
+    localStorage.removeItem('token');
 
-    window.location.replace("../../index.html");
+    window.location.replace("../../");
 });
 
-function sessionLoader() {
-    if (!sessionStorage.getItem("user") || !sessionStorage.getItem("role") || (sessionStorage.getItem("role") && sessionStorage.getItem("role") !== "moderator")) {
-        sessionStorage.clear();
-
-        window.location.replace("../../index.html");
-    }
+function tokenRefresher() {
+    fetch('../../api?endpoint=refresh_token', {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then(response => {
+            localStorage.setItem('token', response.jwt);
+        })
 }
-
-sessionLoader();
 
 /*---- GET_USERS  START ----*/
 
@@ -28,11 +40,19 @@ function getAllUsers() {
     fetch(`../../api?endpoint=get_users`, {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (data.error) {
                 console.log(data.error);
@@ -58,9 +78,9 @@ function buildUsersTable(data) {
             user.email,
             user.phone,
             user.role == 'admin' ?
-             '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
-             '<i class="fas fa-user-cog user-role-icon"></i>' :
-             '<i class="fas fa-user-graduate user-role-icon"></i>'
+                '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
+                    '<i class="fas fa-user-cog user-role-icon"></i>' :
+                    '<i class="fas fa-user-graduate user-role-icon"></i>'
         ];
         const number_columns = row_data.length;
         for (var j = 0; j < number_columns; j++) {
@@ -77,11 +97,19 @@ function getAllStudents() {
     fetch(`../../api?endpoint=get_students`, {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (data.error) {
                 /* display error to user */
@@ -113,9 +141,9 @@ function buildStudentsTable(data) {
             user.group,
             user.has_diploma_right == 0 ? "Не" : "Да",
             user.role == 'admin' ?
-             '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
-             '<i class="fas fa-user-cog user-role-icon"></i>' :
-             '<i class="fas fa-user-graduate user-role-icon"></i>'
+                '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
+                    '<i class="fas fa-user-cog user-role-icon"></i>' :
+                    '<i class="fas fa-user-graduate user-role-icon"></i>'
         ];
         const number_columns = row_data.length;
         for (var j = 0; j < number_columns; j++) {
@@ -131,11 +159,19 @@ function getStudentsDiplomaInfo() {
     fetch(`../../api?endpoint=get_students_diploma`, {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (data.error) {
                 /* display error to user */
@@ -151,11 +187,19 @@ function getColorsConfig(users) {
     fetch('../../api?endpoint=get_graduation_colors', {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (!data.success) {
                 buildStudentsDiplomaTable(users, null);
@@ -240,28 +284,39 @@ function extractColor(color_code) {
 
 /*---- SWITCH_SECTIONS  START ----*/
 function showUsers() {
+    tokenRefresher();
     showGivenSection("users_section");
     activeHeader("users_header");
 }
 
 function showStudents() {
+    tokenRefresher();
     showGivenSection("students_section");
     activeHeader("students_header");
     getAllStudents();
 }
 
 function showAnalyticsSection() {
+    tokenRefresher();
     showGivenSection("analytic_section");
     activeHeader("analytic_header");
 
     fetch(`../../api?endpoint=get_students_diploma`, {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (data.error) {
                 // display error to user 
@@ -284,6 +339,7 @@ function showAnalyticsSection() {
 
 
 function showDiplomaSection() {
+    tokenRefresher();
     showGivenSection("diploma_section");
     activeHeader("diploma_header");
     getStudentsDiplomaInfo();
@@ -318,7 +374,7 @@ function showGivenSection(sectionToBeDisplayed) {
 /*---- SWITCH_SECTIONS  END ----*/
 //give class "active_header" to only element with elementid
 function activeHeader(elementId) {
-    
+
     var headers = [
         'users_header',
         'students_header',
@@ -389,7 +445,7 @@ function dataHasRightToArray(data) {
 }
 
 function dataDegreeToArray(data) {
-    const a = [["Степен на образование", "Брой студенти"], ["Бакалавър", 0], ["Магистър", 0],["Доктор", 0]];
+    const a = [["Степен на образование", "Брой студенти"], ["Бакалавър", 0], ["Магистър", 0], ["Доктор", 0]];
 
     let rows = data.users;
     rows.forEach(row_data => {
