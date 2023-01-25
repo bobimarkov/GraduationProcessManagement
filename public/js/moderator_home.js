@@ -496,19 +496,13 @@ function drawChart(majorData, id, titleMessage) {
     chart.draw(data, options);
 }
 
-
-function distributeStudentsAmonModeratorGowns() {
-
-}
-
-
 function responsibilitiesByModeratorRole() {
     switch (sessionStorage.getItem("role")) {
         case "moderator-hat":
             responsibilitiesForModeratorHat();
             break;
         case "moderator-gown":
-            responsibilitiesForModeratorgown();
+            responsibilitiesForModeratorGown();
             break;
         case "moderator-signature":
             responsibilitiesForModeratorSignature();
@@ -523,7 +517,7 @@ function responsibilitiesForModeratorHat() {
 
 }
 
-function responsibilitiesForModeratorgown() {
+function responsibilitiesForModeratorGown() {
     showGivenSection("responsibilities_section");
     activeHeader("responsibilities_header");
     fetchDataForStudents(buildResponsibilitiesSectionForModeratorGown, "get_students_gown");
