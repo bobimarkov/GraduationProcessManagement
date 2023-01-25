@@ -1022,4 +1022,27 @@ function downloadExportedUsers(event) {
     }
 }
 
-
+  function distributeModerators() {
+    fetch('../../api?endpoint=edit_student_moderators', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }})
+        .then(response => response.json())
+        .then((data) => {
+            var errElem = document.getElementById('message-bar-distribute-moderators');
+            if (data.error) {
+                errElem.classList.remove(['success']);
+                errElem.classList.add(['error']);
+                console.log(data.error);
+                errElem.innerHTML = data.error;
+            } else {
+                errElem.classList.remove(['error']);
+                errElem.classList.add(['success']);
+                console.log(data.success);
+                errElem.innerHTML = data.success;
+            }
+        })
+        .finally(() => {});
+  }

@@ -197,6 +197,8 @@ function exportStudentsToDB($users_arr_2d)
                                              VALUES (:student_fn)");
     $stmt_register_student_hat = $conn->prepare("INSERT INTO `student_hat` (`student_fn`) 
                                              VALUES (:student_fn)");
+    $stmt_register_student_moderators = $conn->prepare("INSERT INTO `student_moderators` (`student_fn`) 
+                                            VALUES (:student_fn)");
 
     $success = "";
     // check for already existing user with this email or FN
@@ -249,7 +251,10 @@ function exportStudentsToDB($users_arr_2d)
             $stmt_register_student_gown->execute([
                 "student_fn" => $values[5]
             ]);
-            $success = $stmt_register_student_hat->execute([
+            $stmt_register_student_hat->execute([
+                "student_fn" => $values[5]
+            ]);
+            $success = $stmt_register_student_moderators->execute([
                 "student_fn" => $values[5]
             ]);
         }

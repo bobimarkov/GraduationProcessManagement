@@ -113,6 +113,16 @@ CREATE TABLE `graduation_colors` (
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
+create table `student_moderators` (
+    `student_fn` INT NOT NULL,
+    `moderator_hat_email` VARCHAR(99) NULL DEFAULT NULL,
+    `moderator_gown_email` VARCHAR(99) NULL DEFAULT NULL,
+    `moderator_signature_email` VARCHAR(99) NULL DEFAULT NULL,
+    PRIMARY KEY (`student_fn`)
+) ENGINE = InnoDB;
+
+ALTER TABLE `student_moderators` ADD INDEX(`student_fn`);
+ALTER TABLE `student_moderators` ADD CONSTRAINT `student_fn_fk_10` FOREIGN KEY (`student_fn`) REFERENCES `student_diploma`(`student_fn`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
 
 
