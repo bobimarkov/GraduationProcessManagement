@@ -124,7 +124,15 @@ create table `student_moderators` (
 ALTER TABLE `student_moderators` ADD INDEX(`student_fn`);
 ALTER TABLE `student_moderators` ADD CONSTRAINT `student_fn_fk_10` FOREIGN KEY (`student_fn`) REFERENCES `student_diploma`(`student_fn`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
+create table moderator_range (
+    `email` VARCHAR(99) NOT NULL,
+    `role` VARCHAR(99) NOT NULL,
+    `range` VARCHAR(99) NULL DEFAULT NULL,
+    PRIMARY KEY (`email`)
+)
 
+ALTER TABLE `moderator_range` ADD INDEX(`email`);
+ALTER TABLE `moderator_range` ADD CONSTRAINT `student_fn_fk_11` FOREIGN KEY (`email`) REFERENCES `user`(`email`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
 
 

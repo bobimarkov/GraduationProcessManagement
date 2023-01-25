@@ -530,18 +530,22 @@ function responsibilitiesForModeratorSignature() {
 
 
 function fetchDataForStudents(moderatorFunction, endpoint) {
+    email = sessionStorage.getItem("user");
+
     fetch(`../../api?endpoint=${endpoint}`, {
-        method: 'GET',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
+        body: JSON.stringify(email)
     })
         .then(response => response.json())
         .catch((error) => {
             console.error(error);
         })
         .then((data) => {
+            console.log(data);
             moderatorFunction(data.users);
         })
         .catch((error) => {
@@ -569,7 +573,8 @@ function createSumDivForModerator(parentId, sums_text, sum_values) {
 
 function buildResponsibilitiesSectionForModeratorHat(users) {
     var resp_beginning = document.getElementById("responsibilities_beginning");
-    resp_beginning.innerHTML = "Отговорност: Шапки";
+    var name_range = users[0].name_range;
+    resp_beginning.innerHTML = "Отговорност: Шапки " + name_range;
     var table = document.getElementById("responsibilities_table");
     var sums = {
         has_right: 0,
@@ -588,7 +593,7 @@ function buildResponsibilitiesSectionForModeratorHat(users) {
     createSumDivForModerator("sums-div", sums_text, Object.values(sums));
 
     tableheader = document.getElementById("header_responsibilities_table");
-    tableheader.innerHTML = "<i class=\"fas fa-list\"></i>" + " Студенти заявили тога";
+    tableheader.innerHTML = "<i class=\"fas fa-list\"></i>" + " Студенти заявили шапка";
 
 
     let i = 1;
@@ -623,7 +628,8 @@ function buildResponsibilitiesSectionForModeratorHat(users) {
 
 function buildResponsibilitiesSectionForModeratorGown(users) {
     var resp_beginning = document.getElementById("responsibilities_beginning");
-    resp_beginning.innerHTML = "Отговорност: Тоги";
+    var name_range = users[0].name_range;
+    resp_beginning.innerHTML = "Отговорност: Тоги " + name_range;
     var table = document.getElementById("responsibilities_table");
     var sums = {
         has_right: 0,
@@ -677,7 +683,8 @@ function buildResponsibilitiesSectionForModeratorGown(users) {
 
 function buildResponsibilitiesSectionForModeratorSignature(users) {
     var resp_beginning = document.getElementById("responsibilities_beginning");
-    resp_beginning.innerHTML = "Отговорност: Дипломи";
+    var name_range = users[0].name_range;
+    resp_beginning.innerHTML = "Отговорност: Дипломи " + name_range;
     var sums = {
         has_right: 0,
         attendance: 0,
@@ -694,7 +701,7 @@ function buildResponsibilitiesSectionForModeratorSignature(users) {
     createSumDivForModerator("sums-div", sums_text, Object.values(sums));
 
     var tableheader = document.getElementById("header_responsibilities_table");
-    tableheader.innerHTML = "<i class=\"fas fa-list\"></i>" + "Студенти с право на диплома:";
+    tableheader.innerHTML = "<i class=\"fas fa-list\"></i>" + " Студенти с право на диплома:";
 
     let i = 1;
     var table = document.getElementById("responsibilities_table");

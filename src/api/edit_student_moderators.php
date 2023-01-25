@@ -20,8 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         WHERE role = 'moderator-hat' or role = 'moderator-gown' or role = 'moderator-signature' ");
     $get_students = $conn->prepare(
         "SELECT student.fn, user.name 
-        from user
-        join student on student.user_id = user.id"
+        FROM user
+        JOIN student ON student.user_id = user.id"
     );
     $update_student_moderators = $conn->prepare(
     "UPDATE student_moderators
@@ -31,6 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
      WHERE student_fn = :fn"
     );
 
+    $update_moderator_range = $conn->prepare(
+    "UPDATE moderator_range SET `range` = :range WHERE email = :email"
+    );
+
     $get_moderators->execute();
     $moderators = $get_moderators->fetchAll();
     
@@ -38,23 +42,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $students = $get_students->fetchAll();
     $response = array();
 
-    $result = defineModeratorsForAllStudents($students, $moderators, $update_student_moderators, $response);
+    $result = defineModeratorsForAllStudents($students, $moderators, $update_student_moderators, $update_moderator_range, $response);
     $success = is_null($result) ? false : "Модераторите бяха разпределени успешно!";
     $response = array_merge($response,array("success" => $success, "users" => $result));
     echo json_encode($response);
     http_response_code(200);
 }
 
-function defineModeratorsForAllStudents($students, $moderators, $update_student_moderators, &$response) {
+function defineModeratorsForAllStudents($students, $moderators, $update_student_moderators, $update_moderator_range, &$response) {
+    $all_ranges = array();
     for($i = 0 ; $i < count($students); $i++) {
-        $res = defineModeratorsForOneStudent($students[$i], $moderators);
+        $student_ranges = defineModeratorsForOneStudent($students[$i], $moderators);
+        
+        $res = $student_ranges["student"];
+        $all_ranges[$i] = $student_ranges["ranges"];
+
         if(is_null($res)) {
             $response["error"] = "Името на студента с факултетен номер: " . $students[$i]["fn"] . " не е на български";
             return null;
         }
         $students[$i] = $res;
     }
-    foreach($students as $student) {
+    $metModerator = array();
+    for($i = 0; $i < count($students); $i++) {
+        $student = $students[$i];
+        $ranges = $all_ranges[$i];
         $fn = array_keys($student)[0];
         $update_student_moderators->execute([
             "fn" => $fn,
@@ -62,6 +74,20 @@ function defineModeratorsForAllStudents($students, $moderators, $update_student_
             "moderator_gown_email" => $student[$fn]["moderator_gown"],
             "moderator_signature_email" => $student[$fn]["moderator_signature"]
         ]);
+
+        $update_moderator_range->execute([
+            "email" => $student[$fn]["moderator_hat"],
+            "range" => $ranges["hat"]
+        ]);
+        $update_moderator_range->execute([
+            "email" => $student[$fn]["moderator_gown"],
+            "range" => $ranges["gown"]
+        ]);
+        $update_moderator_range->execute([
+            "email" => $student[$fn]["moderator_signature"],
+            "range" => $ranges["signature"]
+        ]);
+        
     }
     return $students;
 }
@@ -85,9 +111,18 @@ function defineModeratorsForOneStudent($student, $moderators) {
      }, array_filter($moderators, function($key) {
             return $key["role"] == "moderator-signature";}
     ));
-    $moderator_hat = setStudentModerator($student,array_values($moderator_hat));
-    $moderator_signature = setStudentModerator($student,array_values($moderator_signature));
-    $moderator_gown = setStudentModerator($student,  array_values($moderator_gown));
+    $moderator_hat_and_range = setStudentModerator($student,array_values($moderator_hat));
+    $moderator_signature_and_range = setStudentModerator($student,array_values($moderator_signature));
+    $moderator_gown_and_range = setStudentModerator($student,  array_values($moderator_gown));
+
+    $moderator_hat = $moderator_hat_and_range[0];
+    $range_hat = $moderator_hat_and_range[1];
+
+    $moderator_gown = $moderator_gown_and_range[0];
+    $range_gown = $moderator_gown_and_range[1];
+
+    $moderator_signature = $moderator_signature_and_range[0];
+    $range_signature = $moderator_signature_and_range[1];
 
     if(is_null($moderator_hat) || is_null($moderator_signature)|| is_null($moderator_gown)) {
         return null;
@@ -100,18 +135,27 @@ function defineModeratorsForOneStudent($student, $moderators) {
             "moderator_signature" => $moderator_signature
         ]
     ];
-    return $result;
+    $ranges = array(
+        "hat" => $range_hat,
+        "gown" => $range_gown,
+        "signature" => $range_signature
+    );
+
+    return array( "student" => $result, "ranges" => $ranges);
 }
 
 function setStudentModerator($student, $moderators)
 {
-    $student_first_letter = mb_strtolower(mb_substr($student['name'], 0,1));
-    $bulgarian_alphabet = mb_range('а', 'я');
+    $student_first_letter = mb_strtoupper(mb_substr($student['name'], 0,1));
+    $bulgarian_alphabet = mb_range('А', 'Я');
     $split_alphabet = partition($bulgarian_alphabet, count($moderators));
+    var_dump($split_alphabet);
     $i = 0;
     while ($i < count($split_alphabet)) {
         if (in_array($student_first_letter, $split_alphabet[$i])) {
-            return $moderators[$i];
+            $split = $split_alphabet[$i];
+            $range = "(" . $split[0] . "-" . $split[count($split) - 1 ] . ")";
+            return array( $moderators[$i], $range);
         }
         $i++;
     }
@@ -151,3 +195,13 @@ function mb_range($start, $end) {
     $_result[] = $end;
     return $_result;
 }
+
+
+// function defineRangeForModerators($moderators) {
+//     $bulgarian_alphabet = mb_range('А', 'Я');
+//     $split_alphabet = partition($bulgarian_alphabet, count($moderators));
+//     $split_alphabet = array_map(function ($split, $moderator) {
+//         return 
+//     })
+
+// }

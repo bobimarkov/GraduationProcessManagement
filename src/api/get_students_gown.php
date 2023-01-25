@@ -1,23 +1,30 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: GET");
+header("Access-Control-Allow-Methods: POST");
 
 include_once '../src/database/db_conf.php';
 
 $data_array = array();
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = json_decode(file_get_contents("php://input"));
 
     $database = new Db();
     $conn = $database->getConnection();
     $stmt = $conn->prepare("
-    select student.fn, user.name, user.email, user.phone,student_diploma.attendance, student_diploma.has_right, student_gown.gown_requested, student_gown.gown_taken, student_gown.gown_taken_date, student_gown.gown_returned, student_gown.gown_returned_date
+    select student.fn, user.name, user.email, user.phone,student_diploma.attendance,
+    student_diploma.has_right, student_gown.gown_requested, student_gown.gown_taken,
+    student_gown.gown_taken_date, student_gown.gown_returned, student_gown.gown_returned_date,
+    student_moderators.moderator_gown_email, (select count(DISTINCT moderator_gown_email) from student_moderators) as count_gown_moderators,
+    (select `range` from moderator_range where email = :email) as name_range
     from student
     join user on user.id = student.user_id
     join student_gown on student.fn = student_gown.student_fn
-    join student_diploma on student.fn = student_diploma.student_fn");
-    $stmt->execute();
+    join student_diploma on student.fn = student_diploma.student_fn
+    join student_moderators on student_diploma.student_fn = student_moderators.student_fn
+    where moderator_gown_email = :email");
+    $stmt->execute(["email" => $email]);
 
     $rows = $stmt->fetchAll();
 
