@@ -39,6 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         foreach ($users_arr_1d as $user) {
             $user = trim($user);
             $values = explode(",", $user);
+
             // проверка дали стойностите на студента са валидни
             validateInput($values, $user, $i);
 
@@ -192,6 +193,7 @@ function exportStudentsToDB($users_arr_2d)
                                           VALUES (:email, :password, :name, :phone, :role)");
     $stmt_register_student = $conn->prepare("INSERT INTO `student` (`fn`, `user_id`, `degree`, `major`, `group`, `has_diploma_right`) 
                                              VALUES (:fn, :user_id, :degree, :major, :group, :has_diploma_right)");
+
     $stmt_register_student_diploma = $conn->prepare("INSERT INTO `student_diploma` (`student_fn`, `has_right`, `grade`) 
                                              VALUES (:student_fn, :has_right, :grade)");
     $stmt_register_student_gown = $conn->prepare("INSERT INTO `student_gown` (`student_fn`) 
@@ -228,6 +230,7 @@ function exportStudentsToDB($users_arr_2d)
         ]);
 
         $has_diploma_right = (floatval($values[9]) < 3 || $values[9] === '-') ? 0 : 1;
+        $has_speech_right = ($values[9] !== '-' && floatval($values[9]) == 6) ? 1 : 0;
         
         //get the id of the registered user
         $stmt_id_extract->execute(["email" => $values[0]]);
@@ -246,6 +249,7 @@ function exportStudentsToDB($users_arr_2d)
                 "student_fn" => $values[5],
                 "has_right" => $has_diploma_right,
                 "grade" => $values[9],
+                "speech_request" => $has_speech_right,
             ]);
             $stmt_register_student_gown->execute([
                 "student_fn" => $values[5]
