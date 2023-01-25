@@ -40,7 +40,6 @@
             <p id="no-notifications">В момента нямате никакви известия.</p>
             <div id="speech_request_section" class="speech_request_section">
                 <p id="speech_request"></p>
-                <div></div>
                 <p id="speech_request_answer"></p>
 
                 <select class="speech_request_select" id="speech_request_select"
@@ -133,49 +132,41 @@
         </div>
 
 
-            <div class="request_gown_hat_section">
-                <h3><i class="fa fa-graduation-cap" aria-hidden="true"></i> Заяви тога и шапка</h3>
-                <div class="request_gown_hat_content">
-                    <div id="request_gown_hat_content_1_wrapper">
-                        <div id="request_gown_hat_content_1">
-                            <p id="gown_request">
-                                <i>Веднъж въведено, отговорът Ви не може да бъде променен.</i>
-                            </p>
-                            <select
-                                class="gown_request_select"
-                                id="gown_request_select"
-                                onchange="requestGown(email, this.value)"
-                            >
-                                <option value="-1" selected disabled hidden>Тога</option>
-                                <option value="1">Желая да взема тога.</option>
-                                <option value="0">Не желая.</option>
-                            </select>
-                            <p id="gown_taken"></p>
-                            <p id="gown_taken_date"></p>
-                            <p id="gown_returned"></p>
-                            <p id="gown_returned_date"></p>
-                        </div>
+        <div class="request_gown_hat_section">
+            <h3><i class="fa fa-graduation-cap" aria-hidden="true"></i> Заяви тога и шапка</h3>
+            <div class="request_gown_hat_content">
+                <div id="request_gown_hat_content_1_wrapper">
+                    <div id="request_gown_hat_content_1">
+                        <p id="gown_request">
+                            <i>Веднъж въведено, отговорът Ви не може да бъде променен.</i>
+                        </p>
+                        <select class="gown_request_select" id="gown_request_select"
+                            onchange="requestGown(email, this.value)">
+                            <option value="-1" selected disabled hidden>Тога</option>
+                            <option value="1">Желая да взема тога.</option>
+                            <option value="0">Не желая.</option>
+                        </select>
+                        <p id="gown_taken"></p>
+                        <p id="gown_taken_date"></p>
+                        <p id="gown_returned"></p>
+                        <p id="gown_returned_date"></p>
                     </div>
-                    <div id="request_gown_hat_content_2_wrapper">
-                        <div id="request_gown_hat_content_2">
-                            <p id="hat_request">
-                                <i>Веднъж въведено, отговорът Ви не може да бъде променен.</i>
-                            </p>
-                            <select
-                                class="hat_request_select"
-                                id="hat_request_select"
-                                onchange="requestHat(email, this.value)"
-                            >
-                                <option value="-1" selected disabled hidden>Шапка</option>
-                                <option value="1">Желая да взема шапка.</option>
-                                <option value="0">Не желая.</option>
-                            </select>
-                            <p id="hat_taken"></p>
-                            <p id="hat_taken_date"></p>
-                            <p id="hat_returned"></p>
-                            <p id="hat_returned_date"></p>
-                        </div>
->>>>>>> main
+                </div>
+                <div id="request_gown_hat_content_2_wrapper">
+                    <div id="request_gown_hat_content_2">
+                        <p id="hat_request">
+                            <i>Веднъж въведено, отговорът Ви не може да бъде променен.</i>
+                        </p>
+                        <select class="hat_request_select" id="hat_request_select"
+                            onchange="requestHat(email, this.value)">
+                            <option value="-1" selected disabled hidden>Шапка</option>
+                            <option value="1">Желая да взема шапка.</option>
+                            <option value="0">Не желая.</option>
+                        </select>
+                        <p id="hat_taken"></p>
+                        <p id="hat_taken_date"></p>
+                        <p id="hat_returned"></p>
+                        <p id="hat_returned_date"></p>
                     </div>
                 </div>
             </div>
