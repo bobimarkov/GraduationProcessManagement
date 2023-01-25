@@ -77,7 +77,7 @@ input[type=checkbox] {
 }
 
 .profile_info_section, .diploma_info_section, .notifications_section, .non_graduating_warning_section, .graduation_info_section,
-.request_diploma_in_advance_section, .request_grown_hat_section, .diploma_order_section {
+.request_diploma_in_advance_section, .request_gown_hat_section, .diploma_order_section {
     box-shadow: 5px 5px 20px darkslategray;
     /* border: 1px solid rgba(47, 79, 79, 0.603); */
     border-radius: 5px;
@@ -85,7 +85,7 @@ input[type=checkbox] {
     margin: 1em 0;
 }
 
-.profile_info_section_content, .diploma_info_section_content, .request_diploma_in_advance_content, .request_grown_hat_content {
+.profile_info_section_content, .diploma_info_section_content, .request_diploma_in_advance_content, .request_gown_hat_content {
     display: flex;
 }
 
@@ -94,13 +94,13 @@ input[type=checkbox] {
     align-items: center;
 }
 
-#profile_info_section_content_1_wrapper, #diploma_info_section_content_1_wrapper, #request_grown_hat_content_1_wrapper {
+#profile_info_section_content_1_wrapper, #diploma_info_section_content_1_wrapper, #request_gown_hat_content_1_wrapper {
     padding-left: 1em;
     border-left: 1px solid rgba(47, 79, 79, 0.603);
 }
 
 #profile_info_section_content_2_wrapper, #diploma_info_section_content_2_wrapper, #diploma_info_section_content_3_wrapper, 
-#diploma_info_section_content_4_wrapper, #request_grown_hat_content_2_wrapper {
+#diploma_info_section_content_4_wrapper, #request_gown_hat_content_2_wrapper {
     margin-left: 3em;
     padding-left: 1em;
     border-left: 1px solid rgba(47, 79, 79, 0.603);
@@ -125,7 +125,7 @@ textarea {
     justify-content: space-between;
 }
 
-.speech_request_select, .grown_request_select, .hat_request_select {
+.speech_request_select, .gown_request_select, .hat_request_select {
     width: 200px;
     height: 2.5em;
     font: 1em sans-serif;
@@ -137,7 +137,7 @@ textarea {
 
 .speech_request_select:focus, .speech_request_select:active, 
 .request_diploma_in_advance_comment:focus, .request_diploma_in_advance_comment:active, 
-.grown_request_select:focus, .hat_request_select:focus {
+.gown_request_select:focus, .hat_request_select:focus {
     outline: none;
 }
 

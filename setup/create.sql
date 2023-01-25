@@ -50,27 +50,27 @@ CREATE TABLE `student_diploma` (
 ALTER TABLE `student_diploma` ADD INDEX(`student_fn`);
 ALTER TABLE `student_diploma` ADD CONSTRAINT `student_fn_fk` FOREIGN KEY (`student_fn`) REFERENCES `student`(`fn`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
-CREATE TABLE `student_grown` ( 
+CREATE TABLE `student_gown` ( 
     `id` INT NOT NULL AUTO_INCREMENT , 
     `student_fn` INT NOT NULL , 
-    `grown_requested` BOOLEAN NULL DEFAULT NULL , 
-    `grown_taken` BOOLEAN NULL DEFAULT 0 , 
-    `grown_taken_date` VARCHAR(99) NULL DEFAULT NULL , 
-    `grown_returned` BOOLEAN NULL DEFAULT 0 , 
-    `grown_returned_date` DATE NULL DEFAULT NULL , 
+    `gown_requested` BOOLEAN NULL DEFAULT NULL, 
+    `gown_taken` BOOLEAN NULL DEFAULT NULL, 
+    `gown_taken_date` DATE NULL DEFAULT NULL , 
+    `gown_returned` BOOLEAN NULL DEFAULT NULL, 
+    `gown_returned_date` DATE NULL DEFAULT NULL , 
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
-ALTER TABLE `student_grown` ADD INDEX(`student_fn`);
-ALTER TABLE `student_grown` ADD CONSTRAINT `student_fn_fk_3` FOREIGN KEY (`student_fn`) REFERENCES `student`(`fn`) ON DELETE CASCADE ON UPDATE RESTRICT;
+ALTER TABLE `student_gown` ADD INDEX(`student_fn`);
+ALTER TABLE `student_gown` ADD CONSTRAINT `student_fn_fk_3` FOREIGN KEY (`student_fn`) REFERENCES `student`(`fn`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
 CREATE TABLE `student_hat` ( 
     `id` INT NOT NULL AUTO_INCREMENT , 
     `student_fn` INT NOT NULL , 
     `hat_requested` BOOLEAN NULL DEFAULT NULL , 
-    `hat_taken` BOOLEAN NULL DEFAULT 0 , 
-    `hat_taken_date` VARCHAR(99) NULL DEFAULT NULL , 
-    `hat_returned` BOOLEAN NULL DEFAULT 0 , 
+    `hat_taken` BOOLEAN NULL DEFAULT NULL , 
+    `hat_taken_date` DATE NULL DEFAULT NULL , 
+    `hat_returned` BOOLEAN NULL DEFAULT NULL , 
     `hat_returned_date` DATE NULL DEFAULT NULL , 
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
