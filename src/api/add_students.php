@@ -199,8 +199,8 @@ function exportStudentsToDB($users_arr_2d)
     $stmt_register_student = $conn->prepare("INSERT INTO `student` (`fn`, `user_id`, `degree`, `major`, `group`, `has_diploma_right`) 
                                              VALUES (:fn, :user_id, :degree, :major, :group, :has_diploma_right)");
 
-    $stmt_register_student_diploma = $conn->prepare("INSERT INTO `student_diploma` (`student_fn`, `has_right`, `grade`) 
-                                             VALUES (:student_fn, :has_right, :grade)");
+    $stmt_register_student_diploma = $conn->prepare("INSERT INTO `student_diploma` (`student_fn`, `has_right`, `grade`, `speech_request`) 
+                                             VALUES (:student_fn, :has_right, :grade, :speech_request)");
     $stmt_register_student_gown = $conn->prepare("INSERT INTO `student_gown` (`student_fn`) 
                                              VALUES (:student_fn)");
     $stmt_register_student_hat = $conn->prepare("INSERT INTO `student_hat` (`student_fn`) 

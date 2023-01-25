@@ -414,10 +414,10 @@ function getStartHour() {
             } else {
                 start_date_grad.innerHTML = ("Дата: ").concat(data.graduation_time[0].graduation_date);
                 start_time_grad.innerHTML = ("Начален час: ").concat(data.graduation_time[0].start_time);
-                auditory_grad.innerHTML = ("Аудитория: ").concat(data.graduation_time[0].graduation_place);
+                auditory_grad.innerHTML = ("Местоположение: ").concat(data.graduation_time[0].graduation_place);
                 start_date_nograd.innerHTML = ("Дата: ").concat(data.graduation_time[0].graduation_date);
                 start_time_nograd.innerHTML = ("Начален час: ").concat(data.graduation_time[0].start_time);
-                auditory_nograd.innerHTML = ("Аудитория: ").concat(data.graduation_time[0].graduation_place);
+                auditory_nograd.innerHTML = ("Местоположение: ").concat(data.graduation_time[0].graduation_place);
                 window.graduation_time = data.graduation_time[0];
                 getStudentsOrder();
             }
@@ -428,6 +428,7 @@ function getStudentsOrder() {
     fetch('../../api?endpoint=get_students_diploma_simplified', {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
