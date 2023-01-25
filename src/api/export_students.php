@@ -6,6 +6,7 @@ include_once '../src/database/db_conf.php';
 include_once '../src/utils/JWTUtils.php';
 
 validateJWT($jwt, ["admin", "moderator"]);
+
 if (isset($data["format"])) {
     
     $format = $data["format"];
