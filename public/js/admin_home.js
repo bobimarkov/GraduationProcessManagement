@@ -818,6 +818,48 @@ function submitAction(event) {
         });
 }
 
+function sendMessage(event) {
+    event.preventDefault();
+    let fns = document.getElementById('textarea-fn');
+    let message = document.getElementById('message');
+
+    let actions = {
+        "fns" : fns.value,
+        "message" : message.value
+    };
+    fetch('../../api?endpoint=send_message', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(actions)
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            var errElem = document.getElementById('message-bar-export-message');
+            if (!data.success) {
+                errElem.classList.remove(['success']);
+                errElem.classList.add(['error']);
+                errElem.innerHTML = data.message;
+            } else {
+                errElem.classList.remove(['error']);
+                errElem.classList.add(['success']);
+                errElem.innerHTML = data.message;
+                fns.value = "";
+                message.value = "";
+            }
+        });
+}
+
 var saveCurrOption;
 
 function getCurrOption(selectObj) {

@@ -250,6 +250,22 @@
             <p class="message-bar" id="message-bar-diploma"></p>
         </div>
     </div>
+    <div class="row message_send" id="message_send">
+        <h3><i class="fas fa-envelope"></i> Изпращане на информация</h3>
+        <form id="write-message">
+            <div id="textarea">
+                <textarea class="dashboard-textarea-fn" name="textarea" id="textarea-fn"
+                    placeholder="Факултетни номера (отделени със запетая) или @всички, ако искате да изпратите съобщението до всички дипломиращи се студенти"></textarea>
+                <textarea class="dashboard-textarea-fn" name="message" id="message"
+                    placeholder="Напишете вашето съобщение"></textarea>
+            </div>
+            <button type="submit" class="submit-button-users" id="send-message" onclick="sendMessage(event)">Изпрати <i
+                    class="fa fa-send-o"></i>
+            </button>
+            <p  class="message-bar" id="message-bar-export-message"></p>
+        </form>
+        <p class="message-bar" id="message-bar-info"></p>
+    </div>
     <div class="row excellent_order" id="excellent_order">
         <h3><i class="fas fa-list"></i> Списък със студенти, които ще бъдат наградени</h3>
         <form id="export_excellent">
@@ -261,10 +277,10 @@
                 <option value="xls">Excel</option>
                 <option value="pdf">PDF</option>
             </select>
-            <button type="submit" id="export-excellent"
-                onclick="downloadExcellentStudent(event)">Изтегли списък с отличници <i class="fas fa-file-export"></i>
+            <button type="submit" id="export-excellent" onclick="downloadExcellentStudent(event)">Изтегли списък с
+                отличници <i class="fas fa-file-export"></i>
             </button>
-            <p id="message-bar-export-excellent"></p>
+            <p  class="message-bar" id="message-bar-export-excellent"></p>
         </form>
     </div>
     <div class="row diploma_order_section" id="diploma_order_section">

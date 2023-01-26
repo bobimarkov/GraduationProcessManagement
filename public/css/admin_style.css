@@ -76,6 +76,15 @@ textarea {
     outline: none;
 }
 
+#textarea-fn {
+    width: 100%;
+}
+
+#message {
+    height: 20em !important;
+    width: 100%;
+}
+
 .dashboard {
     display: flex;
     align-items: center;
@@ -598,4 +607,12 @@ svg {
     font-size: 1.2em;
     border-radius: 10px;
     font-family: monospace;
+}
+
+#textarea {
+    display: grid;
+}
+
+#textarea, #message {
+
 }
