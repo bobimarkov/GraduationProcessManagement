@@ -279,11 +279,11 @@ function getStudentData() {
                 document.getElementById("users_header").innerHTML = data.users[0].name;
 
                 if (data.users[0].grade < 3) {
-                buildContentForNotGraduatingStudent(data.users[0]);
-            } else {
-                buildContentForGraduatingStudent(data.users[0]);
+                    buildContentForNotGraduatingStudent(data.users[0]);
+                } else {
+                    buildContentForGraduatingStudent(data.users[0]);
+                }
             }
-        }
         })
 }
 
@@ -531,12 +531,13 @@ function getMessages() {
                 par.innerHTML = "В момента нямате никакви известия.";
 
             } else {
-                for(let i = 0; i < data.order.length; i++) {
-                    const para = document.createElement("p");
-                    const newContent = document.createTextNode(`${i+1}) ${data.order[i].message}`);
-                    para.appendChild(newContent);
-                    notifications.appendChild(para);
+                for (let i = 0; i < data.order.length; i++) {
+                    let text = document.createElement("p");
+                    text.innerHTML = `${i + 1})От ${data.order[i].sender} - ${data.order[i].message}`;
+                    notifications.appendChild(text);
                 }
             }
         });
 }
+
+

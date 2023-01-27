@@ -6,8 +6,6 @@ header("Access-Control-Allow-Methods: GET");
 include_once '../src/database/db_conf.php';
 include_once '../src/utils/JWTUtils.php';
 
-$data_array = array();
-
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     validateJWT($jwt, ["admin", "moderator"]);
 

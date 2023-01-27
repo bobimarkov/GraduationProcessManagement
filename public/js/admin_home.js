@@ -296,13 +296,18 @@ function showEditSection() {
     getAllUsers();
 }
 
+function showMessagesSection() {
+    tokenRefresher();
+    showGivenSection("messages_send_section");
+    activeHeader("messages_header");
+}
 
 function showAnalyticsSection() {
     tokenRefresher();
-    showGivenSection("analytic_section");
+    showGivenSection("analytic_section");drawChart
     activeHeader("analytic_header");
 
-    fetch(`../../api?endpoint=get_students_diploma`, {
+    fetch(`../../api?endpoint=statistics`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -328,10 +333,10 @@ function showAnalyticsSection() {
                 let studentGradeData = dataGradesToArray(data);
                 let studentDegreeData = dataDegreeToArray(data);
                 let studentHasRightData = dataHasRightToArray(data);
-                google.charts.setOnLoadCallback(drawChart(studentMajorData, "analytics1", "Брой стундети с дадена специалност"));
+                google.charts.setOnLoadCallback(drawChart(studentMajorData, "analytics1", "Брой студенти с дадена специалност"));
                 google.charts.setOnLoadCallback(drawChart(studentGradeData, "analytics2", "Брой студенти с дадени оценки"));
                 google.charts.setOnLoadCallback(drawChart(studentDegreeData, "analytics3", "Брой студенти с дадени степени на образование"));
-                google.charts.setOnLoadCallback(drawChart(studentHasRightData, "analytics4", "Студенти имащи право на диплома"));
+                google.charts.setOnLoadCallback(drawChart(studentHasRightData, "analytics4", "Студенти, имащи право на диплома"));
             }
         })
 }
@@ -368,7 +373,9 @@ function showGivenSection(sectionToBeDisplayed) {
         'diploma_section',
         'excellent_order',
         'diploma_order_section',
-        'analytic_section'];
+        'analytic_section',
+        'messages_send_section',
+        'messages_receive_section'];
 
     sections = sections.map(x => document.getElementById(x));
 
@@ -395,8 +402,13 @@ function showGivenSection(sectionToBeDisplayed) {
         sections[4].style.display = 'grid';
         sections[5].style.display = 'grid';
     }
-
+    else if (sectionToBeDisplayed.localeCompare(sections[7].id) == 0) {
+        sections[7].style.display = 'grid';
+        sections[8].style.display = 'grid';
+    }
 }
+
+
 
 /*---- SWITCH_SECTIONS  END ----*/
 //give class "active_header" to only element with elementid
@@ -406,7 +418,8 @@ function activeHeader(elementId) {
         'edit_header',
         'students_header',
         'diploma_header',
-        'analytic_header'];
+        'analytic_header',
+        'messages_header'];
 
     headers = headers.map(x => document.getElementById(x));
 
@@ -464,7 +477,7 @@ function dataDegreeToArray(data) {
 }
 
 function dataGradesToArray(data) {
-    const a = [["Оценка", "Брой студенти с такава оценка"], ["[2-3)", 0], ["[3,4)", 0], ["[4,5)", 0], ["[5,6]", 0]];
+    const a = [["Оценка", "Брой студенти с такава оценка"], ["[2,3)", 0], ["[3,4)", 0], ["[4,5)", 0], ["[5,6]", 0]];
     let rows = data.users;
     rows.forEach(row_data => {
         if (row_data.grade >= 2 && row_data.grade < 3) {
@@ -824,8 +837,8 @@ function sendMessage(event) {
     let message = document.getElementById('message');
 
     let actions = {
-        "fns" : fns.value,
-        "message" : message.value
+        "fns": fns.value,
+        "message": message.value
     };
     fetch('../../api?endpoint=send_message', {
         method: 'POST',

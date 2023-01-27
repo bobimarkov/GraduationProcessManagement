@@ -1,12 +1,10 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: GET");
 
 include_once '../src/database/db_conf.php';
 include_once '../src/utils/JWTUtils.php';
-
-$data_array = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     validateJWT($jwt, ["admin", "moderator", "student"]);
@@ -26,8 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $stmt->execute(["email" => $email]);
 
     $rows = $stmt->fetchAll();
-
-    // var_dump($rows);
 
     $response = array("success" => true, "users" => $rows);
     echo json_encode($response);

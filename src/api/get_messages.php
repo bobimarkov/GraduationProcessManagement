@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     $database = new Db();
     $conn = $database->getConnection();
-    $stmt = $conn->prepare("SELECT message 
+    $stmt = $conn->prepare("SELECT id, sender, message 
                             FROM messages
                             where recipient = :recipient");
 

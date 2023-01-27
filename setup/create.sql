@@ -119,6 +119,14 @@ CREATE TABLE `graduation_colors` (
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
+CREATE TABLE `messages` (
+    `id` INT NOT NULL AUTO_INCREMENT , 
+    `sender` VARCHAR(99) NOT NULL ,
+    `recipient` VARCHAR(99) NOT NULL ,
+    `message` TEXT NOT NULL,
+    PRIMARY KEY(`id`)
+) ENGINE = InnoDB;
+
 
 
 

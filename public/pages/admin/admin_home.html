@@ -31,6 +31,11 @@
             РЕДАКТИРАЙ
         </h2>
         <div class="vertical_line"></div>
+        <h2 class="navigation_element" id="messages_header" onclick="showMessagesSection()">
+            СЪОБЩЕНИЯ
+        </h2>
+        <div class="vertical_line"></div>
+
         <h2 class="navigation_element" id="analytic_header" onclick="showAnalyticsSection()">
             СТАТИСТИКА
         </h2>
@@ -154,6 +159,23 @@
             </form>
         </div>
 
+        <div id="messages_send_section">
+                <h3><i class="fas fa-envelope"></i> Изпращане на информация до дипломиращите се студенти</h3>
+                <form id="write-message">
+                    <div id="textarea">
+                        <textarea class="dashboard-textarea-fn" name="textarea" id="textarea-fn"
+                            placeholder="Факултетни номера (отделени със запетая) или @всички, ако искате да изпратите съобщението до всички дипломиращи се студенти"></textarea>
+                        <textarea class="dashboard-textarea-fn" name="message" id="message"
+                            placeholder="Напишете вашето съобщение"></textarea>
+                    </div>
+                    <button type="submit" class="submit-button-users" id="send-message"
+                        onclick="sendMessage(event)">Изпрати <i class="fa fa-send-o"></i>
+                    </button>
+                    <p class="message-bar" id="message-bar-export-message"></p>
+                </form>
+        </div>
+        
+
         <div id="analytic_section" style="display: flex">
             <div id="analytics1" class="analytics"></div>
             <div id="analytics2" class="analytics"></div>
@@ -250,22 +272,12 @@
             <p class="message-bar" id="message-bar-diploma"></p>
         </div>
     </div>
-    <div class="row message_send" id="message_send">
-        <h3><i class="fas fa-envelope"></i> Изпращане на информация</h3>
-        <form id="write-message">
-            <div id="textarea">
-                <textarea class="dashboard-textarea-fn" name="textarea" id="textarea-fn"
-                    placeholder="Факултетни номера (отделени със запетая) или @всички, ако искате да изпратите съобщението до всички дипломиращи се студенти"></textarea>
-                <textarea class="dashboard-textarea-fn" name="message" id="message"
-                    placeholder="Напишете вашето съобщение"></textarea>
-            </div>
-            <button type="submit" class="submit-button-users" id="send-message" onclick="sendMessage(event)">Изпрати <i
-                    class="fa fa-send-o"></i>
-            </button>
-            <p  class="message-bar" id="message-bar-export-message"></p>
-        </form>
-        <p class="message-bar" id="message-bar-info"></p>
+
+    <div  class="row" id="messages_receive_section">
+        <h3><i class="fas fa-envelope"></i> Получени отговори</h3>
+
     </div>
+
     <div class="row excellent_order" id="excellent_order">
         <h3><i class="fas fa-list"></i> Списък със студенти, които ще бъдат наградени</h3>
         <form id="export_excellent">
@@ -280,7 +292,7 @@
             <button type="submit" id="export-excellent" onclick="downloadExcellentStudent(event)">Изтегли списък с
                 отличници <i class="fas fa-file-export"></i>
             </button>
-            <p  class="message-bar" id="message-bar-export-excellent"></p>
+            <p class="message-bar" id="message-bar-export-excellent"></p>
         </form>
     </div>
     <div class="row diploma_order_section" id="diploma_order_section">
