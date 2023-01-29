@@ -302,6 +302,12 @@ function showMessagesSection() {
     activeHeader("messages_header");
 }
 
+function showSettingsSection() {
+    tokenRefresher();
+    showGivenSection("settings_section");
+    activeHeader("settings_header");
+}
+
 function showAnalyticsSection() {
     tokenRefresher();
     showGivenSection("analytic_section");drawChart
@@ -333,7 +339,7 @@ function showAnalyticsSection() {
                 let studentGradeData = dataGradesToArray(data);
                 let studentDegreeData = dataDegreeToArray(data);
                 let studentHasRightData = dataHasRightToArray(data);
-                google.charts.setOnLoadCallback(drawChart(studentMajorData, "analytics1", "Брой студенти с дадена специалност"));
+                google.charts.setOnLoadCallback(drawChart(studentMajorData, "analytics1", "Брой студенти от дадена специалност със степен 'Бакалавър'"));
                 google.charts.setOnLoadCallback(drawChart(studentGradeData, "analytics2", "Брой студенти с дадени оценки"));
                 google.charts.setOnLoadCallback(drawChart(studentDegreeData, "analytics3", "Брой студенти с дадени степени на образование"));
                 google.charts.setOnLoadCallback(drawChart(studentHasRightData, "analytics4", "Студенти, имащи право на диплома"));
@@ -375,7 +381,8 @@ function showGivenSection(sectionToBeDisplayed) {
         'diploma_order_section',
         'analytic_section',
         'messages_send_section',
-        'messages_receive_section'];
+        'messages_receive_section',
+        'settings_section'];
 
     sections = sections.map(x => document.getElementById(x));
 
@@ -419,7 +426,8 @@ function activeHeader(elementId) {
         'students_header',
         'diploma_header',
         'analytic_header',
-        'messages_header'];
+        'messages_header',
+        'settings_header'];
 
     headers = headers.map(x => document.getElementById(x));
 
@@ -496,7 +504,7 @@ function dataGradesToArray(data) {
 
 function dataMajorToArray(data) {
 
-    const a = [["Специалност", "Брой студенти"], ["СИ", 0], ["КН", 0], ["ИС", 0], ["И", 0], ["М", 0], ["С", 0], ["х", 0]];
+    const a = [["Специалност", "Брой студенти"], ["СИ", 0], ["КН", 0], ["ИС", 0], ["И", 0], ["М", 0], ["С", 0]];
 
     let rows = data.users;
     rows.forEach(row_data => {
@@ -518,9 +526,6 @@ function dataMajorToArray(data) {
                 break;
             case 'С':
                 a[6][1]++;
-                break;
-            default:
-                a[7][1]++;
                 break;
         }
     });
@@ -1550,7 +1555,57 @@ function searchInTable() {
     }
 }
 
+function sendGraduationInfo(event) {
+    event.preventDefault();
+    let time=document.getElementById('start-time');
+    let interval=document.getElementById('students-interval');
+    let date=document.getElementById('graduation-date');
+    let place=document.getElementById('graduation-place');
+    let classes=document.getElementById('class');
 
+    let action = {
+        "start_time": time.value,
+        "students_interval": interval.value,
+        "graduation_date": date.value,
+        "graduation_place": place.value,
+        "class": classes.value
+    };
+
+    fetch('../../api?endpoint=add_graduation_info', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(action)
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            let errElem = document.getElementById('message-add-graduation-info');
+            if (!data.success) {
+                errElem.classList.remove(['success']);
+                errElem.classList.add(['error']);
+                errElem.innerHTML = data.message;
+            } else {
+                errElem.classList.remove(['error']);
+                errElem.classList.add(['success']);
+                errElem.innerHTML = data.message;
+                time.value = "";
+                interval.value = "";
+                date.value = "";
+                place.value = "";
+                classes.value = "";
+            }
+        });
+}
 
 
 

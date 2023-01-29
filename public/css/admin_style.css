@@ -578,7 +578,8 @@ svg {
 }
 
 .custom-file-upload:hover,
-#export-excellent:hover {
+#export-excellent:hover,
+#add-grad-info:hover {
     background-color: #006199;
     color: snow;
 }
@@ -611,4 +612,15 @@ svg {
 
 #textarea {
     display: grid;
+}
+
+.settings {
+    margin-top: 2rem;
+    height: 2.5rem;
+    background-color: rgb(235, 238, 241);
+    border-radius: 5px;
+    padding: 5px;
+    box-sizing: border-box;
+    font: 1em sans-serif;
+    cursor: pointer;
 }

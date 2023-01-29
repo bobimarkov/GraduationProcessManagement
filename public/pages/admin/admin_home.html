@@ -4,6 +4,7 @@
 <head>
     <link href="../../css/admin_style.css" rel="stylesheet" />
     <script defer src="../../js/admin_home.js"></script>
+    <script defer src="../../js/make_archive.js"></script>
     <script src="https://kit.fontawesome.com/ee112817f8.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js"></script>
@@ -35,7 +36,10 @@
             СЪОБЩЕНИЯ
         </h2>
         <div class="vertical_line"></div>
-
+        <h2 class="navigation_element" id="settings_header" onclick="showSettingsSection()">
+            НАСТРОЙКИ
+        </h2>
+        <div class="vertical_line"></div>
         <h2 class="navigation_element" id="analytic_header" onclick="showAnalyticsSection()">
             СТАТИСТИКА
         </h2>
@@ -175,6 +179,17 @@
                 </form>
         </div>
         
+        <div id="settings_section">
+            <h3><i class="fas fa-envelope"></i> Добавяне на информация относно дипломирането</h3>
+            <input type="text" id="start-time" class="settings" placeholder="Начален час(час:минути)"/>
+            <input type="text" id="students-interval" class="settings" placeholder="Интервал между студентите(минути:секунди)"/>
+            <input type="text" id="graduation-date" class="settings" name="grad-date" placeholder="Дата" onfocus="(this.type='date')" onblur="(this.type='text')"/>            
+            <input type="text" id="graduation-place" class="settings" placeholder="Местоположение"/>
+            <input type="number" id="class" class="settings" placeholder="Випуск" min="2020"/>
+            <button type="submit" id="add-grad-info" class="settings" onclick="sendGraduationInfo(event)"> Добави <i class="fa fa-plus"></i></button>
+            <p class="message-bar" id="message-add-graduation-info"></p>
+        </div>
+
 
         <div id="analytic_section" style="display: flex">
             <div id="analytics1" class="analytics"></div>

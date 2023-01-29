@@ -30,12 +30,17 @@ async function getGraduationInfo() {
         .then(response => response.json())
         .then((data) => {
             if (data.success) {
+                let today = new Date();
                 let date = new Date(data.graduation_time[0].graduation_date + " " + data.graduation_time[0].start_time);
-
-                graduationInfo.innerHTML = `На ${date.toLocaleDateString("ro-ro")} г. (${getWeekDay(date.getDay())}) от
+                if (today.getTime() <= date.getTime()) {
+                    graduationInfo.innerHTML = `На ${date.toLocaleDateString("ro-ro")} г. (${getWeekDay(date.getDay())}) от
                  ${date.toLocaleTimeString("ro-ro", { hour: "2-digit", minute: "2-digit" })} ч. в ${data.graduation_time[0].graduation_place} на Софийски университет
                 \"Св. Климент Охридски\" ще се състои тържествено връчване на дипломите за висше
                 образование на абсолвентите от випуск ${data.graduation_time[0].class} г. на ФМИ.`;
+                }
+                else {
+                    graduationInfo.innerHTML = `Церемонията на ${date.toLocaleDateString("ro-ro")} г. приключи! Очаквайте информация за следващото дипломиране!`;
+                }
             }
             else {
                 graduationInfo.innerHTML = "Все още няма информация относно церемонията по дипломиране."
