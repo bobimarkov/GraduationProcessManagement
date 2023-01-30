@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     $rows = $stmt->fetchAll();
 
-    if(count($rows) < 1) {
+    if(count($rows) != 1) {
         $response = array("success" => false, "message" => "Все още няма зададен начален час.");
         echo json_encode($response);
         http_response_code(200);
@@ -26,3 +26,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode($response);
     http_response_code(200);
 }
+
+?>

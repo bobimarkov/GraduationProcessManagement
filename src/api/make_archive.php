@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt_select->execute();
     $existedClass = $stmt_select->fetch(PDO::FETCH_ASSOC);
 
-    if ($yesterday <= $date && (empty($existedClass['class']) || $existedClass['class'] < $class)) {
+    if ($yesterday >= $date && (empty($existedClass['class']) || $existedClass['class'] < $class)) {
 
         $stmt = $conn->prepare("SELECT `id`, `fn`, `email`, `name`, `phone`, `degree`, `major`, `group` 
                             FROM `user` 
@@ -71,6 +71,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if (($successInsert && $successDelete) || $successInsertMessage) {
             $response = array("success" => true, "message" => "Успешен архив на дипломиращите се студенти!");
+            echo json_encode($response);
+            die;
+        }
+        else {
+            $response = array("success" => false, "message" => "Няма данни за архивиране!");
             echo json_encode($response);
             die;
         }

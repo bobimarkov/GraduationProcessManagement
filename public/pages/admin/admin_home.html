@@ -4,7 +4,6 @@
 <head>
     <link href="../../css/admin_style.css" rel="stylesheet" />
     <script defer src="../../js/admin_home.js"></script>
-    <script defer src="../../js/make_archive.js"></script>
     <script src="https://kit.fontawesome.com/ee112817f8.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js"></script>
@@ -164,29 +163,45 @@
         </div>
 
         <div id="messages_send_section">
-                <h3><i class="fas fa-envelope"></i> Изпращане на информация до дипломиращите се студенти</h3>
-                <form id="write-message">
-                    <div id="textarea">
-                        <textarea class="dashboard-textarea-fn" name="textarea" id="textarea-fn"
-                            placeholder="Факултетни номера (отделени със запетая) или @всички, ако искате да изпратите съобщението до всички дипломиращи се студенти"></textarea>
-                        <textarea class="dashboard-textarea-fn" name="message" id="message"
-                            placeholder="Напишете вашето съобщение"></textarea>
-                    </div>
-                    <button type="submit" class="submit-button-users" id="send-message"
-                        onclick="sendMessage(event)">Изпрати <i class="fa fa-send-o"></i>
-                    </button>
-                    <p class="message-bar" id="message-bar-export-message"></p>
-                </form>
+            <h3><i class="fas fa-envelope"></i> Изпращане на информация до дипломиращите се студенти</h3>
+            <form id="write-message">
+                <div id="textarea">
+                    <textarea class="dashboard-textarea-fn" name="textarea" id="textarea-fn"
+                        placeholder="Факултетни номера (отделени със запетая) или @всички, ако искате да изпратите съобщението до всички дипломиращи се студенти"></textarea>
+                    <textarea class="dashboard-textarea-fn" name="message" id="message"
+                        placeholder="Напишете вашето съобщение"></textarea>
+                </div>
+                <button type="submit" class="submit-button-users" id="send-message" onclick="sendMessage(event)">Изпрати
+                    <i class="fa fa-send-o"></i>
+                </button>
+                <p class="message-bar" id="message-bar-export-message"></p>
+            </form>
         </div>
-        
+
         <div id="settings_section">
-            <h3><i class="fas fa-envelope"></i> Добавяне на информация относно дипломирането</h3>
-            <input type="text" id="start-time" class="settings" placeholder="Начален час(час:минути)"/>
-            <input type="text" id="students-interval" class="settings" placeholder="Интервал между студентите(минути:секунди)"/>
-            <input type="text" id="graduation-date" class="settings" name="grad-date" placeholder="Дата" onfocus="(this.type='date')" onblur="(this.type='text')"/>            
-            <input type="text" id="graduation-place" class="settings" placeholder="Местоположение"/>
-            <input type="number" id="class" class="settings" placeholder="Випуск" min="2020"/>
-            <button type="submit" id="add-grad-info" class="settings" onclick="sendGraduationInfo(event)"> Добави <i class="fa fa-plus"></i></button>
+            <h3><i class="fa fa-plus-square"></i> Добавяне на информация относно дипломирането</h3>
+            <table id="info-graduation-table">
+                <tr>
+                    <td>Начален час</td>
+                    <td>Интервал между студентите</td>
+                    <td>Дата на дипломирането</td>
+                    <td>Място на дипломирането</td>
+                    <td>Година на завършване</td>
+                </tr>
+            </table>
+            <h4>Внимание! Ако добавите минала дата, то студентите автоматично ще бъдат добавени в архив и премахнати от тук!</h4>
+            <form class="input">
+                <input type="text" id="start-time" class="settings" placeholder="Начален час(час:минути)" />
+                <input type="text" id="students-interval" class="settings"
+                    placeholder="Интервал(минути:секунди)" />
+                <input type="text" id="graduation-date" class="settings" name="grad-date" placeholder="Дата"
+                    onfocus="(this.type='date')" onblur="(this.type='text')" />
+                <input type="text" id="graduation-place" class="settings" placeholder="Местоположение" />
+                <input type="number" id="class" class="settings" placeholder="Година на завършване" min="2020" />
+
+            </form>
+            <button type="submit" id="add-grad-info" class="settings" onclick="sendGraduationInfo(event)"> Обнови <i
+                    class="fa fa-plus"></i></button>
             <p class="message-bar" id="message-add-graduation-info"></p>
         </div>
 
@@ -288,10 +303,16 @@
         </div>
     </div>
 
-    <div  class="row" id="messages_receive_section">
+    <div class="row" id="messages_receive_section">
         <h3><i class="fas fa-envelope"></i> Получени отговори</h3>
 
     </div>
+
+    <div class="row" id="settings_archive_section">
+        <h3><i class="fa fa-archive"></i> Архив </h3>
+        <div id="for_buttons"></div>
+    </div>
+
 
     <div class="row excellent_order" id="excellent_order">
         <h3><i class="fas fa-list"></i> Списък със студенти, които ще бъдат наградени</h3>

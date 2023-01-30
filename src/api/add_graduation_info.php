@@ -29,10 +29,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
         switch ($k) {
             case "start_time":
-                $data_array["start_time"] = $v;
+                if(preg_match('/^(0?[0-9]|[01][0-9]|2[0-3]):[0-5][0-9]$/', $v)) {
+                    $data_array["start_time"] = $v;
+                }
+                else {
+                    $response = array("success" => false, "message" => "Грешка: Некоректен формат на началния час! Трябва да е 'час:минути'!");
+                    echo json_encode($response);
+                    die;
+                }
                 break;
             case "students_interval":
-                $data_array["students_interval"] = 00 . ':' . $v;
+                if (preg_match('/^(0?[0-9]|[0-5][0-9]):?([0-5]?[0-9]?)$/', $v)) {
+                    $data_array["students_interval"] = 00 . ':' . $v;
+                }
+                else {
+                    $response = array("success" => false, "message" => "Грешка: Некоректен формат на интервала! Трябва да е 'минути:секунди'!");
+                    echo json_encode($response);
+                    die;
+                }
                 break;
             case "graduation_date":
                 $data_array["graduation_date"] = $v;
@@ -44,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 break;
             case "class":
                 if($v + 1 != $yearGrad) {
-                    $response = array("success" => false, "message" => "Грешка: Дипломирането е една година след випуска!");
+                    $response = array("success" => false, "message" => "Грешка: Дипломирането е една година след годината на завършване!");
                     echo json_encode($response); 
                     die; 
                 }
