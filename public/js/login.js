@@ -44,11 +44,11 @@ loginForm.addEventListener("submit", (e) => {
             if (response.success) {
                 localStorage.setItem("token", response.jwt);
                 const moderator_roles = ["moderator-hat", "moderator-gown", "moderator-signature"];
-                if (moderator_roles.includes(response["user"].role )) {
+                if (moderator_roles.includes(response.role)) {
                     window.location.replace(`./moderator/moderator_home.html`);
                 }
                 else {
-                    window.location.replace(`./${response["user"].role}/${response["user"].role}_home.html`);
+                    window.location.replace(`./${response.role}/${response.role}_home.html`);
                 }
             }
             else {

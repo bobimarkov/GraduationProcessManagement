@@ -120,7 +120,7 @@ CREATE TABLE `graduation_colors` (
 ) ENGINE = InnoDB;
 
 create table `student_moderators` (
-    `student_fn` INT NOT NULL,
+    `student_fn` VARCHAR(99) NOT NULL,
     `moderator_hat_email` VARCHAR(99) NULL DEFAULT NULL,
     `moderator_gown_email` VARCHAR(99) NULL DEFAULT NULL,
     `moderator_signature_email` VARCHAR(99) NULL DEFAULT NULL,

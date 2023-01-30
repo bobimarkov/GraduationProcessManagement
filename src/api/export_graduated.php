@@ -3,7 +3,7 @@
 include_once '../src/database/db_conf.php';
 include_once '../src/utils/JWTUtils.php';
 
-validateJWT($jwt, ["admin", "moderator"]);
+validateJWT($jwt, ["admin", "moderator-hat","moderator-gown","moderator-signature"]);
 
 $data = (array) $data;
 

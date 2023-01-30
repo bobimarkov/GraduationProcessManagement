@@ -330,7 +330,7 @@ function buildContentForGraduatingStudent(user) {
     document.getElementById("take_in_advance_request").innerHTML = 'Заявена предварително: ' + (user.take_in_advance_request === 1 ? '<i class="far fa-check-square"></i>' : "Не");
     document.getElementById("is_taken_in_advance").innerHTML = 'Взета (предварително): ' + (user.is_taken_in_advance === 1 ? '<i class="far fa-check-square"></i>' : "Не");
     document.getElementById("taken_at_time").innerText = 'Дата/час на взимане: ' + (user.taken_at_time === null || user.taken_at_time === "" ? "-" : user.taken_at_time);
-    document.getElementById("signature_moderator").innerHTML = 'Модератор за диплома: ' + (user.moderator_signature_email === null || user.signature_requested !== 1 ?  '-' : user.moderator_signature_email);
+    document.getElementById("signature_moderator").innerHTML = 'Модератор за диплома: ' + (user.moderator_signature_email === null || user.attendance !== 1 ?  '-' : user.moderator_signature_email);
 
     document.getElementById("attendance").checked = user.attendance === 1 ? true : false;
     document.getElementById("photos_requested").checked = user.photos_requested === 1 ? true : false;

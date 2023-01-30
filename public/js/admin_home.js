@@ -1500,10 +1500,18 @@ function searchInTable() {
     fetch('../../api?endpoint=edit_student_moderators', {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }})
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             var errElem = document.getElementById('message-bar-distribute-moderators');
             if (data.error) {

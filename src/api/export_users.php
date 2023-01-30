@@ -5,7 +5,7 @@ $data = (array) $data;
 include_once '../src/utils/JWTUtils.php';
 include_once '../src/database/db_conf.php';
 
-validateJWT($jwt, ["admin", "moderator"]);
+validateJWT($jwt, ["admin", "moderator-hat","moderator-gown","moderator-signature"]);
 if (isset($data["format"])) {
 
     $format = $data["format"];

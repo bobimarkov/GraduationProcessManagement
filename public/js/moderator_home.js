@@ -553,17 +553,40 @@ function drawChart(majorData, id, titleMessage) {
 }
 
 function responsibilitiesByModeratorRole() {
-    switch (sessionStorage.getItem("role")) {
-        case "moderator-hat":
-            responsibilitiesForModeratorHat();
-            break;
-        case "moderator-gown":
-            responsibilitiesForModeratorGown();
-            break;
-        case "moderator-signature":
-            responsibilitiesForModeratorSignature();
-            break;
-    }
+    fetch(`../../api?endpoint=get_user_role`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => {
+            if(response.ok) {
+                return response.json();
+            }
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            switch (data.role) {
+                case "moderator-hat":
+                    responsibilitiesForModeratorHat();
+                    break;
+                case "moderator-gown":
+                    responsibilitiesForModeratorGown();
+                    break;
+                case "moderator-signature":
+                    responsibilitiesForModeratorSignature();
+                    break;
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+        .finally();
 }
 
 function responsibilitiesForModeratorHat() {
@@ -585,22 +608,25 @@ function responsibilitiesForModeratorSignature() {
 
 
 function fetchDataForStudents(moderatorFunction, endpoint) {
-    email = sessionStorage.getItem("user");
 
     fetch(`../../api?endpoint=${endpoint}`, {
-        method: 'POST',
+        method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
-        },
-        body: JSON.stringify(email)
+        }
     })
-        .then(response => response.json())
-        .catch((error) => {
-            console.error(error);
+        .then(response => {
+            if(response.ok) {
+                return response.json();
+            }
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
         })
         .then((data) => {
-            console.log(data);
             moderatorFunction(data.users);
         })
         .catch((error) => {

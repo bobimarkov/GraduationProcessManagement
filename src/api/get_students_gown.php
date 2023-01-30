@@ -1,14 +1,16 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: GET");
 
 include_once '../src/database/db_conf.php';
+include_once '../src/utils/JWTUtils.php';
 
 $data_array = array();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = json_decode(file_get_contents("php://input"));
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    validateJWT($jwt, ["admin", "moderator-gown"]);
+    $email = getUserEmailFromJWT($jwt);
 
     $database = new Db();
     $conn = $database->getConnection();
