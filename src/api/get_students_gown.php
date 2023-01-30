@@ -16,8 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     select student.fn, user.name, user.email, user.phone,student_diploma.attendance,
     student_diploma.has_right, student_gown.gown_requested, student_gown.gown_taken,
     student_gown.gown_taken_date, student_gown.gown_returned, student_gown.gown_returned_date,
-    student_moderators.moderator_gown_email, (select count(DISTINCT moderator_gown_email) from student_moderators) as count_gown_moderators,
-    (select `range` from moderator_range where email = :email) as name_range
+    student_moderators.moderator_gown_email, (select `range` from moderator_range where email = :email) as name_range
     from student
     join user on user.id = student.user_id
     join student_gown on student.fn = student_gown.student_fn

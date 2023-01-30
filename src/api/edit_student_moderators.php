@@ -50,9 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 }
 
 function defineModeratorsForAllStudents($students, $moderators, $update_student_moderators, $update_moderator_range, &$response) {
+    $moderators_and_ranges = defineRangeForEachTypeModerator($moderators);
     $all_ranges = array();
     for($i = 0 ; $i < count($students); $i++) {
-        $student_ranges = defineModeratorsForOneStudent($students[$i], $moderators);
+        $student_ranges = defineModeratorsForOneStudent($students[$i], $moderators_and_ranges);
         
         $res = $student_ranges["student"];
         $all_ranges[$i] = $student_ranges["ranges"];
@@ -63,7 +64,6 @@ function defineModeratorsForAllStudents($students, $moderators, $update_student_
         }
         $students[$i] = $res;
     }
-    $metModerator = array();
     for($i = 0; $i < count($students); $i++) {
         $student = $students[$i];
         $ranges = $all_ranges[$i];
@@ -92,28 +92,10 @@ function defineModeratorsForAllStudents($students, $moderators, $update_student_
     return $students;
 }
 
-function defineModeratorsForOneStudent($student, $moderators) {
-    $moderator_hat = array_map(
-        function ($moderator) {
-            return $moderator['email'];
-     }, array_filter($moderators, function($key) {
-            return $key["role"] == "moderator-hat";}
-    ));
-    $moderator_gown = array_map(
-        function ($moderator) {
-            return $moderator['email'];
-     }, array_filter($moderators, function($key) {
-            return $key["role"] == "moderator-gown";}
-    ));
-    $moderator_signature = array_map(
-        function ($moderator) {
-            return $moderator['email'];
-     }, array_filter($moderators, function($key) {
-            return $key["role"] == "moderator-signature";}
-    ));
-    $moderator_hat_and_range = setStudentModerator($student,array_values($moderator_hat));
-    $moderator_signature_and_range = setStudentModerator($student,array_values($moderator_signature));
-    $moderator_gown_and_range = setStudentModerator($student,  array_values($moderator_gown));
+function defineModeratorsForOneStudent($student, $moderators_and_ranges) {
+    $moderator_hat_and_range = setStudentModerator($student,$moderators_and_ranges["hat"]);
+    $moderator_signature_and_range = setStudentModerator($student,$moderators_and_ranges["signature"]);
+    $moderator_gown_and_range = setStudentModerator($student, $moderators_and_ranges["gown"]);
 
     $moderator_hat = $moderator_hat_and_range[0];
     $range_hat = $moderator_hat_and_range[1];
@@ -144,18 +126,17 @@ function defineModeratorsForOneStudent($student, $moderators) {
     return array( "student" => $result, "ranges" => $ranges);
 }
 
-function setStudentModerator($student, $moderators)
-{
-    $student_first_letter = mb_strtoupper(mb_substr($student['name'], 0,1));
-    $bulgarian_alphabet = mb_range('А', 'Я');
-    $split_alphabet = partition($bulgarian_alphabet, count($moderators));
-    var_dump($split_alphabet);
+function setStudentModerator($student, $moderators_and_ranges){
     $i = 0;
-    while ($i < count($split_alphabet)) {
-        if (in_array($student_first_letter, $split_alphabet[$i])) {
-            $split = $split_alphabet[$i];
-            $range = "(" . $split[0] . "-" . $split[count($split) - 1 ] . ")";
-            return array( $moderators[$i], $range);
+    $student_first_letter = mb_strtoupper(mb_substr($student['name'], 0,1));
+    $count_moderators = count($moderators_and_ranges);
+
+    while ($i < $count_moderators) {
+        $name_range = array_keys($moderators_and_ranges[$i]);
+        if (in_array($student_first_letter, $name_range)) {
+            $name_range_string = "(" . $name_range[0] . "-" . $name_range[count($name_range) - 1 ] . ")";
+            $moderator = array_values($moderators_and_ranges[$i])[0];
+            return array( $moderator, $name_range_string);
         }
         $i++;
     }
@@ -197,11 +178,44 @@ function mb_range($start, $end) {
 }
 
 
-// function defineRangeForModerators($moderators) {
-//     $bulgarian_alphabet = mb_range('А', 'Я');
-//     $split_alphabet = partition($bulgarian_alphabet, count($moderators));
-//     $split_alphabet = array_map(function ($split, $moderator) {
-//         return 
-//     })
+function defineRangeForEachTypeModerator($moderators)
+{
+    $result = array();
+    $moderator_hat = array_map(
+        function ($moderator) {
+            return $moderator['email'];
+     }, array_filter($moderators, function($key) {
+            return $key["role"] == "moderator-hat";}
+    ));
 
-// }
+    $result["hat"] = defineRangeForOneTypeModerator(array_values($moderator_hat));
+    $moderator_gown = array_map(
+        function ($moderator) {
+            return $moderator['email'];
+     }, array_filter($moderators, function($key) {
+            return $key["role"] == "moderator-gown";}
+    ));
+    $result["gown"] = defineRangeForOneTypeModerator(array_values($moderator_gown));
+    $moderator_signature = array_map(
+        function ($moderator) {
+            return $moderator['email'];
+     }, array_filter($moderators, function($key) {
+            return $key["role"] == "moderator-signature";}
+    ));
+    $result["signature"] = defineRangeForOneTypeModerator(array_values($moderator_signature));
+    return $result;
+}
+
+
+function defineRangeForOneTypeModerator($moderators)
+{
+    $bulgarian_alphabet = mb_range('А', 'Я');
+    $split_alphabet = partition($bulgarian_alphabet, count($moderators));
+    $result = array();
+    for ($i = 0; $i < count($moderators); $i++) {
+        $split = $split_alphabet[$i];
+        $moderator = array_fill(0, count($split) , $moderators[$i]);
+        $result[$i] = array_combine($split, $moderator);
+    }
+    return $result;
+}

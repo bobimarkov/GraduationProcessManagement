@@ -514,7 +514,6 @@ function responsibilitiesForModeratorHat() {
     showGivenSection("responsibilities_section");
     activeHeader("responsibilities_header");
     fetchDataForStudents(buildResponsibilitiesSectionForModeratorHat, "get_students_hat");
-
 }
 
 function responsibilitiesForModeratorGown() {
