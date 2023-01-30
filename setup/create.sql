@@ -69,7 +69,9 @@ CREATE TABLE `student_hat` (
     `student_fn` INT NOT NULL , 
     `hat_requested` BOOLEAN NULL DEFAULT NULL , 
     `hat_taken` BOOLEAN NULL DEFAULT NULL , 
-    `hat_taken_date` DATE NULL DEFAULT NULL 
+    `hat_taken_date` DATE NULL DEFAULT NULL , 
+    `hat_returned` BOOLEAN NULL DEFAULT NULL , 
+    `hat_returned_date` DATE NULL DEFAULT NULL , 
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
