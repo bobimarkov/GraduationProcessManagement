@@ -51,8 +51,7 @@ textarea {
 
 .form-input,
 .dashboard-textarea-fn,
-.textarea-after-select,
-.searchGrad {
+.textarea-after-select {
     background-color: rgb(235, 238, 241);
     border-color: darkslategray;
     border-radius: 5px;
@@ -90,10 +89,14 @@ textarea {
     margin-top: 1em;
 }
 
+#diploma_section .dashboard-action {
+    margin: auto 1em;
+}
+
 .dashboard-action,
 .boolean-select-after-select,
 .diploma_order_select {
-    margin: auto 1em;
+    margin-top: 1em;
     height: 2.5em;
     font: 1em sans-serif;
     color: darkslategray;
@@ -171,8 +174,6 @@ h2,
     font-family: monospace;
 }
 
-
-
 .error {
     background: rgba(255, 20, 20, 0.755);
 }
@@ -228,6 +229,10 @@ table td {
     /* role */
     text-align: center;
     width: 8%;
+}
+
+#users-table {
+    margin-top: 0;
 }
 
 /*Edit-students-table css-style start*/
@@ -309,36 +314,16 @@ table td {
     width: 5%;
 }
 
+#students-table {
+    margin-top: 0;
+}
+
 .diploma-table {
     display: block;
     overflow-x: auto;
     white-space: nowrap;
+    margin-top: 0;
 }
-
-.diploma-table td:nth-child(1) {
-    /* fn */
-    min-width: 2em;
-}
-
-.diploma-table td:nth-child(2) {
-    /* fn */
-    min-width: 7em;
-}
-
-.diploma-table td:nth-child(3) {
-    /* names */
-    min-width: 20em;
-    width: 100%;
-}
-
-/*.diploma-table td:nth-child(6), td:nth-child(10), td:nth-child(16), td:nth-child(19), td:nth-child(24) {
-    border-right: 2px solid slategrey;
-}*/
-
-
-/* .diploma-table td:nth-child(10) {
-     max-width: 10em; 
-} */
 
 .diploma_take_columns {
     background-color: rgb(216, 216, 216) !important;
@@ -447,8 +432,13 @@ table tr:nth-child(even) {
     background: #005282;
 }
 
-.diploma_order_section {
+.diploma_order_section,
+.excellent_order {
     display: none;
+}
+
+.excellent_order {
+    height: 11.5em;
 }
 
 h3 {
@@ -462,7 +452,11 @@ h3 {
     color: #2f4f4f;
 }
 
-#import_files,
+#diploma_section>h3 {
+    margin-bottom: 0;
+}
+
+
 #export_files {
     border-radius: 5px;
     padding: 5px;
@@ -474,7 +468,8 @@ h3 {
 /* Newly added*/
 
 #analytic_section {
-    height: 75rem;
+    height: 100%;
+    padding-bottom: 10%;
 }
 
 .analytics {
@@ -495,19 +490,112 @@ svg {
     border: 1px solid grey;
 }
 
-#filters input {
-    width: 20rem;
-    margin-bottom: 1rem;
+#search {
+    margin-top: 2rem;
     height: 2.5rem;
-
-}
-
-#searchByName {
-    margin-right: 1rem;
+    background-color: rgb(235, 238, 241);
+    border-radius: 5px;
+    padding: 5px;
+    box-sizing: border-box;
+    font: 1em sans-serif;
 }
 
 #export-graduated {
     margin-top: 2rem;
+    width: 20rem;
+    margin-left: 0;
+}
+
+#header-table,
+#header-table-students,
+#header-table-users,
+#header-table-edit {
+    cursor: pointer;
+}
+
+#filters {
+    display: flex;
+}
+
+#diploma-table>tbody>tr :nth-child(3),
+#diploma-table>tbody>tr :nth-child(4),
+#diploma-table>tbody>tr :nth-child(5) {
+    text-align: center;
+}
+
+#export-excellent {
+    height: 2.5em;
+    width: 20%;
+    border-radius: 5px;
+    border: 1px solid darkslategray;
+    padding: 0 1em;
+    margin-left: 1em;
+    cursor: pointer;
+    background-color: snow;
+    font-weight: bold;
+    color: darkslategray;
+    font-size: medium;
+}
+
+.dashboard-excellent {
+    margin-top: 1em;
+    margin-bottom: 2em;
+    height: 2.5em;
+    font: 1em sans-serif;
+    color: darkslategray;
+    background-color: snow;
+    border-radius: 5px;
+}
+
+#fileUsers,
+#fileStudent {
+    display: none;
+}
+
+.custom-file-upload {
+    display: table-cell;
+    width: 15%;
+    text-align: center;
+    line-height: 250%;
+    height: 2.5em;
+    border-radius: 5px;
+    border: 1px solid darkslategray;
+    padding: 0 1em;
+    cursor: pointer;
+    background-color: snow;
+    color: darkslategray;
+    font-size: medium;
+    margin-bottom: 0;
+}
+
+.custom-file-upload:hover,
+#export-excellent:hover {
+    background-color: #006199;
+    color: snow;
 }
 
 
+.custom-file-upload::before {
+    content: "";
+}
+
+.import_files {
+    display: flex;
+    height: 3em;
+    margin-top: 1em;
+}
+
+#file-name1,
+#file-name2 {
+    text-indent: 0.5em;
+    margin-bottom: 0;
+}
+
+#message-bar-export-excellent {
+    padding: 9px;
+    margin-top: 0;
+    margin-bottom: 1;
+    font-size: 1.2em;
+    border-radius: 10px;
+    font-family: monospace;
+}

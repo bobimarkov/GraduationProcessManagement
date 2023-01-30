@@ -1,3 +1,4 @@
+tokenRefresher();
 showDiplomaSection();
 getAllUsers();
 getAllStudents();
@@ -7,21 +8,10 @@ google.charts.load('current', { 'packages': ['corechart'] });
 
 let logoutHeader = document.getElementById("logout_header");
 logoutHeader.addEventListener("click", (e) => {
-    sessionStorage.clear();
+    localStorage.removeItem('token');
 
-    window.location.replace("../../index.html");
+    window.location.replace("../../");
 });
-
-function sessionLoader() {
-    if (!sessionStorage.getItem("user") || !sessionStorage.getItem("role") || (sessionStorage.getItem("role") &&
-        (!["moderator-hat", "moderator-gown", "moderator-signature"].includes(sessionStorage.getItem("role"))))) {
-        sessionStorage.clear();
-
-        window.location.replace("../../index.html");
-    }
-}
-
-sessionLoader();
 
 
 function generateTableHeaderRow(columnNames) {
@@ -32,17 +22,47 @@ function generateTableHeaderRow(columnNames) {
     return `<tr>${headerCells}</tr>`
 };
 
+
+function tokenRefresher() {
+    fetch('../../api?endpoint=refresh_token', {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then(response => {
+            localStorage.setItem('token', response.jwt);
+        })
+}
+
 /*---- GET_USERS  START ----*/
 
 function getAllUsers() {
     fetch(`../../api?endpoint=get_users`, {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (data.error) {
                 console.log(data.error);
@@ -89,11 +109,19 @@ function getAllStudents() {
     fetch(`../../api?endpoint=get_students`, {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (data.error) {
                 /* display error to user */
@@ -141,11 +169,19 @@ function getStudentsDiplomaInfo() {
     fetch(`../../api?endpoint=get_students_diploma`, {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (data.error) {
                 /* display error to user */
@@ -161,11 +197,19 @@ function getColorsConfig(users) {
     fetch('../../api?endpoint=get_graduation_colors', {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (!data.success) {
                 buildStudentsDiplomaTable(users, null);
@@ -257,28 +301,39 @@ function extractColor(color_code) {
 
 /*---- SWITCH_SECTIONS  START ----*/
 function showUsers() {
+    tokenRefresher();
     showGivenSection("users_section");
     activeHeader("users_header");
 }
 
 function showStudents() {
+    tokenRefresher();
     showGivenSection("students_section");
     activeHeader("students_header");
     getAllStudents();
 }
 
 function showAnalyticsSection() {
+    tokenRefresher();
     showGivenSection("analytic_section");
     activeHeader("analytic_header");
 
     fetch(`../../api?endpoint=get_students_diploma`, {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (data.error) {
                 // display error to user 
@@ -301,6 +356,7 @@ function showAnalyticsSection() {
 
 
 function showDiplomaSection() {
+    tokenRefresher();
     showGivenSection("diploma_section");
     activeHeader("diploma_header");
     getStudentsDiplomaInfo();

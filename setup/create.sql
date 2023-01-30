@@ -5,6 +5,7 @@ GO
 
 ----- Create Tables -----
 
+
 CREATE TABLE `user` ( 
     `id` INT NOT NULL AUTO_INCREMENT , 
     `email` VARCHAR(99) NOT NULL UNIQUE ,
@@ -16,7 +17,7 @@ CREATE TABLE `user` (
 ) ENGINE = InnoDB;
 
 CREATE TABLE `student` ( 
-    `fn` INT NOT NULL , 
+    `fn` VARCHAR(99) NOT NULL , 
     `user_id` INT NOT NULL , 
     `degree` VARCHAR(99) NOT NULL , 
     `major` VARCHAR(99) NOT NULL , 
@@ -30,7 +31,10 @@ ALTER TABLE `student` ADD CONSTRAINT `user_id_fk` FOREIGN KEY (`user_id`) REFERE
 
 CREATE TABLE `student_diploma` ( 
     `id` INT NOT NULL AUTO_INCREMENT , 
-    `student_fn` INT NOT NULL , 
+    `student_fn` VARCHAR(99) NOT NULL , 
+    `color` VARCHAR(99) DEFAULT NULL ,
+    `num_order` INT DEFAULT NULL ,
+    `time_diploma` TIME DEFAULT NULL ,
     `attendance` BOOLEAN NOT NULL DEFAULT 0 , 
     `grade` DOUBLE NULL DEFAULT NULL , 
     `has_right` BOOLEAN NOT NULL DEFAULT 1 , 
@@ -42,7 +46,7 @@ CREATE TABLE `student_diploma` (
     `taken_at_time` DATETIME NULL DEFAULT NULL , 
     `diploma_comment` TEXT NULL DEFAULT NULL , 
     `speech_request` BOOLEAN NOT NULL DEFAULT 0 , 
-    `speech_response` VARCHAR(99) NULL DEFAULT NULL, 
+    `speech_response` BOOLEAN NULL DEFAULT NULL, 
     `photos_requested` BOOLEAN NOT NULL DEFAULT 0 , 
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
@@ -52,9 +56,9 @@ ALTER TABLE `student_diploma` ADD CONSTRAINT `student_fn_fk` FOREIGN KEY (`stude
 
 CREATE TABLE `student_gown` ( 
     `id` INT NOT NULL AUTO_INCREMENT , 
-    `student_fn` INT NOT NULL , 
-    `gown_requested` BOOLEAN NULL DEFAULT NULL , 
-    `gown_taken` BOOLEAN NULL DEFAULT NULL , 
+    `student_fn` VARCHAR(99) NOT NULL , 
+    `gown_requested` BOOLEAN NULL DEFAULT NULL, 
+    `gown_taken` BOOLEAN NULL DEFAULT NULL, 
     `gown_taken_date` DATE NULL DEFAULT NULL , 
     `gown_returned` BOOLEAN NULL DEFAULT NULL , 
     `gown_returned_date` DATE NULL DEFAULT NULL , 
@@ -62,11 +66,11 @@ CREATE TABLE `student_gown` (
 ) ENGINE = InnoDB;
 
 ALTER TABLE `student_gown` ADD INDEX(`student_fn`);
-ALTER TABLE `student_gown` ADD CONSTRAINT `student_fn_fk_3` FOREIGN KEY (`student_fn`) REFERENCES `student`(`fn`) ON DELETE CASCADE ON UPDATE RESTRICT;
+ALTER TABLE `student_gown` ADD CONSTRAINT `student_fn_fk_2` FOREIGN KEY (`student_fn`) REFERENCES `student`(`fn`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
 CREATE TABLE `student_hat` ( 
     `id` INT NOT NULL AUTO_INCREMENT , 
-    `student_fn` INT NOT NULL , 
+    `student_fn` VARCHAR(99) NOT NULL , 
     `hat_requested` BOOLEAN NULL DEFAULT NULL , 
     `hat_taken` BOOLEAN NULL DEFAULT NULL , 
     `hat_taken_date` DATE NULL DEFAULT NULL , 
@@ -135,6 +139,30 @@ create table moderator_range (
 
 ALTER TABLE `moderator_range` ADD INDEX(`email`);
 ALTER TABLE `moderator_range` ADD CONSTRAINT `student_fn_fk_11` FOREIGN KEY (`email`) REFERENCES `user`(`email`) ON DELETE CASCADE ON UPDATE RESTRICT;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,207 +1,192 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link href="../../css/student_style.css" rel="stylesheet"/>
-        <script defer src="../../js/student_home.js"></script>
 
-        <script src="https://kit.fontawesome.com/ee112817f8.js" crossorigin="anonymous"></script>
-        <meta charset="UTF-8"/>
-        <title>Информационно табло</title>
-    </head>
+<head>
+    <link href="../../css/student_style.css" rel="stylesheet" />
+    <script defer src="../../js/student_home.js"></script>
 
-    <body>
-        <img class="logo" src="../../images/su-logo.png" alt="su-logo"/>
-        <p class="su-header">СУ "СВ. КЛИМЕНТ ОХРИДСКИ"</p>
-        <div class="navigation">
-            <h2 class="navigation_element" id="students_header">ДОБРЕ ДОШЪЛ,</h2>
-            <h2 class="navigation_element active_header" id="users_header"></h2>
-            <h2 class="navigation_element">
-                <i class="fas fa-user-graduate"></i>
-            </h2>
-            <div class="vertical_line"></div>
-            <h2 class="navigation_element" id="logout_header">
-                ИЗХОД
-                <i class="fas fa-sign-out-alt"></i>
-            </h2>
+    <script src="https://kit.fontawesome.com/ee112817f8.js" crossorigin="anonymous"></script>
+    <meta charset="UTF-8" />
+    <title>Информационно табло</title>
+</head>
+
+<body>
+    <img class="logo" src="../../images/su-logo.png" alt="su-logo" />
+    <p class="su-header">СУ "СВ. КЛИМЕНТ ОХРИДСКИ"</p>
+    <div class="navigation">
+        <h2 class="navigation_element" id="students_header">ДОБРЕ ДОШЪЛ,</h2>
+        <h2 class="navigation_element active_header" id="users_header"></h2>
+        <h2 class="navigation_element"><i class="fas fa-user-graduate"></i></h2>
+        <div class="vertical_line"></div>
+        <h2 class="navigation_element" id="logout_header">
+            ИЗХОД <i class="fas fa-sign-out-alt"></i>
+        </h2>
+    </div>
+    <div class="row">
+        <div class="non_graduating_warning_section">
+            <h3><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Внимание!</h3>
+            <p>Вие нямате право на диплома!</p>
         </div>
-        <div class="row">
-            <div class="non_graduating_warning_section">
-                <h3>
-                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                    Внимание!</h3>
-                <p>Вие нямате право на диплома!</p>
-            </div>
-            <div class="graduation_info_section">
-                <h3>
-                    <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                    Информация за дипломирането
-                </h3>
-                <div id="diploma_info_section_content_3">
-                    <p>
-                        Ще присъствам на дипломирането:
-                        <input type="checkbox" id="attendance" onchange="setAttandance(email, this)"/>
-                    </p>
-                    <p>
-                        Искам снимки:
-                        <input type="checkbox" id="photos_requested" onchange="requestPhotos(email, this)"/>
-                    </p>
-                </div>
-            </div>
-            <div class="notifications_section">
-                <h3>
-                    <i class="fa fa-bell-o" aria-hidden="true"></i>
-                    Известия</h3>
-                <p id="no-notifications">В момента нямате никакви известия.</p>
-                <div id="speech_request_section" class="speech_request_section">
-                    <p id="speech_request"></p>
-                    <select class="speech_request_select" id="speech_request_select" onchange="submitRequestSpeechAnswer(email, this.value)">
-                        <option value="-1" selected disabled hidden>Отговор ...</option>
-                        <option value="1">Приемам</option>
-                        <option value="0">Отказвам</option>
-                    </select>
-                </div>
-            </div>
-            <div class="profile_info_section">
-                <h3>
-                    <i class="fa fa-user-o" aria-hidden="true"></i>
-                    Информация за потребителя</h3>
-                <div class="profile_info_section_content">
-                    <div id="profile_info_section_content_1_wrapper">
-                        <div id="profile_info_section_content_1">
-                            <p id="name"></p>
-                            <p id="email"></p>
-                            <p id="phone"></p>
-                        </div>
-                    </div>
-                    <div id="profile_info_section_content_2_wrapper">
-                        <div id="profile_info_section_content_2">
-                            <p id="degree"></p>
-                            <p id="major"></p>
-                            <p id="group"></p>
-                            <p id="fn"></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="diploma_info_section">
-                <h3>
-                    <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                    Информация за диплома</h3>
-                <div class="diploma_info_section_content">
-                    <div id="diploma_info_section_content_1_wrapper">
-                        <div id="diploma_info_section_content_1">
-                            <p id="has_right"></p>
-                            <p id="is_ready"></p>
-                            <p id="grade"></p>
-                        </div>
-                    </div>
-                    <div id="diploma_info_section_content_2_wrapper">
-                        <div id="diploma_info_section_content_2">
-                            <p id="take_in_advance_request"></p>
-                            <p id="is_taken"></p>
-                            <p id="is_taken_in_advance"></p>
-                            <p id="taken_at_time"></p>
-                            <p id="signature_moderator"></p>
-                        </div>
-                    </div>
-                    <div id="diploma_info_section_content_3_wrapper">
-                        <div id="diploma_info_section_content_3">
-                            <p>
-                                Ще присъствам на дипломирането:
-                                <input type="checkbox" id="attendance" onchange="setAttandance(email, this)"/>
-                            </p>
-                            <p>
-                                Искам снимки:
-                                <input type="checkbox" id="photos_requested" onchange="requestPhotos(email, this)"/>
-                            </p>
-                        </div>
-                    </div>
-                    <div id="diploma_info_section_content_4_wrapper">
-                        <div id="diploma_info_section_content_4">
-                            <p>Административен коментар:</p>
-                            <textarea class="diploma_comment" id="diploma_comment" disabled></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="graduation_info_section">
+            <h3>
+                <i class="fa fa-file-text-o" aria-hidden="true"></i> Информация за дипломирането
+            </h3>
+            <p class="message-bar no-margin" id="start_date_no">Все още няма дата.</p>
+            <p class="message-bar no-margin" id="start_time_no">Все още няма начален час.</p>
+            <p class="message-bar no-margin" id="auditory_no">Все още няма аудитория.</p>
+        </div>
+        <div class="notifications_section">
+            <h3><i class="fa fa-bell-o" aria-hidden="true"></i> Известия</h3>
+            <p id="no-notifications">В момента нямате никакви известия.</p>
+            <div id="speech_request_section" class="speech_request_section">
+                <p id="speech_request"></p>
+                <p id="speech_request_answer"></p>
 
-            <div class="request_diploma_in_advance_section">
-                <h3>
-                    <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
-                    Заяви вземане на диплома
-                                        предварително
-                </h3>
-                <div class="request_diploma_in_advance_content">
-                    <form class="request_diploma_in_advance_form" id="request_diploma_in_advance_form">
-                        <textarea class="request_diploma_in_advance_comment" name="request_diploma_in_advance_comment" id="request_diploma_in_advance_comment" placeholder="Причина..."></textarea>
-                        <button type="submit" class="request_diploma_in_advance_submit_button" id="request_diploma_in_advance" onclick="requestDiplomaInAdvance(email, event, 1)">
-                            Заяви
-                        </button>
-                        <button type="submit" class="request_diploma_in_advance_submit_button" id="cancel_request_diploma_in_advance" onclick="requestDiplomaInAdvance(email, event, 0)">
-                            Отмени
-                        </button>
-                        <p class="message-bar" id="message-bar-diploma-request"></p>
-                    </form>
-                </div>
-            </div>
-
-            <div class="request_gown_hat_section">
-                <h3>
-                    <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-                    Заяви тога и шапка</h3>
-                <div class="request_gown_hat_content">
-                    <div id="request_gown_hat_content_1_wrapper">
-                        <div id="request_gown_hat_content_1">
-                            <p id="gown_request">
-                                <i>Веднъж въведено, отговорът Ви не може да бъде променен.</i>
-                            </p>
-                            <select
-                                class="gown_request_select"
-                                id="gown_request_select"
-                                onchange="requestGown(email, this.value)"
-                            >
-                                <option value="-1" selected disabled hidden>Тога</option>
-                                <option value="1">Желая да взема тога.</option>
-                                <option value="0">Не желая.</option>
-                            </select>
-                            <p id="gown_taken"></p>
-                            <p id="gown_taken_date"></p>
-                            <p id="gown_returned"></p>
-                            <p id="gown_returned_date"></p>
-                            <p id="gown_moderator"></p>
-                        </div>
-                    </div>
-                    <div id="request_gown_hat_content_2_wrapper">
-                        <div id="request_gown_hat_content_2">
-                            <p id="hat_request">
-                                <i>Веднъж въведено, отговорът Ви не може да бъде променен.</i>
-                            </p>
-                            <select class="hat_request_select" id="hat_request_select" onchange="requestHat(email, this.value)">
-                                <option value="-1" selected disabled hidden>Шапка</option>
-                                <option value="1">Желая да взема шапка.</option>
-                                <option value="0">Не желая.</option>
-                            </select>
-                            <p id="hat_taken"></p>
-                            <p id="hat_taken_date"></p>
-                            <p id="hat_returned"></p>
-                            <p id="hat_returned_date"></p>
-                            <p id="hat_moderator"></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="diploma_order_section">
-                <h3>
-                    <i class="fas fa-user-graduate"></i>
-                    Пореден списък за връчване на дипломи</h3>
-                <p class="message-bar no-margin" id="start_time">Все още няма начален час.</p>
-                <p class="message-bar no-margin" id="order_list">Все още няма наредба.</p>
-                <p class="message-bar no-margin" id="order_student">Все още няма пореден списък.</p>
-                <p class="message-bar no-margin" id="color_message">
-                    Все още няма зададени цветове.
-                </p>
+                <select class="speech_request_select" id="speech_request_select"
+                    onchange="submitRequestSpeechAnswer(email, this.value)">
+                    <option value="-1" selected disabled hidden>Отговор ...</option>
+                    <option value="1">Приемам</option>
+                    <option value="0">Отказвам</option>
+                </select>
             </div>
         </div>
-    </body>
+        <div class="profile_info_section">
+            <h3><i class="fa fa-user-o" aria-hidden="true"></i> Информация за потребителя</h3>
+            <div class="profile_info_section_content">
+                <div id="profile_info_section_content_1_wrapper">
+                    <div id="profile_info_section_content_1">
+                        <p id="name"></p>
+                        <p id="email"></p>
+                        <p id="phone"></p>
+                    </div>
+                </div>
+                <div id="profile_info_section_content_2_wrapper">
+                    <div id="profile_info_section_content_2">
+                        <p id="degree"></p>
+                        <p id="major"></p>
+                        <p id="group"></p>
+                        <p id="fn"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="diploma_info_section">
+            <h3><i class="fa fa-file-text-o" aria-hidden="true"></i> Информация за диплома</h3>
+            <div class="diploma_info_section_content">
+                <div id="diploma_info_section_content_1_wrapper">
+                    <div id="diploma_info_section_content_1">
+                        <p id="has_right"></p>
+                        <p id="is_ready"></p>
+                        <p id="grade"></p>
+                    </div>
+                </div>
+                <div id="diploma_info_section_content_2_wrapper">
+                    <div id="diploma_info_section_content_2">
+                        <p id="take_in_advance_request"></p>
+                        <p id="is_taken"></p>
+                        <p id="is_taken_in_advance"></p>
+                        <p id="taken_at_time"></p>
+                        <p id="signature_moderator"></p>
+                    </div>
+                </div>
+                <div id="diploma_info_section_content_3_wrapper">
+                    <div id="diploma_info_section_content_3">
+                        <p>
+                            Ще присъствам на дипломирането:
+                            <input type="checkbox" id="attendance" onchange="setAttandance(email, this)" />
+                        </p>
+                        <p>
+                            Искам снимки:
+                            <input type="checkbox" id="photos_requested" onchange="requestPhotos(email, this)" />
+                        </p>
+                    </div>
+                </div>
+                <div id="diploma_info_section_content_4_wrapper">
+                    <div id="diploma_info_section_content_4">
+                        <p>Административен коментар:</p>
+                        <textarea class="diploma_comment" id="diploma_comment" disabled></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="request_diploma_in_advance_section">
+            <h3>
+                <i class="fa fa-paper-plane-o" aria-hidden="true"></i> Заяви вземане на диплома
+                предварително
+            </h3>
+            <div class="request_diploma_in_advance_content">
+                <form class="request_diploma_in_advance_form" id="request_diploma_in_advance_form">
+                    <textarea class="request_diploma_in_advance_comment" name="request_diploma_in_advance_comment"
+                        id="request_diploma_in_advance_comment" placeholder="Причина..."></textarea>
+                    <button type="submit" class="request_diploma_in_advance_submit_button"
+                        id="request_diploma_in_advance" onclick="requestDiplomaInAdvance(email, event, 1)">
+                        Заяви
+                    </button>
+                    <button type="submit" class="request_diploma_in_advance_submit_button"
+                        id="cancel_request_diploma_in_advance" onclick="requestDiplomaInAdvance(email, event, 0)">
+                        Отмени
+                    </button>
+                    <p class="message-bar" id="message-bar-diploma-request"></p>
+                </form>
+            </div>
+        </div>
+
+
+        <div class="request_gown_hat_section">
+            <h3><i class="fa fa-graduation-cap" aria-hidden="true"></i> Заяви тога и шапка</h3>
+            <div class="request_gown_hat_content">
+                <div id="request_gown_hat_content_1_wrapper">
+                    <div id="request_gown_hat_content_1">
+                        <p id="gown_request">
+                            <i>Веднъж въведено, отговорът Ви не може да бъде променен.</i>
+                        </p>
+                        <select class="gown_request_select" id="gown_request_select"
+                            onchange="requestGown(email, this.value)">
+                            <option value="-1" selected disabled hidden>Тога</option>
+                            <option value="1">Желая да взема тога.</option>
+                            <option value="0">Не желая.</option>
+                        </select>
+                        <p id="gown_taken"></p>
+                        <p id="gown_taken_date"></p>
+                        <p id="gown_returned"></p>
+                        <p id="gown_returned_date"></p>
+                        <p id="gown_moderator"></p>
+                    </div>
+                </div>
+                <div id="request_gown_hat_content_2_wrapper">
+                    <div id="request_gown_hat_content_2">
+                        <p id="hat_request">
+                            <i>Веднъж въведено, отговорът Ви не може да бъде променен.</i>
+                        </p>
+                        <select class="hat_request_select" id="hat_request_select"
+                            onchange="requestHat(email, this.value)">
+                            <option value="-1" selected disabled hidden>Шапка</option>
+                            <option value="1">Желая да взема шапка.</option>
+                            <option value="0">Не желая.</option>
+                        </select>
+                        <p id="hat_taken"></p>
+                        <p id="hat_taken_date"></p>
+                        <p id="hat_returned"></p>
+                        <p id="hat_returned_date"></p>
+                        <p id="hat_moderator"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="diploma_order_section">
+            <h3><i class="fas fa-user-graduate"></i> Пореден списък за връчване на дипломи</h3>
+            <p class="message-bar no-margin" id="start_date">Все още няма дата.</p>
+            <p class="message-bar no-margin" id="start_time">Все още няма начален час.</p>
+            <p class="message-bar no-margin" id="auditory">Все още няма аудитория.</p>
+            <p class="message-bar no-margin" id="order_list">Все още няма наредба.</p>
+            <p class="message-bar no-margin" id="order_student">Все още няма пореден списък.</p>
+            <p class="message-bar no-margin" id="color_message">
+                Все още няма зададени цветове.
+            </p>
+        </div>
+    </div>
+</body>
+
 </html>

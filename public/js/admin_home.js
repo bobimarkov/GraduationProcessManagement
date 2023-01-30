@@ -1,3 +1,4 @@
+tokenRefresher();
 showDiplomaSection();
 getAllUsers();
 getAllStudents();
@@ -5,33 +6,54 @@ getStudentsDiplomaInfo();
 // Load google charts
 google.charts.load('current', { 'packages': ['corechart'] });
 
+
 let logoutHeader = document.getElementById("logout_header");
 logoutHeader.addEventListener("click", (e) => {
-    sessionStorage.clear();
+    localStorage.removeItem('token')
 
-    window.location.replace("../../");
+    window.location.replace("../../")
 });
 
-function sessionLoader() {
-    if (!sessionStorage.getItem("user") || !sessionStorage.getItem("role") || (sessionStorage.getItem("role") && sessionStorage.getItem("role") !== "admin")) {
-        sessionStorage.clear();
 
-        window.location.replace("../../");
-    }
+function tokenRefresher() {
+    fetch('../../api?endpoint=refresh_token', {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then(response => {
+            localStorage.setItem('token', response.jwt);
+        })
 }
-
-sessionLoader();
 
 /*---- GET_USERS  START ----*/
 function getAllUsers() {
     fetch(`../../api?endpoint=get_users`, {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (data.error) {
                 console.log(data.error);
@@ -46,13 +68,12 @@ function buildUsersTable(data) {
     let i = 1;
     let users = data.users;
 
-    table.innerHTML = " <tr> <td>ID</td> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>Роля</td> </tr>";
+    table.innerHTML = '<tr id="header-table-users"> <td onclick="sortByUsers(0)">Име</td> <td onclick="sortByUsers(1)">Имейл</td> <td onclick="sortByUsers(2)">Телефон</td> <td onclick="sortByUsers(3)">Роля</td> </tr>';
 
     for (const user of users) {
         var row = table.insertRow(i);
         row.id = 'user' + i;
         let row_data = [
-            user.id,
             user.name,
             user.email,
             user.phone,
@@ -77,11 +98,19 @@ function getAllStudents() {
     fetch(`../../api?endpoint=get_students`, {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (data.error) {
                 console.log(data.error);
@@ -97,13 +126,12 @@ function buildEditStudentsTable(data) {
     let i = 1;
     let users = data.users;
 
-    table.innerHTML = "<tr><td>ID</td><td>Име</td><td>Имейл</td><td>Телефон</td><td>ФН</td></tr>";
+    table.innerHTML = '<tr id="header-table-edit"><td onclick="sortByEdit(0)">Име</td><td onclick="sortByEdit(1)">Имейл</td><td onclick="sortByEdit(2)">Телефон</td><td onclick="sortByEdit(3)">ФН</td></tr>';
 
     for (const user of users) {
         var row = table.insertRow(i);
         row.id = 'user' + i;
         let row_data = [
-            user.id,
             user.name,
             user.email,
             user.phone,
@@ -121,13 +149,12 @@ function buildStudentsTable(data) {
     var table = document.getElementById("students-table");
     let i = 1;
     let users = data.users;
-    table.innerHTML = "<tr> <td>ID</td> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>ФН</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Дипломиращ се</td> <td>Роля</td> </tr>";
+    table.innerHTML = '<tr id="header-table-students"> <td onclick="sortByStudents(0)">Име</td> <td onclick="sortByStudents(1)">Имейл</td> <td onclick="sortByStudents(2)">Телефон</td> <td onclick="sortByStudents(3)">ФН</td> <td onclick="sortByStudents(4)">Степен</td> <td onclick="sortByStudents(5)">Спец.</td> <td onclick="sortByStudents(6)">Група</td> <td onclick="sortByStudents(7)">Дипломиращ се</td> <td onclick="sortByStudents(8)">Роля</td> </tr>';
 
     for (const user of users) {
         var row = table.insertRow(i);
         row.id = 'user' + i;
         let row_data = [
-            user.id,
             user.name,
             user.email,
             user.phone,
@@ -152,54 +179,50 @@ function getStudentsDiplomaInfo() {
     fetch(`../../api?endpoint=get_students_diploma`, {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (data.error) {
                 console.log(data.error);
             } else {
-                getColorsConfig(data.users);
+                buildStudentsDiplomaTable(data.users);
             }
         })
 }
 
-function getColorsConfig(users) {
-    fetch('../../api?endpoint=get_graduation_colors', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }
-    })
-        .then(response => response.json())
-        .then((data) => {
-            if (!data.success) {
-                buildStudentsDiplomaTable(users, null);
-            } else {
-                var colors_config = data.graduation_colors;
-                buildStudentsDiplomaTable(users, colors_config);
-            }
-        });
-}
-
-function buildStudentsDiplomaTable(users, colors_config) {
+function buildStudentsDiplomaTable(users) {
     var table = document.getElementById("diploma-table");
 
-    table.innerHTML = "<tr> <td>№</td> <td>ФН</td> <td>Име</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Успех</td> <td>Присъствие</td> <td>Има право</td> <td>Готова</td> <td>Взета</td> <td>Заявка взимане предв.</td> <td>Коментар (студент)</td> <td>Взета предв.</td> <td>Дата/час</td> <td>Коментар (администр.)</td> <td>Покана реч</td> <td>Отговор</td> <td>Снимки</td> <td>Заявена тога</td> <td>Взета</td> <td>Дата/час</td> <td>Върната</td> <td>Дата/час</td> <td>Заявена шапка</td> <td>Взета</td> <td>Дата/час</td></tr>";
+    table.innerHTML = '<tr id="header-table"> <td onclick="sortByGraduated(0)">ФН</td> <td onclick="sortByGraduated(1)">Име</td> <td onclick="sortByGraduated(2)">Цвят</td> <td onclick="sortByGraduated(4)">Ред на връчване</td> <td onclick="sortByGraduated(4)">Час на връчване</td> <td onclick="sortByGraduated(5)">Степен</td> <td onclick="sortByGraduated(6)">Спец.</td> <td onclick="sortByGraduated(7)">Група</td> <td onclick="sortByGraduated(8)">Успех</td> <td onclick="sortByGraduated(9)">Присъствие</td> <td onclick="sortByGraduated(10)">Има право</td> <td onclick="sortByGraduated(11)">Готова</td> <td onclick="sortByGraduated(12)">Взета</td> <td onclick="sortByGraduated(13)">Заявка взимане предв.</td> <td onclick="sortByGraduated(14)">Коментар (студент)</td> <td onclick="sortByGraduated(15)">Взета предв.</td> <td onclick="sortByGraduated(16)">Дата/час</td> <td onclick="sortByGraduated(17)">Коментар (администр.)</td> <td onclick="sortByGraduated(18)">Покана реч</td> <td onclick="sortByGraduated(19)">Отговор</td> <td onclick="sortByGraduated(20)">Снимки</td> <td onclick="sortByGraduated(21)">Заявена тога</td> <td onclick="sortByGraduated(22)">Взета</td> <td onclick="sortByGraduated(23)">Дата/час</td> <td onclick="sortByGraduated(24)">Върната</td> <td>Дата/час</td> <td onclick="sortByGraduated(25)">Заявена шапка</td> <td onclick="sortByGraduated(26)">Взета</td> <td onclick="sortByGraduated(27)">Дата/час</td> <td onclick="sortByGraduated(28)">Върната</td> <td onclick="sortByGraduated(29)">Дата/час</td></tr>';
     let i = 1;
 
     for (const user of users) {
         if (user.grade >= 3) {
             var row = table.insertRow(i);
             row.id = 'user' + i;
-            // row.setAttribute("onmousedown", "toggleBorderColor(this)")
+            let response;
+            switch (user.speech_response) {
+                case null: response = '-'; break;
+                case 0: response = 'Отказва'; break;
+                case 1: response = 'Приема'; break;
+            }
             var row_data = [
-                i,
                 user.student_fn,
-                user.name.concat(" " + getColor(i, users.length, colors_config)),
+                user.name,
+                user.color = "<i class='fas fa-square' style='color:" + user.color + ";'></i>",
+                user.num_order,
+                user.time_diploma,
                 user.degree,
                 user.major,
                 user.group,
@@ -209,12 +232,12 @@ function buildStudentsDiplomaTable(users, colors_config) {
                 user.is_ready == 0 ? 'Не' : 'Да',
                 user.is_taken == 0 ? 'Не' : 'Да',
                 user.take_in_advance_request == 0 ? 'Не' : 'Да',
-                user.take_in_advance_request_comment == null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.take_in_advance_request_comment}</span></i>`,
+                user.take_in_advance_request_comment == null ? "<i class='far fa-comment-alt comment-icon'><span class='studentComm'>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span class='studentComm'>${user.take_in_advance_request_comment}</span></i>`,
                 user.is_taken_in_advance == 0 ? 'Не' : 'Да',
                 user.taken_at_time,
-                user.diploma_comment == null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.diploma_comment}</span></i>`,
-                user.speech_request == 0 ? 'Не' : 'Да',
-                user.speech_response == null ? '-' : user.speech_response,
+                user.diploma_comment == null ? "<i class='far fa-comment-alt comment-icon'><span class='userComm'>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span class='userComm'>${user.diploma_comment}</span></i>`,
+                user.speech_request = (user.speech_request == 1) ? 'Да' : 'Не',
+                user.speech_response = response,
                 user.photos_requested == 0 ? 'Не' : 'Да',
                 //gown_requested
                 user.gown_requested == null ? '' : user.gown_requested == 0 ? 'Не' : 'Да',
@@ -240,49 +263,11 @@ function buildStudentsDiplomaTable(users, colors_config) {
     }
 }
 
-
-function getColor(i, n, colors_config) {
-    var part = Math.round((colors_config[0].color_interval / 100 * n));
-    var current_part = part;
-    var color_index = 1;
-
-    while (current_part < n + part) {
-        if (i <= current_part) {
-            var color = "color".concat(color_index);
-            return extractColor(colors_config[0][`${color}`]);
-        }
-        color_index++;
-        current_part += part;
-    }
-    return extractColor("silver");
-}
-
-function extractColor(color_code) {
-    return "<i class='fas fa-square' style='color:" + color_code + ";'></i>";
-}
-
-function toggleBorderColor(c) {
-    var fn = c.cells[1].innerHTML;
-    var fnTextArea = document.getElementById('dashboard_textarea');
-    var currentFns = fnTextArea.value;
-
-    if (c.style.backgroundColor == "slategray") {
-        c.style.backgroundColor = "transparent";
-        c.style.color = "black";
-        currentFns = currentFns.replace(`${fn},`, "");
-        fnTextArea.value = currentFns
-    } else {
-        c.style.backgroundColor = "slategray";
-        c.style.color = "snow";
-        currentFns = currentFns.concat(`${fn},`);
-        fnTextArea.value = currentFns
-    }
-}
 /*---- GET_STUDENTS_DIPLOMA  END ----*/
 
 /*---- SWITCH_SECTIONS  START ----*/
 function showUsers() {
-
+    tokenRefresher();
     showGivenSection("users_section");
     activeHeader("users_header");
 
@@ -294,7 +279,7 @@ function showUsers() {
 }
 
 function showStudents() {
-
+    tokenRefresher();
     showGivenSection("students_section");
     activeHeader("students_header");
     getAllStudents();
@@ -306,33 +291,39 @@ function showStudents() {
 }
 
 function showEditSection() {
-
+    tokenRefresher();
     showGivenSection("edit_section");
     activeHeader("edit_header");
     getAllUsers();
-
 }
 
 
 function showAnalyticsSection() {
-
+    tokenRefresher();
     showGivenSection("analytic_section");
     activeHeader("analytic_header");
 
     fetch(`../../api?endpoint=get_students_diploma`, {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             if (data.error) {
                 // display error to user 
                 console.log(data.error);
             } else {
-
                 //build piecharts from data
                 let studentMajorData = dataMajorToArray(data);
                 let studentGradeData = dataGradesToArray(data);
@@ -344,14 +335,11 @@ function showAnalyticsSection() {
                 google.charts.setOnLoadCallback(drawChart(studentHasRightData, "analytics4", "Студенти имащи право на диплома"));
             }
         })
-
-
-
 }
 
 
 function showDiplomaSection() {
-
+    tokenRefresher();
     showGivenSection("diploma_section");
     activeHeader("diploma_header");
     getStudentsDiplomaInfo();
@@ -379,6 +367,7 @@ function showGivenSection(sectionToBeDisplayed) {
         'students_section',
         'edit_section',
         'diploma_section',
+        'excellent_order',
         'diploma_order_section',
         'analytic_section'];
 
@@ -400,11 +389,12 @@ function showGivenSection(sectionToBeDisplayed) {
 
 
     //the corner cases for flex and make 2 grids at the same time
-    if (sectionToBeDisplayed.localeCompare(sections[5].id) == 0) {
-        sections[5].style.display = 'flex';
+    if (sectionToBeDisplayed.localeCompare(sections[6].id) == 0) {
+        sections[6].style.display = 'flex';
     } else if (sectionToBeDisplayed.localeCompare(sections[3].id) == 0) {
         sections[3].style.display = 'grid';
         sections[4].style.display = 'grid';
+        sections[5].style.display = 'grid';
     }
 
 }
@@ -553,11 +543,19 @@ function showDiplomaOrderMessage() {
     fetch('../../api?endpoint=get_diploma_order', {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             var errElem = document.getElementById('message-bar-diploma');
             if (!data.success) {
@@ -610,6 +608,9 @@ function showDashboardAdditionalInputElement(value) {
 function submitUserHelper(bodyData) {
     fetch('../../api?endpoint=add_users', {
         method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
         body: bodyData
     })
         .then(response => response.json())
@@ -628,36 +629,6 @@ function submitUserHelper(bodyData) {
             }
         });
 }
-
-/*function submitUsers(event) {
-    event.preventDefault;
-    var form = document.getElementById('add_users_form');
-    var usersData = form.userTextarea.value;
-
-    fetch('../../api?endpoint=add_users', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify(usersData)
-    })
-        .then(response => response.json())
-        .then((data) => {
-            var errElem = document.getElementById('message-bar-users');
-            if (!data.success) {
-                errElem.classList.remove(['success']);
-                errElem.classList.add(['error']);
-                errElem.innerHTML = data.message;
-            } else {
-                errElem.classList.remove(['error']);
-                errElem.classList.add(['success']);
-                errElem.innerHTML = data.message;
-                document.getElementById("userTextarea").value = "";
-                getAllUsers();
-            }
-        });
-}*/
 
 function submitUsers(event) {
     event.preventDefault();
@@ -679,6 +650,32 @@ function submitUsersFromFile(event) {
     document.getElementById('fileUsers').value = "";
 }
 
+const fileNameUsers = document.getElementById('file-name1');
+document.getElementById('fileUsers').addEventListener('change', function () {
+    if (this.files.length > 0) {
+        let fileNames = [];
+        for (let i = 0; i < this.files.length; i++) {
+            fileNames.push(this.files[i].name);
+        }
+        fileNameUsers.innerText = fileNames.join(', ');
+    } else {
+        fileNameUsers.innerText = "Все още няма избрани файлове";
+    }
+});
+
+const fileNameStudents = document.getElementById('file-name2');
+document.getElementById('fileStudent').addEventListener('change', function () {
+    if (this.files.length > 0) {
+        let fileNames = [];
+        for (let i = 0; i < this.files.length; i++) {
+            fileNames.push(this.files[i].name);
+        }
+        fileNameStudents.innerText = fileNames.join(', ');
+    } else {
+        fileNameStudents.innerText = "Все още няма избрани файлове";
+    }
+});
+
 function editStudent(event) {
 
     event.preventDefault;
@@ -688,12 +685,20 @@ function editStudent(event) {
     fetch('../../api?endpoint=edit_students', {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
         body: JSON.stringify(usersData)
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             var errElem = document.getElementById('message-bar-edit-students');
             if (!data.success) {
@@ -714,10 +719,19 @@ function editStudent(event) {
 function submitStudentHelper(bodyData) {
     fetch('../../api?endpoint=add_students', {
         method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
         body: bodyData
-
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             var errElem = document.getElementById('message-bar-students');
             if (!data.success) {
@@ -771,12 +785,20 @@ function submitAction(event) {
     fetch('../../api?endpoint=save_action', {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
         body: JSON.stringify(action)
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             var errElem = document.getElementById('message-bar-diploma');
             if (!data.success) {
@@ -797,52 +819,135 @@ function submitAction(event) {
         });
 }
 
+var saveCurrOption;
+
+function getCurrOption(selectObj) {
+    saveCurrOption = selectObj.value;
+}
+
+
 function removeValueFromOtherLists(selectObject) {
     var value = selectObject.value;
-
     var selectobject1 = document.getElementById("diploma_order_1");
     var selectobject2 = document.getElementById("diploma_order_2");
     var selectobject3 = document.getElementById("diploma_order_3");
     var selectobject4 = document.getElementById("diploma_order_4");
     var selectobject5 = document.getElementById("diploma_order_5");
     var selectobject6 = document.getElementById("diploma_order_6");
-    if (!selectobject1.isEqualNode(selectObject)) {
-        for (var i = 0; i < selectobject1.length; i++) {
-            if (selectobject1.options[i].value == value)
-                selectobject1.remove(i);
+
+    let name;
+    switch (saveCurrOption) {
+        case 'fn': name = 'ФН'; break;
+        case 'name': name = 'Име'; break;
+        case 'degree': name = 'Степен'; break;
+        case 'major': name = 'Специалност'; break;
+        case 'group': name = 'Група'; break;
+        case 'grade': name = 'Успех'; break;
+        default: name = ""; break;
+    }
+
+    if (saveCurrOption == -1) {
+        if (!selectobject1.isEqualNode(selectObject)) {
+            for (let i = 0; i < selectobject1.length; i++) {
+                if (selectobject1.options[i].value == value)
+                    selectobject1.remove(i);
+            }
+        }
+        if (!selectobject2.isEqualNode(selectObject)) {
+            for (var i = 0; i < selectobject2.length; i++) {
+                if (selectobject2.options[i].value == value)
+                    selectobject2.remove(i);
+            }
+        }
+        if (!selectobject3.isEqualNode(selectObject)) {
+            for (var i = 0; i < selectobject3.length; i++) {
+                if (selectobject3.options[i].value == value)
+                    selectobject3.remove(i);
+            }
+        }
+        if (!selectobject4.isEqualNode(selectObject)) {
+            for (var i = 0; i < selectobject4.length; i++) {
+                if (selectobject4.options[i].value == value)
+                    selectobject4.remove(i);
+            }
+        }
+        if (!selectobject5.isEqualNode(selectObject)) {
+            for (var i = 0; i < selectobject5.length; i++) {
+                if (selectobject5.options[i].value == value)
+                    selectobject5.remove(i);
+            }
+        }
+        if (!selectobject6.isEqualNode(selectObject)) {
+            for (var i = 0; i < selectobject6.length; i++) {
+                if (selectobject6.options[i].value == value)
+                    selectobject6.remove(i);
+            }
         }
     }
-    if (!selectobject2.isEqualNode(selectObject)) {
-        for (var i = 0; i < selectobject2.length; i++) {
-            if (selectobject2.options[i].value == value)
-                selectobject2.remove(i);
+    else {
+        if (!selectobject1.isEqualNode(selectObject)) {
+            let opt = document.createElement('option');
+            opt.value = saveCurrOption;
+            opt.innerHTML = name;
+            selectobject1.appendChild(opt);
+            for (var i = 0; i < selectobject1.length; i++) {
+                if (selectobject1.options[i].value == value)
+                    selectobject1.remove(i);
+            }
         }
-    }
-    if (!selectobject3.isEqualNode(selectObject)) {
-        for (var i = 0; i < selectobject3.length; i++) {
-            if (selectobject3.options[i].value == value)
-                selectobject3.remove(i);
+        if (!selectobject2.isEqualNode(selectObject)) {
+            let opt = document.createElement('option');
+            opt.value = saveCurrOption;
+            opt.innerHTML = name;
+            selectobject2.appendChild(opt);
+            for (var i = 0; i < selectobject2.length; i++) {
+                if (selectobject2.options[i].value == value)
+                    selectobject2.remove(i);
+            }
         }
-    }
-    if (!selectobject4.isEqualNode(selectObject)) {
-        for (var i = 0; i < selectobject4.length; i++) {
-            if (selectobject4.options[i].value == value)
-                selectobject4.remove(i);
+        if (!selectobject3.isEqualNode(selectObject)) {
+            let opt = document.createElement('option');
+            opt.value = saveCurrOption;
+            opt.innerHTML = name;
+            selectobject3.appendChild(opt);
+            for (var i = 0; i < selectobject3.length; i++) {
+                if (selectobject3.options[i].value == value)
+                    selectobject3.remove(i);
+            }
         }
-    }
-    if (!selectobject5.isEqualNode(selectObject)) {
-        for (var i = 0; i < selectobject5.length; i++) {
-            if (selectobject5.options[i].value == value)
-                selectobject5.remove(i);
+        if (!selectobject4.isEqualNode(selectObject)) {
+            let opt = document.createElement('option');
+            opt.value = saveCurrOption;
+            opt.innerHTML = name;
+            selectobject4.appendChild(opt);
+            for (var i = 0; i < selectobject4.length; i++) {
+                if (selectobject4.options[i].value == value)
+                    selectobject4.remove(i);
+            }
         }
-    }
-    if (!selectobject6.isEqualNode(selectObject)) {
-        for (var i = 0; i < selectobject6.length; i++) {
-            if (selectobject6.options[i].value == value)
-                selectobject6.remove(i);
+        if (!selectobject5.isEqualNode(selectObject)) {
+            let opt = document.createElement('option');
+            opt.value = saveCurrOption;
+            opt.innerHTML = name;
+            selectobject5.appendChild(opt);
+            for (var i = 0; i < selectobject5.length; i++) {
+                if (selectobject5.options[i].value == value)
+                    selectobject5.remove(i);
+            }
+        }
+        if (!selectobject6.isEqualNode(selectObject)) {
+            let opt = document.createElement('option');
+            opt.value = saveCurrOption;
+            opt.innerHTML = name;
+            selectobject6.appendChild(opt);
+            for (var i = 0; i < selectobject6.length; i++) {
+                if (selectobject6.options[i].value == value)
+                    selectobject6.remove(i);
+            }
         }
     }
 }
+
 
 function submitDiplomaOrder(event) {
     event.preventDefault();
@@ -862,16 +967,23 @@ function submitDiplomaOrder(event) {
         "v5": v5,
         "v6": v6,
     };
-
     fetch('../../api?endpoint=submit_diploma_order', {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
         body: JSON.stringify(values)
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
         .then((data) => {
             var errElem = document.getElementById('message-bar-diploma-order');
             if (!data.success) {
@@ -901,11 +1013,11 @@ function filterActivate() {
         var toAddHidden = false;
         if (i != 0) {
             //sort by name - check if the data in <td> includes inputDataName
-            if (!element.querySelectorAll("td")[2].innerHTML.includes(inputDataName)) {
+            if (!element.querySelectorAll("td")[1].innerHTML.includes(inputDataName)) {
                 toAddHidden = true;
             }
             //sort by fn - check if the data in <td> includes inputDataFn
-            if (!element.querySelectorAll("td")[1].innerHTML.includes(inputDataFn)) {
+            if (!element.querySelectorAll("td")[0].innerHTML.includes(inputDataFn)) {
                 toAddHidden = true;
             }
             element.toggleAttribute("hidden", toAddHidden);
@@ -916,64 +1028,77 @@ function filterActivate() {
     })
 }
 
-
-function exportStudents() {
-    var allStudentsFromTable = [];
-    myTable = document.getElementById("students-table");
-    myTableBody = myTable.getElementsByTagName("tbody")[0];
-    myRow = myTableBody.getElementsByTagName("tr");
-    for (let j = 1; j < myRow.length; j++) {
-        myCell = myRow[j].getElementsByTagName("td");
-        var students = [];
-        for (let i = 0; i < myCell.length - 1; i++) {
-            students.push(myCell[i].innerHTML);
-        }
-        allStudentsFromTable.push(students);
-    }
-}
-
 function downloadExportedStudents(event) {
     event.preventDefault();
     let form = document.getElementById("export_files_student");
     let fileFormat = form.format.value;
-
-    values = { "format": fileFormat }
-    if (fileFormat !== 'pdf' && fileFormat !== 'no') {
-        fetch('../../api?endpoint=export_students', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(values)
-        })
-            .then(response => response.text())
-            .then(response => {
-
-                const blob = new Blob([response], { type: "application/octet-stream" });
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.download = "data.".concat(fileFormat);
-                link.click();
-                link.remove();
-            });
+    let errElem = document.getElementById('message-bar-export-student');
+    if (fileFormat === 'no') {
+        errElem.classList.remove(['success']);
+        errElem.classList.add(['error']);
+        errElem.innerHTML = "Не сте избрали файлов формат!"
     }
-    else if (fileFormat === 'pdf') {
-        fetch('../../api?endpoint=export_students', {
-            method: 'POST',
-            body: JSON.stringify(values)
-        })
-            .then(response => response.blob())
-            .then(blob => {
-                var link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = "students.pdf";
+    else {
+        errElem.classList.remove(['error']);
+        errElem.innerHTML = "";
+        values = { "format": fileFormat }
+        if (fileFormat !== 'pdf') {
+            fetch('../../api?endpoint=export_students', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(values)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.text()
+                    }
+                    else {
+                        localStorage.removeItem('token');
+                        window.location.replace("../../");
+                    }
+                })
+                .then(data => {
 
-                document.body.appendChild(link);
-                link.click();
+                    const blob = new Blob([data], { type: "application/octet-stream" });
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "students.".concat(fileFormat);
+                    link.click();
+                    link.remove();
+                });
+        }
+        else {
+            fetch('../../api?endpoint=export_students', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(values)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob()
+                    }
+                    else {
+                        localStorage.removeItem('token');
+                        window.location.replace("../../");
+                    }
+                })
+                .then(blob => {
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = "students.pdf";
 
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(link.href);
-            });
+                    document.body.appendChild(link);
+                    link.click();
+
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(link.href);
+                });
+        }
     }
 }
 
@@ -981,44 +1106,393 @@ function downloadExportedUsers(event) {
     event.preventDefault();
     let form = document.getElementById("export_files_users");
     let fileFormat = form.format.value;
-
-    values = { "format": fileFormat }
-    if (fileFormat !== 'pdf' && fileFormat !== 'no') {
-        fetch('../../api?endpoint=export_users', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(values)
-        })
-            .then(response => response.text())
-            .then(response => {
-
-                const blob = new Blob([response], { type: "application/octet-stream" });
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.download = "data.".concat(fileFormat);
-                link.click();
-                link.remove();
-            });
+    let errElem = document.getElementById('message-bar-export-users');
+    if (fileFormat === 'no') {
+        errElem.classList.remove(['success']);
+        errElem.classList.add(['error']);
+        errElem.innerHTML = "Не сте избрали файлов формат!"
     }
-    else if (fileFormat === 'pdf') {
-        fetch('../../api?endpoint=export_users', {
-            method: 'POST',
-            body: JSON.stringify(values)
-        })
-            .then(response => response.blob())
-            .then(blob => {
-                var link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = "users.pdf";
+    else {
+        errElem.classList.remove(['error']);
+        errElem.innerHTML = "";
+        values = { "format": fileFormat }
+        if (fileFormat !== 'pdf') {
+            fetch('../../api?endpoint=export_users', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(values)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.text()
+                    }
+                    else {
+                        localStorage.removeItem('token');
+                        window.location.replace("../../");
+                    }
+                })
+                .then(data => {
 
-                document.body.appendChild(link);
-                link.click();
 
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(link.href);
-            });
+                    const blob = new Blob([data], { type: "application/octet-stream" });
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "users.".concat(fileFormat);
+                    link.click();
+                    link.remove();
+                });
+        }
+        else {
+            fetch('../../api?endpoint=export_users', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(values)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob();
+                    }
+                    else {
+                        localStorage.removeItem('token');
+                        window.location.replace("../../");
+                    }
+                })
+                .then(blob => {
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = "users.pdf";
+
+                    document.body.appendChild(link);
+                    link.click();
+
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(link.href);
+                });
+        }
+    }
+}
+
+function downloadExportedGraduated(event) {
+    event.preventDefault();
+    let form = document.getElementById("export_graduated");
+    let fileFormat = form.format.value;
+    let errElem = document.getElementById('message-bar-export-graduated');
+    if (fileFormat === 'no') {
+        errElem.classList.remove(['success']);
+        errElem.classList.add(['error']);
+        errElem.innerHTML = "Не сте избрали файлов формат!"
+    }
+    else {
+        errElem.classList.remove(['error']);
+        errElem.innerHTML = "";
+        values = { "format": fileFormat }
+        if (fileFormat !== 'pdf') {
+            fetch('../../api?endpoint=export_graduated', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(values)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    }
+                    else {
+                        localStorage.removeItem('token');
+                        window.location.replace("../../");
+                    }
+                })
+                .then(data => {
+
+                    const blob = new Blob([data], { type: "application/octet-stream" });
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "graduated.".concat(fileFormat);
+                    link.click();
+                    link.remove();
+                });
+        }
+        else {
+            fetch('../../api?endpoint=export_graduated', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(values)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob();
+                    }
+                    else {
+                        localStorage.removeItem('token');
+                        window.location.replace("../../");
+                    }
+                })
+                .then(blob => {
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = "graduated.pdf";
+
+                    document.body.appendChild(link);
+                    link.click();
+
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(link.href);
+                });
+        }
+    }
+}
+
+function downloadExcellentStudent(event) {
+    event.preventDefault();
+    let form = document.getElementById("export_excellent");
+    let fileFormat = form.format.value;
+    let errElem = document.getElementById('message-bar-export-excellent');
+    if (fileFormat === 'no') {
+        errElem.classList.remove(['success']);
+        errElem.classList.add(['error']);
+        errElem.innerHTML = "Не сте избрали файлов формат!"
+    }
+    else {
+        errElem.classList.remove(['error']);
+        errElem.innerHTML = "";
+        values = { "format": fileFormat }
+        if (fileFormat !== 'pdf') {
+            fetch('../../api?endpoint=export_excellent', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(values)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    }
+                    else {
+                        localStorage.removeItem('token');
+                        window.location.replace("../../");
+                    }
+                })
+                .then(data => {
+
+                    const blob = new Blob([data], { type: "application/octet-stream" });
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "excellent.".concat(fileFormat);
+                    link.click();
+                    link.remove();
+                });
+        }
+        else {
+            fetch('../../api?endpoint=export_excellent', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(values)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob();
+                    }
+                    else {
+                        localStorage.removeItem('token');
+                        window.location.replace("../../");
+                    }
+                })
+                .then(blob => {
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = "excellent.pdf";
+
+                    document.body.appendChild(link);
+                    link.click();
+
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(link.href);
+                });
+        }
+    }
+}
+
+var cPrev = -1;
+function sortByGraduated(c) {
+    let rows = document.getElementById("diploma-table").rows.length;
+    let columns = document.getElementById("diploma-table").rows[0].cells.length;
+    let arrTable = new Array(rows);
+    for (let i = 0; i < arrTable.length; i++) {
+        arrTable[i] = new Array(columns);
+    }
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < columns; col++) {
+            arrTable[row][col] = document.getElementById("diploma-table").rows[row].cells[col].innerHTML;
+        }
+    }
+    let firstLine = arrTable.shift();
+
+    if (c !== cPrev) {
+        arrTable.sort(
+            function (a, b) {
+                if (a[c] === b[c]) {
+                    return 0;
+                } else {
+                    return (a[c] < b[c]) ? -1 : 1;
+                }
+            }
+        );
+    } else {
+        arrTable.reverse();
+    }
+    cPrev = c;
+    arrTable.unshift(firstLine);
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < columns; col++) {
+            document.getElementById("diploma-table").rows[row].cells[col].innerHTML = arrTable[row][col];
+        }
+    }
+}
+
+function sortByUsers(c) {
+    let rows = document.getElementById("users-table").rows.length;
+    let columns = document.getElementById("users-table").rows[0].cells.length;
+    let arrTable = new Array(rows);
+    for (let i = 0; i < arrTable.length; i++) {
+        arrTable[i] = new Array(columns);
+    }
+    for (let row = 0; row < rows; row++) {
+        for (col = 0; col < columns; col++) {
+            arrTable[row][col] = document.getElementById("users-table").rows[row].cells[col].innerHTML;
+        }
+    }
+    let firstLine = arrTable.shift();
+
+    if (c !== cPrev) {
+        arrTable.sort(
+            function (a, b) {
+                if (a[c] === b[c]) {
+                    return 0;
+                } else {
+                    return (a[c] < b[c]) ? -1 : 1;
+                }
+            }
+        );
+    } else {
+        arrTable.reverse();
+    }
+    cPrev = c;
+    arrTable.unshift(firstLine);
+    for (let row = 0; row < rows; row++) {
+        for (col = 0; col < columns; col++) {
+            document.getElementById("users-table").rows[row].cells[col].innerHTML = arrTable[row][col];
+        }
+    }
+}
+
+function sortByStudents(c) {
+    let rows = document.getElementById("students-table").rows.length;
+    let columns = document.getElementById("students-table").rows[0].cells.length;
+    let arrTable = new Array(rows);
+    for (let i = 0; i < arrTable.length; i++) {
+        arrTable[i] = new Array(columns);
+    }
+    for (let row = 0; row < rows; row++) {
+        for (col = 0; col < columns; col++) {
+            arrTable[row][col] = document.getElementById("students-table").rows[row].cells[col].innerHTML;
+        }
+    }
+    let firstLine = arrTable.shift();
+
+    if (c !== cPrev) {
+        arrTable.sort(
+            function (a, b) {
+                if (a[c] === b[c]) {
+                    return 0;
+                } else {
+                    return (a[c] < b[c]) ? -1 : 1;
+                }
+            }
+        );
+    } else {
+        arrTable.reverse();
+    }
+    cPrev = c;
+    arrTable.unshift(firstLine);
+    for (let row = 0; row < rows; row++) {
+        for (col = 0; col < columns; col++) {
+            document.getElementById("students-table").rows[row].cells[col].innerHTML = arrTable[row][col];
+        }
+    }
+}
+
+function sortByEdit(c) {
+    let rows = document.getElementById('edit-students-table').rows.length;
+    let columns = document.getElementById('edit-students-table').rows[0].cells.length;
+    let arrTable = new Array(rows);
+    for (let i = 0; i < arrTable.length; i++) {
+        arrTable[i] = new Array(columns);
+    }
+    for (let row = 0; row < rows; row++) {
+        for (col = 0; col < columns; col++) {
+            arrTable[row][col] = document.getElementById('edit-students-table').rows[row].cells[col].innerHTML;
+        }
+    }
+    let firstLine = arrTable.shift();
+
+    if (c !== cPrev) {
+        arrTable.sort(
+            function (a, b) {
+                if (a[c] === b[c]) {
+                    return 0;
+                } else {
+                    return (a[c] < b[c]) ? -1 : 1;
+                }
+            }
+        );
+    } else {
+        arrTable.reverse();
+    }
+    cPrev = c;
+    arrTable.unshift(firstLine);
+    for (let row = 0; row < rows; row++) {
+        for (col = 0; col < columns; col++) {
+            document.getElementById('edit-students-table').rows[row].cells[col].innerHTML = arrTable[row][col];
+        }
+    }
+}
+
+function searchInTable() {
+    const table = document.getElementById('diploma-table');
+    const input = document.getElementById('search');
+    const filter = input.value.toUpperCase();
+
+    let txtValue;
+    const rows = table.rows.length;
+    const columns = table.rows[0].cells.length;
+
+    let tr = table.getElementsByTagName('tr');//all rows
+    for (let row = 1; row < rows; row++) {
+        let td = tr[row].getElementsByTagName('td');//all columns of each row
+        for (let col = 0; col < columns; col++) {
+            if (td) {
+                txtValue = td[col].textContent || td[col].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[row].style.display = "";
+                    break;
+                } else {
+                    tr[row].style.display = "none";
+                }
+            }
+        }
     }
 }
 

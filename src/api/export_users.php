@@ -1,16 +1,25 @@
 <?php
 
 $data = (array) $data;
+
+include_once '../src/utils/JWTUtils.php';
+include_once '../src/database/db_conf.php';
+
+validateJWT($jwt, ["admin", "moderator"]);
 if (isset($data["format"])) {
-    include_once '../src/database/db_conf.php';
+
     $format = $data["format"];
     $name = "users." . $format;
+
     $database = new Db();
     $conn = $database->getConnection();
+
     $stmt = $conn->prepare("SELECT name, email, phone, role FROM `user` 
     WHERE role='admin' or role in ('moderator-hat', 'moderator-gown', 'moderator-signature');");
     $stmt->execute();
+
     if ($format !== 'pdf' && $format !== 'no') {
+
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename="' . basename($name));
         $output = fopen($name, "w");
@@ -25,10 +34,13 @@ if (isset($data["format"])) {
             }
             fputcsv($output, $row);
         }
+        
         fclose($output);
         readfile($name);
         unlink($name);
+
     } else if ($format === 'pdf') {
+
         require_once('../src/lib/tcpdf/tcpdf.php');
         $data = json_decode(file_get_contents('php://input'), true);
 

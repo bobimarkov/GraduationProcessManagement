@@ -4,14 +4,16 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 
 include_once '../src/database/db_conf.php';
+include_once '../src/utils/JWTUtils.php';
 
 
 $data_array = array();
 $errors = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    validateJWT($jwt, ["admin"]);
+    
     $data = json_decode(file_get_contents("php://input"));
-    // var_dump($data);
 
     foreach ($data as $k => $v) {
         switch ($k) {

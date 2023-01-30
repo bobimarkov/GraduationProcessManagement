@@ -4,10 +4,13 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 
 include_once '../src/database/db_conf.php';
+include_once '../src/utils/JWTUtils.php';
 
 $data_array = array();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    validateJWT($jwt, ["admin"]);
+
     $data = json_decode(file_get_contents("php://input"));
 
     foreach ($data as $k => $v) {
@@ -148,7 +151,7 @@ function updateUserToDB($fns, $column_name, $content) {
         $success = $update_stmt->execute(["fn" => $fn]);
     }
     if ($success) {
-        $response = array("success" => true, "message" => "Промените са запаметени успешно. Моля, презаредете страницата, за да ги видите.");
+        $response = array("success" => true, "message" => "Промените са запаметени успешно.");
         echo json_encode($response);
         die;
     }
