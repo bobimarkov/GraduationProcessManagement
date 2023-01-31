@@ -23,24 +23,7 @@ body {
     box-shadow: 5px 5px 20px darkslategray;
 }
 
-.long-submit-button {
-    margin-top: 1em;
-    height: 2.5em;
-    width: 100%;
-    border-radius: 5px;
-    border: 1px solid #006199;
-    cursor: pointer;
-    background-color: snow;
-    font-weight: bold;
-    color: darkslategray;
-    font-size: medium;
-}
-
-.long-submit-button:hover {
-    background-color: #006199;
-    color: snow;
-}
-
+.long-submit-button,
 .submit-button-users {
     margin-top: 1em;
     height: 2.5em;
@@ -54,7 +37,8 @@ body {
     font-size: medium;
 }
 
-.submit-button-users:hover {
+.long-submit-button:hover,
+.submit-button-users:hover  {
     background-color: #006199;
     color: snow;
 }

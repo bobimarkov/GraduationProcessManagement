@@ -304,6 +304,8 @@ function showMessagesSection() {
     tokenRefresher();
     showGivenSection("messages_send_section");
     activeHeader("messages_header");
+    getMessages();
+
     let errElem = document.getElementById('message-bar-export-message');
     errElem.classList.remove(['success']);
     errElem.classList.remove(['error']);
@@ -1740,6 +1742,40 @@ function getGraduationInfo() {
                 buildGradTable(data.graduation_time);
             }
         })
+}
+
+function getMessages() {
+    let notifications = document.getElementById("notifications");
+    fetch('../../api?endpoint=get_messages', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            notifications.style.display = "block";
+            if (!data.success) {
+                let text = document.createElement("p");
+                text.innerHTML = "В момента нямате никакви известия.";
+                notifications.appendChild(text);
+            } else {
+                for (let i = 0; i < data.order.length; i++) {   
+                    let text = document.createElement("p");                 
+                    text.innerHTML = `${i + 1})От ${data.order[i].sender} - ${data.order[i].message}`;
+                    notifications.appendChild(text);
+                }
+            }
+        });
 }
 
 /*--------------------------------------------------------------------ARCHIVE----------------------------------------------------------------------------------------*/
