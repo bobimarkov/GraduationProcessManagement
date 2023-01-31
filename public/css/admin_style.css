@@ -41,6 +41,24 @@ body {
     color: snow;
 }
 
+.submit-button-users {
+    margin-top: 1em;
+    height: 2.5em;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #006199;
+    cursor: pointer;
+    background-color: snow;
+    font-weight: bold;
+    color: darkslategray;
+    font-size: medium;
+}
+
+.submit-button-users:hover {
+    background-color: #006199;
+    color: snow;
+}
+
 .form-input {
     width: 100%;
 }
@@ -74,6 +92,15 @@ textarea {
 .dashboard-action:active,
 .boolean-select-after-select:active {
     outline: none;
+}
+
+#textarea-fn {
+    width: 100%;
+}
+
+#message {
+    height: 20em !important;
+    width: 100%;
 }
 
 .dashboard {
@@ -124,7 +151,7 @@ textarea {
     background-color: snow;
     font-weight: bold;
     color: darkslategray;
-    font-size: medium;
+    font-size: 1vw;
 }
 
 .submit-action:hover {
@@ -453,6 +480,16 @@ h3 {
     color: #2f4f4f;
 }
 
+h4 {
+    margin-top: 0 !important;
+    padding: 5px;
+    border-radius: 5px;
+    width: 100%;
+    background: rgba(247, 241, 241, 0.603);
+    text-decoration: none;
+    color: #2f4f4f;
+}
+
 #diploma_section>h3 {
     margin-bottom: 0;
 }
@@ -570,7 +607,8 @@ svg {
 }
 
 .custom-file-upload:hover,
-#export-excellent:hover {
+#export-excellent:hover,
+#add-grad-info:hover {
     background-color: #006199;
     color: snow;
 }
@@ -599,4 +637,43 @@ svg {
     font-size: 1.2em;
     border-radius: 10px;
     font-family: monospace;
+}
+
+#textarea {
+    display: grid;
+}
+
+.settings {
+    margin-top: 1.5rem;
+    height: 70%;
+    width: 19%;
+    background-color: rgb(235, 238, 241);
+    border: 1px solid darkslategray;
+    border-radius: 5px;
+    padding: 5px;
+    box-sizing: border-box;
+    font: 1vw sans-serif;
+    cursor: pointer;
+}
+
+.input {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#info-graduation-table > tbody{
+    display: inline-table;
+    width: 100%;
+}
+
+#add-grad-info {
+    width: 100% !important;
+    background-color: snow;
+    font-weight: bold;
+    color: darkslategray;
+}
+
+#for_buttons {
+    display: flex;
+    justify-content: center;
 }

@@ -279,11 +279,11 @@ function getStudentData() {
                 document.getElementById("users_header").innerHTML = data.users[0].name;
 
                 if (data.users[0].grade < 3) {
-                buildContentForNotGraduatingStudent(data.users[0]);
-            } else {
-                buildContentForGraduatingStudent(data.users[0]);
+                    buildContentForNotGraduatingStudent(data.users[0]);
+                } else {
+                    buildContentForGraduatingStudent(data.users[0]);
+                }
             }
-        }
         })
 }
 
@@ -345,8 +345,9 @@ function buildContentForGraduatingStudent(user) {
         }
     } else {
         document.getElementById("speech_request_section").style.display = "none";
-        document.getElementById("no-notifications").style.display = "block";
+        //document.getElementById("no-notifications").style.display = "block";
     }
+    getMessages();
 
     if (user.take_in_advance_request === 0) {
         document.getElementById("request_diploma_in_advance").style.display = "block";
@@ -505,3 +506,39 @@ function displayOrderMessage(data) {
     text = text.slice(0, -1);
     document.getElementById('order_list').innerHTML = text;
 }
+
+
+function getMessages() {
+    let notifications = document.getElementById("no-notifications");
+    fetch('../../api?endpoint=get_messages', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            notifications.style.display = "block";
+            if (!data.success) {
+                par.innerHTML = "В момента нямате никакви известия.";
+
+            } else {
+                for (let i = 0; i < data.order.length; i++) {
+                    let text = document.createElement("p");
+                    text.innerHTML = `${i + 1})От ${data.order[i].sender} - ${data.order[i].message}`;
+                    notifications.appendChild(text);
+                }
+            }
+        });
+}
+
+

@@ -11,7 +11,7 @@ $data_array = array();
 $users_data = "";
 session_start();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     validateJWT($jwt, ["admin"]);
 
     $data = json_decode(file_get_contents("php://input"));

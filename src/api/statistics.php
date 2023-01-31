@@ -8,7 +8,7 @@ include_once '../src/utils/JWTUtils.php';
 
 $errors = array();
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    validateJWT($jwt, ["admin", "moderator-hat","moderator-gown","moderator-signature", "student"]);
+    validateJWT($jwt, ["admin", "moderator"]);
 
     if ($errors) {
         $response = array("success" => false, "errors:" => json_encode($errors, JSON_UNESCAPED_UNICODE));
@@ -18,12 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $database = new Db();
         $conn = $database->getConnection();
 
-
-        $order_stmt = $conn->prepare("SELECT student_diploma.*, user.email
-                                    FROM student_diploma
-                                    RIGHT JOIN student ON student.fn = student_diploma.student_fn 
-                                    RIGHT JOIN user ON user.id = student.user_id 
-                                    WHERE role='student' and grade >= 3");
+        $order_stmt = $conn->prepare("SELECT major, grade, degree, has_right
+                                      FROM student_diploma
+                                      JOIN student ON student.fn = student_diploma.student_fn");
         $order_stmt->execute();
         $rows = $order_stmt->fetchAll();
 
@@ -32,3 +29,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         http_response_code(200);
     }
 }
+
+?>

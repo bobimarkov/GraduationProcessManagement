@@ -138,47 +138,11 @@ create table moderator_range (
 ALTER TABLE `moderator_range` ADD INDEX(`email`);
 ALTER TABLE `moderator_range` ADD CONSTRAINT `student_fn_fk_11` FOREIGN KEY (`email`) REFERENCES `user`(`email`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+CREATE TABLE `messages` (
+    `id` INT NOT NULL AUTO_INCREMENT , 
+    `sender` VARCHAR(99) NOT NULL ,
+    `recipient` VARCHAR(99) NOT NULL ,
+    `message` TEXT NOT NULL,
+    PRIMARY KEY(`id`)
+) ENGINE = InnoDB;
 

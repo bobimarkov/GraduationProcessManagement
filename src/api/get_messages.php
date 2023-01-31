@@ -11,20 +11,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     $database = new Db();
     $conn = $database->getConnection();
-    $stmt = $conn->prepare("SELECT * 
-                            FROM graduation_colors");
-    $stmt->execute();
+    $stmt = $conn->prepare("SELECT id, sender, message 
+                            FROM messages
+                            where recipient = :recipient");
+
+    $recipient = getUserEmailFromJWT($jwt);
+
+    $stmt->execute(["recipient" => $recipient]);
 
     $rows = $stmt->fetchAll();
 
-    if(count($rows) != 1) {
-        $response = array("success" => false, "message" => "Все още няма зададени цветове.");
+    if(count($rows) == 0) {
+        $response = array("success" => false, "message" => "В момента нямате никакви известия.");
         echo json_encode($response);
-        http_response_code(404);
+        http_response_code(200);
         die;
     }
 
-    $response = array("success" => true, "graduation_colors" => $rows);
+    $response = array("success" => true, "order" => $rows);
     echo json_encode($response);
     http_response_code(200);
 }

@@ -1,9 +1,7 @@
-aspasov@gmail.com        , Password1, Атанас Иванов Спасов 	 		 , 0880102047, student, 81829, М, х, 1, 5.66
-dpavlova@gmail.com       , Password1, Доротея Красимирова Павлова 	 , 0880102048, student, 81830, М, х, 1, 4.20
-mtsankova@gmail.com      , Password1, Мария Петрова Цанкова 	 	 , 0880102049, student, 81831, М, х, 1, 3.22
+
 atrendafilova@gmail.com  , Password1, Алекс Иванова Трендафилова 	 , 0880102040, student, 81832, М, х, 1, -
-ptsvetkova@gmail.com     , Password1, Полина Тодорова Цветкова 	 	 , 0880102061, student, 81833, М, х, 1, 6.00
-ttsvetkov@gmail.com      , Password1, Тодор Тодоров Цветков 	 	 , 0880102062, student, 81834, М, х, 1, 5.10
-tboyadzhiev@gmail.com    , Password1, Трифон Петров Бояджиев 	 	 , 0880102063, student, 81835, Д, х, 1, 5.81
-dovcharov@gmail.com      , Password1, Димитър Божидаров Овчаров 	 , 0880102064, student, 81836, Д, х, 1, 4.22
+dkozhuharev@gmail.com    , Password1, Данаил Трендафилов Кожухарев   , 0880102051, student, 81823, Б, С, 2, 2.00
+dtopolov@gmail.com       , Password1, Димитър Ивайлов Тополов 	     , 0880102052, student, 81822, Б, С, 2, -
 vyankova@gmail.com       , Password1, Василена Стоянова Янкова 	 	 , 0880102065, student, 81837, Д, х, 1, -
+vgeorgieva@gmail.com     , Password1, Велислава Добромирова Георгиева, 0880102037, student, 81809, Б, КН, 8, 2.00
+gatanasov@gmail.com      , Password1, Георги Петров Атанасов         , 0880102038, student, 81800, Б, СИ, 7, 2.00

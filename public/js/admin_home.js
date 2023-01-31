@@ -3,6 +3,9 @@ showDiplomaSection();
 getAllUsers();
 getAllStudents();
 getStudentsDiplomaInfo();
+getGraduationInfo();
+makeArchive();
+getClasses();
 // Load google charts
 google.charts.load('current', { 'packages': ['corechart'] });
 
@@ -78,10 +81,10 @@ function buildUsersTable(data) {
             user.email,
             user.phone,
             user.role == 'admin' ? '<i class="fas fa-user-lock user-role-icon"></i>' :
-            user.role == 'moderator-hat' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-graduation-cap user-role-icon"></i>' :
-            user.role == 'moderator-gown' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-tshirt user-role-icon"></i>' :
-            user.role == 'moderator-signature' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-pen user-role-icon"></i>' :
-            '<i class="fas fa-user-graduate user-role-icon"></i>'
+                user.role == 'moderator-hat' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-graduation-cap user-role-icon"></i>' :
+                    user.role == 'moderator-gown' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-tshirt user-role-icon"></i>' :
+                        user.role == 'moderator-signature' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-pen user-role-icon"></i>' :
+                            '<i class="fas fa-user-graduate user-role-icon"></i>'
         ];
         const number_columns = row_data.length;
         for (var j = 0; j < number_columns; j++) {
@@ -271,7 +274,7 @@ function showUsers() {
     showGivenSection("users_section");
     activeHeader("users_header");
 
-    var errElem = document.getElementById('message-bar-users');
+    let errElem = document.getElementById('message-bar-users');
     errElem.classList.remove(['success']);
     errElem.classList.remove(['error']);
     errElem.innerHTML = "";
@@ -282,8 +285,8 @@ function showStudents() {
     tokenRefresher();
     showGivenSection("students_section");
     activeHeader("students_header");
-    getAllStudents();
-    var errElem = document.getElementById('message-bar-students');
+
+    let errElem = document.getElementById('message-bar-students');
     errElem.classList.remove(['success']);
     errElem.classList.remove(['error']);
     errElem.innerHTML = "";
@@ -297,13 +300,35 @@ function showEditSection() {
     getAllUsers();
 }
 
+function showMessagesSection() {
+    tokenRefresher();
+    showGivenSection("messages_send_section");
+    activeHeader("messages_header");
+    let errElem = document.getElementById('message-bar-export-message');
+    errElem.classList.remove(['success']);
+    errElem.classList.remove(['error']);
+    errElem.innerHTML = "";
+}
+
+function showSettingsSection() {
+    tokenRefresher();
+    showGivenSection("settings_section");
+    activeHeader("settings_header");
+    getGraduationInfo();
+
+    let errElem = document.getElementById('message-add-graduation-info');
+    errElem.classList.remove(['success']);
+    errElem.classList.remove(['error']);
+    errElem.innerHTML = "";
+
+}
 
 function showAnalyticsSection() {
     tokenRefresher();
     showGivenSection("analytic_section");
     activeHeader("analytic_header");
 
-    fetch(`../../api?endpoint=get_students_diploma`, {
+    fetch(`../../api?endpoint=statistics`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -329,10 +354,10 @@ function showAnalyticsSection() {
                 let studentGradeData = dataGradesToArray(data);
                 let studentDegreeData = dataDegreeToArray(data);
                 let studentHasRightData = dataHasRightToArray(data);
-                google.charts.setOnLoadCallback(drawChart(studentMajorData, "analytics1", "Брой стундети с дадена специалност"));
+                google.charts.setOnLoadCallback(drawChart(studentMajorData, "analytics1", "Брой студенти от дадена специалност със степен 'Бакалавър'"));
                 google.charts.setOnLoadCallback(drawChart(studentGradeData, "analytics2", "Брой студенти с дадени оценки"));
                 google.charts.setOnLoadCallback(drawChart(studentDegreeData, "analytics3", "Брой студенти с дадени степени на образование"));
-                google.charts.setOnLoadCallback(drawChart(studentHasRightData, "analytics4", "Студенти имащи право на диплома"));
+                google.charts.setOnLoadCallback(drawChart(studentHasRightData, "analytics4", "Студенти, имащи право на диплома"));
             }
         })
 }
@@ -370,10 +395,14 @@ function showGivenSection(sectionToBeDisplayed) {
         'excellent_order',
         'diploma_order_section',
         'distribute_moderators',
-        'analytic_section'];
+        'analytic_section',
+        'messages_send_section',
+        'messages_receive_section',
+        'settings_section',
+        'settings_archive_section'
+    ];
 
     sections = sections.map(x => document.getElementById(x));
-
 
     //iterate all sections
     //make all style.display = "none"
@@ -385,7 +414,6 @@ function showGivenSection(sectionToBeDisplayed) {
 
             sections[i].style.display = 'grid';
         }
-
     }
 
     //the corner cases for flex and make 2 grids at the same time
@@ -397,7 +425,14 @@ function showGivenSection(sectionToBeDisplayed) {
         sections[5].style.display = 'grid';
         sections[6].style.display = 'grid';
     }
-
+    else if (sectionToBeDisplayed.localeCompare(sections[8].id) == 0) {
+        sections[8].style.display = 'grid';
+        sections[9].style.display = 'grid';
+    }
+    else if (sectionToBeDisplayed.localeCompare(sections[10].id) == 0) {
+        sections[10].style.display = 'grid';
+        sections[11].style.display = 'grid';
+    }
 }
 
 /*---- SWITCH_SECTIONS  END ----*/
@@ -408,7 +443,9 @@ function activeHeader(elementId) {
         'edit_header',
         'students_header',
         'diploma_header',
-        'analytic_header'];
+        'analytic_header',
+        'messages_header',
+        'settings_header'];
 
     headers = headers.map(x => document.getElementById(x));
 
@@ -466,7 +503,7 @@ function dataDegreeToArray(data) {
 }
 
 function dataGradesToArray(data) {
-    const a = [["Оценка", "Брой студенти с такава оценка"], ["[2-3)", 0], ["[3,4)", 0], ["[4,5)", 0], ["[5,6]", 0]];
+    const a = [["Оценка", "Брой студенти с такава оценка"], ["[2,3)", 0], ["[3,4)", 0], ["[4,5)", 0], ["[5,6]", 0]];
     let rows = data.users;
     rows.forEach(row_data => {
         if (row_data.grade >= 2 && row_data.grade < 3) {
@@ -485,7 +522,7 @@ function dataGradesToArray(data) {
 
 function dataMajorToArray(data) {
 
-    const a = [["Специалност", "Брой студенти"], ["СИ", 0], ["КН", 0], ["ИС", 0], ["И", 0], ["М", 0], ["С", 0], ["х", 0]];
+    const a = [["Специалност", "Брой студенти"], ["СИ", 0], ["КН", 0], ["ИС", 0], ["И", 0], ["М", 0], ["С", 0]];
 
     let rows = data.users;
     rows.forEach(row_data => {
@@ -507,9 +544,6 @@ function dataMajorToArray(data) {
                 break;
             case 'С':
                 a[6][1]++;
-                break;
-            default:
-                a[7][1]++;
                 break;
         }
     });
@@ -678,7 +712,6 @@ document.getElementById('fileStudent').addEventListener('change', function () {
 });
 
 function editStudent(event) {
-
     event.preventDefault;
     var form = document.getElementById("edit_students_form");
     var usersData = form.editStudentTextarea.value;
@@ -744,7 +777,7 @@ function submitStudentHelper(bodyData) {
                 errElem.classList.add(['success']);
                 errElem.innerHTML = data.message;
                 document.getElementById("studentTextarea").value = "";
-                showStudents();
+                getAllStudents();
             }
         });
 }
@@ -756,7 +789,6 @@ function submitStudents(event) {
     var studentsData = form.studentTextarea.value;
 
     submitStudentHelper(JSON.stringify(studentsData));
-
 }
 
 function submitStudentsFromFile(event) {
@@ -816,6 +848,48 @@ function submitAction(event) {
                 document.getElementById("textarea_after_select").style.display = 'none';
                 document.getElementById("boolean_select_after_select").selectedIndex = null;
                 document.getElementById("boolean_select_after_select").style.display = 'none';
+            }
+        });
+}
+
+function sendMessage(event) {
+    event.preventDefault();
+    let fns = document.getElementById('textarea-fn');
+    let message = document.getElementById('message');
+
+    let actions = {
+        "fns": fns.value,
+        "message": message.value
+    };
+    fetch('../../api?endpoint=send_message', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(actions)
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            var errElem = document.getElementById('message-bar-export-message');
+            if (!data.success) {
+                errElem.classList.remove(['success']);
+                errElem.classList.add(['error']);
+                errElem.innerHTML = data.message;
+            } else {
+                errElem.classList.remove(['error']);
+                errElem.classList.add(['success']);
+                errElem.innerHTML = data.message;
+                fns.value = "";
+                message.value = "";
             }
         });
 }
@@ -1062,7 +1136,6 @@ function downloadExportedStudents(event) {
                     }
                 })
                 .then(data => {
-
                     const blob = new Blob([data], { type: "application/octet-stream" });
                     const link = document.createElement("a");
                     link.href = URL.createObjectURL(blob);
@@ -1497,14 +1570,127 @@ function searchInTable() {
     }
 }
 
-  function distributeModerators() {
+function sendGraduationInfo(event) {
+    event.preventDefault();
+    let time = document.getElementById('start-time');
+    let interval = document.getElementById('students-interval');
+    let date = document.getElementById('graduation-date');
+    let place = document.getElementById('graduation-place');
+    let classes = document.getElementById('class');
+    let errElem = document.getElementById('message-add-graduation-info');
+
+    if (time.value != "" && interval.value != "" && date.value != "" && place.value != "" && classes.value != "") {
+        let reg1 = /^(0?[0-9]|[01][0-9]|2[0-3]):[0-5][0-9]$/;
+        if (!reg1.test(time.value)) {
+            errElem.classList.remove(['success']);
+            errElem.classList.add(['error']);
+            errElem.innerHTML = "Грешка: Некоректен формат на началния час! Трябва да е 'час:минути'!";
+            return;
+        }
+        let reg2 = /^(0?[0-9]|[0-5][0-9]):?([0-5]?[0-9]?)$/;
+        if (!reg2.test(interval.value)) {
+            errElem.classList.remove(['success']);
+            errElem.classList.add(['error']);
+            errElem.innerHTML = "Грешка: Некоректен формат на интервала! Трябва да е 'минути:секунди'!";
+            return;
+        }
+        let d = new Date(date.value);
+        let year = d.getFullYear();
+        if (parseInt(classes.value) + 1 != year) {
+            errElem.classList.remove(['success']);
+            errElem.classList.add(['error']);
+            errElem.innerHTML = "Грешка: Дипломирането е една година след годината на завършване!";
+            return;
+        }
+        let today = new Date().toISOString().slice(0, 10);
+        if (d.toISOString().slice(0, 10) < today) {
+            var text = "Сигурни ли сте, че искате да направите тази промяна? Вие сте задали минала дата и това автоматично ще премахне студентите от текущите таблици и ще ги прехвърли в архива!";
+        }
+        else {
+            var text = "Сигурни ли сте, че искате да направите тази промяна?";
+        }
+        if (confirm(text) == true) {
+            let action = {
+                "start_time": time.value,
+                "students_interval": interval.value,
+                "graduation_date": date.value,
+                "graduation_place": place.value,
+                "class": classes.value
+            };
+
+            fetch('../../api?endpoint=add_graduation_info', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(action)
+            })
+                .then(response => {
+                    if (response.ok)
+                        return response.json()
+                    else {
+                        localStorage.removeItem('token');
+                        window.location.replace("../../");
+                    }
+                })
+                .then((data) => {
+                    if (!data.success) {
+                        errElem.classList.remove(['success']);
+                        errElem.classList.add(['error']);
+                        errElem.innerHTML = data.message;
+                    } else {
+                        errElem.classList.remove(['error']);
+                        errElem.classList.add(['success']);
+                        errElem.innerHTML = data.message;
+                        time.value = "";
+                        interval.value = "";
+                        date.value = "";
+                        place.value = "";
+                        classes.value = "";
+                        getGraduationInfo();
+                        makeArchive();
+                    }
+                });
+        }
+    }
+    else {
+        errElem.classList.remove(['success']);
+        errElem.classList.add(['error']);
+        errElem.innerHTML = "Моля, попълнете всички полета!";
+    }
+}
+
+function buildGradTable(data) {
+    var table = document.getElementById("info-graduation-table");
+
+    table.innerHTML = '<tr> <td>Начален час</td> <td>Интервал между студентите</td> <td>Дата на дипломирането</td> <td>Място на дипломирането</td> <td>Година на завършване</td> </tr>';
+    let i = 1;
+    let row = table.insertRow(i);
+    let row_data = [
+        data[0].start_time,
+        data[0].students_interval,
+        data[0].graduation_date,
+        data[0].graduation_place,
+        data[0].class
+    ];
+    const number_columns = row_data.length;
+    for (let j = 0; j < number_columns; j++) {
+        row.insertCell(j).innerHTML = row_data[j];
+    }
+}
+
+
+function distributeModerators() {
     fetch('../../api?endpoint=edit_student_moderators', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
-        }})
+        }
+    })
         .then(response => {
             if (response.ok)
                 return response.json()
@@ -1527,5 +1713,120 @@ function searchInTable() {
                 errElem.innerHTML = data.success;
             }
         })
-        .finally(() => {});
-  }
+        .finally(() => { });
+}
+
+function getGraduationInfo() {
+    fetch(`../../api?endpoint=get_graduation_time`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            if (!data.success) {
+                console.log(data.message);
+            } else {
+                buildGradTable(data.graduation_time);
+            }
+        })
+}
+
+/*--------------------------------------------------------------------ARCHIVE----------------------------------------------------------------------------------------*/
+
+function makeArchive() {
+    fetch('../../api?endpoint=make_archive', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+    })
+        .then(response => response.json())
+        .then((data) => {
+            if (!data.success) {
+                //console.log(data.message);
+            } else {
+                getClasses();
+            }
+        });
+}
+
+
+function getClasses() {
+    fetch(`../../api?endpoint=get_archive_classes`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            if (!data.success) {
+                console.log(data.message);
+            } else {
+                let div = document.getElementById('for_buttons');
+                while (div.firstChild) {
+                    div.removeChild(div.firstChild);
+                }
+                for (let i = 0; i < data.class.length; i++) {
+                    let button = document.createElement('button');
+                    let text = document.createTextNode(data.class[i].class);
+                    button.appendChild(text);
+                    button.setAttribute("id", "but" + data.class[i].class)
+                    button.setAttribute("class", "submit-action");
+                    button.onclick = function (event) { downloadArchive(event, data.class[i].class); }
+                    div.appendChild(button);
+                }
+            }
+        })
+}
+
+
+function downloadArchive(event, id) {
+    event.preventDefault();
+    let values = { "id": id };
+    fetch('../../api?endpoint=export_archives', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(values)
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.text()
+            }
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then(data => {
+            const blob = new Blob([data], { type: "application/octet-stream" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "achieve" + id + ".csv";
+            link.click();
+            link.remove();
+        });
+}

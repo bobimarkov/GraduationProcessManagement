@@ -1,14 +1,12 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: GET");
 
 include_once '../src/database/db_conf.php';
 include_once '../src/utils/JWTUtils.php';
 
-$data_array = array();
 $errors = array();
-
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     validateJWT($jwt, ["admin", "moderator-hat","moderator-gown","moderator-signature"]);
 
@@ -105,10 +103,12 @@ function executeQuery($order_values, $conn)
     }
 
     //Graduation_time
-    $stmtGrad = $conn->prepare("SELECT * 
-                            FROM graduation_time");
+    $stmtGrad = $conn->prepare("SELECT *
+                                FROM graduation_time
+                                LIMIT 1");
     $stmtGrad->execute();
     $gradTime = $stmtGrad->fetchAll();
+
     $startTime = new DateTime($gradTime[0]['start_time']);
     $interval = new DateTime($gradTime[0]['students_interval']);
 
@@ -122,15 +122,13 @@ function executeQuery($order_values, $conn)
                                         WHERE student_fn = :fn");
 
         $update_stmt->execute(["color" => $color, "num_order" => $num + 1, "time_diploma" => $startTime->format('H:i:s'), "fn" => $fn]);
-        $sec = $interval->format('s');
-        if ($sec == 0) {
-            $min = $interval->format('i');
-            $startTime->modify("+$min minutes");
 
-        } else {
-            $startTime->modify("+$sec seconds");
-        }
-        if($allRows[$num]['speech_response'] == 1) {
+        $min = $interval->format('i');
+        $sec = $interval->format('s');
+        $startTime->modify("+$min minutes");
+        $startTime->modify("+$sec seconds");
+
+        if ($allRows[$num]['speech_response'] == 1) {
             $startTime->modify("+ 90 seconds");
         }
         $num++;
