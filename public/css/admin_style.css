@@ -433,7 +433,8 @@ table tr:nth-child(even) {
 }
 
 .diploma_order_section,
-.excellent_order {
+.excellent_order,
+.distribute_moderators {
     display: none;
 }
 

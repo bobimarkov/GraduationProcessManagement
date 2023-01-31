@@ -655,7 +655,7 @@ function createSumDivForModerator(parentId, sums_text, sum_values) {
 function buildResponsibilitiesSectionForModeratorHat(users) {
     var resp_beginning = document.getElementById("responsibilities_beginning");
     var name_range = users[0].name_range;
-    resp_beginning.innerHTML = "Отговорност: Шапки " + name_range;
+    resp_beginning.innerHTML = '<i class="fas fa-graduation-cap"> </i>' + " " +  " Отговорност: Шапки " + name_range ;
     var table = document.getElementById("responsibilities_table");
     var sums = {
         has_right: 0,
@@ -674,7 +674,7 @@ function buildResponsibilitiesSectionForModeratorHat(users) {
     createSumDivForModerator("sums-div", sums_text, Object.values(sums));
 
     tableheader = document.getElementById("header_responsibilities_table");
-    tableheader.innerHTML = "<i class=\"fas fa-list\"></i>" + " Студенти заявили шапка";
+    tableheader.innerHTML = '<i class=\"fas fa-list\"></i>' + " Студенти заявили шапка";
 
 
     let i = 1;
@@ -710,7 +710,7 @@ function buildResponsibilitiesSectionForModeratorHat(users) {
 function buildResponsibilitiesSectionForModeratorGown(users) {
     var resp_beginning = document.getElementById("responsibilities_beginning");
     var name_range = users[0].name_range;
-    resp_beginning.innerHTML = "Отговорност: Тоги " + name_range;
+    resp_beginning.innerHTML = '<i class="fas fa-tshirt"></i>' + " Отговорност: Тоги " + name_range;
     var table = document.getElementById("responsibilities_table");
     var sums = {
         has_right: 0,
@@ -765,7 +765,7 @@ function buildResponsibilitiesSectionForModeratorGown(users) {
 function buildResponsibilitiesSectionForModeratorSignature(users) {
     var resp_beginning = document.getElementById("responsibilities_beginning");
     var name_range = users[0].name_range;
-    resp_beginning.innerHTML = "Отговорност: Дипломи " + name_range;
+    resp_beginning.innerHTML = '<i class="fas fa-pen"></i>' + " Отговорност: Дипломи " + name_range;
     var sums = {
         has_right: 0,
         attendance: 0,

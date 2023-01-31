@@ -214,8 +214,6 @@
                     <td>Заявена шапка</td>
                     <td>Взета</td>
                     <td>Дата/час</td>
-                    <td>Върната</td>
-                    <td>Дата/час</td>
                 </tr>
             </table>
 
@@ -267,6 +265,13 @@
             <p id="message-bar-export-excellent"></p>
         </form>
     </div>
+
+    <div class="row distribute_moderators" id="distribute_moderators">
+        <h3><i class="fas fa-clipboard-list"></i>  Разпределяне на Отговорностите на Модераторите</h3>
+        <button type="button" class="long-submit-button" onclick="distributeModerators(event)">Разпредели Модераторите</button>
+        <p class="message-bar" id="message-bar-distribute-moderators"></p>
+    </div>
+
     <div class="row diploma_order_section" id="diploma_order_section">
         <h3><i class="fas fa-user-graduate"></i> Пореден списък за връчване на дипломи</h3>
         <form id="diploma_order_form">
@@ -335,9 +340,6 @@
             </button>
             <p class="message-bar" id="message-bar-diploma-order"></p>
         </form>
-        <h3>Разпределяне на Отговорностите на Модераторите</h3>
-        <button type="button" class="long-submit-button" onclick="distributeModerators(event)">Разпредели Модераторите</button>
-        <p class="message-bar" id="message-bar-distribute-moderators"></p>
     </div>
 </body>
 

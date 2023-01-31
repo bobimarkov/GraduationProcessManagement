@@ -204,7 +204,7 @@ function getStudentsDiplomaInfo() {
 function buildStudentsDiplomaTable(users) {
     var table = document.getElementById("diploma-table");
 
-    table.innerHTML = '<tr id="header-table"> <td onclick="sortByGraduated(0)">ФН</td> <td onclick="sortByGraduated(1)">Име</td> <td onclick="sortByGraduated(2)">Цвят</td> <td onclick="sortByGraduated(4)">Ред на връчване</td> <td onclick="sortByGraduated(4)">Час на връчване</td> <td onclick="sortByGraduated(5)">Степен</td> <td onclick="sortByGraduated(6)">Спец.</td> <td onclick="sortByGraduated(7)">Група</td> <td onclick="sortByGraduated(8)">Успех</td> <td onclick="sortByGraduated(9)">Присъствие</td> <td onclick="sortByGraduated(10)">Има право</td> <td onclick="sortByGraduated(11)">Готова</td> <td onclick="sortByGraduated(12)">Взета</td> <td onclick="sortByGraduated(13)">Заявка взимане предв.</td> <td onclick="sortByGraduated(14)">Коментар (студент)</td> <td onclick="sortByGraduated(15)">Взета предв.</td> <td onclick="sortByGraduated(16)">Дата/час</td> <td onclick="sortByGraduated(17)">Коментар (администр.)</td> <td onclick="sortByGraduated(18)">Покана реч</td> <td onclick="sortByGraduated(19)">Отговор</td> <td onclick="sortByGraduated(20)">Снимки</td> <td onclick="sortByGraduated(21)">Заявена тога</td> <td onclick="sortByGraduated(22)">Взета</td> <td onclick="sortByGraduated(23)">Дата/час</td> <td onclick="sortByGraduated(24)">Върната</td> <td>Дата/час</td> <td onclick="sortByGraduated(25)">Заявена шапка</td> <td onclick="sortByGraduated(26)">Взета</td> <td onclick="sortByGraduated(27)">Дата/час</td> <td onclick="sortByGraduated(28)">Върната</td> <td onclick="sortByGraduated(29)">Дата/час</td></tr>';
+    table.innerHTML = '<tr id="header-table"> <td onclick="sortByGraduated(0)">ФН</td> <td onclick="sortByGraduated(1)">Име</td> <td onclick="sortByGraduated(2)">Цвят</td> <td onclick="sortByGraduated(4)">Ред на връчване</td> <td onclick="sortByGraduated(4)">Час на връчване</td> <td onclick="sortByGraduated(5)">Степен</td> <td onclick="sortByGraduated(6)">Спец.</td> <td onclick="sortByGraduated(7)">Група</td> <td onclick="sortByGraduated(8)">Успех</td> <td onclick="sortByGraduated(9)">Присъствие</td> <td onclick="sortByGraduated(10)">Има право</td> <td onclick="sortByGraduated(11)">Готова</td> <td onclick="sortByGraduated(12)">Взета</td> <td onclick="sortByGraduated(13)">Заявка взимане предв.</td> <td onclick="sortByGraduated(14)">Коментар (студент)</td> <td onclick="sortByGraduated(15)">Взета предв.</td> <td onclick="sortByGraduated(16)">Дата/час</td> <td onclick="sortByGraduated(17)">Коментар (администр.)</td> <td onclick="sortByGraduated(18)">Покана реч</td> <td onclick="sortByGraduated(19)">Отговор</td> <td onclick="sortByGraduated(20)">Снимки</td> <td onclick="sortByGraduated(21)">Заявена тога</td> <td onclick="sortByGraduated(22)">Взета</td> <td onclick="sortByGraduated(23)">Дата/час</td> <td onclick="sortByGraduated(24)">Върната</td> <td>Дата/час</td> <td onclick="sortByGraduated(25)">Заявена шапка</td> <td onclick="sortByGraduated(26)">Взета</td> <td onclick="sortByGraduated(27)">Дата/час</td></tr>';
     let i = 1;
 
     for (const user of users) {
@@ -369,6 +369,7 @@ function showGivenSection(sectionToBeDisplayed) {
         'diploma_section',
         'excellent_order',
         'diploma_order_section',
+        'distribute_moderators',
         'analytic_section'];
 
     sections = sections.map(x => document.getElementById(x));
@@ -387,14 +388,14 @@ function showGivenSection(sectionToBeDisplayed) {
 
     }
 
-
     //the corner cases for flex and make 2 grids at the same time
-    if (sectionToBeDisplayed.localeCompare(sections[6].id) == 0) {
-        sections[6].style.display = 'flex';
+    if (sectionToBeDisplayed.localeCompare(sections[7].id) == 0) {
+        sections[7].style.display = 'flex';
     } else if (sectionToBeDisplayed.localeCompare(sections[3].id) == 0) {
         sections[3].style.display = 'grid';
         sections[4].style.display = 'grid';
         sections[5].style.display = 'grid';
+        sections[6].style.display = 'grid';
     }
 
 }

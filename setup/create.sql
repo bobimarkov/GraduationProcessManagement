@@ -74,8 +74,6 @@ CREATE TABLE `student_hat` (
     `hat_requested` BOOLEAN NULL DEFAULT NULL , 
     `hat_taken` BOOLEAN NULL DEFAULT NULL , 
     `hat_taken_date` DATE NULL DEFAULT NULL , 
-    `hat_returned` BOOLEAN NULL DEFAULT NULL , 
-    `hat_returned_date` DATE NULL DEFAULT NULL , 
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
@@ -135,7 +133,7 @@ create table moderator_range (
     `role` VARCHAR(99) NOT NULL,
     `range` VARCHAR(99) NULL DEFAULT NULL,
     PRIMARY KEY (`email`)
-)
+) ENGINE = InnoDB;
 
 ALTER TABLE `moderator_range` ADD INDEX(`email`);
 ALTER TABLE `moderator_range` ADD CONSTRAINT `student_fn_fk_11` FOREIGN KEY (`email`) REFERENCES `user`(`email`) ON DELETE CASCADE ON UPDATE RESTRICT;

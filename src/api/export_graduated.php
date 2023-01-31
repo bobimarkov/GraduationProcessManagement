@@ -31,7 +31,7 @@ if (isset($data["format"])) {
 
     $database = new Db();
     $conn = $database->getConnection();
-    $query = "SELECT student.fn, user.name, student_diploma.color, student_diploma.num_order, student_diploma.time_diploma, student.degree, student.major, student.group, student_diploma.grade, student_diploma.attendance, student_diploma.has_right, student_diploma.is_ready, student_diploma.is_taken, student_diploma.take_in_advance_request, student_diploma.take_in_advance_request_comment, student_diploma.is_taken_in_advance, student_diploma.taken_at_time, student_diploma.diploma_comment, student_diploma.speech_request, student_diploma.speech_response, student_diploma.photos_requested, student_gown.gown_requested, student_gown.gown_taken, student_gown.gown_taken_date, student_gown.gown_returned, student_gown.gown_returned_date, student_hat.hat_requested, student_hat.hat_taken, student_hat.hat_taken_date, student_hat.hat_returned, student_hat.hat_returned_date  
+    $query = "SELECT student.fn, user.name, student_diploma.color, student_diploma.num_order, student_diploma.time_diploma, student.degree, student.major, student.group, student_diploma.grade, student_diploma.attendance, student_diploma.has_right, student_diploma.is_ready, student_diploma.is_taken, student_diploma.take_in_advance_request, student_diploma.take_in_advance_request_comment, student_diploma.is_taken_in_advance, student_diploma.taken_at_time, student_diploma.diploma_comment, student_diploma.speech_request, student_diploma.speech_response, student_diploma.photos_requested, student_gown.gown_requested, student_gown.gown_taken, student_gown.gown_taken_date, student_gown.gown_returned, student_gown.gown_returned_date, student_hat.hat_requested, student_hat.hat_taken, student_hat.hat_taken_date
     FROM student_diploma
     RIGHT JOIN student ON student.fn = student_diploma.student_fn 
     RIGHT JOIN user ON user.id = student.user_id 
@@ -100,7 +100,6 @@ if (isset($data["format"])) {
             $row['gown_taken'] = ($row['gown_taken'] == 0) ? 'Не' : 'Да';
             $row['gown_returned'] = ($row['gown_returned'] == 0) ? 'Не' : 'Да';
             $row['hat_taken'] = ($row['hat_taken'] == 0) ? 'Не' : 'Да';
-            $row['hat_returned'] = ($row['hat_returned'] == 0) ? 'Не' : 'Да';
 
             fputcsv($output, $row);
         }
@@ -136,7 +135,6 @@ if (isset($data["format"])) {
             $row['gown_taken'] = ($row['gown_taken'] == 0) ? 'Не' : 'Да';
             $row['gown_returned'] = ($row['gown_returned'] == 0) ? 'Не' : 'Да';
             $row['hat_taken'] = ($row['hat_taken'] == 0) ? 'Не' : 'Да';
-            $row['hat_returned'] = ($row['hat_returned'] == 0) ? 'Не' : 'Да';
             $pdf->Cell(0, 0, implode(",", $row), 0, 1);
         }
 

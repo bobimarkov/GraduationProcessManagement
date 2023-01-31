@@ -377,8 +377,6 @@ function buildContentForGraduatingStudent(user) {
     }
     document.getElementById("hat_taken").innerHTML = 'Взета: ' + (user.hat_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
     document.getElementById("hat_taken_date").innerHTML = 'Дата/час: ' + (user.hat_taken_date === null || user.hat_taken_date === "" ? "-" : user.hat_taken_date);
-    document.getElementById("hat_returned").innerHTML = 'Върната: ' + (user.hat_returned === 1 ? '<i class="far fa-check-square"></i>' : "Не");
-    document.getElementById("hat_returned_date").innerHTML = 'Дата/час: ' + (user.hat_returned_date === null || user.hat_taken_date === "" ? "-" : user.hat_taken_date);
     document.getElementById("hat_moderator").innerHTML = 'Модератор за шапка: ' + (user.moderator_hat_email === null || user.hat_requested !== 1 ? '-' : user.moderator_hat_email);
 }
 
