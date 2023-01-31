@@ -108,6 +108,7 @@ function executeQuery($order_values, $conn)
                                 LIMIT 1");
     $stmtGrad->execute();
     $gradTime = $stmtGrad->fetchAll();
+
     $startTime = new DateTime($gradTime[0]['start_time']);
     $interval = new DateTime($gradTime[0]['students_interval']);
 

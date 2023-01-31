@@ -41,6 +41,24 @@ body {
     color: snow;
 }
 
+.submit-button-users {
+    margin-top: 1em;
+    height: 2.5em;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #006199;
+    cursor: pointer;
+    background-color: snow;
+    font-weight: bold;
+    color: darkslategray;
+    font-size: medium;
+}
+
+.submit-button-users:hover {
+    background-color: #006199;
+    color: snow;
+}
+
 .form-input {
     width: 100%;
 }

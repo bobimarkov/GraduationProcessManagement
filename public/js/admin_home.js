@@ -274,7 +274,7 @@ function showUsers() {
     showGivenSection("users_section");
     activeHeader("users_header");
 
-    var errElem = document.getElementById('message-bar-users');
+    let errElem = document.getElementById('message-bar-users');
     errElem.classList.remove(['success']);
     errElem.classList.remove(['error']);
     errElem.innerHTML = "";
@@ -285,8 +285,8 @@ function showStudents() {
     tokenRefresher();
     showGivenSection("students_section");
     activeHeader("students_header");
-    getAllStudents();
-    var errElem = document.getElementById('message-bar-students');
+
+    let errElem = document.getElementById('message-bar-students');
     errElem.classList.remove(['success']);
     errElem.classList.remove(['error']);
     errElem.innerHTML = "";
@@ -304,7 +304,7 @@ function showMessagesSection() {
     tokenRefresher();
     showGivenSection("messages_send_section");
     activeHeader("messages_header");
-    var errElem = document.getElementById('message-bar-export-message');
+    let errElem = document.getElementById('message-bar-export-message');
     errElem.classList.remove(['success']);
     errElem.classList.remove(['error']);
     errElem.innerHTML = "";
@@ -315,6 +315,12 @@ function showSettingsSection() {
     showGivenSection("settings_section");
     activeHeader("settings_header");
     getGraduationInfo();
+
+    let errElem = document.getElementById('message-add-graduation-info');
+    errElem.classList.remove(['success']);
+    errElem.classList.remove(['error']);
+    errElem.innerHTML = "";
+
 }
 
 function showAnalyticsSection() {
@@ -393,8 +399,8 @@ function showGivenSection(sectionToBeDisplayed) {
         'messages_send_section',
         'messages_receive_section',
         'settings_section',
-        'settings_archive_section',
-        'analytic_section'];
+        'settings_archive_section'
+    ];
 
     sections = sections.map(x => document.getElementById(x));
 
@@ -408,7 +414,6 @@ function showGivenSection(sectionToBeDisplayed) {
 
             sections[i].style.display = 'grid';
         }
-
     }
 
     //the corner cases for flex and make 2 grids at the same time
@@ -420,17 +425,15 @@ function showGivenSection(sectionToBeDisplayed) {
         sections[5].style.display = 'grid';
         sections[6].style.display = 'grid';
     }
-    else if (sectionToBeDisplayed.localeCompare(sections[7].id) == 0) {
+    else if (sectionToBeDisplayed.localeCompare(sections[8].id) == 0) {
         sections[8].style.display = 'grid';
         sections[9].style.display = 'grid';
     }
-    else if (sectionToBeDisplayed.localeCompare(sections[9].id) == 0) {
+    else if (sectionToBeDisplayed.localeCompare(sections[10].id) == 0) {
         sections[10].style.display = 'grid';
         sections[11].style.display = 'grid';
     }
 }
-
-
 
 /*---- SWITCH_SECTIONS  END ----*/
 //give class "active_header" to only element with elementid
@@ -774,7 +777,7 @@ function submitStudentHelper(bodyData) {
                 errElem.classList.add(['success']);
                 errElem.innerHTML = data.message;
                 document.getElementById("studentTextarea").value = "";
-                showStudents();
+                getAllStudents();
             }
         });
 }
@@ -786,7 +789,6 @@ function submitStudents(event) {
     var studentsData = form.studentTextarea.value;
 
     submitStudentHelper(JSON.stringify(studentsData));
-
 }
 
 function submitStudentsFromFile(event) {
@@ -1648,6 +1650,7 @@ function sendGraduationInfo(event) {
                         place.value = "";
                         classes.value = "";
                         getGraduationInfo();
+                        makeArchive();
                     }
                 });
         }
@@ -1751,9 +1754,9 @@ function makeArchive() {
         .then(response => response.json())
         .then((data) => {
             if (!data.success) {
-                console.log(data.message);
+                //console.log(data.message);
             } else {
-                getStudentsDiplomaInfo();
+                getClasses();
             }
         });
 }
@@ -1781,6 +1784,9 @@ function getClasses() {
                 console.log(data.message);
             } else {
                 let div = document.getElementById('for_buttons');
+                while (div.firstChild) {
+                    div.removeChild(div.firstChild);
+                }
                 for (let i = 0; i < data.class.length; i++) {
                     let button = document.createElement('button');
                     let text = document.createTextNode(data.class[i].class);
