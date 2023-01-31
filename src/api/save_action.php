@@ -75,9 +75,6 @@ function getColumnByOptionNumber(&$column_name, $action) {
         case "9":
             $column_name = "hat_taken";
             break;
-        case "10":
-            $column_name = "hat_returned";
-            break;
         default: {
             $response = array("success" => false, "message" => "Грешка: Невалидна опция.");
             echo json_encode($response);
@@ -116,7 +113,7 @@ function updateUserToDB($fns, $column_name, $content) {
     $table_name = "";
     if ($column_name == "gown_taken" || $column_name == "gown_returned") {
         $table_name = "student_gown";
-    } else if ($column_name == "hat_taken" || $column_name == "hat_returned") {
+    } else if ($column_name == "hat_taken") {
         $table_name = "student_hat";
     } else {
         $table_name = "student_diploma";

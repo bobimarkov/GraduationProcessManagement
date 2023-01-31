@@ -5,7 +5,7 @@ $data = (array) $data;
 include_once '../src/utils/JWTUtils.php';
 include_once '../src/database/db_conf.php';
 
-validateJWT($jwt, ["admin", "moderator"]);
+validateJWT($jwt, ["admin", "moderator-hat","moderator-gown","moderator-signature"]);
 if (isset($data["format"])) {
 
     $format = $data["format"];
@@ -15,8 +15,7 @@ if (isset($data["format"])) {
     $conn = $database->getConnection();
 
     $stmt = $conn->prepare("SELECT name, email, phone, role FROM `user` 
-    WHERE role='admin' or role='moderator';");
-
+    WHERE role='admin' or role in ('moderator-hat', 'moderator-gown', 'moderator-signature');");
     $stmt->execute();
 
     if ($format !== 'pdf' && $format !== 'no') {

@@ -9,14 +9,12 @@ include_once '../src/utils/JWTUtils.php';
 $data_array = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    validateJWT($jwt, ["admin", "moderator-hat","moderator-gown","moderator-signature"]);
+    validateJWT($jwt, ["admin", "moderator-hat","moderator-gown", "moderator-signature","student"]);
+    $email = json_decode(file_get_contents("php://input"));
 
     $database = new Db();
     $conn = $database->getConnection();
-    $stmt = $conn->prepare("SELECT id, email, name, role, phone 
-                                FROM user 
-                                WHERE role='admin' OR role in ('moderator-hat', 'moderator-gown', 'moderator-signature')
-                                ORDER BY id DESC");
+    $stmt = $conn->prepare("SELECT * from student_moderators");
     $stmt->execute();
 
     $rows = $stmt->fetchAll();
@@ -25,3 +23,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode($response);
     http_response_code(200);
 }
+?>

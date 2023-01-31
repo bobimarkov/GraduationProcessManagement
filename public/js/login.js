@@ -39,11 +39,17 @@ loginForm.addEventListener("submit", (e) => {
         },
         body: JSON.stringify(data)
     })
-        .then(response => response.json())
-        .then(response => {
+        .then((response) => response.json())
+        .then((response) => {
             if (response.success) {
                 localStorage.setItem("token", response.jwt);
-                window.location.replace(`./${response.role}/${response.role}_home.html`);
+                const moderator_roles = ["moderator-hat", "moderator-gown", "moderator-signature"];
+                if (moderator_roles.includes(response.role)) {
+                    window.location.replace(`./moderator/moderator_home.html`);
+                }
+                else {
+                    window.location.replace(`./${response.role}/${response.role}_home.html`);
+                }
             }
             else {
                 document.querySelector("#message-bar-users").innerHTML = response.error;

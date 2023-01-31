@@ -165,7 +165,6 @@ function validateInput($values, $user, $i)
     }
 
     $grade = $values_indexed[9];
-    // echo $grade;
     if (!is_numeric($grade) && $grade != '-') {
         $response = array("success" => false, "message" => "Грешка за потребител $i ($user) - оценката трябва да е двоично число със запетая!");
         echo json_encode($response);
@@ -205,6 +204,8 @@ function exportStudentsToDB($users_arr_2d)
                                              VALUES (:student_fn)");
     $stmt_register_student_hat = $conn->prepare("INSERT INTO `student_hat` (`student_fn`) 
                                              VALUES (:student_fn)");
+    $stmt_register_student_moderators = $conn->prepare("INSERT INTO `student_moderators` (`student_fn`) 
+                                            VALUES (:student_fn)");
 
     $success = "";
     // check for already existing user with this email or FN
@@ -259,7 +260,10 @@ function exportStudentsToDB($users_arr_2d)
             $stmt_register_student_gown->execute([
                 "student_fn" => $values[5]
             ]);
-            $success = $stmt_register_student_hat->execute([
+            $stmt_register_student_hat->execute([
+                "student_fn" => $values[5]
+            ]);
+            $success = $stmt_register_student_moderators->execute([
                 "student_fn" => $values[5]
             ]);
         }

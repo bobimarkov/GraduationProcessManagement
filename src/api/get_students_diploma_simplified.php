@@ -10,7 +10,7 @@ $data_array = array();
 $errors = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    validateJWT($jwt, ["admin", "moderator", "student"]);
+    validateJWT($jwt, ["admin", "moderator-hat","moderator-gown","moderator-signature", "student"]);
 
     if ($errors) {
         $response = array("success" => false, "errors:" => json_encode($errors, JSON_UNESCAPED_UNICODE));

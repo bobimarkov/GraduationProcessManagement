@@ -9,25 +9,24 @@ include_once '../src/utils/JWTUtils.php';
 $data_array = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    validateJWT($jwt, ["admin", "moderator", "student"]);
+    validateJWT($jwt, ["admin", "moderator-hat","moderator-gown","moderator-signature", "student"]);
 
     $email = getUserEmailFromJWT($jwt);
 
     $database = new Db();
     $conn = $database->getConnection();
     $stmt = $conn->prepare("SELECT user.email, user.name, user.phone, student.degree, student.major, student.group,
-                                  student_diploma.*, student_gown.*, student_hat.*
+                                  student_diploma.*, student_gown.*, student_hat.*, student_moderators.*
                             FROM student_diploma
                             RIGHT JOIN student ON student.fn = student_diploma.student_fn 
                             RIGHT JOIN user ON user.id = student.user_id 
                             LEFT JOIN student_gown ON student.fn = student_gown.student_fn 
                             LEFT JOIN student_hat ON student.fn = student_hat.student_fn 
+                            LEFT JOIN student_moderators on student.fn = student_moderators.student_fn
                             WHERE user.email=:email");
     $stmt->execute(["email" => $email]);
 
     $rows = $stmt->fetchAll();
-
-    // var_dump($rows);
 
     $response = array("success" => true, "users" => $rows);
     echo json_encode($response);

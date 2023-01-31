@@ -77,10 +77,10 @@
             <p class="message-bar" id="message-bar-users"></p>
             <form id="add_users_form" name="new_user_form" onsubmit="return false">
                 <textarea class="form-input" name="userTextarea" id="userTextarea" rows="30"
-                    placeholder='Формат: &NewLine;"имейл, парола, имена, телефон, роля"&NewLine;&NewLine;роля=[admin, moderator]'></textarea>
-                <button type="submit" id="submit-button-users" class="submit-button-users" onclick="submitUsers(event)">
+                    placeholder='Формат: &NewLine;"имейл, парола, имена, телефон, роля"&NewLine;&NewLine;роля=[admin, moderator-hat,moderator-gown,moderator-signature]'></textarea>
+                <button type="submit" id="long-submit-button" class="long-submit-button" onclick="submitUsers(event)">
                     Добави <i class="fas fa-solid fa-plus"></i>
-                </button>
+                </button> 
             </form>
         </div>
 
@@ -126,7 +126,7 @@
             <form id="add_students_form" name="add_students_form" onsubmit="return false">
                 <textarea class="form-input" name="studentTextarea" id="studentTextarea" rows="30"
                     placeholder="Формат: &NewLine;&quot;имейл, парола, имена, телефон, роля, ФН, степен, специалност, група, оценка от диплома&quot;&NewLine;&NewLine;роля=[student]&NewLine;степен=[Б, М, Д]&NewLine;специалност=[КН, СИ, ИС, И, М, ПМ, С], ако степен=Б&NewLine;група=[1, 2, 3, 4, 5, 6, 7, 8], ако degree=Б&NewLine;оценка = число с плаваща запетая или '-', ако е студент от долен курс"></textarea>
-                <button type="submit" class="submit-button-users" class="submit-action" onclick="submitStudents(event)">
+                <button type="submit" class="long-submit-button" class="submit-action" onclick="submitStudents(event)">
                     Добави <i class="fas fa-solid fa-plus"></i>
                 </button>
             </form>
@@ -148,7 +148,7 @@
             <form id="edit_students_form" name="edit_students_form" onsubmit="return false">
                 <textarea class="form-input" name="editStudentTextarea" id="editStudentTextarea" rows="30"
                     placeholder='Формат: &NewLine;"ФН,имейл,телефон"&NewLine;&NewLine;ФН - факултетен номер на студента, чиито данни ще променяме&NewLine;Имейл - новият имейл(при нужда на промяна), ако не бъде променян се записва стария имейл&NewLine;телефон - новият телефон(при нужда на промяна), ако не бъде променян се записва стария телефон'></textarea>
-                <button type="submit" class="submit-button-users" onclick="editStudent(event)">
+                <button type="submit" class="long-submit-button" onclick="editStudent(event)">
                     Редактирай
                 </button>
             </form>
@@ -214,8 +214,6 @@
                     <td>Заявена шапка</td>
                     <td>Взета</td>
                     <td>Дата/час</td>
-                    <td>Върната</td>
-                    <td>Дата/час</td>
                 </tr>
             </table>
 
@@ -267,6 +265,13 @@
             <p id="message-bar-export-excellent"></p>
         </form>
     </div>
+
+    <div class="row distribute_moderators" id="distribute_moderators">
+        <h3><i class="fas fa-clipboard-list"></i>  Разпределяне на Отговорностите на Модераторите</h3>
+        <button type="button" class="long-submit-button" onclick="distributeModerators(event)">Разпредели Модераторите</button>
+        <p class="message-bar" id="message-bar-distribute-moderators"></p>
+    </div>
+
     <div class="row diploma_order_section" id="diploma_order_section">
         <h3><i class="fas fa-user-graduate"></i> Пореден списък за връчване на дипломи</h3>
         <form id="diploma_order_form">

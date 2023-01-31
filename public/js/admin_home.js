@@ -77,10 +77,11 @@ function buildUsersTable(data) {
             user.name,
             user.email,
             user.phone,
-            user.role == 'admin' ?
-                '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
-                    '<i class="fas fa-user-cog user-role-icon"></i>' :
-                    '<i class="fas fa-user-graduate user-role-icon"></i>'
+            user.role == 'admin' ? '<i class="fas fa-user-lock user-role-icon"></i>' :
+            user.role == 'moderator-hat' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-graduation-cap user-role-icon"></i>' :
+            user.role == 'moderator-gown' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-tshirt user-role-icon"></i>' :
+            user.role == 'moderator-signature' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-pen user-role-icon"></i>' :
+            '<i class="fas fa-user-graduate user-role-icon"></i>'
         ];
         const number_columns = row_data.length;
         for (var j = 0; j < number_columns; j++) {
@@ -162,10 +163,7 @@ function buildStudentsTable(data) {
             user.major,
             user.group,
             user.has_diploma_right == 0 ? "Не" : "Да",
-            user.role == 'admin' ?
-                '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
-                    '<i class="fas fa-user-cog user-role-icon"></i>' :
-                    '<i class="fas fa-user-graduate user-role-icon"></i>'
+            '<i class="fas fa-user-graduate user-role-icon"></i>'
         ];
         const number_columns = row_data.length;
         for (var j = 0; j < number_columns; j++) {
@@ -206,7 +204,7 @@ function getStudentsDiplomaInfo() {
 function buildStudentsDiplomaTable(users) {
     var table = document.getElementById("diploma-table");
 
-    table.innerHTML = '<tr id="header-table"> <td onclick="sortByGraduated(0)">ФН</td> <td onclick="sortByGraduated(1)">Име</td> <td onclick="sortByGraduated(2)">Цвят</td> <td onclick="sortByGraduated(4)">Ред на връчване</td> <td onclick="sortByGraduated(4)">Час на връчване</td> <td onclick="sortByGraduated(5)">Степен</td> <td onclick="sortByGraduated(6)">Спец.</td> <td onclick="sortByGraduated(7)">Група</td> <td onclick="sortByGraduated(8)">Успех</td> <td onclick="sortByGraduated(9)">Присъствие</td> <td onclick="sortByGraduated(10)">Има право</td> <td onclick="sortByGraduated(11)">Готова</td> <td onclick="sortByGraduated(12)">Взета</td> <td onclick="sortByGraduated(13)">Заявка взимане предв.</td> <td onclick="sortByGraduated(14)">Коментар (студент)</td> <td onclick="sortByGraduated(15)">Взета предв.</td> <td onclick="sortByGraduated(16)">Дата/час</td> <td onclick="sortByGraduated(17)">Коментар (администр.)</td> <td onclick="sortByGraduated(18)">Покана реч</td> <td onclick="sortByGraduated(19)">Отговор</td> <td onclick="sortByGraduated(20)">Снимки</td> <td onclick="sortByGraduated(21)">Заявена тога</td> <td onclick="sortByGraduated(22)">Взета</td> <td onclick="sortByGraduated(23)">Дата/час</td> <td onclick="sortByGraduated(24)">Върната</td> <td>Дата/час</td> <td onclick="sortByGraduated(25)">Заявена шапка</td> <td onclick="sortByGraduated(26)">Взета</td> <td onclick="sortByGraduated(27)">Дата/час</td> <td onclick="sortByGraduated(28)">Върната</td> <td onclick="sortByGraduated(29)">Дата/час</td></tr>';
+    table.innerHTML = '<tr id="header-table"> <td onclick="sortByGraduated(0)">ФН</td> <td onclick="sortByGraduated(1)">Име</td> <td onclick="sortByGraduated(2)">Цвят</td> <td onclick="sortByGraduated(4)">Ред на връчване</td> <td onclick="sortByGraduated(4)">Час на връчване</td> <td onclick="sortByGraduated(5)">Степен</td> <td onclick="sortByGraduated(6)">Спец.</td> <td onclick="sortByGraduated(7)">Група</td> <td onclick="sortByGraduated(8)">Успех</td> <td onclick="sortByGraduated(9)">Присъствие</td> <td onclick="sortByGraduated(10)">Има право</td> <td onclick="sortByGraduated(11)">Готова</td> <td onclick="sortByGraduated(12)">Взета</td> <td onclick="sortByGraduated(13)">Заявка взимане предв.</td> <td onclick="sortByGraduated(14)">Коментар (студент)</td> <td onclick="sortByGraduated(15)">Взета предв.</td> <td onclick="sortByGraduated(16)">Дата/час</td> <td onclick="sortByGraduated(17)">Коментар (администр.)</td> <td onclick="sortByGraduated(18)">Покана реч</td> <td onclick="sortByGraduated(19)">Отговор</td> <td onclick="sortByGraduated(20)">Снимки</td> <td onclick="sortByGraduated(21)">Заявена тога</td> <td onclick="sortByGraduated(22)">Взета</td> <td onclick="sortByGraduated(23)">Дата/час</td> <td onclick="sortByGraduated(24)">Върната</td> <td>Дата/час</td> <td onclick="sortByGraduated(25)">Заявена шапка</td> <td onclick="sortByGraduated(26)">Взета</td> <td onclick="sortByGraduated(27)">Дата/час</td></tr>';
     let i = 1;
 
     for (const user of users) {
@@ -241,16 +239,19 @@ function buildStudentsDiplomaTable(users) {
                 user.speech_request = (user.speech_request == 1) ? 'Да' : 'Не',
                 user.speech_response = response,
                 user.photos_requested == 0 ? 'Не' : 'Да',
-                user.gown_requested == 0 ? 'Не' : 'Да',
-                user.gown_taken == 0 ? 'Не' : 'Да',
+                //gown_requested
+                user.gown_requested == null ? '' : user.gown_requested == 0 ? 'Не' : 'Да',
+                //gown_taken
+                user.gown_requested != 1 ? '' : user.gown_taken == 0 || user.gown_taken == null ? 'Не' : 'Да',
                 user.gown_taken_date,
-                user.gown_returned == 0 ? 'Не' : 'Да',
+                //gown_returned
+                user.gown_taken != 1 ? '' : user.gown_returned == 0 || user.gown_returned == null ? 'Не' : 'Да',
                 user.gown_returned_date,
-                user.hat_requested == 0 ? 'Не' : 'Да',
-                user.hat_taken == 0 ? 'Не' : 'Да',
-                user.hat_taken_date,
-                user.hat_returned == 0 ? 'Не' : 'Да',
-                user.hat_returned_date,
+                //hat_requested
+                user.hat_requested == null ? '' : user.hat_requested == 0 ? 'Не' : 'Да',
+                //hat_taken
+                user.hat_requested != 1 ? '' : user.hat_taken == 0 || user.hat_taken == null ? 'Не' : 'Да',
+                user.hat_taken_date
 
             ];
             const number_columns = row_data.length;
@@ -368,6 +369,7 @@ function showGivenSection(sectionToBeDisplayed) {
         'diploma_section',
         'excellent_order',
         'diploma_order_section',
+        'distribute_moderators',
         'analytic_section'];
 
     sections = sections.map(x => document.getElementById(x));
@@ -386,14 +388,14 @@ function showGivenSection(sectionToBeDisplayed) {
 
     }
 
-
     //the corner cases for flex and make 2 grids at the same time
-    if (sectionToBeDisplayed.localeCompare(sections[6].id) == 0) {
-        sections[6].style.display = 'flex';
+    if (sectionToBeDisplayed.localeCompare(sections[7].id) == 0) {
+        sections[7].style.display = 'flex';
     } else if (sectionToBeDisplayed.localeCompare(sections[3].id) == 0) {
         sections[3].style.display = 'grid';
         sections[4].style.display = 'grid';
         sections[5].style.display = 'grid';
+        sections[6].style.display = 'grid';
     }
 
 }
@@ -1495,8 +1497,35 @@ function searchInTable() {
     }
 }
 
-
-
-
-
-
+  function distributeModerators() {
+    fetch('../../api?endpoint=edit_student_moderators', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }})
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            var errElem = document.getElementById('message-bar-distribute-moderators');
+            if (data.error) {
+                errElem.classList.remove(['success']);
+                errElem.classList.add(['error']);
+                console.log(data.error);
+                errElem.innerHTML = data.error;
+            } else {
+                errElem.classList.remove(['error']);
+                errElem.classList.add(['success']);
+                console.log(data.success);
+                errElem.innerHTML = data.success;
+            }
+        })
+        .finally(() => {});
+  }

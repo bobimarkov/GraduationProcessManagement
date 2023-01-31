@@ -9,7 +9,7 @@ include_once '../src/utils/JWTUtils.php';
 $data_array = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    validateJWT($jwt, ["admin", "moderator"]);
+    validateJWT($jwt, ["admin", "moderator-hat","moderator-gown","moderator-signature"]);
 
     $database = new Db();
     $conn = $database->getConnection();
