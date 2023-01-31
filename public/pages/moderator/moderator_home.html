@@ -47,7 +47,6 @@
                     Списък потребители</h3>
                 <table class="users-table" id="users-table">
                     <tr>
-                        <td>ID</td>
                         <td>Име</td>
                         <td>Имейл</td>
                         <td>Телефон</td>
@@ -62,7 +61,6 @@
                     Списък студенти</h3>
                 <table class="students-table" id="students-table">
                     <tr>
-                        <td>ID</td>
                         <td>Име</td>
                         <td>Имейл</td>
                         <td>Телефон</td>
@@ -89,22 +87,25 @@
                     <i class="fas fa-list"></i>
                     Списък студенти
                 </h3>
-                <div id="filters">
-                    <input id="searchByName" placeholder="Търсене по име" onchange="filterActivate()">
-                    <input id="searchByFn" placeholder="Търсене по факултетен номер" onchange="filterActivate()">
+                <div class="filters">
+                    <input id="search-diploma" placeholder="Търсене..." oninput="searchInTable('diploma-table','search-diploma')"/>
                 </div>
+
                 <table class="diploma-table" id="diploma-table">
                     <tr>
-                        <td>№</td>
                         <td>ФН</td>
                         <td>Име</td>
+                        <td>Цвят</td>
+                        <td>Ред на връчване</td>
+                        <td>Час на връчване</td>
                         <td>Степен</td>
                         <td>Спец.</td>
                         <td>Група</td>
                         <td>Успех</td>
                         <td>Присъствие</td>
                         <td>Има право</td>
-                        <td>Готова</td>
+                        <td>Модератор за диплома</td>
+                        <td>Готова диплома</td>
                         <td>Взета</td>
                         <td>Заявка взимане предв.</td>
                         <td>Коментар (студент)</td>
@@ -114,11 +115,13 @@
                         <td>Покана реч</td>
                         <td>Отговор</td>
                         <td>Снимки</td>
+                        <td>Модератор за тога</td>
                         <td>Заявена тога</td>
                         <td>Взета</td>
                         <td>Дата/час</td>
                         <td>Върната</td>
                         <td>Дата/час</td>
+                        <td>Модератор за шапка</td>
                         <td>Заявена шапка</td>
                         <td>Взета</td>
                         <td>Дата/час</td>
@@ -130,7 +133,29 @@
                 <h3 id="responsibilities_beginning">Отговорност:</h3>
                 <div id="sums-div"></div>
                 <h3 id="header_responsibilities_table"></h3>
-                <table class="responsibilities_table" id="responsibilities_table"></table>
+                <div class="filters">
+                    <input id="search-responsibilities" placeholder="Търсене..." oninput="searchInTable('responsibilities_table','search-responsibilities')"/>
+                    <form id="export_files_moderator_responsibilities">
+                        <select class="dashboard-action" name="format">
+                            <option value="no" selected disabled hidden>Изберете файлов формат...</option>
+                            <option value="csv">CSV</option>
+                            <option value="txt">TextFile</option>
+                            <option value="doc">MsWord</option>
+                            <option value="xls">Excel</option>
+                            <option value="pdf">PDF</option>
+                        </select>
+                        <button type="submit" id="button-export-moderator-responsibilities" class="submit-action" onclick="getExportEndpointByModeratorRole(event,'export_files_moderator_responsibilities','message-bar-export-moderator-responsibilities')">
+                            Изтегли
+                            <i class="fas fa-file-export"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <p class="message-bar" id="message-bar-export-moderator-responsibilities"></p>
+                <table class="responsibilities_table" id="responsibilities_table">
+                    <tr>
+                    </tr>
+                </table>
 
                 <h3 id="header_responsibilities_table2"></h3>
                 <table class="responsibilities_table" id="responsibilities_table2"></table>

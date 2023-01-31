@@ -18,6 +18,67 @@ logoutHeader.addEventListener("click", (e) => {
 });
 
 
+function generateTableHeaderRow(columnNames,functionName,header_table_id,table_id) {
+    var headerCells = 
+    functionName === undefined ?
+    columnNames.reduce(
+        (accumulator, currentValue) => accumulator.concat(`<td>${currentValue}</td>`),
+        ''
+    ) 
+    : 
+    table_id === undefined ?
+    columnNames.reduce(
+        (accumulator, currentValue, currentIndex) => accumulator.concat(`<td onclick=${functionName}(${currentIndex})>${currentValue}</td>`),
+        ''
+    )
+    :
+    columnNames.reduce(
+        (accumulator, currentValue, currentIndex) => accumulator.concat(`<td onclick=${functionName}(${currentIndex},"${table_id}")>${currentValue}</td>`),
+        ''
+    )
+    
+    return  header_table_id === undefined ? `<tr>${headerCells}</tr>` : `<tr id=${header_table_id}>${headerCells}</tr>`;
+}
+
+
+var cPrev = -1;
+function sortBy(c,id) {
+    let rows = document.getElementById(id).rows.length;
+    let columns = document.getElementById(id).rows[0].cells.length;
+    let arrTable = new Array(rows);
+    for (let i = 0; i < arrTable.length; i++) {
+        arrTable[i] = new Array(columns);
+    }
+    for (let row = 0; row < rows; row++) {
+        for (col = 0; col < columns; col++) {
+            arrTable[row][col] = document.getElementById(id).rows[row].cells[col].innerHTML;
+        }
+    }
+    let firstLine = arrTable.shift();
+
+    if (c !== cPrev) {
+        arrTable.sort(
+            function (a, b) {
+                if (a[c] === b[c]) {
+                    return 0;
+                } else {
+                    return (a[c] < b[c]) ? -1 : 1;
+                }
+            }
+        );
+    } else {
+        arrTable.reverse();
+    }
+    cPrev = c;
+    arrTable.unshift(firstLine);
+    for (let row = 0; row < rows; row++) {
+        for (col = 0; col < columns; col++) {
+            document.getElementById(id).rows[row].cells[col].innerHTML = arrTable[row][col];
+        }
+    }
+}
+
+
 function tokenRefresher() {
     fetch('../../api?endpoint=refresh_token', {
         headers: {
@@ -71,7 +132,8 @@ function buildUsersTable(data) {
     let i = 1;
     let users = data.users;
 
-    table.innerHTML = '<tr id="header-table-users"> <td onclick="sortByUsers(0)">Име</td> <td onclick="sortByUsers(1)">Имейл</td> <td onclick="sortByUsers(2)">Телефон</td> <td onclick="sortByUsers(3)">Роля</td> </tr>';
+        var columnNames = ["Име", "Имейл", "Телефон", "Роля"];
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy','header-table-users','users-table');
 
     for (const user of users) {
         var row = table.insertRow(i);
@@ -129,7 +191,8 @@ function buildEditStudentsTable(data) {
     let i = 1;
     let users = data.users;
 
-    table.innerHTML = '<tr id="header-table-edit"><td onclick="sortByEdit(0)">Име</td><td onclick="sortByEdit(1)">Имейл</td><td onclick="sortByEdit(2)">Телефон</td><td onclick="sortByEdit(3)">ФН</td></tr>';
+    var columnNames = ["Име", "Имейл", "Телефон", "Фн"];
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy','header-table-edit','edit-students-table');
 
     for (const user of users) {
         var row = table.insertRow(i);
@@ -152,7 +215,8 @@ function buildStudentsTable(data) {
     var table = document.getElementById("students-table");
     let i = 1;
     let users = data.users;
-    table.innerHTML = '<tr id="header-table-students"> <td onclick="sortByStudents(0)">Име</td> <td onclick="sortByStudents(1)">Имейл</td> <td onclick="sortByStudents(2)">Телефон</td> <td onclick="sortByStudents(3)">ФН</td> <td onclick="sortByStudents(4)">Степен</td> <td onclick="sortByStudents(5)">Спец.</td> <td onclick="sortByStudents(6)">Група</td> <td onclick="sortByStudents(7)">Дипломиращ се</td> <td onclick="sortByStudents(8)">Роля</td> </tr>';
+    var columnNames = ["Име", "Имейл", "Телефон", "ФН", "Степен", "Спец.", "Група", "Дипломиращ се", "Роля"];
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy','header-table-students','students-table');
 
     for (const user of users) {
         var row = table.insertRow(i);
@@ -207,7 +271,12 @@ function getStudentsDiplomaInfo() {
 function buildStudentsDiplomaTable(users) {
     var table = document.getElementById("diploma-table");
 
-    table.innerHTML = '<tr id="header-table"> <td onclick="sortByGraduated(0)">ФН</td> <td onclick="sortByGraduated(1)">Име</td> <td onclick="sortByGraduated(2)">Цвят</td> <td onclick="sortByGraduated(4)">Ред на връчване</td> <td onclick="sortByGraduated(4)">Час на връчване</td> <td onclick="sortByGraduated(5)">Степен</td> <td onclick="sortByGraduated(6)">Спец.</td> <td onclick="sortByGraduated(7)">Група</td> <td onclick="sortByGraduated(8)">Успех</td> <td onclick="sortByGraduated(9)">Присъствие</td> <td onclick="sortByGraduated(10)">Има право</td> <td onclick="sortByGraduated(11)">Готова</td> <td onclick="sortByGraduated(12)">Взета</td> <td onclick="sortByGraduated(13)">Заявка взимане предв.</td> <td onclick="sortByGraduated(14)">Коментар (студент)</td> <td onclick="sortByGraduated(15)">Взета предв.</td> <td onclick="sortByGraduated(16)">Дата/час</td> <td onclick="sortByGraduated(17)">Коментар (администр.)</td> <td onclick="sortByGraduated(18)">Покана реч</td> <td onclick="sortByGraduated(19)">Отговор</td> <td onclick="sortByGraduated(20)">Снимки</td> <td onclick="sortByGraduated(21)">Заявена тога</td> <td onclick="sortByGraduated(22)">Взета</td> <td onclick="sortByGraduated(23)">Дата/час</td> <td onclick="sortByGraduated(24)">Върната</td> <td>Дата/час</td> <td onclick="sortByGraduated(25)">Заявена шапка</td> <td onclick="sortByGraduated(26)">Взета</td> <td onclick="sortByGraduated(27)">Дата/час</td></tr>';
+    var columnNames = [
+        "ФН", "Име","Цвят","Ред на връчване","Час на връчване", "Степен", "Спец.", "Група", "Успех",
+        "Присъствие", "Има право", "Модератор за диплома", "Готова диплома", "Взета", "Заявка взимане предв.", "Коментар (студент)",
+        "Взета предв.", "Дата/час", "Коментар (администр.)", "Покана реч", "Отговор", "Снимки", "Модератор за тога","Заявена тога",
+        "Взета", "Дата/час", "Върната", "Дата/час","Модератор за шапка", "Заявена шапка", "Взета", "Дата/час"];
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy','header-table-diploma','diploma-table');
     let i = 1;
 
     for (const user of users) {
@@ -232,6 +301,7 @@ function buildStudentsDiplomaTable(users) {
                 user.grade,
                 user.attendance == 0 ? 'Не' : 'Да',
                 user.has_right == 0 ? 'Не' : 'Да',
+                user.moderator_signature_email === null ? 'не е избран' : user.moderator_signature_email,
                 user.is_ready == 0 ? 'Не' : 'Да',
                 user.is_taken == 0 ? 'Не' : 'Да',
                 user.take_in_advance_request == 0 ? 'Не' : 'Да',
@@ -242,6 +312,7 @@ function buildStudentsDiplomaTable(users) {
                 user.speech_request = (user.speech_request == 1) ? 'Да' : 'Не',
                 user.speech_response = response,
                 user.photos_requested == 0 ? 'Не' : 'Да',
+                user.moderator_gown_email === null ? 'не е избран' : user.moderator_gown_email,
                 //gown_requested
                 user.gown_requested == null ? '' : user.gown_requested == 0 ? 'Не' : 'Да',
                 //gown_taken
@@ -250,12 +321,12 @@ function buildStudentsDiplomaTable(users) {
                 //gown_returned
                 user.gown_taken != 1 ? '' : user.gown_returned == 0 || user.gown_returned == null ? 'Не' : 'Да',
                 user.gown_returned_date,
+                user.moderator_hat_email === null ? 'не е избран' : user.moderator_hat_email,
                 //hat_requested
                 user.hat_requested == null ? '' : user.hat_requested == 0 ? 'Не' : 'Да',
                 //hat_taken
                 user.hat_requested != 1 ? '' : user.hat_taken == 0 || user.hat_taken == null ? 'Не' : 'Да',
-                user.hat_taken_date
-
+                user.hat_taken_date,
             ];
             const number_columns = row_data.length;
             for (var j = 0; j < number_columns; j++) {
@@ -1399,154 +1470,10 @@ function downloadExcellentStudent(event) {
     }
 }
 
-var cPrev = -1;
-function sortByGraduated(c) {
-    let rows = document.getElementById("diploma-table").rows.length;
-    let columns = document.getElementById("diploma-table").rows[0].cells.length;
-    let arrTable = new Array(rows);
-    for (let i = 0; i < arrTable.length; i++) {
-        arrTable[i] = new Array(columns);
-    }
-    for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < columns; col++) {
-            arrTable[row][col] = document.getElementById("diploma-table").rows[row].cells[col].innerHTML;
-        }
-    }
-    let firstLine = arrTable.shift();
 
-    if (c !== cPrev) {
-        arrTable.sort(
-            function (a, b) {
-                if (a[c] === b[c]) {
-                    return 0;
-                } else {
-                    return (a[c] < b[c]) ? -1 : 1;
-                }
-            }
-        );
-    } else {
-        arrTable.reverse();
-    }
-    cPrev = c;
-    arrTable.unshift(firstLine);
-    for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < columns; col++) {
-            document.getElementById("diploma-table").rows[row].cells[col].innerHTML = arrTable[row][col];
-        }
-    }
-}
-
-function sortByUsers(c) {
-    let rows = document.getElementById("users-table").rows.length;
-    let columns = document.getElementById("users-table").rows[0].cells.length;
-    let arrTable = new Array(rows);
-    for (let i = 0; i < arrTable.length; i++) {
-        arrTable[i] = new Array(columns);
-    }
-    for (let row = 0; row < rows; row++) {
-        for (col = 0; col < columns; col++) {
-            arrTable[row][col] = document.getElementById("users-table").rows[row].cells[col].innerHTML;
-        }
-    }
-    let firstLine = arrTable.shift();
-
-    if (c !== cPrev) {
-        arrTable.sort(
-            function (a, b) {
-                if (a[c] === b[c]) {
-                    return 0;
-                } else {
-                    return (a[c] < b[c]) ? -1 : 1;
-                }
-            }
-        );
-    } else {
-        arrTable.reverse();
-    }
-    cPrev = c;
-    arrTable.unshift(firstLine);
-    for (let row = 0; row < rows; row++) {
-        for (col = 0; col < columns; col++) {
-            document.getElementById("users-table").rows[row].cells[col].innerHTML = arrTable[row][col];
-        }
-    }
-}
-
-function sortByStudents(c) {
-    let rows = document.getElementById("students-table").rows.length;
-    let columns = document.getElementById("students-table").rows[0].cells.length;
-    let arrTable = new Array(rows);
-    for (let i = 0; i < arrTable.length; i++) {
-        arrTable[i] = new Array(columns);
-    }
-    for (let row = 0; row < rows; row++) {
-        for (col = 0; col < columns; col++) {
-            arrTable[row][col] = document.getElementById("students-table").rows[row].cells[col].innerHTML;
-        }
-    }
-    let firstLine = arrTable.shift();
-
-    if (c !== cPrev) {
-        arrTable.sort(
-            function (a, b) {
-                if (a[c] === b[c]) {
-                    return 0;
-                } else {
-                    return (a[c] < b[c]) ? -1 : 1;
-                }
-            }
-        );
-    } else {
-        arrTable.reverse();
-    }
-    cPrev = c;
-    arrTable.unshift(firstLine);
-    for (let row = 0; row < rows; row++) {
-        for (col = 0; col < columns; col++) {
-            document.getElementById("students-table").rows[row].cells[col].innerHTML = arrTable[row][col];
-        }
-    }
-}
-
-function sortByEdit(c) {
-    let rows = document.getElementById('edit-students-table').rows.length;
-    let columns = document.getElementById('edit-students-table').rows[0].cells.length;
-    let arrTable = new Array(rows);
-    for (let i = 0; i < arrTable.length; i++) {
-        arrTable[i] = new Array(columns);
-    }
-    for (let row = 0; row < rows; row++) {
-        for (col = 0; col < columns; col++) {
-            arrTable[row][col] = document.getElementById('edit-students-table').rows[row].cells[col].innerHTML;
-        }
-    }
-    let firstLine = arrTable.shift();
-
-    if (c !== cPrev) {
-        arrTable.sort(
-            function (a, b) {
-                if (a[c] === b[c]) {
-                    return 0;
-                } else {
-                    return (a[c] < b[c]) ? -1 : 1;
-                }
-            }
-        );
-    } else {
-        arrTable.reverse();
-    }
-    cPrev = c;
-    arrTable.unshift(firstLine);
-    for (let row = 0; row < rows; row++) {
-        for (col = 0; col < columns; col++) {
-            document.getElementById('edit-students-table').rows[row].cells[col].innerHTML = arrTable[row][col];
-        }
-    }
-}
-
-function searchInTable() {
-    const table = document.getElementById('diploma-table');
-    const input = document.getElementById('search');
+function searchInTable(table_id,input_id) {
+    const table = document.getElementById(table_id);
+    const input = document.getElementById(input_id);
     const filter = input.value.toUpperCase();
 
     let txtValue;
