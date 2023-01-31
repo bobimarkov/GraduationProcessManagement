@@ -88,6 +88,11 @@ table {
     border-radius: 5px;
 }  
 
+table tbody {
+    display: table;
+    width: 100%;
+}
+
 table td {
     border: 0.5px solid slategray;
     padding: 0 0.2em;
@@ -119,6 +124,8 @@ table td {
     width: 8%;
 }
 
+
+
 /*Edit-students-table css-style start*/
 
 .edit-students-table td:nth-child(1){
@@ -142,6 +149,9 @@ table td {
     
     width:20%;
 }
+
+
+
 
 
 /*Edit-students-table css-style end*/
@@ -195,6 +205,8 @@ table td {
     width: 5%;
 }
 
+
+
 .diploma-table {
     display: block;
     overflow-x: auto;
@@ -229,6 +241,19 @@ table td {
 .diploma_take_columns {
     background-color: rgb(216, 216, 216)!important;
 }
+
+
+.responsibilities_table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.responsibilities_table tbody {
+    display: table;
+    width: 100%;
+}
+
 
 table tr {
     height: 1.7em;

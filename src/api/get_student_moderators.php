@@ -6,16 +6,15 @@ header("Access-Control-Allow-Methods: GET");
 include_once '../src/database/db_conf.php';
 include_once '../src/utils/JWTUtils.php';
 
+$data_array = array();
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    validateJWT($jwt, ["admin", "moderator-hat","moderator-gown","moderator-signature"]);
+    validateJWT($jwt, ["admin", "moderator-hat","moderator-gown", "moderator-signature","student"]);
+    $email = json_decode(file_get_contents("php://input"));
 
     $database = new Db();
     $conn = $database->getConnection();
-    $stmt = $conn->prepare("SELECT user.id, user.name, user.email, user.phone, student.fn, student.degree, student.major, student.group, student.has_diploma_right, user.role 
-                            FROM user
-                            RIGHT JOIN student ON user.id = student.user_id 
-                            WHERE user.role='student'
-                            ORDER BY id ASC");
+    $stmt = $conn->prepare("SELECT * from student_moderators");
     $stmt->execute();
 
     $rows = $stmt->fetchAll();
@@ -24,3 +23,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode($response);
     http_response_code(200);
 }
+?>

@@ -8,7 +8,7 @@ include_once '../src/utils/JWTUtils.php';
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
-    validateJWT($jwt, ["admin", "moderator"]);
+    validateJWT($jwt, ["admin", "moderator-hat", "moderator-gown", "moderator-signature"]);
 
     $data = (array) $data;
 
@@ -68,4 +68,5 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         }
     }
 }
+
 ?>

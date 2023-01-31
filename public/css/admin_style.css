@@ -23,7 +23,7 @@ body {
     box-shadow: 5px 5px 20px darkslategray;
 }
 
-.submit-button-users {
+.long-submit-button {
     margin-top: 1em;
     height: 2.5em;
     width: 100%;
@@ -36,7 +36,7 @@ body {
     font-size: medium;
 }
 
-.submit-button-users:hover {
+.long-submit-button:hover {
     background-color: #006199;
     color: snow;
 }
@@ -442,7 +442,8 @@ table tr:nth-child(even) {
 }
 
 .diploma_order_section,
-.excellent_order {
+.excellent_order,
+.distribute_moderators {
     display: none;
 }
 

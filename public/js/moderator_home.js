@@ -13,6 +13,16 @@ logoutHeader.addEventListener("click", (e) => {
     window.location.replace("../../");
 });
 
+
+function generateTableHeaderRow(columnNames) {
+    var headerCells = columnNames.reduce(
+        (accumulator, currentValue) => accumulator.concat(`<td>${currentValue}</td>`),
+        ''
+    )
+    return `<tr>${headerCells}</tr>`
+};
+
+
 function tokenRefresher() {
     fetch('../../api?endpoint=refresh_token', {
         headers: {
@@ -67,7 +77,8 @@ function buildUsersTable(data) {
     let i = 1;
     let users = data.users;
 
-    table.innerHTML = " <tr> <td>ID</td> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>Роля</td> </tr>";
+    var columnNames = ["ID", "Име", "Имейл", "Телефон", "Роля"];
+    table.innerHTML = generateTableHeaderRow(columnNames);
 
     for (const user of users) {
         var row = table.insertRow(i);
@@ -77,10 +88,11 @@ function buildUsersTable(data) {
             user.name,
             user.email,
             user.phone,
-            user.role == 'admin' ?
-                '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
-                    '<i class="fas fa-user-cog user-role-icon"></i>' :
-                    '<i class="fas fa-user-graduate user-role-icon"></i>'
+            user.role == 'admin' ? '<i class="fas fa-user-lock user-role-icon"></i>' :
+                user.role == 'moderator-hat' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-graduation-cap user-role-icon"></i>' :
+                    user.role == 'moderator-gown' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-tshirt user-role-icon"></i>' :
+                        user.role == 'moderator-signature' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-pen user-role-icon"></i>' :
+                            '<i class="fas fa-user-graduate user-role-icon"></i>'
         ];
         const number_columns = row_data.length;
         for (var j = 0; j < number_columns; j++) {
@@ -125,7 +137,8 @@ function buildStudentsTable(data) {
     var table = document.getElementById("students-table");
     let i = 1;
     let users = data.users;
-    table.innerHTML = "<tr> <td>ID</td> <td>Име</td> <td>Имейл</td> <td>Телефон</td> <td>ФН</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Дипломиращ се</td> <td>Роля</td> </tr>";
+    var columnNames = ["ID", "Име", "Имейл", "Телефон", "ФН", "Степен", "Спец.", "Група", "Дипломиращ се", "Роля"];
+    table.innerHTML = generateTableHeaderRow(columnNames);
 
     for (const user of users) {
         var row = table.insertRow(i);
@@ -140,10 +153,7 @@ function buildStudentsTable(data) {
             user.major,
             user.group,
             user.has_diploma_right == 0 ? "Не" : "Да",
-            user.role == 'admin' ?
-                '<i class="fas fa-user-lock user-role-icon"></i>' : user.role = 'moderator' ?
-                    '<i class="fas fa-user-cog user-role-icon"></i>' :
-                    '<i class="fas fa-user-graduate user-role-icon"></i>'
+            '<i class="fas fa-user-graduate user-role-icon"></i>'
         ];
         const number_columns = row_data.length;
         for (var j = 0; j < number_columns; j++) {
@@ -212,7 +222,12 @@ function getColorsConfig(users) {
 
 function buildStudentsDiplomaTable(users, colors_config) {
     var table = document.getElementById("diploma-table");
-    table.innerHTML = "<tr> <td>№</td> <td>ФН</td> <td>Име</td> <td>Степен</td> <td>Спец.</td> <td>Група</td> <td>Успех</td> <td>Присъствие</td> <td>Има право</td> <td>Готова</td> <td>Взета</td> <td>Заявка взимане предв.</td> <td>Коментар (студент)</td> <td>Взета предв.</td> <td>Дата/час</td> <td>Коментар (администр.)</td> <td>Покана реч</td> <td>Отговор</td> <td>Снимки</td> <td>Заявена тога</td> <td>Взета</td> <td>Дата/час</td> <td>Върната</td> <td>Дата/час</td> <td>Заявена шапка</td> <td>Взета</td> <td>Дата/час</td> <td>Върната</td> <td>Дата/час</td></tr>";
+    var columnNames = [
+        "ID", "ФН", "Име", "Степен", "Спец.", "Група", "Успех",
+        "Присъствие", "Има право", "Готова", "Взета", "Заявка взимане предв.", "Коментар (студент)",
+        "Взета предв.", "Дата/час", "Коментар (администр.)", "Покана реч", "Отговор", "Снимки", "Заявена тога",
+        "Взета", "Дата/час", "Върната", "Дата/час", "Заявена шапка", "Взета", "Дата/час"];
+    table.innerHTML = generateTableHeaderRow(columnNames);
     let i = 1;
 
     for (const user of users) {
@@ -239,17 +254,19 @@ function buildStudentsDiplomaTable(users, colors_config) {
                 user.speech_request == 0 ? 'Не' : 'Да',
                 user.speech_response == null ? '-' : user.speech_response,
                 user.photos_requested == 0 ? 'Не' : 'Да',
-                user.gown_requested == 0 ? 'Не' : 'Да',
-                user.gown_taken == 0 ? 'Не' : 'Да',
+                //gown_requested
+                user.gown_requested == null ? '' : user.gown_requested == 0 ? 'Не' : 'Да',
+                //gown_taken
+                user.gown_requested != 1 ? '' : user.gown_taken == 0 || user.gown_taken == null ? 'Не' : 'Да',
                 user.gown_taken_date,
-                user.gown_returned == 0 ? 'Не' : 'Да',
+                //gown_returned
+                user.gown_taken != 1 ? '' : user.gown_returned == 0 || user.gown_returned == null ? 'Не' : 'Да',
                 user.gown_returned_date,
-                user.hat_requested == 0 ? 'Не' : 'Да',
-                user.hat_taken == 0 ? 'Не' : 'Да',
-                user.hat_taken_date,
-                user.hat_returned == 0 ? 'Не' : 'Да',
-                user.hat_returned_date,
-
+                //hat_requested
+                user.hat_requested == null ? '' : user.hat_requested == 0 ? 'Не' : 'Да',
+                //hat_taken
+                user.hat_requested != 1 ? '' : user.hat_taken == 0 || user.hat_taken == null ? 'Не' : 'Да',
+                user.hat_taken_date
             ];
             const number_columns = row_data.length;
             for (var j = 0; j < number_columns; j++) {
@@ -353,7 +370,8 @@ function showGivenSection(sectionToBeDisplayed) {
         'users_section',
         'students_section',
         'diploma_section',
-        'analytic_section'];
+        'analytic_section',
+        'responsibilities_section'];
     sections = sections.map(x => document.getElementById(x));
 
     //iterate all sections
@@ -379,7 +397,8 @@ function activeHeader(elementId) {
         'users_header',
         'students_header',
         'diploma_header',
-        'analytic_header'];
+        'analytic_header',
+        'responsibilities_header'];
 
     headers = headers.map(x => document.getElementById(x));
 
@@ -531,4 +550,298 @@ function drawChart(majorData, id, titleMessage) {
     // Display the chart inside the <div> element with id="piechart"
     var chart = new google.visualization.PieChart(document.getElementById(id));
     chart.draw(data, options);
-} 
+}
+
+function responsibilitiesByModeratorRole() {
+    fetch(`../../api?endpoint=get_user_role`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => {
+            if(response.ok) {
+                return response.json();
+            }
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            switch (data.role) {
+                case "moderator-hat":
+                    responsibilitiesForModeratorHat();
+                    break;
+                case "moderator-gown":
+                    responsibilitiesForModeratorGown();
+                    break;
+                case "moderator-signature":
+                    responsibilitiesForModeratorSignature();
+                    break;
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+        .finally();
+}
+
+function responsibilitiesForModeratorHat() {
+    showGivenSection("responsibilities_section");
+    activeHeader("responsibilities_header");
+    fetchDataForStudents(buildResponsibilitiesSectionForModeratorHat, "get_students_hat");
+}
+
+function responsibilitiesForModeratorGown() {
+    showGivenSection("responsibilities_section");
+    activeHeader("responsibilities_header");
+    fetchDataForStudents(buildResponsibilitiesSectionForModeratorGown, "get_students_gown");
+}
+function responsibilitiesForModeratorSignature() {
+    showGivenSection("responsibilities_section");
+    activeHeader("responsibilities_header");
+    fetchDataForStudents(buildResponsibilitiesSectionForModeratorSignature, "get_students_signature");
+}
+
+
+function fetchDataForStudents(moderatorFunction, endpoint) {
+
+    fetch(`../../api?endpoint=${endpoint}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => {
+            if(response.ok) {
+                return response.json();
+            }
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            moderatorFunction(data.users);
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+        .finally();
+}
+
+
+function createParagraphForModerator(text, data, dataId) {
+    let paragraph = document.createElement('p');
+    paragraph.setAttribute('id', dataId);
+    paragraph.setAttribute('class', 'sum-paragraph');
+    paragraph.appendChild(document.createTextNode(text + data));
+    return paragraph.outerHTML;
+}
+function createSumDivForModerator(parentId, sums_text, sum_values) {
+    let paragraphs_parent = document.getElementById(parentId);
+    paragraphs_parent.innerHTML = '';
+    for (let j = 0; j < sum_values.length; j++) {
+        paragraphs_parent.innerHTML += createParagraphForModerator(sums_text[j], sum_values[j], "sum" + j);
+    }
+}
+
+
+function buildResponsibilitiesSectionForModeratorHat(users) {
+    var resp_beginning = document.getElementById("responsibilities_beginning");
+    var name_range = users[0].name_range;
+    resp_beginning.innerHTML = '<i class="fas fa-graduation-cap"> </i>' + " " +  " Отговорност: Шапки " + name_range ;
+    var table = document.getElementById("responsibilities_table");
+    var sums = {
+        has_right: 0,
+        attendance: 0,
+        hat_requested: 0,
+        hat_declined: 0
+    }
+    var sums_text = ["Студенти с право на диплома: ", "Студенти заявили присъствие: ", "Студенти заявили шапка: ", "Студенти отказали шапка: "];
+    for (const user of users) {
+        sums.hat_requested += user.hat_requested === 1;
+        sums.hat_declined += user.hat_requested === 0;
+        sums.has_right += user.has_right === 1;
+        sums.attendance += user.attendance === 1;
+    }
+
+    createSumDivForModerator("sums-div", sums_text, Object.values(sums));
+
+    tableheader = document.getElementById("header_responsibilities_table");
+    tableheader.innerHTML = '<i class=\"fas fa-list\"></i>' + " Студенти заявили шапка";
+
+
+    let i = 1;
+    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Дата на вземане"];
+    table.innerHTML = generateTableHeaderRow(columnNames);
+    for (const user of users) {
+        if (user.hat_requested == 1) {
+            var row = table.insertRow(i);
+            row.id = 'user' + i;
+            let row_data = [
+                user.fn,
+                user.name,
+                user.email,
+                user.phone,
+                user.attendance === 0 ? 'Не' : 'Да',
+                user.hat_taken === null ? '' : user.hat_taken === 0 ? 'Не' : 'Да',
+                user.hat_taken === 1 ? user.hat_taken_date : ''
+            ]
+            for (var j = 0; j < row_data.length; j++) {
+                row.insertCell(j).innerHTML = row_data[j];
+            }
+            i++;
+        }
+    }
+
+    tableheader = document.getElementById("header_responsibilities_table2");
+    tableheader.style.display ="none";
+    table = document.getElementById("responsibilities_table2")
+    table.style.display = "none";
+}
+
+
+function buildResponsibilitiesSectionForModeratorGown(users) {
+    var resp_beginning = document.getElementById("responsibilities_beginning");
+    var name_range = users[0].name_range;
+    resp_beginning.innerHTML = '<i class="fas fa-tshirt"></i>' + " Отговорност: Тоги " + name_range;
+    var table = document.getElementById("responsibilities_table");
+    var sums = {
+        has_right: 0,
+        attendance: 0,
+        gown_requested: 0,
+        gown_declined: 0
+    }
+    var sums_text = ["Студенти с право на диплома: ", "Студенти заявили присъствие: ", "Студенти заявили тога: ", "Студенти отказали тога: "];
+    for (const user of users) {
+        sums.gown_requested += user.gown_requested === 1;
+        sums.gown_declined += user.gown_requested === 0;
+        sums.has_right += user.has_right === 1;
+        sums.attendance += user.attendance === 1;
+    }
+    createSumDivForModerator("sums-div", sums_text, Object.values(sums));
+
+    tableheader = document.getElementById("header_responsibilities_table");
+    tableheader.innerHTML = "<i class=\"fas fa-list\"></i>" + " Студенти заявили тога";
+
+    let i = 1;
+    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Дата на вземане", "Върната", "Дата на връщане"];
+    table.innerHTML = generateTableHeaderRow(columnNames);
+    for (const user of users) {
+        if (user.gown_requested === 1) {
+            var row = table.insertRow(i);
+            row.id = 'user' + i;
+            let row_data = [
+                user.fn,
+                user.name,
+                user.email,
+                user.phone,
+                user.attendance === 0 ? 'Не' : 'Да',
+                user.gown_taken === null ? '' : user.gown_taken === 0 ? 'Не' : 'Да',
+                user.gown_taken === 1 ? user.gown_taken_date : '',
+                user.gown_returned === null ? '' : user.gown_returned === 0 ? 'Не' : 'Да',
+                user.gown_returned_date === 1 ? user.gown_returned_date : ''
+            ]
+            for (var j = 0; j < row_data.length; j++) {
+                row.insertCell(j).innerHTML = row_data[j];
+            }
+            i++;
+        }
+    }
+
+    tableheader = document.getElementById("header_responsibilities_table2");
+    tableheader.style.display ="none";
+    table = document.getElementById("responsibilities_table2")
+    table.style.display = "none";
+}
+
+
+function buildResponsibilitiesSectionForModeratorSignature(users) {
+    var resp_beginning = document.getElementById("responsibilities_beginning");
+    var name_range = users[0].name_range;
+    resp_beginning.innerHTML = '<i class="fas fa-pen"></i>' + " Отговорност: Дипломи " + name_range;
+    var sums = {
+        has_right: 0,
+        attendance: 0,
+        take_in_advance: 0,
+        taken: 0
+    }
+    var sums_text = ["Студенти с право на диплома: ", "Студенти заявили присъствие: ", "Студенти искащи дипломата си предварително: ", "Студенти взели дипломите си: "];
+    for (const user of users) {
+        sums.taken += user.is_taken;
+        sums.has_right += user.has_right;
+        sums.take_in_advance += user.take_in_advance_request;
+        sums.attendance += user.attendance;
+    }
+    createSumDivForModerator("sums-div", sums_text, Object.values(sums));
+
+    var tableheader = document.getElementById("header_responsibilities_table");
+    tableheader.innerHTML = "<i class=\"fas fa-list\"></i>" + " Студенти с право на диплома:";
+
+    let i = 1;
+    var table = document.getElementById("responsibilities_table");
+    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Заявка взимане предв.", "Коментар (студент)", "Взета предв.", "Дата/час", "Коментар (администр.)"];
+    table.innerHTML = generateTableHeaderRow(columnNames);
+    for (const user of users) {
+        if (user.has_right) {
+            var row = table.insertRow(i);
+            row.id = 'user' + i;
+            let row_data = [
+                user.fn,
+                user.name,
+                user.email,
+                user.phone,
+                user.attendance === 0 ? 'Не' : 'Да',
+                user.is_taken === 0 ? 'Не' : 'Да',
+                user.take_in_advance_request === 0 ? 'Не' : 'Да',
+                user.take_in_advance_request_comment === null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.take_in_advance_request_comment}</span></i>`,
+                user.is_taken_in_advance === 0 ? 'Не' : 'Да',
+                user.taken_at_time,
+                user.diploma_comment === null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.diploma_comment}</span></i>`,
+            ]
+            for (var j = 0; j < row_data.length; j++) {
+                row.insertCell(j).innerHTML = row_data[j];
+            }
+            i++;
+        }
+    }
+
+    tableheader = document.getElementById("header_responsibilities_table2");
+    tableheader.innerHTML = "<i class=\"fas fa-list\"></i>" + " Студенти, искащи дипломата си предварително:";
+
+    i = 1;
+    table = document.getElementById("responsibilities_table2");
+    var columnNames = ["ФН", "Име,", "Имейл", "Телефон", "Присъствие", "Заявка взимане предв.", "Коментар (студент)", "Взета предв.","Коментар (администр.)"];
+    table.innerHTML = generateTableHeaderRow(columnNames);
+    for (const user of users) {
+        if (user.take_in_advance_request) {
+            var row = table.insertRow(i);
+            row.id = 'user' + i;
+            let row_data = [
+                user.fn,
+                user.name,
+                user.email,
+                user.phone,
+                user.attendance === 0 ? 'Не' : 'Да',
+                user.take_in_advance_request === 0 ? 'Не' : 'Да',
+                user.take_in_advance_request_comment === null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.take_in_advance_request_comment}</span></i>`,
+                user.is_taken_in_advance === 0 ? 'Не' : 'Да',
+                user.diploma_comment === null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.diploma_comment}</span></i>`,
+            ]
+            for (var j = 0; j < row_data.length; j++) {
+                row.insertCell(j).innerHTML = row_data[j];
+            }
+            i++;
+        }
+    }
+}
+
+
+
+

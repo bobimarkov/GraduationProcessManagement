@@ -330,6 +330,7 @@ function buildContentForGraduatingStudent(user) {
     document.getElementById("take_in_advance_request").innerHTML = 'Заявена предварително: ' + (user.take_in_advance_request === 1 ? '<i class="far fa-check-square"></i>' : "Не");
     document.getElementById("is_taken_in_advance").innerHTML = 'Взета (предварително): ' + (user.is_taken_in_advance === 1 ? '<i class="far fa-check-square"></i>' : "Не");
     document.getElementById("taken_at_time").innerText = 'Дата/час на взимане: ' + (user.taken_at_time === null || user.taken_at_time === "" ? "-" : user.taken_at_time);
+    document.getElementById("signature_moderator").innerHTML = 'Модератор за диплома: ' + (user.moderator_signature_email === null || user.attendance !== 1 ?  '-' : user.moderator_signature_email);
 
     document.getElementById("attendance").checked = user.attendance === 1 ? true : false;
     document.getElementById("photos_requested").checked = user.photos_requested === 1 ? true : false;
@@ -369,6 +370,7 @@ function buildContentForGraduatingStudent(user) {
     document.getElementById("gown_taken_date").innerHTML = 'Дата/час: ' + (user.gown_taken_date === null || user.gown_taken_date === "" ? "-" : user.gown_taken_date);
     document.getElementById("gown_returned").innerHTML = 'Върната: ' + (user.gown_returned === 1 ? '<i class="far fa-check-square"></i>' : "Не");
     document.getElementById("gown_returned_date").innerHTML = 'Дата/час: ' + ((user.gown_returned_date === null || user.gown_returned_date === "") ? "-" : user.gown_returned_date);
+    document.getElementById("gown_moderator").innerHTML = 'Модератор за тога: ' + (user.moderator_gown_email === null || user.gown_requested !== 1 ? '-' : user.moderator_gown_email);
 
     if (user.hat_requested !== null) {
         document.getElementById("hat_request").innerHTML = "Статус: " + (user.hat_requested === 1 ? "Заявена" : "Отказана");
@@ -376,8 +378,7 @@ function buildContentForGraduatingStudent(user) {
     }
     document.getElementById("hat_taken").innerHTML = 'Взета: ' + (user.hat_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
     document.getElementById("hat_taken_date").innerHTML = 'Дата/час: ' + (user.hat_taken_date === null || user.hat_taken_date === "" ? "-" : user.hat_taken_date);
-    document.getElementById("hat_returned").innerHTML = 'Върната: ' + (user.hat_returned === 1 ? '<i class="far fa-check-square"></i>' : "Не");
-    document.getElementById("hat_returned_date").innerHTML = 'Дата/час: ' + (user.hat_returned_date === null || user.gown_taken_date === "" ? "-" : user.gown_taken_date);
+    document.getElementById("hat_moderator").innerHTML = 'Модератор за шапка: ' + (user.moderator_hat_email === null || user.hat_requested !== 1 ? '-' : user.moderator_hat_email);
 }
 
 getStartHour();

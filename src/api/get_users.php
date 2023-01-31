@@ -7,13 +7,13 @@ include_once '../src/database/db_conf.php';
 include_once '../src/utils/JWTUtils.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    validateJWT($jwt, ["admin", "moderator"]);
+    validateJWT($jwt, ["admin", "moderator-hat","moderator-gown","moderator-signature"]);
 
     $database = new Db();
     $conn = $database->getConnection();
     $stmt = $conn->prepare("SELECT id, email, name, role, phone 
                                 FROM user 
-                                WHERE role='admin' OR role='moderator'
+                                WHERE role='admin' OR role in ('moderator-hat', 'moderator-gown', 'moderator-signature')
                                 ORDER BY id DESC");
     $stmt->execute();
 

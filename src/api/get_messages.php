@@ -7,7 +7,7 @@ include_once '../src/database/db_conf.php';
 include_once '../src/utils/JWTUtils.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    validateJWT($jwt, ["admin", "moderator", "student"]);
+    validateJWT($jwt, ["admin", "moderator-hat","moderator-gown","moderator-signature", "student"]);
 
     $database = new Db();
     $conn = $database->getConnection();

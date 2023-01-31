@@ -7,7 +7,8 @@ include_once '../src/database/db_conf.php';
 include_once '../src/utils/JWTUtils.php';
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-    validateJWT($jwt, ["admin", "moderator"]);
+
+    validateJWT($jwt, ["admin", "moderator-hat", "moderator-gown", "moderator-signature"]);
 
     $data = (array) $data;
     if (isset($data["format"])) {
@@ -18,9 +19,9 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         $database = new Db();
         $conn = $database->getConnection();
 
-        $stmt = $conn->prepare("SELECT name, email, phone, role FROM `user` 
-    WHERE role='admin' or role='moderator';");
 
+        $stmt = $conn->prepare("SELECT name, email, phone, role FROM `user` 
+                                    WHERE role='admin' or role in ('moderator-hat', 'moderator-gown', 'moderator-signature');");
         $stmt->execute();
 
         if ($format !== 'pdf' && $format !== 'no') {

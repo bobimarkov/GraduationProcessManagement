@@ -103,8 +103,8 @@ function validateInput($values, $user, $i) {
     }
 
     $role = $values_indexed[4];
-    if ($role != "admin" && $role != "moderator") {
-        $response = array("success" => false, "message" => "Грешка за потребител $i ($user) - ролята може да е или admin, или moderator!");
+    if ($role != "admin" && $role != "moderator-hat" && $role != "moderator-gown" && $role != "moderator-signature")  {
+        $response = array("success" => false, "message" => "Грешка за потребител $i ($user) - ролята може да е или admin, или moderator-hat, или moderator-gown, или moderator-signature!");
         echo json_encode($response);
         die;
     }
@@ -119,6 +119,7 @@ function exportUsersToDB($users_arr_2d) {
                                         WHERE email = :email");
     $stmt_register_user = $conn->prepare("INSERT INTO `user` (`email`, `password`, `name`, `phone`, `role`) 
                                           VALUES (:email, :password, :name, :phone, :role)");
+    $stmt_add_moderator_range = $conn->prepare("INSERT INTO `moderator_range` (`email`, `role`) VALUES (:email, :role)");
     $success = "";
     // check for already existing user with this email
     foreach ($users_arr_2d as $user => $values) {
@@ -130,7 +131,7 @@ function exportUsersToDB($users_arr_2d) {
                     die;
         }
 
-        $success = $stmt_register_user->execute([
+        $stmt_register_user->execute([
             "email" => $values[0],
             "password" => sha1($values[1]),
             "name" => $values[2],
@@ -138,6 +139,8 @@ function exportUsersToDB($users_arr_2d) {
             "role" => $values[4]
             
         ]);
+
+        $success = $stmt_add_moderator_range->execute(["email" => $values[0], "role" => $values[4]]);
     }
     if ($success) {
         $response = array("success" => true, "message" => "Потребителите са въведени успешно.");

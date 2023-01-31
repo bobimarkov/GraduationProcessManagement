@@ -60,7 +60,7 @@ CREATE TABLE `student_gown` (
     `gown_requested` BOOLEAN NULL DEFAULT NULL, 
     `gown_taken` BOOLEAN NULL DEFAULT NULL, 
     `gown_taken_date` DATE NULL DEFAULT NULL , 
-    `gown_returned` BOOLEAN NULL DEFAULT NULL, 
+    `gown_returned` BOOLEAN NULL DEFAULT NULL , 
     `gown_returned_date` DATE NULL DEFAULT NULL , 
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
@@ -74,8 +74,6 @@ CREATE TABLE `student_hat` (
     `hat_requested` BOOLEAN NULL DEFAULT NULL , 
     `hat_taken` BOOLEAN NULL DEFAULT NULL , 
     `hat_taken_date` DATE NULL DEFAULT NULL , 
-    `hat_returned` BOOLEAN NULL DEFAULT NULL , 
-    `hat_returned_date` DATE NULL DEFAULT NULL , 
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
@@ -119,6 +117,27 @@ CREATE TABLE `graduation_colors` (
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
+create table `student_moderators` (
+    `student_fn` VARCHAR(99) NOT NULL,
+    `moderator_hat_email` VARCHAR(99) NULL DEFAULT NULL,
+    `moderator_gown_email` VARCHAR(99) NULL DEFAULT NULL,
+    `moderator_signature_email` VARCHAR(99) NULL DEFAULT NULL,
+    PRIMARY KEY (`student_fn`)
+) ENGINE = InnoDB;
+
+ALTER TABLE `student_moderators` ADD INDEX(`student_fn`);
+ALTER TABLE `student_moderators` ADD CONSTRAINT `student_fn_fk_10` FOREIGN KEY (`student_fn`) REFERENCES `student_diploma`(`student_fn`) ON DELETE CASCADE ON UPDATE RESTRICT;
+
+create table moderator_range (
+    `email` VARCHAR(99) NOT NULL,
+    `role` VARCHAR(99) NOT NULL,
+    `range` VARCHAR(99) NULL DEFAULT NULL,
+    PRIMARY KEY (`email`)
+) ENGINE = InnoDB;
+
+ALTER TABLE `moderator_range` ADD INDEX(`email`);
+ALTER TABLE `moderator_range` ADD CONSTRAINT `student_fn_fk_11` FOREIGN KEY (`email`) REFERENCES `user`(`email`) ON DELETE CASCADE ON UPDATE RESTRICT;
+
 CREATE TABLE `messages` (
     `id` INT NOT NULL AUTO_INCREMENT , 
     `sender` VARCHAR(99) NOT NULL ,
@@ -126,51 +145,4 @@ CREATE TABLE `messages` (
     `message` TEXT NOT NULL,
     PRIMARY KEY(`id`)
 ) ENGINE = InnoDB;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
