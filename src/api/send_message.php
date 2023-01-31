@@ -125,7 +125,6 @@ function updateAllMessageToDB($content, $sender)
     $success = "";
     while($row = $select_stmt->fetch(PDO::FETCH_ASSOC)) {
         $success = $insert_stmt->execute(["sender" => $sender, "recipient" => $row['email'], "content" => $content]);
-        //mail('bomar3110@gmail.com', "Graduation", $content);
     }
 
     if ($success) {

@@ -303,6 +303,10 @@ function showMessagesSection() {
     tokenRefresher();
     showGivenSection("messages_send_section");
     activeHeader("messages_header");
+    var errElem = document.getElementById('message-bar-export-message');
+    errElem.classList.remove(['success']);
+    errElem.classList.remove(['error']);
+    errElem.innerHTML = "";
 }
 
 function showSettingsSection() {
@@ -314,7 +318,7 @@ function showSettingsSection() {
 
 function showAnalyticsSection() {
     tokenRefresher();
-    showGivenSection("analytic_section"); drawChart
+    showGivenSection("analytic_section"); 
     activeHeader("analytic_header");
 
     fetch(`../../api?endpoint=statistics`, {
