@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     
     // Check if username is empty
     if (empty(trim($data))) {
-        $response = array("success" => false, "message" => "Грешка: Моля, въведете данни за студент(и).");
+        $response = array("success" => false, "message" => "Грешка: Моля, въведете данни за потребител(и).");
         echo json_encode($response);
         die;
     } else {

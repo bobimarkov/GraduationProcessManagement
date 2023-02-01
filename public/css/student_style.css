@@ -140,6 +140,12 @@ textarea {
 .speech_request_section {
     border-bottom: 1px solid rgba(47, 79, 79, 0.603);
     justify-content: space-between;
+    margin-bottom: 1em;
+    border-top: 1px solid rgba(47, 79, 79, 0.603);
+}
+
+#speech_request_select{
+    margin-top: 0.3em;
 }
 
 .speech_request_select,
@@ -287,4 +293,16 @@ table tr {
 
 #message-bar-export-message {
     margin-left: 0 !important;
+}
+
+.received_messages {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    text-indent: 0.5em;
+    border: 1px solid #006199;
+    background: rgba(247, 241, 241, 0.603);
+    color: darkslategray;
+    font-size: medium;
+    margin-bottom: 1em;
 }

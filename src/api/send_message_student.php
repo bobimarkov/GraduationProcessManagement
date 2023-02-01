@@ -88,3 +88,4 @@ function updateMessageToDB($recipient, $content, $sender)
     }
 }
 
+?>

@@ -30,6 +30,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         array_push($rows, $row);
     }
 
+    if(empty($rows)) {
+        $response = array("success" => false, "message" => "В момента нямате никакви съобщения!");
+        echo json_encode($response);
+        die;
+    }
+
     $response = array("success" => true, "order" => $rows);
     echo json_encode($response);
     http_response_code(200);

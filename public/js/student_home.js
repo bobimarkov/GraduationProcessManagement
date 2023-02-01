@@ -534,13 +534,16 @@ function getMessages() {
             notifications.style.display = "block";
             if (!data.success) {
                 let text = document.createElement("p");
-                text.innerHTML = "В момента нямате никакви известия.";
+                text.innerHTML = data.message;
                 notifications.appendChild(text);
             } else {
                 for (let i = 0; i < data.order.length; i++) {   
+                    let div = document.createElement("div");
+                    div.setAttribute("class", "received_messages");
                     let text = document.createElement("p");                 
-                    text.innerHTML = `${i + 1})От ${data.order[i].sender} - ${data.order[i].message}`;
-                    notifications.appendChild(text);
+                    text.innerHTML = `${i + 1}) От ${data.order[i].sender} - ${data.order[i].message}`;
+                    div.appendChild(text);
+                    notifications.appendChild(div);
                 }
             }
         });

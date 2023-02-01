@@ -6,8 +6,6 @@ getStudentsDiplomaInfo();
 getGraduationInfo();
 makeArchive();
 getClasses();
-// Load google charts
-google.charts.load('current', { 'packages': ['corechart'] });
 
 
 let logoutHeader = document.getElementById("logout_header");
@@ -326,10 +324,44 @@ function showSettingsSection() {
 }
 
 function showAnalyticsSection() {
-    tokenRefresher();
-    showGivenSection("analytic_section");
-    activeHeader("analytic_header");
+    let text = document.getElementById('analytic_text');
+    fetch(`../../api?endpoint=get_students_diploma_simplified`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            tokenRefresher();
+            showGivenSection("analytic_section");
+            activeHeader("analytic_header");
+            if (!data.success) {
+                text.innerHTML = '<i class="fa fa-pie-chart"></i> В момента няма данни за дипломиращи се студенти и няма направена статистика! <br> Когато добавите данни, то ще получите статистика за тях!';
+                document.getElementById('analytic_section').style = 'height: 1em !important';
+                text.style = "text-align : center";
+                //console.log(data.error);
+            } else {
+                // Load google charts
+                google.charts.load('current', { 'packages': ['corechart'] });
+                text.innerHTML = '<i class="fa fa-pie-chart"></i> Статистиката е на база дипломиращи се студенти!';
+                text.style = "text-align : center; height : 1em";
+                document.getElementById('analytics1').style = 'margin-top: 1em';
+                showAnalyticsSectionHelper();
+            }
+        })
+}
 
+function showAnalyticsSectionHelper() {
     fetch(`../../api?endpoint=statistics`, {
         method: 'GET',
         headers: {
@@ -856,11 +888,11 @@ function submitAction(event) {
 
 function sendMessage(event) {
     event.preventDefault();
-    let fns = document.getElementById('textarea-fn');
+    let recipient = document.getElementById('textarea-emails');
     let message = document.getElementById('message');
 
     let actions = {
-        "fns": fns.value,
+        "recipient": recipient.value,
         "message": message.value
     };
     fetch('../../api?endpoint=send_message', {
@@ -890,7 +922,7 @@ function sendMessage(event) {
                 errElem.classList.remove(['error']);
                 errElem.classList.add(['success']);
                 errElem.innerHTML = data.message;
-                fns.value = "";
+                recipient.value = "";
                 message.value = "";
             }
         });
@@ -1572,97 +1604,6 @@ function searchInTable() {
     }
 }
 
-function sendGraduationInfo(event) {
-    event.preventDefault();
-    let time = document.getElementById('start-time');
-    let interval = document.getElementById('students-interval');
-    let date = document.getElementById('graduation-date');
-    let place = document.getElementById('graduation-place');
-    let classes = document.getElementById('class');
-    let errElem = document.getElementById('message-add-graduation-info');
-
-    if (time.value != "" && interval.value != "" && date.value != "" && place.value != "" && classes.value != "") {
-        let reg1 = /^(0?[0-9]|[01][0-9]|2[0-3]):[0-5][0-9]$/;
-        if (!reg1.test(time.value)) {
-            errElem.classList.remove(['success']);
-            errElem.classList.add(['error']);
-            errElem.innerHTML = "Грешка: Некоректен формат на началния час! Трябва да е 'час:минути'!";
-            return;
-        }
-        let reg2 = /^(0?[0-9]|[0-5][0-9]):?([0-5]?[0-9]?)$/;
-        if (!reg2.test(interval.value)) {
-            errElem.classList.remove(['success']);
-            errElem.classList.add(['error']);
-            errElem.innerHTML = "Грешка: Некоректен формат на интервала! Трябва да е 'минути:секунди'!";
-            return;
-        }
-        let d = new Date(date.value);
-        let year = d.getFullYear();
-        if (parseInt(classes.value) + 1 != year) {
-            errElem.classList.remove(['success']);
-            errElem.classList.add(['error']);
-            errElem.innerHTML = "Грешка: Дипломирането е една година след годината на завършване!";
-            return;
-        }
-        let today = new Date().toISOString().slice(0, 10);
-        if (d.toISOString().slice(0, 10) < today) {
-            var text = "Сигурни ли сте, че искате да направите тази промяна? Вие сте задали минала дата и това автоматично ще премахне студентите от текущите таблици и ще ги прехвърли в архива!";
-        }
-        else {
-            var text = "Сигурни ли сте, че искате да направите тази промяна?";
-        }
-        if (confirm(text) == true) {
-            let action = {
-                "start_time": time.value,
-                "students_interval": interval.value,
-                "graduation_date": date.value,
-                "graduation_place": place.value,
-                "class": classes.value
-            };
-
-            fetch('../../api?endpoint=add_graduation_info', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(action)
-            })
-                .then(response => {
-                    if (response.ok)
-                        return response.json()
-                    else {
-                        localStorage.removeItem('token');
-                        window.location.replace("../../");
-                    }
-                })
-                .then((data) => {
-                    if (!data.success) {
-                        errElem.classList.remove(['success']);
-                        errElem.classList.add(['error']);
-                        errElem.innerHTML = data.message;
-                    } else {
-                        errElem.classList.remove(['error']);
-                        errElem.classList.add(['success']);
-                        errElem.innerHTML = data.message;
-                        time.value = "";
-                        interval.value = "";
-                        date.value = "";
-                        place.value = "";
-                        classes.value = "";
-                        getGraduationInfo();
-                        makeArchive();
-                    }
-                });
-        }
-    }
-    else {
-        errElem.classList.remove(['success']);
-        errElem.classList.add(['error']);
-        errElem.innerHTML = "Моля, попълнете всички полета!";
-    }
-}
 
 function buildGradTable(data) {
     var table = document.getElementById("info-graduation-table");
@@ -1766,19 +1707,149 @@ function getMessages() {
             notifications.style.display = "block";
             if (!data.success) {
                 let text = document.createElement("p");
-                text.innerHTML = "В момента нямате никакви известия.";
+                text.innerHTML = data.message;
                 notifications.appendChild(text);
             } else {
-                for (let i = 0; i < data.order.length; i++) {   
-                    let text = document.createElement("p");                 
-                    text.innerHTML = `${i + 1})От ${data.order[i].sender} - ${data.order[i].message}`;
-                    notifications.appendChild(text);
+                for (let i = 0; i < data.order.length; i++) {
+                    let div = document.createElement("div");
+                    div.setAttribute("class", "received_messages");
+                    let text = document.createElement("p");
+                    text.innerHTML = `${i + 1}) От ${data.order[i].sender} - ${data.order[i].message}`;
+                    div.appendChild(text);
+                    notifications.appendChild(div);
                 }
             }
         });
 }
 
 /*--------------------------------------------------------------------ARCHIVE----------------------------------------------------------------------------------------*/
+
+
+function getClassArchiveInfo(event) {
+    event.preventDefault();
+    fetch(`../../api?endpoint=get_last_class_archive`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            if (!data.success) {
+                //console.log(data.message);
+            } else {
+                sendGraduationInfo(data.class);
+            }
+        })
+}
+
+
+function sendGraduationInfo(c) {
+    let time = document.getElementById('start-time');
+    let interval = document.getElementById('students-interval');
+    let date = document.getElementById('graduation-date');
+    let place = document.getElementById('graduation-place');
+    let classes = document.getElementById('class');
+    let errElem = document.getElementById('message-add-graduation-info');
+
+    if (time.value != "" && interval.value != "" && date.value != "" && place.value != "" && classes.value != "") {
+        let reg1 = /^(0?[0-9]|[01][0-9]|2[0-3]):[0-5][0-9]$/;
+        if (!reg1.test(time.value)) {
+            errElem.classList.remove(['success']);
+            errElem.classList.add(['error']);
+            errElem.innerHTML = "Грешка: Некоректен формат на началния час! Трябва да е 'час:минути'!";
+            return;
+        }
+        let reg2 = /^(0?[0-9]|[0-5][0-9]):?([0-5]?[0-9]?)$/;
+        if (!reg2.test(interval.value)) {
+            errElem.classList.remove(['success']);
+            errElem.classList.add(['error']);
+            errElem.innerHTML = "Грешка: Некоректен формат на интервала! Трябва да е 'минути:секунди'!";
+            return;
+        }
+        let d = new Date(date.value);
+        let year = d.getFullYear();
+        if (parseInt(classes.value) + 1 != year) {
+            errElem.classList.remove(['success']);
+            errElem.classList.add(['error']);
+            errElem.innerHTML = "Грешка: Дипломирането е една година след годината на завършване!";
+            return;
+        }
+        else if(c >= parseInt(classes.value)) {
+            errElem.classList.remove(['success']);
+            errElem.classList.add(['error']);
+            errElem.innerHTML = `Грешка: Последният архив е от ${c} година и вие нямате право да добавяте от по-минала година!`;
+            return;
+        }
+        let today = new Date().toISOString().slice(0, 10);
+        if (d.toISOString().slice(0, 10) < today) {
+            var text = "Сигурни ли сте, че искате да направите тази промяна? Вие сте задали минала дата и това автоматично ще премахне студентите от текущите таблици и ще ги прехвърли в архива!";
+        }
+        else {
+            var text = "Сигурни ли сте, че искате да направите тази промяна?";
+        }
+        if (confirm(text) == true) {
+            let action = {
+                "start_time": time.value,
+                "students_interval": interval.value,
+                "graduation_date": date.value,
+                "graduation_place": place.value,
+                "class": classes.value
+            };
+
+            fetch('../../api?endpoint=add_graduation_info', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(action)
+            })
+                .then(response => {
+                    if (response.ok)
+                        return response.json()
+                    else {
+                        localStorage.removeItem('token');
+                        window.location.replace("../../");
+                    }
+                })
+                .then((data) => {
+                    if (!data.success) {
+                        errElem.classList.remove(['success']);
+                        errElem.classList.add(['error']);
+                        errElem.innerHTML = data.message;
+                    } else {
+                        errElem.classList.remove(['error']);
+                        errElem.classList.add(['success']);
+                        errElem.innerHTML = data.message;
+                        time.value = "";
+                        interval.value = "";
+                        date.value = "";
+                        place.value = "";
+                        classes.value = "";
+                        getGraduationInfo();
+                        makeArchive();
+                    }
+                });
+        }
+    }
+    else {
+        errElem.classList.remove(['success']);
+        errElem.classList.add(['error']);
+        errElem.innerHTML = "Моля, попълнете всички полета!";
+    }
+}
+
 
 function makeArchive() {
     fetch('../../api?endpoint=make_archive', {

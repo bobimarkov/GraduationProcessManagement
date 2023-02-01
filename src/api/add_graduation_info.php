@@ -4,6 +4,7 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 
 include_once '../src/database/db_conf.php';
+include_once '../src/database/db_conf_archive.php';
 include_once '../src/utils/JWTUtils.php';
 
 $data_array = array();
@@ -13,12 +14,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $data = json_decode(file_get_contents("php://input"));
 
+    $databaseArchive = new DbA();
+    $connArchive = $databaseArchive->getConnection();
+    $stmt_select = $connArchive->prepare("SELECT `class`
+                                        FROM `student`
+                                        ORDER BY `class` DESC
+                                        LIMIT 1");
+    $stmt_select->execute();
+    $existedClass = $stmt_select->fetch(PDO::FETCH_ASSOC);
+
     $database = new Db();
     $conn = $database->getConnection();
 
     $stmt_year = $conn->prepare("SELECT `class`
-                            FROM `graduation_time`
-                            LIMIT 1");
+                            FROM `graduation_time`");
     $stmt_year->execute();
     $year = $stmt_year->fetch(PDO::FETCH_ASSOC);
     foreach ($data as $k => $v) {
@@ -62,6 +71,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     echo json_encode($response); 
                     die; 
                 }
+                else if($existedClass['class'] >= $v) {
+                    $response = array("success" => false, "message" => "Грешка: Последният архив е от {$existedClass['class']} година и вие нямате право да добавяте от по-минала година!");
+                    echo json_encode($response); 
+                    die; 
+                }
                 else {
                     $data_array['class'] = $v;
                 }
@@ -75,8 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     $update_stmt = $conn->prepare("UPDATE `graduation_time`
-                                SET `start_time` = :start_time, `students_interval` = :students_interval, `graduation_date` = :graduation_date, `graduation_place` = :graduation_place, `class` = :class
-                                WHERE `id` = 1");
+                                SET `start_time` = :start_time, `students_interval` = :students_interval, `graduation_date` = :graduation_date, `graduation_place` = :graduation_place, `class` = :class");
     
     $success = $update_stmt->execute(["start_time" => $data_array['start_time'], "students_interval" => $data_array['students_interval'], "graduation_date" => $data_array['graduation_date'], "graduation_place" => $data_array['graduation_place'], "class" => $data_array['class']]);
 

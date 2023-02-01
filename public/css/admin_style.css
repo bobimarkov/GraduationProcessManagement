@@ -78,8 +78,9 @@ textarea {
     outline: none;
 }
 
-#textarea-fn {
+#textarea-emails {
     width: 100%;
+    height: 8em;
 }
 
 #message {
@@ -660,4 +661,16 @@ svg {
 #for_buttons {
     display: flex;
     justify-content: center;
+}
+
+.received_messages {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    text-indent: 0.5em;
+    border: 1px solid #006199;
+    background: rgba(247, 241, 241, 0.603);
+    color: darkslategray;
+    font-size: medium;
+    margin-bottom: 1em;
 }

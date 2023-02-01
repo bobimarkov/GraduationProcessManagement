@@ -14,15 +14,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $conn = $database->getConnection();
 
     $stmt_class = $conn->prepare("SELECT `graduation_date`, `class`
-                                FROM `graduation_time`
-                                LIMIT 1");
+                                FROM `graduation_time`");
     $stmt_class->execute();
     $rowGrad = $stmt_class->fetch(PDO::FETCH_ASSOC);
     $date = $rowGrad['graduation_date']; //Y-M-D
     $class = $rowGrad['class'];
     $date1 = strtotime("yesterday");
     $yesterday = date("Y-m-d", $date1);
-    //$yesterday = "2023-02-04";
 
     $databaseArchive = new DbA();
     $connArchive = $databaseArchive->getConnection();
