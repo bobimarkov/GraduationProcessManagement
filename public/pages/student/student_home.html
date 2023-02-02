@@ -37,7 +37,6 @@
         </div>
         <div class="notifications_section">
             <h3><i class="fa fa-bell-o" aria-hidden="true"></i> Известия</h3>
-            <div id="no-notifications"></div>
             <div id="speech_request_section" class="speech_request_section">
                 <p id="speech_request"></p>
                 <p id="speech_request_answer"></p>
@@ -49,6 +48,7 @@
                     <option value="0">Отказвам</option>
                 </select>
             </div>
+            <div id="no-notifications"></div>
         </div>
         <div class="profile_info_section">
             <h3><i class="fa fa-user-o" aria-hidden="true"></i> Информация за потребителя</h3>
@@ -183,6 +183,23 @@
             <p class="message-bar no-margin" id="color_message">
                 Все още няма зададени цветове.
             </p>
+        </div>
+
+        <div class="messages_send_section">
+            <h3><i class="fas fa-envelope"></i> Изпращане на съобщения</h3>
+            <form id="write-message">
+                <div id="textarea">
+                    <textarea class="dashboard-textarea" name="textarea" id="textarea-email" placeholder="Моля, напишете имейла, на когото искате да изпратите съобщение!
+Ако искате на администрацията, то изпратете на admin@gmail.com!
+Ако искате на някой от отговорниците, то в горната секция може да видите имейла на вашия отговорник!"></textarea>
+                    <textarea class="dashboard-textarea" name="message" id="message"
+                        placeholder="Напишете вашето съобщение"></textarea>
+                </div>
+                <button type="submit" class="submit-button" id="send-message" onclick="sendMessage(fn, event)">Изпрати
+                    <i class="fa fa-send-o"></i>
+                </button>
+                <p class="message-bar" id="message-bar-export-message"></p>
+            </form>
         </div>
     </div>
 </body>

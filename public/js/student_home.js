@@ -1,6 +1,7 @@
 tokenRefresher();
 getStudentData();
 var email;
+var fn;
 
 let logoutHeader = document.getElementById("logout_header");
 logoutHeader.addEventListener("click", (e) => {
@@ -293,6 +294,7 @@ function buildContentForNotGraduatingStudent(user) {
     document.querySelector(".request_diploma_in_advance_section").style.display = 'none';
     document.querySelector(".request_gown_hat_section").style.display = 'none';
     document.querySelector(".diploma_order_section").style.display = 'none';
+    document.querySelector(".messages_send_section").style.display = 'none';
 
     document.getElementById("name").innerText = 'Имена: ' + user.name;
     document.getElementById("email").innerText = 'Имейл: ' + user.email;
@@ -321,6 +323,7 @@ function buildContentForGraduatingStudent(user) {
     document.getElementById("major").innerText = 'Специалност: ' + user.major;
     document.getElementById("group").innerText = 'Група: ' + user.group;
     document.getElementById("fn").innerText = 'Факултетен номер: ' + user.student_fn;
+    fn = user.student_fn;
 
     document.getElementById("has_right").innerHTML = 'Право на диплома: ' + (user.has_right === 1 ? '<i class="far fa-check-square"></i>' : "Не");
     document.getElementById("is_ready").innerHTML = 'Готова диплома: ' + (user.is_ready === 1 ? '<i class="far fa-check-square"></i>' : "Не");
@@ -379,6 +382,7 @@ function buildContentForGraduatingStudent(user) {
     document.getElementById("hat_taken").innerHTML = 'Взета: ' + (user.hat_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
     document.getElementById("hat_taken_date").innerHTML = 'Дата/час: ' + (user.hat_taken_date === null || user.hat_taken_date === "" ? "-" : user.hat_taken_date);
     document.getElementById("hat_moderator").innerHTML = 'Модератор за шапка: ' + (user.moderator_hat_email === null || user.hat_requested !== 1 ? '-' : user.moderator_hat_email);
+
 }
 
 getStartHour();
@@ -528,15 +532,64 @@ function getMessages() {
         })
         .then((data) => {
             notifications.style.display = "block";
+            while (notifications.firstChild) {
+                notifications.removeChild(notifications.firstChild);
+            }
             if (!data.success) {
-                par.innerHTML = "В момента нямате никакви известия.";
-
+                let text = document.createElement("p");
+                text.innerHTML = data.message;
+                notifications.appendChild(text);
             } else {
-                for (let i = 0; i < data.order.length; i++) {
-                    let text = document.createElement("p");
-                    text.innerHTML = `${i + 1})От ${data.order[i].sender} - ${data.order[i].message}`;
-                    notifications.appendChild(text);
+                for (let i = 0; i < data.order.length; i++) {   
+                    let div = document.createElement("div");
+                    div.setAttribute("class", "received_messages");
+                    let text = document.createElement("p");                 
+                    text.innerHTML = `${i + 1}) От ${data.order[i].sender} - ${data.order[i].message}`;
+                    div.appendChild(text);
+                    notifications.appendChild(div);
                 }
+            }
+        });
+}
+
+function sendMessage(fn, event) {
+    event.preventDefault();
+    let email = document.getElementById('textarea-email');
+    let message = document.getElementById('message');
+    let actions = {
+        "fn" : fn,
+        "email": email.value,
+        "message": message.value
+    };
+    fetch('../../api?endpoint=send_message_student', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(actions)
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            let errElem = document.getElementById('message-bar-export-message');
+            if (!data.success) {
+                errElem.classList.remove(['success']);
+                errElem.classList.add(['error']);
+                errElem.innerHTML = data.message;
+            } else {
+                errElem.classList.remove(['error']);
+                errElem.classList.add(['success']);
+                errElem.innerHTML = data.message;
+                email.value = "";
+                message.value = "";
             }
         });
 }

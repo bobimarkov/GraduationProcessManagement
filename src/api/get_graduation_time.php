@@ -9,8 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $database = new Db();
     $conn = $database->getConnection();
     $stmt = $conn->prepare("SELECT `start_time`, `students_interval`, `graduation_date`, `graduation_place`, `class`
-                            FROM `graduation_time`
-                            LIMIT 1");
+                            FROM `graduation_time`");
+    
     $stmt->execute();
 
     $rows = $stmt->fetchAll();

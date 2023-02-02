@@ -27,6 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $order_stmt->execute();
         $rows = $order_stmt->fetchAll();
 
+        if(empty($rows)) {
+            $response = array("success" => false, "message" => "Грешка: Няма данни за дипломиращи се студенти!");
+            echo json_encode($response);
+            die;
+        }
+
         $response = array("success" => true, "users" => $rows);
         echo json_encode($response);
         http_response_code(200);

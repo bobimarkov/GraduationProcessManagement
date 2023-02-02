@@ -163,11 +163,11 @@
         </div>
 
         <div id="messages_send_section">
-            <h3><i class="fas fa-envelope"></i> Изпращане на информация до дипломиращите се студенти</h3>
+            <h3><i class="fas fa-envelope"></i> Изпращане на съобщения до студенти и модератори</h3>
             <form id="write-message">
                 <div id="textarea">
-                    <textarea class="dashboard-textarea-fn" name="textarea" id="textarea-fn"
-                        placeholder="Факултетни номера (отделени със запетая) или @всички, ако искате да изпратите съобщението до всички дипломиращи се студенти"></textarea>
+                    <textarea class="dashboard-textarea-fn" name="textarea" id="textarea-emails"
+                        placeholder="Моля, въведете:&NewLine;- Имейли, отделени със запетаи; &NewLine;- `@Студенти`, ако искате да изпратите съобщението до всички дипломиращи се студенти; &NewLine;- `@Шапки`, ако искате да изпратите съобщението до всички отговорници за шапки; &NewLine;- `@Тоги`, ако искате да изпратите съобщението до всички отговорници за тоги; &NewLine;- `@Подписи`, ако искате да изпратите съобщението до всички отговорници за подписи;"></textarea>
                     <textarea class="dashboard-textarea-fn" name="message" id="message"
                         placeholder="Напишете вашето съобщение"></textarea>
                 </div>
@@ -200,13 +200,14 @@
                 <input type="number" id="class" class="settings" placeholder="Година на завършване" min="2020" />
 
             </form>
-            <button type="submit" id="add-grad-info" class="settings" onclick="sendGraduationInfo(event)"> Обнови <i
+            <button type="submit" id="add-grad-info" class="settings" onclick="getClassArchiveInfo(event)"> Обнови <i
                     class="fa fa-plus"></i></button>
             <p class="message-bar" id="message-add-graduation-info"></p>
         </div>
 
 
         <div id="analytic_section" style="display: flex">
+            <h3 id="analytic_text"></h3>
             <div id="analytics1" class="analytics"></div>
             <div id="analytics2" class="analytics"></div>
             <div id="analytics3" class="analytics"></div>
@@ -302,8 +303,8 @@
     </div>
 
     <div class="row" id="messages_receive_section">
-        <h3><i class="fas fa-envelope"></i> Получени отговори</h3>
-
+        <h3><i class="fas fa-envelope"></i> Получени съобщения</h3>
+        <div id="notifications"></div>
     </div>
 
     <div class="row" id="settings_archive_section">

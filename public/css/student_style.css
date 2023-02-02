@@ -85,7 +85,8 @@ input[type=checkbox] {
 .graduation_info_section,
 .request_diploma_in_advance_section,
 .request_gown_hat_section,
-.diploma_order_section {
+.diploma_order_section,
+.messages_send_section {
     box-shadow: 5px 5px 20px darkslategray;
     border-radius: 5px;
     padding: 1em;
@@ -139,6 +140,12 @@ textarea {
 .speech_request_section {
     border-bottom: 1px solid rgba(47, 79, 79, 0.603);
     justify-content: space-between;
+    margin-bottom: 1em;
+    border-top: 1px solid rgba(47, 79, 79, 0.603);
+}
+
+#speech_request_select{
+    margin-top: 0.3em;
 }
 
 .speech_request_select,
@@ -236,4 +243,66 @@ table tr:nth-child(even) {
 
 table tr {
     height: 1.7em;
+}
+
+#message {
+    height: 10em !important;
+}
+
+#textarea {
+    display: grid;
+}
+
+.dashboard-textarea {
+    width: 100%;
+    height: 5em;
+    margin-top: 1em;
+    background-color: rgb(235, 238, 241);
+    border-color: darkslategray;
+    border-radius: 5px;
+    padding: 5px;
+    box-sizing: border-box;
+    font: 1em sans-serif;
+}
+
+.dashboard-textarea:focus {
+    outline: none;
+}
+
+.dashboard-textarea:active {
+    outline: none;
+}
+
+.submit-button {
+    margin-top: 1em;
+    height: 2.5em;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #006199;
+    cursor: pointer;
+    background-color: snow;
+    font-weight: bold;
+    color: darkslategray;
+    font-size: medium;
+}
+
+.submit-button:hover {
+    background-color: #006199;
+    color: snow;
+}
+
+#message-bar-export-message {
+    margin-left: 0 !important;
+}
+
+.received_messages {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    text-indent: 0.5em;
+    border: 1px solid #006199;
+    background: rgba(247, 241, 241, 0.603);
+    color: darkslategray;
+    font-size: medium;
+    margin-bottom: 1em;
 }
