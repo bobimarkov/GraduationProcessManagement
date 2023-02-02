@@ -95,7 +95,7 @@ function updateMessageToDB($recipient, $content, $sender)
     }
 
     if ($success) {
-        $response = array("success" => true, "message" => "Промените са запаметени успешно.");
+        $response = array("success" => true, "message" => "Съобщението ви е изпратено успешно!");
         echo json_encode($response);
         die;
     }

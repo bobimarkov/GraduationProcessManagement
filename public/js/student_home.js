@@ -532,6 +532,9 @@ function getMessages() {
         })
         .then((data) => {
             notifications.style.display = "block";
+            while (notifications.firstChild) {
+                notifications.removeChild(notifications.firstChild);
+            }
             if (!data.success) {
                 let text = document.createElement("p");
                 text.innerHTML = data.message;
