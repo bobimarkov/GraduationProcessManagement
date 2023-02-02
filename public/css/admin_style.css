@@ -529,14 +529,14 @@ svg {
     margin-left: 0;
 }
 
-#header-table,
+#header-table-diploma,
 #header-table-students,
 #header-table-users,
 #header-table-edit {
     cursor: pointer;
 }
 
-#filters {
+.filters {
     display: flex;
 }
 
