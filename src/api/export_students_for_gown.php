@@ -67,7 +67,6 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                 $row['attendance'] = ($row['attendance'] == 0) ? 'Не' : 'Да';
                 $row['gown_taken'] = ($row['gown_taken'] == 0) ? 'Не' : 'Да';
                 $row['gown_returned'] = ($row['gown_returned'] == 0) ? 'Не' : 'Да';
-                fputcsv($output, $row);
                 $pdf->Cell(0, 0, implode(",", $row), 0, 1);
             }
             $pdf->Output("students_for_gown.pdf", 'D');

@@ -76,7 +76,6 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                 $row['is_taken_in_advance'] = ($row['is_taken_in_advance'] == 0) ? 'Не' : 'Да';
                 $row['taken_at_time'] = ($row['taken_at_time'] === null ) ? '-' : $row['taken_at_time'];
                 $row['diploma__comment'] = ($row['diploma_comment'] === null ) ? '-' : $row['diploma__comment'];
-                fputcsv($output, $row);
                 $pdf->Cell(0, 0, implode(",", $row), 0, 1);
             }
             $pdf->Output("students_for_gown.pdf", 'D');
