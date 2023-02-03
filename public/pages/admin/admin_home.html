@@ -88,7 +88,7 @@
                     placeholder='Формат: &NewLine;"имейл, парола, имена, телефон, роля"&NewLine;&NewLine;роля=[admin, moderator-hat,moderator-gown,moderator-signature]'></textarea>
                 <button type="submit" id="long-submit-button" class="long-submit-button" onclick="submitUsers(event)">
                     Добави <i class="fas fa-solid fa-plus"></i>
-                </button> 
+                </button>
             </form>
         </div>
 
@@ -189,11 +189,11 @@
                     <td>Година на завършване</td>
                 </tr>
             </table>
-            <h4>Внимание! Ако добавите минала дата, то студентите автоматично ще бъдат добавени в архив и премахнати от тук!</h4>
+            <h4>Внимание! Ако добавите минала дата, то студентите автоматично ще бъдат добавени в архив и премахнати от
+                тук!</h4>
             <form class="input">
                 <input type="text" id="start-time" class="settings" placeholder="Начален час(час:минути)" />
-                <input type="text" id="students-interval" class="settings"
-                    placeholder="Интервал(минути:секунди)" />
+                <input type="text" id="students-interval" class="settings" placeholder="Интервал(минути:секунди)" />
                 <input type="text" id="graduation-date" class="settings" name="grad-date" placeholder="Дата"
                     onfocus="(this.type='date')" onblur="(this.type='text')" />
                 <input type="text" id="graduation-place" class="settings" placeholder="Местоположение" />
@@ -218,7 +218,8 @@
             <h3><i class="fas fa-list"></i> Списък студенти</h3>
             <div class="filters">
 
-                <input id="search" class="searchGrad" placeholder="Търсене..." oninput="searchInTable('diploma-table','search')" />
+                <input id="search" class="searchGrad" placeholder="Търсене..."
+                    oninput="searchInTable('diploma-table','search')" />
 
                 <form id="export_graduated">
                     <select class="dashboard-action" name="format">
@@ -310,6 +311,31 @@
         <div id="notifications"></div>
     </div>
 
+    <div class="row" id="settings_date_section">
+        <h3><i class="fas fa-calendar-alt"></i> Настройки на крайни срокове </h3>
+        <table id="info-graduation-table">
+            <tr>
+                <td>Краен срок за заявка за тога</td>
+                <td>Краен срок за заявка за шапка</td>
+                <td>Краен срок за потвърждаване на присъствие</td>
+            </tr>
+        </table>
+
+        <h4>Внимание! 
+        </h4>
+        <form class="input" id="deadline">
+            <input type="text" id="date-gown" class="settings" name="date-gown" placeholder="Дата за тога"
+                onfocus="(this.type='date')" onblur="(this.type='text')" />
+            <input type="text" id="date-hat" class="settings" name="date-hat" placeholder="Дата за шапка"
+                onfocus="(this.type='date')" onblur="(this.type='text')" />
+            <input type="text" id="date-attendance" class="settings" name="date-attendance" placeholder="Дата за присъствие"
+                onfocus="(this.type='date')" onblur="(this.type='text')" />
+        </form>
+        <button type="submit" id="add-grad-info" class="settings" onclick=""> Обнови <i
+                class="fa fa-plus"></i></button>
+        <p class="message-bar" id="message-add-graduation-info"></p>
+    </div>
+
     <div class="row" id="settings_archive_section">
         <h3><i class="fa fa-archive"></i> Архив </h3>
         <div id="for_buttons"></div>
@@ -335,8 +361,9 @@
     </div>
 
     <div class="row distribute_moderators" id="distribute_moderators">
-        <h3><i class="fas fa-clipboard-list"></i>  Разпределяне на Отговорностите на Модераторите</h3>
-        <button type="button" class="long-submit-button" onclick="distributeModerators(event)">Разпредели Модераторите</button>
+        <h3><i class="fas fa-clipboard-list"></i> Разпределяне на Отговорностите на Модераторите</h3>
+        <button type="button" class="long-submit-button" onclick="distributeModerators(event)">Разпредели
+            Модераторите</button>
         <p class="message-bar" id="message-bar-distribute-moderators"></p>
     </div>
 

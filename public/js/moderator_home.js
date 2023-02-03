@@ -14,29 +14,29 @@ logoutHeader.addEventListener("click", (e) => {
 });
 
 function generateTableHeaderRow(columnNames, functionName, header_table_id, table_id) {
-    var headerCells = 
-    functionName === undefined ?
-    columnNames.reduce(
-        (accumulator, currentValue) => accumulator.concat(`<td>${currentValue}</td>`),
-        ''
-    ) 
-    : 
-    table_id === undefined ?
-    columnNames.reduce(
-        (accumulator, currentValue, currentIndex) => accumulator.concat(`<td onclick=${functionName}(${currentIndex})>${currentValue}</td>`),
-        ''
-    )
-    :
-    columnNames.reduce(
-        (accumulator, currentValue, currentIndex) => accumulator.concat(`<td onclick=${functionName}(${currentIndex},"${table_id}")>${currentValue}</td>`),
-        ''
-    )
-    
-    return  header_table_id === undefined ? `<tr>${headerCells}</tr>` : `<tr id=${header_table_id}>${headerCells}</tr>`;
+    var headerCells =
+        functionName === undefined ?
+            columnNames.reduce(
+                (accumulator, currentValue) => accumulator.concat(`<td>${currentValue}</td>`),
+                ''
+            )
+            :
+            table_id === undefined ?
+                columnNames.reduce(
+                    (accumulator, currentValue, currentIndex) => accumulator.concat(`<td onclick=${functionName}(${currentIndex})>${currentValue}</td>`),
+                    ''
+                )
+                :
+                columnNames.reduce(
+                    (accumulator, currentValue, currentIndex) => accumulator.concat(`<td onclick=${functionName}(${currentIndex},"${table_id}")>${currentValue}</td>`),
+                    ''
+                )
+
+    return header_table_id === undefined ? `<tr>${headerCells}</tr>` : `<tr id=${header_table_id}>${headerCells}</tr>`;
 }
 
 var cPrev = -1;
-function sortBy(c,id) {
+function sortBy(c, id) {
     let rows = document.getElementById(id).rows.length;
     let columns = document.getElementById(id).rows[0].cells.length;
     let arrTable = new Array(rows);
@@ -72,7 +72,7 @@ function sortBy(c,id) {
     }
 }
 
-function searchInTable(table_id,input_id) {
+function searchInTable(table_id, input_id) {
     const table = document.getElementById(table_id);
     const input = document.getElementById(input_id);
     const filter = input.value.toUpperCase();
@@ -153,7 +153,7 @@ function buildUsersTable(data) {
     let users = data.users;
 
     var columnNames = ["Име", "Имейл", "Телефон", "Роля"];
-    table.innerHTML = generateTableHeaderRow(columnNames,'sortBy','header-table-users','users-table');
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-users', 'users-table');
 
     for (const user of users) {
         var row = table.insertRow(i);
@@ -212,7 +212,7 @@ function buildStudentsTable(data) {
     let i = 1;
     let users = data.users;
     var columnNames = ["Име", "Имейл", "Телефон", "ФН", "Степен", "Спец.", "Група", "Дипломиращ се", "Роля"];
-    table.innerHTML = generateTableHeaderRow(columnNames,'sortBy', 'header-table-students','students-table');
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-students', 'students-table');
 
     for (const user of users) {
         var row = table.insertRow(i);
@@ -268,11 +268,11 @@ function getStudentsDiplomaInfo() {
 function buildStudentsDiplomaTable(users) {
     var table = document.getElementById("diploma-table");
     var columnNames = [
-        "ФН", "Име","Цвят","Ред на връчване","Час на връчване", "Степен", "Спец.", "Група", "Успех",
+        "ФН", "Име", "Цвят", "Ред на връчване", "Час на връчване", "Степен", "Спец.", "Група", "Успех",
         "Присъствие", "Има право", "Модератор за диплома", "Готова диплома", "Взета", "Заявка взимане предв.", "Коментар (студент)",
-        "Взета предв.", "Дата/час", "Коментар (администр.)", "Покана реч", "Отговор", "Снимки", "Модератор за тога","Заявена тога",
-        "Взета", "Дата/час", "Върната", "Дата/час","Модератор за шапка", "Заявена шапка", "Взета", "Дата/час"];
-    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy','header-table-diploma','diploma-table');
+        "Взета предв.", "Дата/час", "Коментар (администр.)", "Покана реч", "Отговор", "Снимки", "Модератор за тога", "Заявена тога",
+        "Взета", "Дата/час", "Върната", "Дата/час", "Модератор за шапка", "Заявена шапка", "Взета", "Дата/час"];
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-diploma', 'diploma-table');
     let i = 1;
 
     for (const user of users) {
@@ -351,11 +351,45 @@ function showStudents() {
 }
 
 function showAnalyticsSection() {
-    tokenRefresher();
-    showGivenSection("analytic_section");
-    activeHeader("analytic_header");
+    let text = document.getElementById('analytic_text');
+    fetch(`../../api?endpoint=get_students_diploma_simplified`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            tokenRefresher();
+            showGivenSection("analytic_section");
+            activeHeader("analytic_header");
+            if (!data.success) {
+                text.innerHTML = '<i class="fa fa-pie-chart"></i> В момента няма данни за дипломиращи се студенти и няма направена статистика! <br> Когато добавите данни, то ще получите статистика за тях!';
+                document.getElementById('analytic_section').style = 'height: 1em !important';
+                text.style = "text-align : center";
+                //console.log(data.error);
+            } else {
+                // Load google charts
+                google.charts.load('current', { 'packages': ['corechart'] });
+                text.innerHTML = '<i class="fa fa-pie-chart"></i> Статистиката е на база дипломиращи се студенти!';
+                text.style = "text-align : center; height : 1em";
+                document.getElementById('analytics1').style = 'margin-top: 1em';
+                showAnalyticsSectionHelper();
+            }
+        })
+}
 
-    fetch(`../../api?endpoint=get_students_diploma`, {
+function showAnalyticsSectionHelper() {
+    fetch(`../../api?endpoint=statistics`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -376,21 +410,18 @@ function showAnalyticsSection() {
                 // display error to user 
                 console.log(data.error);
             } else {
-
                 //build piecharts from data
                 let studentMajorData = dataMajorToArray(data);
                 let studentGradeData = dataGradesToArray(data);
                 let studentDegreeData = dataDegreeToArray(data);
                 let studentHasRightData = dataHasRightToArray(data);
-                google.charts.setOnLoadCallback(drawChart(studentMajorData, "analytics1", "Брой стундети с дадена специалност"));
-                google.charts.setOnLoadCallback(drawChart(studentGradeData, "analytics2", "Брой студенти с дадени оценки"));
-                google.charts.setOnLoadCallback(drawChart(studentDegreeData, "analytics3", "Брой студенти с дадени степени на образование"));
-                google.charts.setOnLoadCallback(drawChart(studentHasRightData, "analytics4", "Студенти имащи право на диплома"));
+                google.charts.setOnLoadCallback(drawChart(studentMajorData, "analytics1", "Брой дипломиращи се студенти от дадена специалност със степен 'Бакалавър'"));
+                google.charts.setOnLoadCallback(drawChart(studentGradeData, "analytics2", "Брой дипломиращи се студенти с дадени оценки"));
+                google.charts.setOnLoadCallback(drawChart(studentDegreeData, "analytics3", "Брой дипломиращи се студенти с дадени степени на образование"));
+                google.charts.setOnLoadCallback(drawChart(studentHasRightData, "analytics4", "Студенти, имащи право на диплома"));
             }
         })
-
 }
-
 
 function showDiplomaSection() {
     tokenRefresher();
@@ -475,34 +506,35 @@ function dataDegreeToArray(data) {
 
     let rows = data.users;
     rows.forEach(row_data => {
-        switch (row_data.degree) {
-            case 'Б':
-                a[1][1]++;
-                break;
-            case 'М':
-                a[2][1]++;
-                break;
-            case 'Д':
-                a[3][1]++;
-                break;
-            default:
-                break;
+        if (row_data.grade >= 3) {
+            switch (row_data.degree) {
+                case 'Б':
+                    a[1][1]++;
+                    break;
+                case 'М':
+                    a[2][1]++;
+                    break;
+                case 'Д':
+                    a[3][1]++;
+                    break;
+                default:
+                    break;
+            }
         }
     });
     return a;
 }
+
 function dataGradesToArray(data) {
-    const a = [["Оценка", "Брой студенти с такава оценка"], ["[2-3)", 0], ["[3,4)", 0], ["[4,5)", 0], ["[5,6]", 0]];
+    const a = [["Оценка", "Брой студенти с такава оценка"], ["[3,4)", 0], ["[4,5)", 0], ["[5,6]", 0]];
     let rows = data.users;
     rows.forEach(row_data => {
-        if (row_data.grade >= 2 && row_data.grade < 3) {
+        if (row_data.grade >= 3 && row_data.grade < 4) {
             a[1][1]++;
-        } else if (row_data.grade >= 3 && row_data.grade < 4) {
-            a[2][1]++;
         } else if (row_data.grade >= 4 && row_data.grade < 5) {
-            a[3][1]++;
+            a[2][1]++;
         } else {
-            a[4][1]++;
+            a[3][1]++;
         }
     });
     return a;
@@ -511,37 +543,34 @@ function dataGradesToArray(data) {
 
 function dataMajorToArray(data) {
 
-    const a = [["Специалност", "Брой студенти"], ["СИ", 0], ["КН", 0], ["ИС", 0], ["И", 0], ["М", 0], ["С", 0], ["х", 0]];
+    const a = [["Специалност", "Брой студенти"], ["СИ", 0], ["КН", 0], ["ИС", 0], ["И", 0], ["М", 0], ["С", 0]];
 
     let rows = data.users;
     rows.forEach(row_data => {
-        switch (row_data.major) {
-            case 'СИ':
-                a[1][1]++;
-                break;
-            case 'КН':
-                a[2][1]++;
-                break;
-            case 'ИС':
-                a[3][1]++;
-                break;
-            case 'И':
-                a[4][1]++;
-                break;
-            case 'М':
-                a[5][1]++;
-                break;
-            case 'С':
-                a[6][1]++;
-                break;
-            default:
-                a[7][1]++;
-                break;
+        if (row_data.grade >= 3) {
+            switch (row_data.major) {
+                case 'СИ':
+                    a[1][1]++;
+                    break;
+                case 'КН':
+                    a[2][1]++;
+                    break;
+                case 'ИС':
+                    a[3][1]++;
+                    break;
+                case 'И':
+                    a[4][1]++;
+                    break;
+                case 'М':
+                    a[5][1]++;
+                    break;
+                case 'С':
+                    a[6][1]++;
+                    break;
+            }
         }
     });
     return a;
-
-
 }
 //end of converting different data to array
 
@@ -569,7 +598,7 @@ function responsibilitiesByModeratorRole() {
         }
     })
         .then(response => {
-            if(response.ok) {
+            if (response.ok) {
                 return response.json();
             }
             else {
@@ -625,7 +654,7 @@ function fetchDataForStudents(moderatorFunction, endpoint) {
         }
     })
         .then(response => {
-            if(response.ok) {
+            if (response.ok) {
                 return response.json();
             }
             else {
@@ -640,7 +669,7 @@ function fetchDataForStudents(moderatorFunction, endpoint) {
         .catch((error) => {
             console.error(error);
         })
-        .finally(() => {});
+        .finally(() => { });
 }
 
 
@@ -662,8 +691,8 @@ function createSumDivForModerator(parentId, sums_text, sum_values) {
 
 function buildResponsibilitiesSectionForModeratorHat(users) {
     var resp_beginning = document.getElementById("responsibilities_beginning");
-    var name_range = users[0] === undefined ? '' :  users[0].name_range;
-    resp_beginning.innerHTML = '<i class="fas fa-graduation-cap"> </i>' + " " +  " Отговорност: Шапки " + name_range ;
+    var name_range = users[0] === undefined ? '' : users[0].name_range;
+    resp_beginning.innerHTML = '<i class="fas fa-graduation-cap"> </i>' + " " + " Отговорност: Шапки " + name_range;
     var table = document.getElementById("responsibilities_table");
     var sums = {
         has_right: 0,
@@ -687,7 +716,7 @@ function buildResponsibilitiesSectionForModeratorHat(users) {
 
     let i = 1;
     var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Дата на вземане"];
-    table.innerHTML = generateTableHeaderRow(columnNames,'sortBy','header_responsibilities_table','responsibilities_table');
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header_responsibilities_table', 'responsibilities_table');
     for (const user of users) {
         if (user.hat_requested == 1) {
             var row = table.insertRow(i);
@@ -709,7 +738,7 @@ function buildResponsibilitiesSectionForModeratorHat(users) {
     }
 
     tableheader = document.getElementById("header_responsibilities_table2");
-    tableheader.style.display ="none";
+    tableheader.style.display = "none";
     table = document.getElementById("responsibilities_table2")
     table.style.display = "none";
 }
@@ -717,7 +746,7 @@ function buildResponsibilitiesSectionForModeratorHat(users) {
 
 function buildResponsibilitiesSectionForModeratorGown(users) {
     var resp_beginning = document.getElementById("responsibilities_beginning");
-    var name_range = users[0] === undefined ? '' :  users[0].name_range;
+    var name_range = users[0] === undefined ? '' : users[0].name_range;
     resp_beginning.innerHTML = '<i class="fas fa-tshirt"></i>' + " Отговорност: Тоги " + name_range;
     var table = document.getElementById("responsibilities_table");
     var sums = {
@@ -740,7 +769,7 @@ function buildResponsibilitiesSectionForModeratorGown(users) {
 
     let i = 1;
     var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Дата на вземане", "Върната", "Дата на връщане"];
-    table.innerHTML =  generateTableHeaderRow(columnNames,'sortBy','header_responsibilities_table','responsibilities_table');
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header_responsibilities_table', 'responsibilities_table');
     for (const user of users) {
         if (user.gown_requested === 1) {
             var row = table.insertRow(i);
@@ -764,7 +793,7 @@ function buildResponsibilitiesSectionForModeratorGown(users) {
     }
 
     tableheader = document.getElementById("header_responsibilities_table2");
-    tableheader.style.display ="none";
+    tableheader.style.display = "none";
     table = document.getElementById("responsibilities_table2")
     table.style.display = "none";
 }
@@ -772,7 +801,7 @@ function buildResponsibilitiesSectionForModeratorGown(users) {
 
 function buildResponsibilitiesSectionForModeratorSignature(users) {
     var resp_beginning = document.getElementById("responsibilities_beginning");
-    var name_range = users[0] === undefined ? '' :  users[0].name_range;
+    var name_range = users[0] === undefined ? '' : users[0].name_range;
     resp_beginning.innerHTML = '<i class="fas fa-pen"></i>' + " Отговорност: Дипломи " + name_range;
     var sums = {
         has_right: 0,
@@ -795,7 +824,7 @@ function buildResponsibilitiesSectionForModeratorSignature(users) {
     let i = 1;
     var table = document.getElementById("responsibilities_table");
     var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Заявка взимане предв.", "Коментар (студент)", "Взета предв.", "Дата/час", "Коментар (администр.)"];
-    table.innerHTML = generateTableHeaderRow(columnNames,'sortBy','header_responsibilities_table','responsibilities_table');
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header_responsibilities_table', 'responsibilities_table');
     for (const user of users) {
         if (user.has_right) {
             var row = table.insertRow(i);
@@ -825,8 +854,8 @@ function buildResponsibilitiesSectionForModeratorSignature(users) {
 
     i = 1;
     table = document.getElementById("responsibilities_table2");
-    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Заявка взимане предв.", "Коментар (студент)", "Взета предв.","Коментар (администр.)"];
-    table.innerHTML =  generateTableHeaderRow(columnNames,'sortBy','header_responsibilities_table2','responsibilities_table2');
+    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Заявка взимане предв.", "Коментар (студент)", "Взета предв.", "Коментар (администр.)"];
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header_responsibilities_table2', 'responsibilities_table2');
     for (const user of users) {
         if (user.take_in_advance_request) {
             var row = table.insertRow(i);
@@ -850,8 +879,8 @@ function buildResponsibilitiesSectionForModeratorSignature(users) {
     }
 }
 
-function getExportEndpointByModeratorRole(event,export_files_id,message_bar) {
-        event.preventDefault();
+function getExportEndpointByModeratorRole(event, export_files_id, message_bar) {
+    event.preventDefault();
     fetch(`../../api?endpoint=get_user_role`, {
         method: 'GET',
         headers: {
@@ -861,7 +890,7 @@ function getExportEndpointByModeratorRole(event,export_files_id,message_bar) {
         }
     })
         .then(response => {
-            if(response.ok) {
+            if (response.ok) {
                 return response.json();
             }
             else {
@@ -886,14 +915,14 @@ function getExportEndpointByModeratorRole(event,export_files_id,message_bar) {
                     file_name = 'students_for_signature';
                     break;
             }
-            downloadExportedModeratorResponsibilities(endpoint,export_files_id,message_bar,file_name);
+            downloadExportedModeratorResponsibilities(endpoint, export_files_id, message_bar, file_name);
         })
         .catch((error) => {
             console.error(error);
         });
 }
 
-function downloadExportedModeratorResponsibilities(endpoint,export_files_id,message_bar,file_name) {
+function downloadExportedModeratorResponsibilities(endpoint, export_files_id, message_bar, file_name) {
     let form = document.getElementById(export_files_id);
     let fileFormat = form.format.value;
     let errElem = document.getElementById(message_bar);
@@ -928,7 +957,7 @@ function downloadExportedModeratorResponsibilities(endpoint,export_files_id,mess
                     const blob = new Blob([data], { type: "application/octet-stream" });
                     const link = document.createElement("a");
                     link.href = URL.createObjectURL(blob);
-                    link.download = file_name.concat('.',fileFormat);
+                    link.download = file_name.concat('.', fileFormat);
                     link.click();
                     link.remove();
                 });
