@@ -466,9 +466,9 @@ svg {
 #diploma-table>tbody>tr :nth-child(6),
 #diploma-table>tbody>tr :nth-child(7),
 #diploma-table>tbody>tr :nth-child(8),
-#diploma-table>tbody>tr :nth-child(9),
 #diploma-table>tbody>tr :nth-child(10),
 #diploma-table>tbody>tr :nth-child(11),
+#diploma-table>tbody>tr :nth-child(12),
 #diploma-table>tbody>tr :nth-child(13),
 #diploma-table>tbody>tr :nth-child(14),
 #diploma-table>tbody>tr :nth-child(15),
@@ -476,14 +476,14 @@ svg {
 #diploma-table>tbody>tr :nth-child(17),
 #diploma-table>tbody>tr :nth-child(18),
 #diploma-table>tbody>tr :nth-child(19),
-#diploma-table>tbody>tr :nth-child(20),
 #diploma-table>tbody>tr :nth-child(21),
 #diploma-table>tbody>tr :nth-child(22),
+#diploma-table>tbody>tr :nth-child(23),
 #diploma-table>tbody>tr :nth-child(24),
 #diploma-table>tbody>tr :nth-child(25),
-#diploma-table>tbody>tr :nth-child(26),
 #diploma-table>tbody>tr :nth-child(27),
-#diploma-table>tbody>tr :nth-child(28) {
+#diploma-table>tbody>tr :nth-child(28),
+#diploma-table>tbody>tr :nth-child(29) {
     text-align: center;
 }
 

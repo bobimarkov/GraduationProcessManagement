@@ -611,8 +611,7 @@ function showGivenSection(sectionToBeDisplayed) {
         'students_section',
         'edit_section',
         'diploma_section',
-        'excellent_order',
-        'diploma_order_section',
+        'excellent_order',       
         'distribute_moderators',
         'analytic_section',
         'messages_send_section',
@@ -620,7 +619,8 @@ function showGivenSection(sectionToBeDisplayed) {
         'settings_section',
         'settings_date_section',
         'settings_archive_section',
-        'attendance_section'
+        'attendance_section',
+        'diploma_order_section'
     ];
 
     sections = sections.map(x => document.getElementById(x));
@@ -638,25 +638,25 @@ function showGivenSection(sectionToBeDisplayed) {
     }
 
     //the corner cases for flex and make 2 grids at the same time
-    if (sectionToBeDisplayed.localeCompare(sections[7].id) == 0) {
-        sections[7].style.display = 'flex';
+    if (sectionToBeDisplayed.localeCompare(sections[6].id) == 0) {
+        sections[6].style.display = 'flex';
     } else if (sectionToBeDisplayed.localeCompare(sections[3].id) == 0) {
         sections[3].style.display = 'grid';
         sections[4].style.display = 'grid';
         //sections[5].style.display = 'grid';
-        sections[6].style.display = 'grid';
+        sections[5].style.display = 'grid';
     }
-    else if (sectionToBeDisplayed.localeCompare(sections[8].id) == 0) {
+    else if (sectionToBeDisplayed.localeCompare(sections[7].id) == 0) {
+        sections[7].style.display = 'grid';
         sections[8].style.display = 'grid';
-        sections[9].style.display = 'grid';
     }
-    else if (sectionToBeDisplayed.localeCompare(sections[10].id) == 0) {
+    else if (sectionToBeDisplayed.localeCompare(sections[9].id) == 0) {
+        sections[9].style.display = 'grid';
         sections[10].style.display = 'grid';
         sections[11].style.display = 'grid';
-        sections[12].style.display = 'grid';
     }
-    else if (sectionToBeDisplayed.localeCompare(sections[13].id) == 0) {
-        sections[5].style.display = 'grid';
+    else if (sectionToBeDisplayed.localeCompare(sections[12].id) == 0) {
+        sections[12].style.display = 'grid';
         sections[13].style.display = 'grid';
     }
 }
