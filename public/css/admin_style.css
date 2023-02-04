@@ -246,15 +246,15 @@ table td {
     margin-top: 0;
 }
 
-/*students-table css-style end*/
+
 #students-table>tbody>tr :nth-child(5),
 #students-table>tbody>tr :nth-child(6),
 #students-table>tbody>tr :nth-child(7),
 #students-table>tbody>tr :nth-child(8),
-#students-table>tbody>tr :nth-child(9) {
+#students-table>tbody>tr :nth-child(9), 
+#edit-users-table>tbody>tr :nth-child(5) {
     text-align: center;
 }
-
 
 #students-table {
     margin-top: 0;

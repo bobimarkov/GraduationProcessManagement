@@ -218,13 +218,6 @@ function buildEditAllUsersTable(data) {
     const columnNames = ["ID", "Име", "Имейл", "Телефон", "Роля"]
     table.innerHTML = generateTableHeaderRow(columnNames, 'sortByEdit', 'header-table-edit', 'edit-users-table');
 
-    // let header_string = '<tr id="header-table-edit">'
-    // column_names.forEach((c, idx) => {
-    //     header_string += `<td onclick="sortByEdit(${idx})">${c}</td>`;
-    // });
-    // header_string += '</tr>';
-    // table.innerHTML = header_string;
-
     for (const user of users) {
         var row = table.insertRow(i);
         row.id = 'user' + user.id;
