@@ -107,6 +107,7 @@
             <h3>
                 <i class="fa fa-paper-plane-o" aria-hidden="true"></i> Заяви присъствие на дипломирането
             </h3>
+            <p id="deadline_attendance"></p>
             <div id="attendance_section">
                 <select class="speech_request_select" id="attendance_request_select"
                     onchange="setAttendance(email, this.value)">
@@ -124,6 +125,7 @@
                 </form>
                 <p class="message-bar" id="message-bar-diploma-request"></p>
             </div>
+            <p id="messageAttendance"></p>
         </div>
 
 
@@ -133,6 +135,7 @@
                 присъствате на церемонията!</p>
             <div class="request_gown_hat_content" id="request_gown_hat_content">
                 <div id="request_gown_hat_content_1_wrapper">
+                    <p id="deadline_gown"></p>
                     <div id="request_gown_hat_content_1">
                         <select class="gown_request_select" id="gown_request_select"
                             onchange="requestGown(email, this.value)">
@@ -140,15 +143,16 @@
                             <option value="1">Желая да взема тога.</option>
                             <option value="0">Не желая.</option>
                         </select>
-                        <p id="gown_request"></p>
                         <p id="gown_taken"></p>
                         <p id="gown_taken_date"></p>
                         <p id="gown_returned"></p>
                         <p id="gown_returned_date"></p>
-                        <p id="gown_moderator"></p>
                     </div>
+                    <p id="gown_request"></p>
+                    <p id="gown_moderator"></p>
                 </div>
                 <div id="request_gown_hat_content_2_wrapper">
+                    <p id="deadline_hat"></p>
                     <div id="request_gown_hat_content_2">
                         <select class="hat_request_select" id="hat_request_select"
                             onchange="requestHat(email, this.value)">
@@ -156,11 +160,11 @@
                             <option value="1">Желая да взема шапка.</option>
                             <option value="0">Не желая.</option>
                         </select>
-                        <p id="hat_request"></p>
                         <p id="hat_taken"></p>
                         <p id="hat_taken_date"></p>
-                        <p id="hat_moderator"></p>
                     </div>
+                    <p id="hat_request"></p>
+                    <p id="hat_moderator"></p>
                 </div>
             </div>
         </div>

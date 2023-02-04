@@ -72,7 +72,7 @@ function updateUserToDB($content)
     if ($column == "attendance") {
         $newValue = 1 - $value;
         $update_stmt = $conn->prepare("UPDATE student_diploma 
-                                       SET $column = \"$value\", take_in_advance_request = \"$newValue\", take_in_advance_request_comment = NULL  
+                                       SET $column = \"$value\", take_in_advance_request = \"$newValue\", take_in_advance_request_comment = NULL, color = NULL, num_order = NULL, time_diploma = NULL  
                                        WHERE student_fn = :fn");
     } else if ($column == "take_in_advance_request") {
         $update_stmt = $conn->prepare("UPDATE student_diploma 

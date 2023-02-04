@@ -1,5 +1,6 @@
 tokenRefresher();
 showDiplomaSection();
+showAttendanceSection();
 getAllUsers();
 getAllStudents();
 getStudentsDiplomaInfo();
@@ -268,15 +269,111 @@ function getStudentsDiplomaInfo() {
         })
 }
 
+function getStudentsAttendanceInfo() {
+    fetch(`../../api?endpoint=get_student_attendance`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            if (data.error) {
+                console.log(data.error);
+            } else {
+                buildStudentsAttendanceDiplomaTable(data.users);
+            }
+        })
+}
+
+
 function buildStudentsDiplomaTable(users) {
-    var table = document.getElementById("diploma-table");
+    var table = document.getElementById('diploma-table');
+
+        var columnNames = [
+            "ФН", "Име", "Степен", "Спец.", "Група", "Успех",
+            "Присъствие", "Има право", "Модератор за диплома", "Готова диплома", "Взета", "Заявка взимане предв.", "Коментар (студент)",
+            "Взета предв.", "Дата/час", "Коментар (администр.)", "Покана реч", "Отговор", "Снимки", "Модератор за тога", "Заявена тога",
+            "Взета", "Дата/час", "Върната", "Дата/час", "Модератор за шапка", "Заявена шапка", "Взета", "Дата/час"];
+    
+
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-diploma', 'diploma-table');
+    let i = 1;
+
+    for (const user of users) {
+        if (user.grade >= 3) {
+            var row = table.insertRow(i);
+            row.id = 'user' + i;
+            let response;
+            switch (user.speech_response) {
+                case null: response = '-'; break;
+                case 0: response = 'Отказва'; break;
+                case 1: response = 'Приема'; break;
+            }
+            var row_data = [
+                user.student_fn,
+                user.name,
+                user.degree,
+                user.major,
+                user.group,
+                user.grade,
+                user.attendance == null ? '' : user.attendance == 0 ? 'Не' : 'Да',
+                user.has_right == 0 ? 'Не' : 'Да',
+                user.moderator_signature_email === null ? 'не е избран' : user.moderator_signature_email,
+                user.is_ready == 0 ? 'Не' : 'Да',
+                user.is_taken == 0 ? 'Не' : 'Да',
+                user.take_in_advance_request == 0 ? 'Не' : 'Да',
+                user.take_in_advance_request_comment == null ? "<i class='far fa-comment-alt comment-icon'><span class='studentComm'>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span class='studentComm'>${user.take_in_advance_request_comment}</span></i>`,
+                user.is_taken_in_advance == 0 ? 'Не' : 'Да',
+                user.taken_at_time,
+                user.diploma_comment == null ? "<i class='far fa-comment-alt comment-icon'><span class='userComm'>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span class='userComm'>${user.diploma_comment}</span></i>`,
+                user.speech_request = (user.speech_request == 1) ? 'Да' : 'Не',
+                user.speech_response = response,
+                user.photos_requested == 0 ? 'Не' : 'Да',
+                user.moderator_gown_email === null ? 'не е избран' : user.moderator_gown_email,
+                //gown_requested
+                user.gown_requested == null ? '' : user.gown_requested == 0 ? 'Не' : 'Да',
+                //gown_taken
+                user.gown_requested != 1 ? '' : user.gown_taken == 0 || user.gown_taken == null ? 'Не' : 'Да',
+                user.gown_taken_date,
+                //gown_returned
+                user.gown_taken != 1 ? '' : user.gown_returned == 0 || user.gown_returned == null ? 'Не' : 'Да',
+                user.gown_returned_date,
+                user.moderator_hat_email === null ? 'не е избран' : user.moderator_hat_email,
+                //hat_requested
+                user.hat_requested == null ? '' : user.hat_requested == 0 ? 'Не' : 'Да',
+                //hat_taken
+                user.hat_requested != 1 ? '' : user.hat_taken == 0 || user.hat_taken == null ? 'Не' : 'Да',
+                user.hat_taken_date,
+            ];
+            const number_columns = row_data.length;
+            for (var j = 0; j < number_columns; j++) {
+                row.insertCell(j).innerHTML = row_data[j];
+            }
+            i++;
+        }
+    }
+}
+
+function buildStudentsAttendanceDiplomaTable(users) {
+    var table = document.getElementById('attendance-table');
 
     var columnNames = [
         "ФН", "Име", "Цвят", "Ред на връчване", "Час на връчване", "Степен", "Спец.", "Група", "Успех",
         "Присъствие", "Има право", "Модератор за диплома", "Готова диплома", "Взета", "Заявка взимане предв.", "Коментар (студент)",
         "Взета предв.", "Дата/час", "Коментар (администр.)", "Покана реч", "Отговор", "Снимки", "Модератор за тога", "Заявена тога",
         "Взета", "Дата/час", "Върната", "Дата/час", "Модератор за шапка", "Заявена шапка", "Взета", "Дата/час"];
-    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-diploma', 'diploma-table');
+    
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-attendance', 'attendance-table');
     let i = 1;
 
     for (const user of users) {
@@ -494,6 +591,17 @@ function showDiplomaSection() {
     showDiplomaOrderMessage();
 }
 
+function showAttendanceSection() {
+    tokenRefresher();
+    showGivenSection("attendance_section");
+    activeHeader("attendance_header");
+    getStudentsAttendanceInfo();
+    let errElem = document.getElementById('message-bar-export-attendance');
+    errElem.classList.remove(['success']);
+    errElem.classList.remove(['error']);
+    errElem.innerHTML = "";
+}
+
 //make section visible, giving only its name
 function showGivenSection(sectionToBeDisplayed) {
 
@@ -511,7 +619,8 @@ function showGivenSection(sectionToBeDisplayed) {
         'messages_receive_section',
         'settings_section',
         'settings_date_section',
-        'settings_archive_section'
+        'settings_archive_section',
+        'attendance_section'
     ];
 
     sections = sections.map(x => document.getElementById(x));
@@ -534,7 +643,7 @@ function showGivenSection(sectionToBeDisplayed) {
     } else if (sectionToBeDisplayed.localeCompare(sections[3].id) == 0) {
         sections[3].style.display = 'grid';
         sections[4].style.display = 'grid';
-        sections[5].style.display = 'grid';
+        //sections[5].style.display = 'grid';
         sections[6].style.display = 'grid';
     }
     else if (sectionToBeDisplayed.localeCompare(sections[8].id) == 0) {
@@ -545,6 +654,10 @@ function showGivenSection(sectionToBeDisplayed) {
         sections[10].style.display = 'grid';
         sections[11].style.display = 'grid';
         sections[12].style.display = 'grid';
+    }
+    else if (sectionToBeDisplayed.localeCompare(sections[13].id) == 0) {
+        sections[5].style.display = 'grid';
+        sections[13].style.display = 'grid';
     }
 }
 
@@ -558,7 +671,9 @@ function activeHeader(elementId) {
         'diploma_header',
         'analytic_header',
         'messages_header',
-        'settings_header'];
+        'settings_header',
+        'attendance_header'
+    ];
 
     headers = headers.map(x => document.getElementById(x));
 
@@ -1408,6 +1523,81 @@ function downloadExportedGraduated(event) {
         }
         else {
             fetch('../../api?endpoint=export_graduated', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(values)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob();
+                    }
+                    else {
+                        localStorage.removeItem('token');
+                        window.location.replace("../../");
+                    }
+                })
+                .then(blob => {
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = "graduated.pdf";
+
+                    document.body.appendChild(link);
+                    link.click();
+
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(link.href);
+                });
+        }
+    }
+}
+
+function downloadExportedAttGraduated(event) {
+    event.preventDefault();
+    let form = document.getElementById("export_att_graduated");
+    let fileFormat = form.formatatt.value;
+    console.log(fileFormat);
+    let errElem = document.getElementById('message-bar-export-attendance');
+    if (fileFormat === 'no') {
+        errElem.classList.remove(['success']);
+        errElem.classList.add(['error']);
+        errElem.innerHTML = "Не сте избрали файлов формат!"
+    }
+    else {
+        errElem.classList.remove(['error']);
+        errElem.innerHTML = "";
+        values = { "format": fileFormat }
+        if (fileFormat !== 'pdf') {
+            fetch('../../api?endpoint=export_attendance', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(values)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    }
+                    else {
+                        localStorage.removeItem('token');
+                        window.location.replace("../../");
+                    }
+                })
+                .then(data => {
+
+                    const blob = new Blob([data], { type: "application/octet-stream" });
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "graduated.".concat(fileFormat);
+                    link.click();
+                    link.remove();
+                });
+        }
+        else {
+            fetch('../../api?endpoint=export_attendance', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
