@@ -457,3 +457,10 @@ svg{
 .boolean-select-after-select:active {
     outline: none;
 }
+
+.disabled-button, .disabled-button:hover  {
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
+    cursor: auto;
+}

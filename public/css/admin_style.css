@@ -617,3 +617,11 @@ svg {
     font-size: medium;
     margin-bottom: 1em;
 }
+
+
+.disabled-button, .disabled-button:hover  {
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
+    cursor: auto;
+}
