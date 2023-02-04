@@ -3,6 +3,7 @@ showDiplomaSection();
 getAllUsers();
 getAllStudents();
 getStudentsDiplomaInfo();
+getMessages();
 // Load google charts
 google.charts.load('current', { 'packages': ['corechart'] });
 
@@ -350,6 +351,12 @@ function showStudents() {
     getAllStudents();
 }
 
+function showMessagesSection() {
+    tokenRefresher();
+    showGivenSection("messages_send_section");
+    activeHeader("messages_header");
+}
+
 function showAnalyticsSection() {
     let text = document.getElementById('analytic_text');
     fetch(`../../api?endpoint=get_students_diploma_simplified`, {
@@ -415,7 +422,7 @@ function showAnalyticsSectionHelper() {
                 let studentGradeData = dataGradesToArray(data);
                 let studentDegreeData = dataDegreeToArray(data);
                 let studentHasRightData = dataHasRightToArray(data);
-                google.charts.setOnLoadCallback(drawChart(studentMajorData, "analytics1", "Брой дипломиращи се студенти от дадена специалност със степен 'Бакалавър'"));
+                google.charts.setOnLoadCallback(drawChart(studentMajorData, "analytics1", "рой дипломиращи се студенти от дадена специалност със степен 'Бакалавър'"));
                 google.charts.setOnLoadCallback(drawChart(studentGradeData, "analytics2", "Брой дипломиращи се студенти с дадени оценки"));
                 google.charts.setOnLoadCallback(drawChart(studentDegreeData, "analytics3", "Брой дипломиращи се студенти с дадени степени на образование"));
                 google.charts.setOnLoadCallback(drawChart(studentHasRightData, "analytics4", "Студенти, имащи право на диплома"));
@@ -439,7 +446,9 @@ function showGivenSection(sectionToBeDisplayed) {
         'students_section',
         'diploma_section',
         'analytic_section',
-        'responsibilities_section'];
+        'responsibilities_section',
+        'messages_send_section',
+        'messages_receive_section'];
     sections = sections.map(x => document.getElementById(x));
 
     //iterate all sections
@@ -455,6 +464,11 @@ function showGivenSection(sectionToBeDisplayed) {
         }
 
     }
+
+    if (sectionToBeDisplayed.localeCompare(sections[5].id) == 0) {
+        sections[5].style.display = 'grid';
+        sections[6].style.display = 'grid';
+    }
 }
 
 /*---- SWITCH_SECTIONS  END ----*/
@@ -466,7 +480,8 @@ function activeHeader(elementId) {
         'students_header',
         'diploma_header',
         'analytic_header',
-        'responsibilities_header'];
+        'responsibilities_header',
+        'messages_header'];
 
     headers = headers.map(x => document.getElementById(x));
 
@@ -736,11 +751,6 @@ function buildResponsibilitiesSectionForModeratorHat(users) {
             i++;
         }
     }
-
-    tableheader = document.getElementById("header_responsibilities_table2");
-    tableheader.style.display = "none";
-    table = document.getElementById("responsibilities_table2")
-    table.style.display = "none";
 }
 
 
@@ -791,11 +801,6 @@ function buildResponsibilitiesSectionForModeratorGown(users) {
             i++;
         }
     }
-
-    tableheader = document.getElementById("header_responsibilities_table2");
-    tableheader.style.display = "none";
-    table = document.getElementById("responsibilities_table2")
-    table.style.display = "none";
 }
 
 
@@ -819,14 +824,14 @@ function buildResponsibilitiesSectionForModeratorSignature(users) {
     createSumDivForModerator("sums-div", sums_text, Object.values(sums));
 
     var tableheader = document.getElementById("header_responsibilities_table");
-    tableheader.innerHTML = "<i class=\"fas fa-list\"></i>" + " Студенти с право на диплома:";
+    tableheader.innerHTML = "<i class=\"fas fa-list\"></i>" + " Студенти заявили диплома:";
 
     let i = 1;
     var table = document.getElementById("responsibilities_table");
     var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Заявка взимане предв.", "Коментар (студент)", "Взета предв.", "Дата/час", "Коментар (администр.)"];
     table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header_responsibilities_table', 'responsibilities_table');
     for (const user of users) {
-        if (user.has_right) {
+        if (user.attendance === 1 || user.take_in_advance_request === 1) {
             var row = table.insertRow(i);
             row.id = 'user' + i;
             let row_data = [
@@ -840,35 +845,6 @@ function buildResponsibilitiesSectionForModeratorSignature(users) {
                 user.take_in_advance_request_comment === null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.take_in_advance_request_comment}</span></i>`,
                 user.is_taken_in_advance === 0 ? 'Не' : 'Да',
                 user.taken_at_time,
-                user.diploma_comment === null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.diploma_comment}</span></i>`,
-            ]
-            for (var j = 0; j < row_data.length; j++) {
-                row.insertCell(j).innerHTML = row_data[j];
-            }
-            i++;
-        }
-    }
-
-    tableheader = document.getElementById("header_responsibilities_table2");
-    tableheader.innerHTML = "<i class=\"fas fa-list\"></i>" + " Студенти, искащи дипломата си предварително:";
-
-    i = 1;
-    table = document.getElementById("responsibilities_table2");
-    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Заявка взимане предв.", "Коментар (студент)", "Взета предв.", "Коментар (администр.)"];
-    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header_responsibilities_table2', 'responsibilities_table2');
-    for (const user of users) {
-        if (user.take_in_advance_request) {
-            var row = table.insertRow(i);
-            row.id = 'user' + i;
-            let row_data = [
-                user.fn,
-                user.name,
-                user.email,
-                user.phone,
-                user.attendance === 0 ? 'Не' : 'Да',
-                user.take_in_advance_request === 0 ? 'Не' : 'Да',
-                user.take_in_advance_request_comment === null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.take_in_advance_request_comment}</span></i>`,
-                user.is_taken_in_advance === 0 ? 'Не' : 'Да',
                 user.diploma_comment === null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.diploma_comment}</span></i>`,
             ]
             for (var j = 0; j < row_data.length; j++) {
@@ -993,6 +969,84 @@ function downloadExportedModeratorResponsibilities(endpoint, export_files_id, me
                 });
         }
     }
+}
+
+
+
+function sendMessage(event) {
+    event.preventDefault();
+    let recipient = document.getElementById('textarea-emails');
+    let message = document.getElementById('message');
+
+    let actions = {
+        "recipient": recipient.value,
+        "message": message.value
+    };
+    fetch('../../api?endpoint=send_message_moderator', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(actions)
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            var errElem = document.getElementById('message-bar-export-message');
+            if (!data.success) {
+                errElem.classList.remove(['success']);
+                errElem.classList.add(['error']);
+                errElem.innerHTML = data.message;
+            } else {
+                errElem.classList.remove(['error']);
+                errElem.classList.add(['success']);
+                errElem.innerHTML = data.message;
+                recipient.value = "";
+                message.value = "";
+            }
+        });
+}
+
+function getMessages() {
+    let notifications = document.getElementById("notifications");
+    fetch('../../api?endpoint=get_messages', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            notifications.style.display = "block";
+            if (!data.success) {
+                let text = document.createElement("p");
+                text.innerHTML = "В момента нямате никакви известия.";
+                notifications.appendChild(text);
+            } else {
+                for (let i = 0; i < data.order.length; i++) {   
+                    let text = document.createElement("p");                 
+                    text.innerHTML = `${i + 1})От ${data.order[i].sender} - ${data.order[i].message}`;
+                    notifications.appendChild(text);
+                }
+            }
+        });
 }
 
 

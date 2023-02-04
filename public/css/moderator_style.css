@@ -392,3 +392,68 @@ svg{
     column-gap: 10px;
     width: 30%;
 }
+
+#textarea-fn {
+    width: 100%;
+}
+
+#message {
+    height: 20em !important;
+    width: 100%;
+}
+
+#textarea {
+    display: grid;
+}
+
+#textarea-emails {
+    width: 100%;
+    height: 8em;
+}
+
+.long-submit-button,
+.submit-button-users {
+    margin-top: 1em;
+    height: 2.5em;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #006199;
+    cursor: pointer;
+    background-color: snow;
+    font-weight: bold;
+    color: darkslategray;
+    font-size: medium;
+}
+
+.long-submit-button:hover,
+.submit-button-users:hover  {
+    background-color: #006199;
+    color: snow;
+}
+
+.form-input,
+.dashboard-textarea-fn,
+.textarea-after-select {
+    background-color: rgb(235, 238, 241);
+    border-color: darkslategray;
+    border-radius: 5px;
+    padding: 5px;
+    box-sizing: border-box;
+    font: 1em sans-serif;
+}
+
+.form-input:focus,
+.dashboard-textarea-fn:focus,
+.textarea-after-select:focus,
+.dashboard-action:focus,
+.boolean-select-after-select:focus {
+    outline: none;
+}
+
+.form-input:active,
+.dashboard-textarea-fn:active,
+.textarea-after-select:active,
+.dashboard-action:active,
+.boolean-select-after-select:active {
+    outline: none;
+}
