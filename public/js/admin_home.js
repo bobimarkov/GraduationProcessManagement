@@ -16,31 +16,31 @@ logoutHeader.addEventListener("click", (e) => {
 });
 
 
-function generateTableHeaderRow(columnNames,functionName,header_table_id,table_id) {
-    var headerCells = 
-    functionName === undefined ?
-    columnNames.reduce(
-        (accumulator, currentValue) => accumulator.concat(`<td>${currentValue}</td>`),
-        ''
-    ) 
-    : 
-    table_id === undefined ?
-    columnNames.reduce(
-        (accumulator, currentValue, currentIndex) => accumulator.concat(`<td onclick=${functionName}(${currentIndex})>${currentValue}</td>`),
-        ''
-    )
-    :
-    columnNames.reduce(
-        (accumulator, currentValue, currentIndex) => accumulator.concat(`<td onclick=${functionName}(${currentIndex},"${table_id}")>${currentValue}</td>`),
-        ''
-    )
-    
-    return  header_table_id === undefined ? `<tr>${headerCells}</tr>` : `<tr id=${header_table_id}>${headerCells}</tr>`;
+function generateTableHeaderRow(columnNames, functionName, header_table_id, table_id) {
+    var headerCells =
+        functionName === undefined ?
+            columnNames.reduce(
+                (accumulator, currentValue) => accumulator.concat(`<td>${currentValue}</td>`),
+                ''
+            )
+            :
+            table_id === undefined ?
+                columnNames.reduce(
+                    (accumulator, currentValue, currentIndex) => accumulator.concat(`<td onclick=${functionName}(${currentIndex})>${currentValue}</td>`),
+                    ''
+                )
+                :
+                columnNames.reduce(
+                    (accumulator, currentValue, currentIndex) => accumulator.concat(`<td onclick=${functionName}(${currentIndex},"${table_id}")>${currentValue}</td>`),
+                    ''
+                )
+
+    return header_table_id === undefined ? `<tr>${headerCells}</tr>` : `<tr id=${header_table_id}>${headerCells}</tr>`;
 }
 
 
 var cPrev = -1;
-function sortBy(c,id) {
+function sortBy(c, id) {
     let rows = document.getElementById(id).rows.length;
     let columns = document.getElementById(id).rows[0].cells.length;
     let arrTable = new Array(rows);
@@ -130,8 +130,8 @@ function buildUsersTable(data) {
     let i = 1;
     let users = data.users;
 
-        var columnNames = ["Име", "Имейл", "Телефон", "Роля"];
-    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy','header-table-users','users-table');
+    var columnNames = ["Име", "Имейл", "Телефон", "Роля"];
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-users', 'users-table');
 
     for (const user of users) {
         var row = table.insertRow(i);
@@ -190,7 +190,7 @@ function buildEditStudentsTable(data) {
     let users = data.users;
 
     var columnNames = ["Име", "Имейл", "Телефон", "Фн"];
-    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy','header-table-edit','edit-students-table');
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-edit', 'edit-students-table');
 
     for (const user of users) {
         var row = table.insertRow(i);
@@ -214,7 +214,7 @@ function buildStudentsTable(data) {
     let i = 1;
     let users = data.users;
     var columnNames = ["Име", "Имейл", "Телефон", "ФН", "Степен", "Спец.", "Група", "Дипломиращ се", "Роля"];
-    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy','header-table-students','students-table');
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-students', 'students-table');
 
     for (const user of users) {
         var row = table.insertRow(i);
@@ -270,11 +270,11 @@ function buildStudentsDiplomaTable(users) {
     var table = document.getElementById("diploma-table");
 
     var columnNames = [
-        "ФН", "Име","Цвят","Ред на връчване","Час на връчване", "Степен", "Спец.", "Група", "Успех",
+        "ФН", "Име", "Цвят", "Ред на връчване", "Час на връчване", "Степен", "Спец.", "Група", "Успех",
         "Присъствие", "Има право", "Модератор за диплома", "Готова диплома", "Взета", "Заявка взимане предв.", "Коментар (студент)",
-        "Взета предв.", "Дата/час", "Коментар (администр.)", "Покана реч", "Отговор", "Снимки", "Модератор за тога","Заявена тога",
-        "Взета", "Дата/час", "Върната", "Дата/час","Модератор за шапка", "Заявена шапка", "Взета", "Дата/час"];
-    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy','header-table-diploma','diploma-table');
+        "Взета предв.", "Дата/час", "Коментар (администр.)", "Покана реч", "Отговор", "Снимки", "Модератор за тога", "Заявена тога",
+        "Взета", "Дата/час", "Върната", "Дата/час", "Модератор за шапка", "Заявена шапка", "Взета", "Дата/час"];
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-diploma', 'diploma-table');
     let i = 1;
 
     for (const user of users) {
@@ -459,9 +459,9 @@ function showAnalyticsSectionHelper() {
                 let studentGradeData = dataGradesToArray(data);
                 let studentDegreeData = dataDegreeToArray(data);
                 let studentHasRightData = dataHasRightToArray(data);
-                google.charts.setOnLoadCallback(drawChart(studentMajorData, "analytics1", "Брой студенти от дадена специалност със степен 'Бакалавър'"));
-                google.charts.setOnLoadCallback(drawChart(studentGradeData, "analytics2", "Брой студенти с дадени оценки"));
-                google.charts.setOnLoadCallback(drawChart(studentDegreeData, "analytics3", "Брой студенти с дадени степени на образование"));
+                google.charts.setOnLoadCallback(drawChart(studentMajorData, "analytics1", "рой дипломиращи се студенти от дадена специалност със степен 'Бакалавър'"));
+                google.charts.setOnLoadCallback(drawChart(studentGradeData, "analytics2", "Брой дипломиращи се студенти с дадени оценки"));
+                google.charts.setOnLoadCallback(drawChart(studentDegreeData, "analytics3", "Брой дипломиращи се студенти с дадени степени на образование"));
                 google.charts.setOnLoadCallback(drawChart(studentHasRightData, "analytics4", "Студенти, имащи право на диплома"));
             }
         })
@@ -504,6 +504,7 @@ function showGivenSection(sectionToBeDisplayed) {
         'messages_send_section',
         'messages_receive_section',
         'settings_section',
+        'settings_date_section',
         'settings_archive_section'
     ];
 
@@ -537,6 +538,7 @@ function showGivenSection(sectionToBeDisplayed) {
     else if (sectionToBeDisplayed.localeCompare(sections[10].id) == 0) {
         sections[10].style.display = 'grid';
         sections[11].style.display = 'grid';
+        sections[12].style.display = 'grid';
     }
 }
 
@@ -590,35 +592,35 @@ function dataDegreeToArray(data) {
 
     let rows = data.users;
     rows.forEach(row_data => {
-        switch (row_data.degree) {
-            case 'Б':
-                a[1][1]++;
-                break;
-            case 'М':
-                a[2][1]++;
-                break;
-            case 'Д':
-                a[3][1]++;
-                break;
-            default:
-                break;
+        if (row_data.grade >= 3) {
+            switch (row_data.degree) {
+                case 'Б':
+                    a[1][1]++;
+                    break;
+                case 'М':
+                    a[2][1]++;
+                    break;
+                case 'Д':
+                    a[3][1]++;
+                    break;
+                default:
+                    break;
+            }
         }
     });
     return a;
 }
 
 function dataGradesToArray(data) {
-    const a = [["Оценка", "Брой студенти с такава оценка"], ["[2,3)", 0], ["[3,4)", 0], ["[4,5)", 0], ["[5,6]", 0]];
+    const a = [["Оценка", "Брой студенти с такава оценка"], ["[3,4)", 0], ["[4,5)", 0], ["[5,6]", 0]];
     let rows = data.users;
     rows.forEach(row_data => {
-        if (row_data.grade >= 2 && row_data.grade < 3) {
+        if (row_data.grade >= 3 && row_data.grade < 4) {
             a[1][1]++;
-        } else if (row_data.grade >= 3 && row_data.grade < 4) {
-            a[2][1]++;
         } else if (row_data.grade >= 4 && row_data.grade < 5) {
-            a[3][1]++;
+            a[2][1]++;
         } else {
-            a[4][1]++;
+            a[3][1]++;
         }
     });
     return a;
@@ -631,30 +633,30 @@ function dataMajorToArray(data) {
 
     let rows = data.users;
     rows.forEach(row_data => {
-        switch (row_data.major) {
-            case 'СИ':
-                a[1][1]++;
-                break;
-            case 'КН':
-                a[2][1]++;
-                break;
-            case 'ИС':
-                a[3][1]++;
-                break;
-            case 'И':
-                a[4][1]++;
-                break;
-            case 'М':
-                a[5][1]++;
-                break;
-            case 'С':
-                a[6][1]++;
-                break;
+        if (row_data.grade >= 3) {
+            switch (row_data.major) {
+                case 'СИ':
+                    a[1][1]++;
+                    break;
+                case 'КН':
+                    a[2][1]++;
+                    break;
+                case 'ИС':
+                    a[3][1]++;
+                    break;
+                case 'И':
+                    a[4][1]++;
+                    break;
+                case 'М':
+                    a[5][1]++;
+                    break;
+                case 'С':
+                    a[6][1]++;
+                    break;
+            }
         }
     });
     return a;
-
-
 }
 //end of converting different data to array
 
@@ -1505,7 +1507,7 @@ function downloadExcellentStudent(event) {
 }
 
 
-function searchInTable(table_id,input_id) {
+function searchInTable(table_id, input_id) {
     const table = document.getElementById(table_id);
     const input = document.getElementById(input_id);
     const filter = input.value.toUpperCase();
@@ -1714,7 +1716,7 @@ function sendGraduationInfo(c) {
             errElem.innerHTML = "Грешка: Дипломирането е една година след годината на завършване!";
             return;
         }
-        else if(c >= parseInt(classes.value)) {
+        else if (c >= parseInt(classes.value)) {
             errElem.classList.remove(['success']);
             errElem.classList.add(['error']);
             errElem.innerHTML = `Грешка: Последният архив е от ${c} година и вие нямате право да добавяте от по-минала година!`;

@@ -98,114 +98,22 @@ table td {
     padding: 0 0.2em;
 }
 
-.users-table td:nth-child(1) {
-    /* id */
-    width: 5%;
-}
-
-.users-table td:nth-child(2) {
-    /* 3 names */
-    width: 50%;
-}
-
-.users-table td:nth-child(3) {
-    /* email */
-    width: 30%;
-}
 
 .users-table td:nth-child(4) {
-    /* phone */
-    width: 20%;
-}
-
-.users-table td:nth-child(5) {
     /* role */
     text-align: center;
     width: 8%;
 }
 
 
-
-/*Edit-students-table css-style start*/
-
-.edit-students-table td:nth-child(1){
-    
-    width:5%;
-}
-
-.edit-students-table td:nth-child(2){
-    
-    width:50%;
-}
-.edit-students-table td:nth-child(3){
-    
-    width:25%;
-}
-.edit-students-table td:nth-child(4){
-    
-    width:20%;
-}
-.edit-students-table td:nth-child(5){
-    
-    width:20%;
-}
-
-
-
-
-
-/*Edit-students-table css-style end*/
-.students-table td:nth-child(1) {
-    /* id */
-    width: 5%;
-}
-
-.students-table td:nth-child(2) {
-    /* 3 names */
-    width: 40%;
-}
-
-.students-table td:nth-child(3) {
-    /* email */
-    width: 20%;
-}
-
-.students-table td:nth-child(4) {
-    /* phone */
-    width: 15%;
-}
-
-.students-table td:nth-child(5) {
-    /* fn */
-    /* text-align: center; */
-    width: 15%;
-}
-
-.students-table td:nth-child(6) {
-    /* degree */
+/*students-table css-style end*/
+#students-table>tbody>tr :nth-child(5),
+#students-table>tbody>tr :nth-child(6),
+#students-table>tbody>tr :nth-child(7),
+#students-table>tbody>tr :nth-child(8),
+#students-table>tbody>tr :nth-child(9) {
     text-align: center;
-    width: 5%;
 }
-
-.students-table td:nth-child(7) {
-    /* major */
-    text-align: center;
-    width: 5%;
-}
-
-.students-table td:nth-child(8) {
-    /* group */
-    text-align: center;
-    width: 5%;
-}
-
-.students-table td:nth-child(9) {
-    /* role */
-    text-align: center;
-    width: 5%;
-}
-
-
 
 .diploma-table {
     display: block;
@@ -213,30 +121,35 @@ table td {
     white-space: nowrap;
 }
 
-.diploma-table td:nth-child(1) {
-    /* fn */
-    min-width: 2em;
+#diploma-table>tbody>tr :nth-child(3),
+#diploma-table>tbody>tr :nth-child(4),
+#diploma-table>tbody>tr :nth-child(5),
+#diploma-table>tbody>tr :nth-child(6),
+#diploma-table>tbody>tr :nth-child(7),
+#diploma-table>tbody>tr :nth-child(8),
+#diploma-table>tbody>tr :nth-child(9),
+#diploma-table>tbody>tr :nth-child(10),
+#diploma-table>tbody>tr :nth-child(11),
+#diploma-table>tbody>tr :nth-child(13),
+#diploma-table>tbody>tr :nth-child(14),
+#diploma-table>tbody>tr :nth-child(15),
+#diploma-table>tbody>tr :nth-child(16),
+#diploma-table>tbody>tr :nth-child(17),
+#diploma-table>tbody>tr :nth-child(18),
+#diploma-table>tbody>tr :nth-child(19),
+#diploma-table>tbody>tr :nth-child(20),
+#diploma-table>tbody>tr :nth-child(21),
+#diploma-table>tbody>tr :nth-child(22),
+#diploma-table>tbody>tr :nth-child(24),
+#diploma-table>tbody>tr :nth-child(25),
+#diploma-table>tbody>tr :nth-child(26),
+#diploma-table>tbody>tr :nth-child(27),
+#diploma-table>tbody>tr :nth-child(28),
+#diploma-table>tbody>tr :nth-child(30),
+#diploma-table>tbody>tr :nth-child(31),
+#diploma-table>tbody>tr :nth-child(32) {
+    text-align: center;
 }
-
-.diploma-table td:nth-child(2) {
-    /* fn */
-    min-width: 7em;
-}
-
-.diploma-table td:nth-child(3) {
-    /* names */
-    min-width: 20em;
-    width: 100%;
-}
-
-/*.diploma-table td:nth-child(6), td:nth-child(10), td:nth-child(16), td:nth-child(19), td:nth-child(24) {
-    border-right: 2px solid slategrey;
-}*/
-
-
-/* .diploma-table td:nth-child(10) {
-     max-width: 10em; 
-} */
 
 .diploma_take_columns {
     background-color: rgb(216, 216, 216)!important;
@@ -252,6 +165,25 @@ table td {
 .responsibilities_table tbody {
     display: table;
     width: 100%;
+}
+
+#responsibilities_table>tbody>tr :nth-child(5),
+#responsibilities_table>tbody>tr :nth-child(6),
+#responsibilities_table>tbody>tr :nth-child(7),
+#responsibilities_table>tbody>tr :nth-child(8),
+#responsibilities_table>tbody>tr :nth-child(9),
+#responsibilities_table>tbody>tr :nth-child(10),
+#responsibilities_table>tbody>tr :nth-child(11) {
+    text-align: center;
+}
+
+
+#responsibilities_table2>tbody>tr :nth-child(5),
+#responsibilities_table2>tbody>tr :nth-child(6),
+#responsibilities_table2>tbody>tr :nth-child(7),
+#responsibilities_table2>tbody>tr :nth-child(8),
+#responsibilities_table2>tbody>tr :nth-child(9) {
+    text-align: center;
 }
 
 #header-table-diploma,
