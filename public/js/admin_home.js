@@ -1,7 +1,8 @@
 tokenRefresher();
 showDiplomaSection();
-getAllUsers();
+getAllNonStudentUsers();
 getAllStudents();
+getAllUsers();
 getStudentsDiplomaInfo();
 getGraduationInfo();
 makeArchive();
@@ -99,7 +100,7 @@ function tokenRefresher() {
 }
 
 /*---- GET_USERS  START ----*/
-function getAllUsers() {
+function getAllNonStudentUsers() {
     fetch(`../../api?endpoint=get_users`, {
         method: 'GET',
         headers: {
@@ -121,6 +122,32 @@ function getAllUsers() {
                 console.log(data.error);
             } else {
                 buildUsersTable(data);
+            }
+        })
+}
+
+function getAllUsers() {
+    fetch(`../../api?endpoint=get_all_users`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            if (data.error) {
+                console.log(data.error);
+            } else {
+                buildEditAllUsersTable(data);
             }
         })
 }
@@ -179,32 +206,61 @@ function getAllStudents() {
                 console.log(data.error);
             } else {
                 buildStudentsTable(data);
-                buildEditStudentsTable(data);
             }
         })
 }
 
-function buildEditStudentsTable(data) {
-    var table = document.getElementById("edit-students-table");
+function buildEditAllUsersTable(data) {
+    var table = document.getElementById("edit-users-table");
     let i = 1;
-    let users = data.users;
+    const users = data.users;
 
-    var columnNames = ["Име", "Имейл", "Телефон", "Фн"];
-    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-edit', 'edit-students-table');
+    // var columnNames = ["Име", "Имейл", "Телефон", "Фн"];
+    // table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-edit', 'edit-students-table');
+    const column_names = ["ID", "Име", "Имейл", "Телефон", "Роля"]
+    let header_string = '<tr id="header-table-edit">'
+    column_names.forEach((c, idx) => {
+        header_string += `<td onclick="sortByEdit(${idx})">${c}</td>`;
+    });
+    header_string += '</tr>';
+    table.innerHTML = header_string;
 
     for (const user of users) {
         var row = table.insertRow(i);
-        row.id = 'user' + i;
+        row.id = 'user' + user.id;
         let row_data = [
+            user.id,
             user.name,
             user.email,
             user.phone,
-            user.fn
+            user.role == 'admin' ? '<i class="fas fa-user-lock user-role-icon"></i>' :
+                user.role == 'moderator-hat' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-graduation-cap user-role-icon"></i>' :
+                    user.role == 'moderator-gown' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-tshirt user-role-icon"></i>' :
+                        user.role == 'moderator-signature' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-pen user-role-icon"></i>' :
+                            '<i class="fas fa-user-graduate user-role-icon"></i>'
         ];
         const number_columns = row_data.length;
         for (var j = 0; j < number_columns; j++) {
             row.insertCell(j).innerHTML = row_data[j];
         }
+        row.addEventListener("click", (e) => {
+            let edit_modal = document.getElementById("edit_user_modal");
+            let message_bar_modal = document.getElementById("message-bar-modal-edit-users");
+            let input_name = document.getElementById("user_name");
+            let input_email = document.getElementById("user_email");
+            let input_phone = document.getElementById("user_phone");
+            let input_role = document.getElementById("user_role");
+
+            edit_modal.setAttribute("active", "");
+            edit_modal.setAttribute("user_id", user.id);
+            message_bar_modal.style.display = "none";
+
+            input_name.value = user.name;
+            input_email.value = user.email;
+            input_phone.value = user.phone;
+            input_role.value = user.role;
+        })
+        row.style.cursor = "pointer";
         i++;
     }
 }
@@ -366,7 +422,9 @@ function showEditSection() {
     tokenRefresher();
     showGivenSection("edit_section");
     activeHeader("edit_header");
+    getAllNonStudentUsers();
     getAllUsers();
+    getAllStudents();
 }
 
 function showMessagesSection() {
@@ -767,7 +825,7 @@ function submitUserHelper(bodyData) {
                 errElem.classList.add(['success']);
                 errElem.innerHTML = data.message;
                 document.getElementById("userTextarea").value = "";
-                getAllUsers();
+                getAllNonStudentUsers();
             }
         });
 }
@@ -818,12 +876,12 @@ document.getElementById('fileStudent').addEventListener('change', function () {
     }
 });
 
-function editStudent(event) {
+function editUsers(event) {
     event.preventDefault;
-    var form = document.getElementById("edit_students_form");
-    var usersData = form.editStudentTextarea.value;
+    var form = document.getElementById("edit_users_form");
+    var usersData = form.editUsersTextarea.value;
 
-    fetch('../../api?endpoint=edit_students', {
+    fetch('../../api?endpoint=edit_users', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -841,7 +899,7 @@ function editStudent(event) {
             }
         })
         .then((data) => {
-            var errElem = document.getElementById('message-bar-edit-students');
+            var errElem = document.getElementById('message-bar-edit-users');
             if (!data.success) {
                 errElem.classList.remove(['success']);
                 errElem.classList.add(['error']);
@@ -850,11 +908,115 @@ function editStudent(event) {
                 errElem.classList.remove(['error']);
                 errElem.classList.add(['success']);
                 errElem.innerHTML = data.message;
-                document.getElementById("userTextarea").value = "";
+                errElem.style.display = "block";
+                document.getElementById("editUsersTextarea").value = "";
+
+                getAllUsers();
+                getAllStudents();
+                getAllNonStudentUsers();
             }
         }
         );
-    form.editStudentTextarea.valuе = null;
+}
+
+function editSelectedUser(event) {
+    event.preventDefault();
+    let editModal = document.getElementById("edit_user_modal");
+    const editForm = document.getElementById("edit_selected_user_form");
+    let editData = new FormData(editForm);
+    editData.append("id", editModal.getAttribute("user_id"));
+    const userData = Object.fromEntries(editData.entries());
+
+    fetch('../../api?endpoint=edit_user', {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then(data => {
+            let errElemModal = document.getElementById("message-bar-modal-edit-users");
+            let errElem = document.getElementById("message-bar-edit-users");
+
+            if (!data.success) {
+                errElemModal.style.display = "block";
+                errElemModal.classList.remove(['success']);
+                errElemModal.classList.add(['error']);
+                errElemModal.innerHTML = data.message;
+                errElem.style.display = "none";
+            } else {
+                editModal.removeAttribute("active");
+                
+                errElem.style.display = "block";
+                errElem.classList.remove(['error']);
+                errElem.classList.add(['success']);
+                errElem.innerHTML = data.message;
+                errElemModal.style.display = "none";
+
+                getAllUsers();
+                getAllStudents();
+                getAllNonStudentUsers();
+            }
+        });
+}
+
+function deleteSelectedUser(event) {
+    event.preventDefault();
+
+    let editModal = document.getElementById("edit_user_modal");
+    userData = {"id" : editModal.getAttribute("user_id")}
+
+    fetch('../../api?endpoint=delete-user', {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then(data => {
+            let errElemModal = document.getElementById("message-bar-modal-edit-users");
+            let errElem = document.getElementById("message-bar-edit-users");
+
+            if (!data.success) {
+                errElemModal.style.display = "block";
+                errElemModal.classList.remove(['success']);
+                errElemModal.classList.add(['error']);
+                errElemModal.innerHTML = data.message;
+                errElem.style.display = "none";
+            } else {
+                editModal.removeAttribute("active");
+                
+                errElem.style.display = "block";
+                errElem.classList.remove(['error']);
+                errElem.classList.add(['success']);
+                errElem.innerHTML = data.message;
+                errElemModal.style.display = "none";
+
+                getAllUsers();
+                getAllStudents();
+                getAllNonStudentUsers();
+            }
+        });
 }
 
 function submitStudentHelper(bodyData) {
@@ -1506,6 +1668,68 @@ function downloadExcellentStudent(event) {
     }
 }
 
+
+
+function sortByEdit(c) {
+    let table = document.getElementById('edit-users-table'); 
+    let rows = table.rows.length;
+    let columns = table.rows[0].cells.length;
+    let arrTable = new Array(rows);
+    for (let i = 0; i < arrTable.length; i++) {
+        arrTable[i] = new Array(columns);
+    }
+    for (let row = 0; row < rows; row++) {
+        for (col = 0; col < columns; col++) {
+            arrTable[row][col] = table.rows[row].cells[col].innerHTML;
+        }
+    }
+    for (let row = 1; row < rows; row++) {
+        table.deleteRow(1);
+    }
+    let firstLine = arrTable.shift();
+
+    if (c !== cPrev) {
+        arrTable.sort(
+            function (a, b) {
+                if (a[c] === b[c]) {
+                    return 0;
+                } else {
+                    return (a[c] < b[c]) ? -1 : 1;
+                }
+            }
+        );
+    } else {
+        arrTable.reverse();
+    }
+    cPrev = c;
+    arrTable.unshift(firstLine);
+    
+    for (let row = 1; row < rows; row++) {
+        let n_row = table.insertRow(row);
+        n_row.id = 'user' + arrTable[0];
+        for (col = 0; col < columns; col++) {
+            n_row.insertCell(col).innerHTML = arrTable[row][col];
+        }
+        n_row.addEventListener("click", (e) => {
+            let edit_modal = document.getElementById("edit_user_modal");
+            let message_bar_modal = document.getElementById("message-bar-modal-edit-users");
+            let input_name = document.getElementById("user_name");
+            let input_email = document.getElementById("user_email");
+            let input_phone = document.getElementById("user_phone");
+            let input_fn = document.getElementById("user_fn");
+
+            edit_modal.setAttribute("active", "");
+            edit_modal.setAttribute("user_id", arrTable[row][0]);
+            message_bar_modal.style.display = "none";
+
+            input_name.value = arrTable[row][1];
+            input_email.value = arrTable[row][2];
+            input_phone.value = arrTable[row][3];
+            input_fn.value = arrTable[row][4];
+        })
+        n_row.style.cursor = "pointer";
+    }
+}
 
 function searchInTable(table_id, input_id) {
     const table = document.getElementById(table_id);
