@@ -35,7 +35,7 @@ CREATE TABLE `student_diploma` (
     `color` VARCHAR(99) DEFAULT NULL ,
     `num_order` INT DEFAULT NULL ,
     `time_diploma` TIME DEFAULT NULL ,
-    `attendance` BOOLEAN NOT NULL DEFAULT 0 , 
+    `attendance` BOOLEAN NOT NULL DEFAULT NULL , 
     `grade` DOUBLE NULL DEFAULT NULL , 
     `has_right` BOOLEAN NOT NULL DEFAULT 1 , 
     `is_ready` BOOLEAN NOT NULL DEFAULT 0 , 

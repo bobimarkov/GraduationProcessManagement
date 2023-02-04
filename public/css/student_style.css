@@ -100,11 +100,6 @@ input[type=checkbox] {
     display: flex;
 }
 
-.request_diploma_in_advance_form {
-    display: flex;
-    align-items: center;
-}
-
 #profile_info_section_content_1_wrapper,
 #diploma_info_section_content_1_wrapper,
 #request_gown_hat_content_1_wrapper {
@@ -142,6 +137,10 @@ textarea {
     justify-content: space-between;
     margin-bottom: 1em;
     border-top: 1px solid rgba(47, 79, 79, 0.603);
+}
+
+#speech_request_section {
+    display: none;
 }
 
 #speech_request_select{

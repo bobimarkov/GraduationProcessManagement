@@ -63,8 +63,8 @@ function submitRequestSpeechAnswer(email, value) {
         });
 }
 
-function setAttandance(email, checkbox) {
-    var value = checkbox.checked ? 1 : 0;
+function setAttendance(email, value) {
+    updateGownAndHatValue(email);
     var requestData = {
         "column_name": "attendance",
         "email": email,
@@ -92,18 +92,16 @@ function setAttandance(email, checkbox) {
 
             } else {
 
+                getStudentData();
             }
         });
 }
 
-function requestPhotos(email, checkbox) {
-    var value = checkbox.checked ? 1 : 0;
+function updateGownAndHatValue(email) {
     var requestData = {
-        "column_name": "photos_requested",
-        "email": email,
-        "value": value
+        "email": email
     };
-    fetch('../../api?endpoint=submit_student_action', {
+    fetch('../../api?endpoint=update_default_gown_hat', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -124,13 +122,12 @@ function requestPhotos(email, checkbox) {
             if (!data.success) {
 
             } else {
-
+                getStudentData();
             }
         });
 }
 
 function requestDiplomaInAdvance(email, event, value) {
-    // value = 0, 1
     event.preventDefault();
     var form = document.getElementById('request_diploma_in_advance_form');
     var comment = form.request_diploma_in_advance_comment.value;
@@ -184,8 +181,42 @@ function requestDiplomaInAdvance(email, event, value) {
         });
 }
 
+
+function requestPhotos(email, checkbox) {
+    var value = checkbox.checked ? 1 : 0;
+    var requestData = {
+        "column_name": "photos_requested",
+        "email": email,
+        "value": value
+    };
+    fetch('../../api?endpoint=submit_student_action', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            if (!data.success) {
+
+            } else {
+
+            }
+        });
+}
+
+
 function requestGown(email, value) {
-    // value = 1, 0
     var requestData = {
         "column_name": "gown_requested",
         "email": email,
@@ -218,7 +249,6 @@ function requestGown(email, value) {
 }
 
 function requestHat(email, value) {
-    // value = 1, 0
     var requestData = {
         "column_name": "hat_requested",
         "email": email,
@@ -331,57 +361,125 @@ function buildContentForGraduatingStudent(user) {
 
     document.getElementById("is_taken").innerText = 'Взета: ' + (user.is_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
     document.getElementById("take_in_advance_request").innerHTML = 'Заявена предварително: ' + (user.take_in_advance_request === 1 ? '<i class="far fa-check-square"></i>' : "Не");
-    document.getElementById("is_taken_in_advance").innerHTML = 'Взета (предварително): ' + (user.is_taken_in_advance === 1 ? '<i class="far fa-check-square"></i>' : "Не");
     document.getElementById("taken_at_time").innerText = 'Дата/час на взимане: ' + (user.taken_at_time === null || user.taken_at_time === "" ? "-" : user.taken_at_time);
-    document.getElementById("signature_moderator").innerHTML = 'Модератор за диплома: ' + (user.moderator_signature_email === null || user.attendance !== 1 ?  '-' : user.moderator_signature_email);
+    document.getElementById("signature_moderator").innerHTML = 'Модератор за диплома: ' + (user.moderator_signature_email === null || user.attendance !== 1 ? '-' : user.moderator_signature_email);
 
-    document.getElementById("attendance").checked = user.attendance === 1 ? true : false;
+
+    let comment = document.getElementById("request_diploma_in_advance_form");
+    let selectAttendance = document.getElementById("attendance_request_select");
+
+    let messageGownAndHat = document.getElementById("message-bar-gown-hat-request");
+    let contentGownAndHat = document.getElementById("request_gown_hat_content");
+
+    let speech_request_section = document.getElementById("speech_request_section");
+    let speech_request = document.getElementById("speech_request");
+    let speech_request_select = document.getElementById("speech_request_select");
+
+    if (user.attendance === null) {
+        if (user.speech_request === 1) {
+            speech_request_section.style.display = "flex";
+            speech_request.innerText = 'Поканен сте да изнесете реч по време на дипломирането. За да имате опция да потвърдите/откажете, моля първо отбележете ще присъствате ли на дипломирането!'
+            speech_request_select.style.display = "none";
+        }
+        selectAttendance.value = -1;
+        comment.style.display = "none";
+        contentGownAndHat.style.display = "none";
+        messageGownAndHat.style.display = "flex";
+    }
+    else {
+        if (user.attendance === 0) {
+            comment.style.display = "flex";
+            selectAttendance.value = 0;
+            contentGownAndHat.style.display = "none";
+            messageGownAndHat.style.display = "flex";
+
+            let errElem = document.getElementById('message-bar-diploma-request');
+            errElem.classList.remove(['success']);
+            errElem.classList.remove(['error']);
+            errElem.innerHTML = "";
+
+            if (user.speech_request === 1) {
+                speech_request_section.style.display = "flex";
+                speech_request.innerText = 'Поканен сте да изнесете реч по време на дипломирането. Щом няма да присъствате на дипломирането, то вие нямате право да потвърдите/откажете!'
+                speech_request_select.style.display = "none";
+            }
+        }
+        else {
+            comment.style.display = "none";
+            selectAttendance.value = 1;
+            messageGownAndHat.style.display = "none";
+            contentGownAndHat.style.display = "flex";
+
+            if (user.speech_request === 1) {
+                speech_request_section.style.display = "flex";
+                speech_request.innerText = 'Поканен сте да изнесете реч по време на дипломирането. Моля, изберете от падащото меню дали приемате или отказвате поканата.'
+                speech_request_select.style.display = "flex";
+                if (user.speech_response !== null) {
+                    user.speech_response === 1 ? speech_request_select.value = 1 : speech_request_select.value = 0;
+                }
+            }
+        }
+        let gownRequest = document.getElementById("gown_request_select");
+        let gownRequestedMessage = document.getElementById("gown_request");
+        if (user.gown_requested === null) {
+            gownRequest.value = -1;
+        }
+        else if (user.gown_requested === 0) {
+            gownRequestedMessage.innerHTML = "Статус: Отказана";
+            gownRequest.value = 0;
+        }
+        else {
+            gownRequestedMessage.innerHTML = "Статус: Заявена";
+            gownRequest.value = 1;
+            document.getElementById("gown_taken").innerHTML = 'Взета: ' + (user.gown_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
+            document.getElementById("gown_taken_date").innerHTML = 'Дата/час: ' + (user.gown_taken_date === null || user.gown_taken_date === "" ? "-" : user.gown_taken_date);
+            document.getElementById("gown_returned").innerHTML = 'Върната: ' + (user.gown_returned === 1 ? '<i class="far fa-check-square"></i>' : "Не");
+            document.getElementById("gown_returned_date").innerHTML = 'Дата/час: ' + ((user.gown_returned_date === null || user.gown_returned_date === "") ? "-" : user.gown_returned_date);
+            document.getElementById("gown_moderator").innerHTML = 'Модератор за тога: ' + (user.moderator_gown_email === null || user.gown_requested !== 1 ? '-' : user.moderator_gown_email);
+        }
+
+        let hatRequest = document.getElementById("hat_request_select");
+        let hatRequestedMessage = document.getElementById("hat_request");
+        if (user.hat_requested === null) {
+            hatRequest.value = -1;
+        }
+        else if (user.hat_requested === 0) {
+            hatRequestedMessage.innerHTML = "Статус: Отказана";
+            hatRequest.value = 0;
+        }
+        else {
+            hatRequestedMessage.innerHTML = "Статус: Заявена";
+            hatRequest.value = 1;
+            document.getElementById("hat_taken").innerHTML = 'Взета: ' + (user.hat_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
+            document.getElementById("hat_taken_date").innerHTML = 'Дата/час: ' + (user.hat_taken_date === null || user.hat_taken_date === "" ? "-" : user.hat_taken_date);
+            document.getElementById("hat_moderator").innerHTML = 'Модератор за шапка: ' + (user.moderator_hat_email === null || user.hat_requested !== 1 ? '-' : user.moderator_hat_email);
+        }
+
+    }
+
+
+
+
+
+
+    //document.getElementById("attendance").checked = user.attendance === 1 ? true : false;
     document.getElementById("photos_requested").checked = user.photos_requested === 1 ? true : false;
 
     document.getElementById("diploma_comment").value = user.diploma_comment === null || user.diploma_comment === "" ? "Няма коментари" : user.diploma_comment;
 
-    if (user.speech_request === 1) {
-        document.getElementById("speech_request_section").style.display = "flex";
-        document.getElementById("speech_request").innerText = 'Поканен сте да изнесете реч по време на дипломирането. Моля, изберете от падащото меню дали приемате или отказвате поканата.'
-        if (user.speech_response !== null) {
-            user.speech_response === 1 ? document.getElementById("speech_request_select").value = 1 : document.getElementById("speech_request_select").value = 0;
-        }
-    } else {
-        document.getElementById("speech_request_section").style.display = "none";
-        //document.getElementById("no-notifications").style.display = "block";
-    }
+    /* if (user.speech_request === 1) {
+         document.getElementById("speech_request_section").style.display = "flex";
+         document.getElementById("speech_request").innerText = 'Поканен сте да изнесете реч по време на дипломирането. Моля, изберете от падащото меню дали приемате или отказвате поканата.'
+         if (user.speech_response !== null) {
+             user.speech_response === 1 ? document.getElementById("speech_request_select").value = 1 : document.getElementById("speech_request_select").value = 0;
+         }
+     } else {
+         document.getElementById("speech_request_section").style.display = "none";
+         //document.getElementById("no-notifications").style.display = "block";
+     }*/
     getMessages();
 
-    if (user.take_in_advance_request === 0) {
-        document.getElementById("request_diploma_in_advance").style.display = "block";
-        document.getElementById("cancel_request_diploma_in_advance").style.display = "none";
-    } else {
-        document.getElementById("request_diploma_in_advance").style.display = "none";
-        document.getElementById("cancel_request_diploma_in_advance").style.display = "block";
-    }
 
-    var errElem = document.getElementById('message-bar-diploma-request');
-    errElem.classList.remove(['success']);
-    errElem.classList.remove(['error']);
-    errElem.innerHTML = "";
-
-    if (user.gown_requested !== null) {
-        document.getElementById("gown_request").innerHTML = "Статус: " + (user.gown_requested === 1 ? "Заявена" : "Отказана");
-        document.getElementById("gown_request_select").style.display = "none";
-    }
-    document.getElementById("gown_taken").innerHTML = 'Взета: ' + (user.gown_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
-    document.getElementById("gown_taken_date").innerHTML = 'Дата/час: ' + (user.gown_taken_date === null || user.gown_taken_date === "" ? "-" : user.gown_taken_date);
-    document.getElementById("gown_returned").innerHTML = 'Върната: ' + (user.gown_returned === 1 ? '<i class="far fa-check-square"></i>' : "Не");
-    document.getElementById("gown_returned_date").innerHTML = 'Дата/час: ' + ((user.gown_returned_date === null || user.gown_returned_date === "") ? "-" : user.gown_returned_date);
-    document.getElementById("gown_moderator").innerHTML = 'Модератор за тога: ' + (user.moderator_gown_email === null || user.gown_requested !== 1 ? '-' : user.moderator_gown_email);
-
-    if (user.hat_requested !== null) {
-        document.getElementById("hat_request").innerHTML = "Статус: " + (user.hat_requested === 1 ? "Заявена" : "Отказана");
-        document.getElementById("hat_request_select").style.display = "none";
-    }
-    document.getElementById("hat_taken").innerHTML = 'Взета: ' + (user.hat_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
-    document.getElementById("hat_taken_date").innerHTML = 'Дата/час: ' + (user.hat_taken_date === null || user.hat_taken_date === "" ? "-" : user.hat_taken_date);
-    document.getElementById("hat_moderator").innerHTML = 'Модератор за шапка: ' + (user.moderator_hat_email === null || user.hat_requested !== 1 ? '-' : user.moderator_hat_email);
 
 }
 
@@ -540,10 +638,10 @@ function getMessages() {
                 text.innerHTML = data.message;
                 notifications.appendChild(text);
             } else {
-                for (let i = 0; i < data.order.length; i++) {   
+                for (let i = 0; i < data.order.length; i++) {
                     let div = document.createElement("div");
                     div.setAttribute("class", "received_messages");
-                    let text = document.createElement("p");                 
+                    let text = document.createElement("p");
                     text.innerHTML = `${i + 1}) От ${data.order[i].sender} - ${data.order[i].message}`;
                     div.appendChild(text);
                     notifications.appendChild(div);
@@ -557,7 +655,7 @@ function sendMessage(fn, event) {
     let email = document.getElementById('textarea-email');
     let message = document.getElementById('message');
     let actions = {
-        "fn" : fn,
+        "fn": fn,
         "email": email.value,
         "message": message.value
     };
