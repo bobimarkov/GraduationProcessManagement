@@ -297,7 +297,7 @@ function buildStudentsDiplomaTable(users) {
                 user.major,
                 user.group,
                 user.grade,
-                user.attendance == 0 ? 'Не' : 'Да',
+                user.attendance == null ? '' : user.attendance == 0 ? 'Не' : 'Да',
                 user.has_right == 0 ? 'Не' : 'Да',
                 user.moderator_signature_email === null ? 'не е избран' : user.moderator_signature_email,
                 user.is_ready == 0 ? 'Не' : 'Да',
@@ -391,6 +391,11 @@ function showSettingsSection() {
     errElem.classList.remove(['success']);
     errElem.classList.remove(['error']);
     errElem.innerHTML = "";
+
+    let errElem1 = document.getElementById('message-add-deadline-info');
+    errElem1.classList.remove(['success']);
+    errElem1.classList.remove(['error']);
+    errElem1.innerHTML = "";
 
 }
 
@@ -1535,11 +1540,11 @@ function searchInTable(table_id, input_id) {
 
 
 function buildGradTable(data) {
-    var table = document.getElementById("info-graduation-table");
+    let table1 = document.getElementById("info-graduation-table1");
 
-    table.innerHTML = '<tr> <td>Начален час</td> <td>Интервал между студентите</td> <td>Дата на дипломирането</td> <td>Място на дипломирането</td> <td>Година на завършване</td> </tr>';
+    table1.innerHTML = '<tr> <td>Начален час</td> <td>Интервал между студентите</td> <td>Дата на дипломирането</td> <td>Място на дипломирането</td> <td>Година на завършване</td> </tr>';
     let i = 1;
-    let row = table.insertRow(i);
+    let row = table1.insertRow(i);
     let row_data = [
         data[0].start_time,
         data[0].students_interval,
@@ -1547,7 +1552,22 @@ function buildGradTable(data) {
         data[0].graduation_place,
         data[0].class
     ];
-    const number_columns = row_data.length;
+    let number_columns = row_data.length;
+    for (let j = 0; j < number_columns; j++) {
+        row.insertCell(j).innerHTML = row_data[j];
+    }
+
+    let table2 = document.getElementById("info-graduation-table2");
+
+    table2.innerHTML = '<tr><td>Краен срок за заявка за тога</td><td>Краен срок за заявка за шапка</td><td>Краен срок за потвърждаване на присъствие</td></tr>';
+    i = 1;
+    row = table2.insertRow(i);
+    row_data = [
+        data[0].deadline_gown,
+        data[0].deadline_hat,
+        data[0].deadline_attendance,
+    ];
+    number_columns = row_data.length;
     for (let j = 0; j < number_columns; j++) {
         row.insertCell(j).innerHTML = row_data[j];
     }
@@ -1782,6 +1802,55 @@ function sendGraduationInfo(c) {
     }
 }
 
+
+function sendDeadlineInfo(event) {
+    event.preventDefault();
+    let gown = document.getElementById('date-gown');
+    let hat = document.getElementById('date-hat');
+    let attendance = document.getElementById('date-attendance');
+
+    let errElem = document.getElementById('message-add-deadline-info');
+
+    let action = {
+        "deadline_gown": gown.value,
+        "deadline_hat": hat.value,
+        "deadline_attendance": attendance.value
+    };
+
+    fetch('../../api?endpoint=add_deadline_info', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(action)
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            if (!data.success) {
+                errElem.classList.remove(['success']);
+                errElem.classList.add(['error']);
+                errElem.innerHTML = data.message;
+            } else {
+                errElem.classList.remove(['error']);
+                errElem.classList.add(['success']);
+                errElem.innerHTML = data.message;
+                gown.value = "";
+                hat.value = "";
+                attendance.value = "";
+                getGraduationInfo();
+            }
+        });
+
+}
 
 function makeArchive() {
     fetch('../../api?endpoint=make_archive', {

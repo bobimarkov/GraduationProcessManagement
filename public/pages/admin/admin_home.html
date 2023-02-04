@@ -180,7 +180,7 @@
 
         <div id="settings_section">
             <h3><i class="fa fa-plus-square"></i> Добавяне на информация относно дипломирането</h3>
-            <table id="info-graduation-table">
+            <table id="info-graduation-table1">
                 <tr>
                     <td>Начален час</td>
                     <td>Интервал между студентите</td>
@@ -200,7 +200,7 @@
                 <input type="number" id="class" class="settings" placeholder="Година на завършване" min="2020" />
 
             </form>
-            <button type="submit" id="add-grad-info" class="settings" onclick="getClassArchiveInfo(event)"> Обнови <i
+            <button type="submit" class="settings add-grad-info" onclick="getClassArchiveInfo(event)"> Обнови <i
                     class="fa fa-plus"></i></button>
             <p class="message-bar" id="message-add-graduation-info"></p>
         </div>
@@ -313,7 +313,7 @@
 
     <div class="row" id="settings_date_section">
         <h3><i class="fas fa-calendar-alt"></i> Настройки на крайни срокове </h3>
-        <table id="info-graduation-table">
+        <table id="info-graduation-table2">
             <tr>
                 <td>Краен срок за заявка за тога</td>
                 <td>Краен срок за заявка за шапка</td>
@@ -321,19 +321,19 @@
             </tr>
         </table>
 
-        <h4>Внимание! 
+        <h4>Внимание! Не може да задавате дата, която е след дипломирането!
         </h4>
         <form class="input" id="deadline">
             <input type="text" id="date-gown" class="settings" name="date-gown" placeholder="Дата за тога"
                 onfocus="(this.type='date')" onblur="(this.type='text')" />
             <input type="text" id="date-hat" class="settings" name="date-hat" placeholder="Дата за шапка"
                 onfocus="(this.type='date')" onblur="(this.type='text')" />
-            <input type="text" id="date-attendance" class="settings" name="date-attendance" placeholder="Дата за присъствие"
-                onfocus="(this.type='date')" onblur="(this.type='text')" />
+            <input type="text" id="date-attendance" class="settings" name="date-attendance"
+                placeholder="Дата за присъствие" onfocus="(this.type='date')" onblur="(this.type='text')" />
         </form>
-        <button type="submit" id="add-grad-info" class="settings" onclick=""> Обнови <i
+        <button type="submit" class="settings add-grad-info" onclick="sendDeadlineInfo(event)"> Обнови <i
                 class="fa fa-plus"></i></button>
-        <p class="message-bar" id="message-add-graduation-info"></p>
+        <p class="message-bar" id="message-add-deadline-info"></p>
     </div>
 
     <div class="row" id="settings_archive_section">

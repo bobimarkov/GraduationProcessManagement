@@ -313,7 +313,7 @@ table tr:nth-child(even) {
     display: block;
     z-index: 100;
     left: 0px;
-    margin: 10px;
+    margin: -40px;
     position: absolute;
     top: 10px;
     text-decoration: none;
@@ -381,14 +381,15 @@ h3 {
 }
 
 h4 {
-    margin-top: 0 !important;
+    margin: 0 !important;
     padding: 5px;
     border-radius: 5px;
     width: 100%;
     background: rgba(247, 241, 241, 0.603);
     text-decoration: none;
     color: #2f4f4f;
-}
+    display: flex;
+    justify-content: center;}
 
 #diploma_section>h3 {
     margin-bottom: 0;
@@ -532,7 +533,7 @@ svg {
 
 .custom-file-upload:hover,
 #export-excellent:hover,
-#add-grad-info:hover {
+.add-grad-info:hover {
     background-color: #006199;
     color: snow;
 }
@@ -589,12 +590,13 @@ svg {
     width: 32% !important;
 }
 
-#info-graduation-table > tbody{
+#info-graduation-table1 > tbody,
+#info-graduation-table2 > tbody {
     display: inline-table;
     width: 100%;
 }
 
-#add-grad-info {
+.add-grad-info {
     width: 100% !important;
     background-color: snow;
     font-weight: bold;
@@ -617,3 +619,5 @@ svg {
     font-size: medium;
     margin-bottom: 1em;
 }
+
+

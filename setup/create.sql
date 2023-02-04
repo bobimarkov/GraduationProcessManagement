@@ -98,6 +98,10 @@ CREATE TABLE `graduation_time` (
     `graduation_date` DATE NULL DEFAULT NULL ,
     `graduation_place` VARCHAR(50) NULL DEFAULT NULL ,
     `class` INT NULL DEFAULT NULL ,
+    `deadline_gown` DATE NULL DEFAULT NULL ,
+    `deadline_hat` DATE NULL DEFAULT NULL ,
+    `deadline_attendance` DATE NULL DEFAULT NULL ,
+
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
