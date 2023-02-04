@@ -20,57 +20,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
             case "id":
                 $data_array["id"] = $v;
                 break;
-            case "username":
-                $data_array["username"] = $v;
-                break;
             default:
                 $data_array["invalid_field"] = "true";
         }
     }
 
-    if ($errors) {
-        $response = array("success" => false, "errors:" => json_encode($errors, JSON_UNESCAPED_UNICODE)); //JSON_UNESCAPED_UNICODE заради съобщенията на кирилица (от php 5.5)
+    $email = getUserEmailByID($data_array["id"]);
+    $logged_email = getUserEmailFromJWT($jwt);
+
+    if ($email === $logged_email) {
+        $response = array("success" => false, "message" => "Не може да премахнете вашият потребителски профил."); 
         echo json_encode($response);
-        http_response_code(404);
+        die;
+    }
+    
+    if ($errors) {
+        $response = array("success" => false, "message" => json_encode($errors, JSON_UNESCAPED_UNICODE)); 
+        echo json_encode($response);
     } else {
 
         $database = new Db();
         $conn = $database->getConnection();
-        $stmt = $conn->prepare("DELETE FROM user WHERE id = :id AND username = :username");
+        $stmt = $conn->prepare("DELETE FROM user WHERE id = :id");
 
         try {
-            $stmt->execute(["id" => $data_array["id"], "username" => $data_array["username"]]);
+            $stmt->execute(["id" => $data_array["id"]]);
             if ($stmt) {
-                $response = array("success" => true);
+                $response = array("success" => true, "message" => "Потребителят беше успешно премахнат.");
                 echo json_encode($response);
                 http_response_code(200);
             }
         } catch(PDOException $e) {
             if ($stmt->errorCode() == 23000) {
-                $response = array("success" => false, "error" => "User with this id and username doesn't exist.");
+                $response = array("success" => false, "message" => "Потребител с това id не съществува.");
                 echo json_encode($response);
-                http_response_code(404);
             } else {
-                $response = array("success" => false, "error" => "Unknown error.");
+                $response = array("success" => false, "message" => "Непозната грешка.");
                 echo json_encode($response);
-                http_response_code(404);
             }
         }
     }
 }
 
-function okResponse($data) {
-    $response['status_code_header'] = 'HTTP/1.1 200 OK';
-    $response['body'] = $data;
-    return $response;
-}
+function getUserEmailByID($id) {
+    $database = new Db();
+    $conn = $database->getConnection();
 
-function notFoundResponse() {
-    $response['status_code_header'] = 'HTTP/1.1 404 Not Found';
-    $response['body'] = null;
-    $response['error'] = null;
-    var_dump($response);
-    return $response;
+    $stmt = $conn->prepare("SELECT email FROM user WHERE id = :id");
+    $stmt->execute(["id" => $id]);
+
+    return $stmt->fetch()["email"];
 }
 
 ?>

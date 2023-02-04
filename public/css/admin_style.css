@@ -103,6 +103,20 @@ textarea {
     width: 100%;
 }
 
+#message-bar-modal-edit-users {
+    display: none;
+    font-size: 1.2em;
+    border-radius: 10px;
+    font-family: monospace;
+    padding: 10px;
+    width: 85%;
+    text-align: center;
+}
+
+#message-bar-edit-users {
+    display: none;
+}
+
 .dashboard {
     display: flex;
     align-items: center;
@@ -262,35 +276,38 @@ table td {
     margin-top: 0;
 }
 
-/*Edit-students-table css-style start*/
+/*Edit-users-table css-style start*/
 
-.edit-students-table td:nth-child(1) {
+.edit-users-table td:nth-child(1) {
 
-    width: 5%;
+    width: 2%;
 }
 
-.edit-students-table td:nth-child(2) {
+.edit-users-table td:nth-child(2) {
 
-    width: 50%;
+    width: 65%;
 }
 
-.edit-students-table td:nth-child(3) {
+.edit-users-table td:nth-child(3) {
+
+    width: 20%;
+}
+
+.edit-users-table td:nth-child(4) {
 
     width: 25%;
 }
 
-.edit-students-table td:nth-child(4) {
+.edit-users-table td:nth-child(5) {
 
-    width: 20%;
+    width: 50%;
 }
 
-.edit-students-table td:nth-child(5) {
-
-    width: 20%;
+#edit-users-table {
+    margin-top: 0;
 }
 
-
-/*Edit-students-table css-style end*/
+/*Edit-users-table css-style end*/
 .students-table td:nth-child(1) {
     /* id */
     width: 5%;
@@ -644,7 +661,7 @@ svg {
 }
 
 .settings {
-    margin-top: 1.5rem;
+    /* margin-top: 1.5rem; */
     height: 70%;
     width: 19%;
     background-color: rgb(235, 238, 241);
@@ -676,4 +693,33 @@ svg {
 #for_buttons {
     display: flex;
     justify-content: center;
+}
+
+#edit_selected_user_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 88%;
+    padding-top: 30px;
+    row-gap: 1.5rem;    
+}
+
+#edit_selected_user_form > input {
+    width: 350px;
+    height: 2.3em;
+
+}
+
+#edit-user-button-section {
+    margin-top: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    column-gap: 30px;
+}
+
+#edit-user-button-section > button {
+    width: 90%;
+    margin: 0;
+    padding: 0;
 }

@@ -162,9 +162,8 @@ input {
 	cursor: pointer;
 	user-select: none;
 	position: absolute;
-	top: 5px;
 	left: 5px;
-	font-size: 25px;
+	font-size: 35px;
 	color: #0059fd;
 }
 
