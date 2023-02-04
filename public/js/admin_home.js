@@ -7,6 +7,8 @@ getGraduationInfo();
 makeArchive();
 getClasses();
 
+google.charts.load('current', { 'packages': ['corechart'] });
+
 
 let logoutHeader = document.getElementById("logout_header");
 logoutHeader.addEventListener("click", (e) => {
@@ -428,7 +430,6 @@ function showAnalyticsSection() {
                 //console.log(data.error);
             } else {
                 // Load google charts
-                google.charts.load('current', { 'packages': ['corechart'] });
                 text.innerHTML = '<i class="fa fa-pie-chart"></i> Статистиката е на база дипломиращи се студенти!';
                 text.style = "text-align : center; height : 1em";
                 document.getElementById('analytics1').style = 'margin-top: 1em';
@@ -464,7 +465,7 @@ function showAnalyticsSectionHelper() {
                 let studentGradeData = dataGradesToArray(data);
                 let studentDegreeData = dataDegreeToArray(data);
                 let studentHasRightData = dataHasRightToArray(data);
-                google.charts.setOnLoadCallback(drawChart(studentMajorData, "analytics1", "рой дипломиращи се студенти от дадена специалност със степен 'Бакалавър'"));
+                google.charts.setOnLoadCallback(drawChart(studentMajorData, "analytics1", "Брой дипломиращи се студенти от дадена специалност със степен 'Бакалавър'"));
                 google.charts.setOnLoadCallback(drawChart(studentGradeData, "analytics2", "Брой дипломиращи се студенти с дадени оценки"));
                 google.charts.setOnLoadCallback(drawChart(studentDegreeData, "analytics3", "Брой дипломиращи се студенти с дадени степени на образование"));
                 google.charts.setOnLoadCallback(drawChart(studentHasRightData, "analytics4", "Студенти, имащи право на диплома"));
