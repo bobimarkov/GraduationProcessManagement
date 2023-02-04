@@ -645,7 +645,7 @@ svg {
 #edit_selected_user_form > input {
     width: 350px;
     height: 2.3em;
-
+    margin-top: 0;
 }
 
 #edit-user-button-section {
