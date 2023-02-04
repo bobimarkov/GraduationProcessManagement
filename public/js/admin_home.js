@@ -215,15 +215,15 @@ function buildEditAllUsersTable(data) {
     let i = 1;
     const users = data.users;
 
-    // var columnNames = ["Име", "Имейл", "Телефон", "Фн"];
-    // table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-edit', 'edit-students-table');
-    const column_names = ["ID", "Име", "Имейл", "Телефон", "Роля"]
-    let header_string = '<tr id="header-table-edit">'
-    column_names.forEach((c, idx) => {
-        header_string += `<td onclick="sortByEdit(${idx})">${c}</td>`;
-    });
-    header_string += '</tr>';
-    table.innerHTML = header_string;
+    const columnNames = ["ID", "Име", "Имейл", "Телефон", "Роля"]
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortByEdit', 'header-table-edit', 'edit-users-table');
+
+    // let header_string = '<tr id="header-table-edit">'
+    // column_names.forEach((c, idx) => {
+    //     header_string += `<td onclick="sortByEdit(${idx})">${c}</td>`;
+    // });
+    // header_string += '</tr>';
+    // table.innerHTML = header_string;
 
     for (const user of users) {
         var row = table.insertRow(i);
