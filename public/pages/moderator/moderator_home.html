@@ -89,7 +89,7 @@
                     Списък студенти
                 </h3>
                 <div class="filters">
-                    <input id="search-diploma" placeholder="Търсене..." oninput="searchInTable('diploma-table','search-diploma')"/>
+                    <input class="search" id="search-diploma" placeholder="Търсене..." oninput="searchInTable('diploma-table','search-diploma')"/>
                 </div>
 
                 <table class="diploma-table" id="diploma-table">
@@ -135,9 +135,9 @@
                 <div id="sums-div"></div>
                 <h3 id="header_responsibilities_table"></h3>
                 <div class="filters">
-                    <input id="search-responsibilities" placeholder="Търсене..." oninput="searchInTable('responsibilities_table','search-responsibilities')"/>
+                    <input class="search" id="search-responsibilities" placeholder="Търсене..." oninput="searchInTable('responsibilities_table','search-responsibilities')"/>
                     <form id="export_files_moderator_responsibilities">
-                        <select class="dashboard-action" name="format">
+                        <select class="file-extension-picker" name="format">
                             <option value="no" selected disabled hidden>Изберете файлов формат...</option>
                             <option value="csv">CSV</option>
                             <option value="txt">TextFile</option>
@@ -145,7 +145,7 @@
                             <option value="xls">Excel</option>
                             <option value="pdf">PDF</option>
                         </select>
-                        <button type="submit" id="button-export-moderator-responsibilities" class="submit-action" onclick="getExportEndpointByModeratorRole(event,'export_files_moderator_responsibilities','message-bar-export-moderator-responsibilities')">
+                        <button class="button" type="submit" id="button-export-moderator-responsibilities" onclick="getExportEndpointByModeratorRole(event,'export_files_moderator_responsibilities','message-bar-export-moderator-responsibilities')">
                             Изтегли
                             <i class="fas fa-file-export"></i>
                         </button>
