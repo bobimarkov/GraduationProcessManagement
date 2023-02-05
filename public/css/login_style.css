@@ -1,80 +1,8 @@
-/*body {
-    font-family: Arial, Helvetica, sans-serif;
-
-    background:
-    linear-gradient(135deg, #708090 21px, #d9ecff 22px, #d9ecff 24px, transparent 24px, transparent 67px, #d9ecff 67px, #d9ecff 69px, transparent 69px),
-    linear-gradient(225deg, #708090 21px, #d9ecff 22px, #d9ecff 24px, transparent 24px, transparent 67px, #d9ecff 67px, #d9ecff 69px, transparent 69px)0 64px;
-    background-color:#708090;
-    background-size: 64px 128px;
-}
-
-.row {
-    margin: 10% 35%;
-    display: flex;
-    background: rgb(195,192,236);
-    background: linear-gradient(90deg, rgba(195,192,236,1) 0%, rgba(226,237,238,1) 51%, rgba(255,255,255,1) 100%);
-    border-radius: 1em;
-    padding: 1em;
-}
-
-.column {
-    flex: 100%;  
-    padding: 0 2em;
-} 
-
-input, select {
-    margin-bottom: 1em;
-    height: 2.5em;
-    border-radius: 5px;
-    border: 0.5px solid grey;
-    padding-left: 1em;
-}
-
-input[type=submit] {
-    height: 3em;
-    cursor: pointer;
-    background-color: snow;
-    font-weight: bold;
-    color: darkslategray;
-}
-
-input[type=submit]:hover {
-    background-color: darkslategray;
-    color: snow;
-}
-
-form {
-    display: grid;
-}
-
-h2 {
-    margin-bottom: 5em 0;
-    color: darkslategray;
-    display: inline;
-}
-
-.title {
-    margin: 1em 0;
-}
-
-.message-bar {
-    padding: 10px;
-    margin-bottom: 1em;
-    font-size: 1.2em;
-    border-radius: 10px;
-    font-family: monospace;
-    background: rgb(214 128 128 / 30%);
-    color: darkslategrey;
-}*/
-
-
-
 * {
 	box-sizing: border-box;
 }
 
 body {
-	/*background: #f6f5f7;*/
 	background: #5fc4ff;
 	display: flex;
 	justify-content: center;
@@ -164,7 +92,6 @@ input {
 	position: absolute;
 	left: 5px;
 	font-size: 35px;
-	color: #0059fd;
 }
 
 .form-container {
@@ -214,3 +141,16 @@ input {
 	width: 100%;
 }
 
+@media screen and (max-width: 700px) {
+	.overlay-container {
+		display: none;
+	}
+
+	.container {
+		width: 80%;
+	}
+
+	.sign-in-container {
+		width: 100%;
+	}	
+}

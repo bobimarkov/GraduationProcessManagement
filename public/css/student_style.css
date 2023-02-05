@@ -16,6 +16,10 @@ body {
     font-family: Arial, Helvetica, sans-serif !important;
 }
 
+.mt-5 {
+    margin-top: 5px;
+}
+
 .row {
     margin: 2em;
     padding: 1em;
@@ -23,6 +27,27 @@ body {
     background: rgb(195, 192, 236);
     background: linear-gradient(90deg, #86CEFA 0%, rgba(226, 237, 238, 1) 75%, rgba(255, 255, 255, 1) 100%);
     box-shadow: 5px 5px 20px darkslategray;
+}
+
+.button {
+    height: 2.5em;
+    border-radius: 5px;
+    border: 1px solid #006199;
+    cursor: pointer;
+    background-color: snow;
+    font-weight: bold;
+    color: darkslategray;
+    font-size: medium;
+    padding: 0 1rem;
+}
+
+.long-button {
+    width: 100%;
+}
+
+.button:hover  {
+    background-color: #006199;
+    color: snow;
 }
 
 h2,
@@ -38,13 +63,12 @@ h3 {
     padding: 5px;
     border-radius: 5px;
     background: rgba(247, 241, 241, 0.603);
-    /* border-bottom:  1px solid rgba(47, 79, 79, 0.603); */
 }
 
 .navigation {
     padding: 5px;
     background: rgba(247, 241, 241, 0.3);
-    margin: 1em 0;
+    margin: 1em 0.5em;
 }
 
 .vertical_line {
@@ -179,27 +203,6 @@ textarea {
     outline: none;
 }
 
-.request_diploma_in_advance_submit_button {
-    height: 2.5em;
-    max-width: 25%;
-    width: 200px;
-    border-radius: 5px;
-    border: 1px solid darkslategray;
-    padding: 0 1em;
-    margin-left: 2em;
-    margin-top: 25px;
-    cursor: pointer;
-    background-color: snow;
-    font-weight: bold;
-    color: darkslategray;
-    font-size: medium;
-}
-
-.request_diploma_in_advance_submit_button:hover {
-    background-color: #006199;
-    color: snow;
-}
-
 .request_diploma_in_advance_comment {
     width: 30em;
     height: 5em;
@@ -235,18 +238,28 @@ p {
 }
 
 table {
+    box-shadow: 2px 2px 20px #006199;
     margin-bottom: 2em;
+    margin-top: 1em;
+    max-height: 50vh;
+    width: 100%;
     border-collapse: collapse;
-    display: block;
+    display: block; 
     overflow: auto;
     white-space: nowrap;
     border-radius: 5px;
+}  
+
+table tbody {
+    display: table;
+    width: 100%;
 }
 
 table td {
     border: 0.5px solid slategray;
     padding: 0 0.2em;
 }
+
 
 table tr:nth-child(even) {
     background-color: rgba(47, 79, 79, 0.096)
@@ -258,6 +271,7 @@ table tr {
 
 #message {
     height: 10em !important;
+    margin-bottom: 1rem;
 }
 
 #textarea {
@@ -282,24 +296,6 @@ table tr {
 
 .dashboard-textarea:active {
     outline: none;
-}
-
-.submit-button {
-    margin-top: 1em;
-    height: 2.5em;
-    width: 100%;
-    border-radius: 5px;
-    border: 1px solid #006199;
-    cursor: pointer;
-    background-color: snow;
-    font-weight: bold;
-    color: darkslategray;
-    font-size: medium;
-}
-
-.submit-button:hover {
-    background-color: #006199;
-    color: snow;
 }
 
 #message-bar-export-message {
@@ -332,4 +328,37 @@ table tr {
 
 #message-bar-gown-hat-request {
     margin-left: 0;
+}
+
+@media screen and (max-width: 900px) {
+
+    .profile_info_section_content,
+    .diploma_info_section_content,
+    .request_diploma_in_advance_content,
+    .request_gown_hat_content {
+        display: block;
+    }
+
+    #profile_info_section_content_1_wrapper,
+    #diploma_info_section_content_1_wrapper,
+    #request_gown_hat_content_1_wrapper,
+    #profile_info_section_content_2_wrapper,
+    #diploma_info_section_content_2_wrapper,
+    #diploma_info_section_content_3_wrapper,
+    #request_gown_hat_content_2_wrapper {
+        margin-left: 0;
+        padding-left: 0;
+        border-top: 1px solid rgba(47, 79, 79, 0.603);
+        border-left: none
+    }
+
+    #diploma_info_section_content_1_wrapper, #diploma_info_section_content_2_wrapper, #diploma_info_section_content_3_wrapper {
+        width: 100%;
+    }
+
+    .diploma_comment {
+        width: 95%;
+        height: 8em;
+        background-color: snow;
+    }
 }

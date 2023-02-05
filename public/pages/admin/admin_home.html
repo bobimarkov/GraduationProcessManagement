@@ -57,7 +57,7 @@
         <div id="users_section">
             <h3><i class="fas fa-list"></i> Списък потребители</h3>
             <form id="export_files_users">
-                <select class="dashboard-action" name="format">
+                <select class="file-extension-picker-short" name="format">
                     <option value="no" selected disabled hidden>Изберете файлов формат...</option>
                     <option value="csv">CSV</option>
                     <option value="txt">TextFile</option>
@@ -100,7 +100,7 @@
         <div id="students_section">
             <h3><i class="fas fa-list"></i> Списък студенти</h3>
             <form id="export_files_student">
-                <select class="dashboard-action" name="format">
+                <select class="file-extension-picker-short" name="format">
                     <option value="no" selected disabled hidden>Изберете файлов формат...</option>
                     <option value="csv">CSV</option>
                     <option value="txt">TextFile</option>
@@ -154,8 +154,8 @@
                     <input type="email" class="settings" name="email" id="user_email" placeholder="Имейл на потребителя" />
                     <input type="text" class="settings" name="phone" id="user_phone" placeholder="Телефон на потребителя" />
                     <div id="edit-user-button-section">
-                        <button class="submit-action" onclick="editSelectedUser(event)">Редактирай</button>
-                        <button class="submit-action error" onclick="deleteSelectedUser(event)">Премахни потребител</button>
+                        <button class="button" onclick="editSelectedUser(event)">Редактирай</button>
+                        <button class="button delete-button" onclick="deleteSelectedUser(event)">Премахни потребител</button>
                     </div>
                 </form>
             </popup-modal> 
@@ -176,8 +176,8 @@
                 <textarea class="form-input" name="editUsersTextarea" id="editUsersTextarea" rows="30"
                     placeholder='Формат: &NewLine;"ID, Име, Имейл, Телефон"&NewLine;&NewLine;ID - идентификационен номер на потребителя, чийто данни ще променяте&NewLine;Име - новото име(при нужда на промяна), ако не бъде променяно се записва старото име&NewLine;Имейл - новият имейл(при нужда на промяна), ако не бъде променян се записва стария имейл&NewLine;телефон - новият телефон(при нужда на промяна), ако не бъде променян се записва стария телефон'></textarea>
                     <button class="button long-button mt-5" type="submit" onclick="editUsers(event)">
-                    Редактирай
-                </button>
+                        Редактирай
+                    </button>
             </form>
         </div>
 
@@ -244,7 +244,7 @@
                     oninput="searchInTable('attendance-table','searchAttendance')" />
 
                 <form id="export_att_graduated">
-                    <select class="dashboard-action" name="formatatt">
+                    <select class="file-extension-picker-long" name="formatatt">
                         <option value="no" selected disabled hidden>Изберете файлов формат...</option>
                         <option value="csv">CSV</option>
                         <option value="txt">TextFile</option>
@@ -252,7 +252,7 @@
                         <option value="xls">Excel</option>
                         <option value="pdf">PDF</option>
                     </select>
-                    <button type="submit" id="export-att-graduated" class="submit-action"
+                    <button class="button" type="submit" id="export-att-graduated"
                         onclick="downloadExportedAttGraduated(event)">Изтегли <i class="fas fa-file-export"></i>
                     </button>
                 </form>
@@ -299,7 +299,7 @@
                     oninput="searchInTable('diploma-table','search')" />
 
                 <form id="export_graduated">
-                    <select class="file-extension-picker" name="format">
+                    <select class="file-extension-picker-long" name="format">
                         <option value="no" selected disabled hidden>Изберете файлов формат...</option>
                         <option value="csv">CSV</option>
                         <option value="txt">TextFile</option>
@@ -419,7 +419,7 @@
     <div class="row excellent_order" id="excellent_order">
         <h3><i class="fas fa-list"></i> Списък със студенти, които ще бъдат наградени</h3>
         <form id="export_excellent">
-            <select class="dashboard-excellent" name="format">
+            <select class="file-extension-picker-short" name="format">
                 <option value="no" selected disabled hidden>Изберете файлов формат...</option>
                 <option value="csv">CSV</option>
                 <option value="txt">TextFile</option>
