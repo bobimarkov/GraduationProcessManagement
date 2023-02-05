@@ -39,9 +39,9 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         foreach ($students_arr_1d as $student) {
             $student = trim($student);
             $values = array_values(explode(",", $student));
-            $values = array("fn" => trim($values[0]), "taken_graduation" => trim($values[1]),"taken_in_advance" => trim($values[2]));
- 
+
             validateInput($values, $student, ($i + 1), $conn, $email);
+            $values = array("fn" => trim($values[0]), "taken_graduation" => trim($values[1]),"taken_in_advance" => trim($values[2]));
             $students_arr_2d += [$i => array_map("trim", $values)];
             $i++;
         }
@@ -57,6 +57,8 @@ function validateInput($values, $student, $i, $connection, $email)
         echo json_encode($response);
         die;
     }
+
+    $values = array("fn" => trim($values[0]), "taken_graduation" => trim($values[1]),"taken_in_advance" => trim($values[2]));
 
     if (empty($values["fn"])) {
         $response = array("success" => false, "message" => "Грешка за потребител на ред $i ($student) - Фн не може да е празна стойност!");
@@ -104,7 +106,7 @@ function validateInput($values, $student, $i, $connection, $email)
         join user on user.id = student.user_id
         join student_diploma on student.fn = student_diploma.student_fn
         join student_moderators on student_diploma.student_fn = student_moderators.student_fn
-        where moderator_gown_email = :email and student.fn = :fn 
+        where moderator_signature_email = :email and student.fn = :fn 
         and student_diploma.attendance = 1 
         or student_diploma.take_in_advance_request = 1");
 
