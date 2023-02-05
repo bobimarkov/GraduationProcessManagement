@@ -1,6 +1,5 @@
 tokenRefresher();
 showDiplomaSection();
-showAttendanceSection();
 getAllNonStudentUsers();
 getAllStudents();
 getAllUsers();
@@ -694,7 +693,6 @@ function showGivenSection(sectionToBeDisplayed) {
     } else if (sectionToBeDisplayed.localeCompare(sections[3].id) == 0) {
         sections[3].style.display = 'grid';
         sections[4].style.display = 'grid';
-        //sections[5].style.display = 'grid';
         sections[5].style.display = 'grid';
     }
     else if (sectionToBeDisplayed.localeCompare(sections[7].id) == 0) {
@@ -1456,6 +1454,7 @@ function submitDiplomaOrder(event) {
                 errElem.innerHTML = data.message;
             }
             getStudentsDiplomaInfo();
+            getStudentsAttendanceInfo();
         });
 };
 
