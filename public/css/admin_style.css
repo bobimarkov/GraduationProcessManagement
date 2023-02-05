@@ -667,6 +667,13 @@ svg {
     margin-bottom: 1em;
 }
 
+
+.disabled-button, .disabled-button:hover  {
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
+    cursor: auto;
+}
 #edit_selected_user_form {
     display: flex;
     flex-direction: column;

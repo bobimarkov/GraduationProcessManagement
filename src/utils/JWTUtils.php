@@ -122,4 +122,13 @@ function getUserEmailFromJWT($jwt) {
     return $decoded -> sub;
 }
 
+
+function getUserRoleFromJWT($jwt) {
+    global $secret_key;
+
+    $decoded = JWT::decode($jwt, new Key($secret_key, "HS256"));
+
+    return $decoded -> role;
+}
+
 ?>

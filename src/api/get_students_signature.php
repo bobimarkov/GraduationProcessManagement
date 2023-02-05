@@ -15,8 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $database = new Db();
     $conn = $database->getConnection();
     $stmt = $conn->prepare("
-    select student.fn, user.name, user.email, user.phone,student_diploma.attendance, student_diploma.has_right, student_diploma.is_ready,
-    student_diploma.is_taken, student_diploma.take_in_advance_request, student_diploma.take_in_advance_request_comment, student_diploma.is_taken_in_advance, student_diploma.diploma_comment,
+    select student.fn, user.name, user.email, user.phone,student_diploma.attendance,
+    student_diploma.color, student_diploma.num_order, student_diploma.time_diploma,
+    student_diploma.has_right, student_diploma.is_ready,
+    student_diploma.is_taken, student_diploma.take_in_advance_request, student_diploma.take_in_advance_request_comment, student_diploma.is_taken_in_advance,
+    student_diploma.taken_at_time, student_diploma.diploma_comment,
     student_moderators.moderator_signature_email, (select `range` from moderator_range where email = :email) as name_range
     from student
     join user on user.id = student.user_id

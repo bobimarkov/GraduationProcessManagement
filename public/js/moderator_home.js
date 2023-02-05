@@ -3,6 +3,7 @@ showDiplomaSection();
 getAllUsers();
 getAllStudents();
 getStudentsDiplomaInfo();
+getMessages();
 // Load google charts
 google.charts.load('current', { 'packages': ['corechart'] });
 
@@ -266,12 +267,15 @@ function getStudentsDiplomaInfo() {
 }
 
 function buildStudentsDiplomaTable(users) {
-    var table = document.getElementById("diploma-table");
-    var columnNames = [
-        "ФН", "Име", "Цвят", "Ред на връчване", "Час на връчване", "Степен", "Спец.", "Група", "Успех",
-        "Присъствие", "Има право", "Модератор за диплома", "Готова диплома", "Взета", "Заявка взимане предв.", "Коментар (студент)",
-        "Взета предв.", "Коментар (администр.)", "Покана реч", "Отговор", "Снимки", "Модератор за тога", "Заявена тога",
-        "Взета", "Върната", "Модератор за шапка", "Заявена шапка", "Взета"];
+    var table = document.getElementById('diploma-table');
+
+        var columnNames = [
+            "ФН", "Име", "Степен", "Спец.", "Група", "Успех",
+            "Присъствие", "Има право", "Модератор за диплома", "Готова диплома", "Взета", "Заявка взимане предв.", "Коментар (студент)",
+            "Взета предв.", "Коментар (администр.)", "Покана реч", "Отговор", "Снимки", "Модератор за тога", "Заявена тога",
+            "Взета", "Върната", "Модератор за шапка", "Заявена шапка", "Взета"];
+    
+
     table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-diploma', 'diploma-table');
     let i = 1;
 
@@ -288,9 +292,6 @@ function buildStudentsDiplomaTable(users) {
             var row_data = [
                 user.student_fn,
                 user.name,
-                user.color = "<i class='fas fa-square' style='color:" + user.color + ";'></i>",
-                user.num_order,
-                user.time_diploma,
                 user.degree,
                 user.major,
                 user.group,
@@ -310,10 +311,12 @@ function buildStudentsDiplomaTable(users) {
                 user.moderator_gown_email === null ? 'не е избран' : user.moderator_gown_email,
                 user.gown_requested == null ? '' : user.gown_requested == 0 ? 'Не' : 'Да',
                 user.gown_requested != 1 ? '' : user.gown_taken == 0 || user.gown_taken == null ? 'Не' : 'Да',
+                //gown_returned
                 user.gown_taken != 1 ? '' : user.gown_returned == 0 || user.gown_returned == null ? 'Не' : 'Да',
                 user.moderator_hat_email === null ? 'не е избран' : user.moderator_hat_email,
                 user.hat_requested == null ? '' : user.hat_requested == 0 ? 'Не' : 'Да',
-                user.hat_requested != 1 ? '' : user.hat_taken == 0 || user.hat_taken == null ? 'Не' : 'Да',
+                //hat_taken
+                user.hat_requested != 1 ? '' : user.hat_taken == 0 || user.hat_taken == null ? 'Не' : 'Да'
             ];
             const number_columns = row_data.length;
             for (var j = 0; j < number_columns; j++) {
@@ -337,6 +340,12 @@ function showStudents() {
     showGivenSection("students_section");
     activeHeader("students_header");
     getAllStudents();
+}
+
+function showMessagesSection() {
+    tokenRefresher();
+    showGivenSection("messages_send_section");
+    activeHeader("messages_header");
 }
 
 function showAnalyticsSection() {
@@ -428,7 +437,9 @@ function showGivenSection(sectionToBeDisplayed) {
         'students_section',
         'diploma_section',
         'analytic_section',
-        'responsibilities_section'];
+        'responsibilities_section',
+        'messages_send_section',
+        'messages_receive_section'];
     sections = sections.map(x => document.getElementById(x));
 
     //iterate all sections
@@ -444,6 +455,11 @@ function showGivenSection(sectionToBeDisplayed) {
         }
 
     }
+
+    if (sectionToBeDisplayed.localeCompare(sections[5].id) == 0) {
+        sections[5].style.display = 'grid';
+        sections[6].style.display = 'grid';
+    }
     if (sectionToBeDisplayed.localeCompare(sections[3].id) == 0) {
         sections[3].style.display = 'flex';
     } 
@@ -458,7 +474,8 @@ function activeHeader(elementId) {
         'students_header',
         'diploma_header',
         'analytic_header',
-        'responsibilities_header'];
+        'responsibilities_header',
+        'messages_header'];
 
     headers = headers.map(x => document.getElementById(x));
 
@@ -707,7 +724,7 @@ function buildResponsibilitiesSectionForModeratorHat(users) {
 
 
     let i = 1;
-    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета"];
+    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Взета"];
     table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header_responsibilities_table', 'responsibilities_table');
     for (const user of users) {
         if (user.hat_requested == 1) {
@@ -718,8 +735,7 @@ function buildResponsibilitiesSectionForModeratorHat(users) {
                 user.name,
                 user.email,
                 user.phone,
-                user.attendance === 0 ? 'Не' : 'Да',
-                user.hat_taken === null ? '' : user.hat_taken === 0 ? 'Не' : 'Да',
+                user.hat_taken === null ? '' : user.hat_taken === 0 ? 'Не' : 'Да'
             ]
             for (var j = 0; j < row_data.length; j++) {
                 row.insertCell(j).innerHTML = row_data[j];
@@ -727,11 +743,14 @@ function buildResponsibilitiesSectionForModeratorHat(users) {
             i++;
         }
     }
-
     tableheader = document.getElementById("header_responsibilities_table2");
     tableheader.style.display = "none";
     table = document.getElementById("responsibilities_table2")
     table.style.display = "none";
+
+    text = 'Формат: \n"ФН, Взета"\n\nФН - Факултетният номер на студента\nВзета - Да или Не';
+    var student_placeholder = document.getElementById("updateResponsibilitiesForStudents");
+    student_placeholder.setAttribute("placeholder", text );
 }
 
 
@@ -759,7 +778,7 @@ function buildResponsibilitiesSectionForModeratorGown(users) {
     tableheader.innerHTML = "<i class=\"fas fa-list\"></i>" + " Студенти заявили тога";
 
     let i = 1;
-    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Върната"];
+    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Взета", "Върната"];
     table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header_responsibilities_table', 'responsibilities_table');
     for (const user of users) {
         if (user.gown_requested === 1) {
@@ -770,7 +789,6 @@ function buildResponsibilitiesSectionForModeratorGown(users) {
                 user.name,
                 user.email,
                 user.phone,
-                user.attendance === 0 ? 'Не' : 'Да',
                 user.gown_taken === null ? '' : user.gown_taken === 0 ? 'Не' : 'Да',
                 user.gown_returned === null ? '' : user.gown_returned === 0 ? 'Не' : 'Да',
             ]
@@ -780,11 +798,14 @@ function buildResponsibilitiesSectionForModeratorGown(users) {
             i++;
         }
     }
-
     tableheader = document.getElementById("header_responsibilities_table2");
     tableheader.style.display = "none";
     table = document.getElementById("responsibilities_table2")
     table.style.display = "none";
+
+    text = 'Формат: \n"ФН, Взета, Върната"\n"Въведете стойност за всеки елемент. За да не се промени елемент, оставете стойността празна."\n\nФН - Факултетният номер на студента\nВзета - Да или Не\nВърната - Да или Не';
+    var student_placeholder = document.getElementById("updateResponsibilitiesForStudents");
+    student_placeholder.setAttribute("placeholder", text );
 }
 
 
@@ -808,14 +829,14 @@ function buildResponsibilitiesSectionForModeratorSignature(users) {
     createSumDivForModerator("sums-div", sums_text, Object.values(sums));
 
     var tableheader = document.getElementById("header_responsibilities_table");
-    tableheader.innerHTML = "<i class=\"fas fa-list\"></i>" + " Студенти с право на диплома:";
+    tableheader.innerHTML = "<i class=\"fas fa-list\"></i>" + " Студенти заявили присъствие на дипломирането:";
 
     let i = 1;
     var table = document.getElementById("responsibilities_table");
-    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Заявка взимане предв.", "Коментар (студент)", "Взета предв.", "Коментар (администр.)"];
+    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Цвят","Ред на връчване", "Час на връчване", "Взета"];
     table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header_responsibilities_table', 'responsibilities_table');
     for (const user of users) {
-        if (user.has_right) {
+        if (user.attendance === 1 ) {
             var row = table.insertRow(i);
             row.id = 'user' + i;
             let row_data = [
@@ -823,12 +844,10 @@ function buildResponsibilitiesSectionForModeratorSignature(users) {
                 user.name,
                 user.email,
                 user.phone,
-                user.attendance === 0 ? 'Не' : 'Да',
-                user.is_taken === 0 ? 'Не' : 'Да',
-                user.take_in_advance_request === 0 ? 'Не' : 'Да',
-                user.take_in_advance_request_comment === null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.take_in_advance_request_comment}</span></i>`,
-                user.is_taken_in_advance === 0 ? 'Не' : 'Да',
-                user.diploma_comment === null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.diploma_comment}</span></i>`,
+                user.color = "<i class='fas fa-square' style='color:" + user.color + ";'></i>",
+                user.num_order,
+                user.time_diploma,
+                user.is_taken === null ? '' : user.is_taken === 0 ? 'Не' : 'Да'
             ]
             for (var j = 0; j < row_data.length; j++) {
                 row.insertCell(j).innerHTML = row_data[j];
@@ -836,16 +855,15 @@ function buildResponsibilitiesSectionForModeratorSignature(users) {
             i++;
         }
     }
-
     tableheader = document.getElementById("header_responsibilities_table2");
     tableheader.innerHTML = "<i class=\"fas fa-list\"></i>" + " Студенти, искащи дипломата си предварително:";
 
     i = 1;
     table = document.getElementById("responsibilities_table2");
-    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Заявка взимане предв.", "Коментар (студент)", "Взета предв.", "Коментар (администр.)"];
+    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Коментар (студент)", "Взета", "Коментар (администр.)"];
     table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header_responsibilities_table2', 'responsibilities_table2');
     for (const user of users) {
-        if (user.take_in_advance_request) {
+        if (user.take_in_advance_request === 1) {
             var row = table.insertRow(i);
             row.id = 'user' + i;
             let row_data = [
@@ -853,10 +871,8 @@ function buildResponsibilitiesSectionForModeratorSignature(users) {
                 user.name,
                 user.email,
                 user.phone,
-                user.attendance === 0 ? 'Не' : 'Да',
-                user.take_in_advance_request === 0 ? 'Не' : 'Да',
                 user.take_in_advance_request_comment === null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.take_in_advance_request_comment}</span></i>`,
-                user.is_taken_in_advance === 0 ? 'Не' : 'Да',
+                user.is_taken_in_advance === null ? '' : user.is_taken_in_advance === 0 ? 'Не' : 'Да',
                 user.diploma_comment === null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.diploma_comment}</span></i>`,
             ]
             for (var j = 0; j < row_data.length; j++) {
@@ -865,6 +881,10 @@ function buildResponsibilitiesSectionForModeratorSignature(users) {
             i++;
         }
     }
+
+    text = 'Формат: \n"ФН, Взета (на дипломирането), Взета (предварително)"\n"Въведете стойност за всеки елемент. За да не се промени елемент, оставете стойността празна. Въведете стойност или за Взета (на дипломирането) или за Взета (предварително). Не и двете."\n\nФН - Факултетният номер на студента\nВзета (на дипломирането) - Да или Не\nВзета (предварително) - Да или Не';
+    var student_placeholder = document.getElementById("updateResponsibilitiesForStudents");
+    student_placeholder.setAttribute("placeholder", text );
 }
 
 function getExportEndpointByModeratorRole(event, export_files_id, message_bar) {
@@ -982,6 +1002,176 @@ function downloadExportedModeratorResponsibilities(endpoint, export_files_id, me
         }
     }
 }
+
+
+
+function sendMessage(event) {
+    event.preventDefault();
+    let recipient = document.getElementById('textarea-emails');
+    let message = document.getElementById('message');
+
+    let actions = {
+        "recipient": recipient.value,
+        "message": message.value
+    };
+    fetch('../../api.php?endpoint=send_message_moderator', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(actions)
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            var errElem = document.getElementById('message-bar-export-message');
+            if (!data.success) {
+                errElem.classList.remove(['success']);
+                errElem.classList.add(['error']);
+                errElem.innerHTML = data.message;
+            } else {
+                errElem.classList.remove(['error']);
+                errElem.classList.add(['success']);
+                errElem.innerHTML = data.message;
+                recipient.value = "";
+                message.value = "";
+            }
+        });
+}
+
+function getMessages() {
+    let notifications = document.getElementById("notifications");
+    fetch('../../api.php?endpoint=get_messages', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            notifications.style.display = "block";
+            if (!data.success) {
+                let text = document.createElement("p");
+                text.innerHTML = "В момента нямате никакви известия.";
+                notifications.appendChild(text);
+            } else {
+                for (let i = 0; i < data.order.length; i++) {   
+                    let text = document.createElement("p");                 
+                    text.innerHTML = `${i + 1})От ${data.order[i].sender} - ${data.order[i].message}`;
+                    notifications.appendChild(text);
+                }
+            }
+        });
+}
+
+
+function updateStudentsByModeratorRole(event) {
+    event.preventDefault();
+    fetch(`../../api.php?endpoint=get_user_role`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            let endpoint;
+            switch (data.role) {
+                case "moderator-hat":
+                    endpoint = 'update_students_hat';
+                    text = 'Формат: \n"ФН, Взета"\n\nФН - Факултетният номер на студента\nВзета - Да или Не';
+                    break;
+                case "moderator-gown":
+                    endpoint = 'update_students_gown';
+                    text = 'Формат: \n"ФН, Взета, Върната"\n"Въведете стойност за всеки елемент. За да не се промени елемент, оставете стойността празна."\n\nФН - Факултетният номер на студента\nВзета - Да или Не\nВърната - Да или Не';
+                    break;
+                case "moderator-signature":
+                    endpoint = 'update_students_signature';
+                    text = 'Формат: \n"ФН, Взета (на дипломирането), Взета (предварително)"\n"Въведете стойност за всеки елемент. За да не се промени елемент, оставете стойността празна. Въведете стойност или за Взета (на дипломирането) или за Взета (предварително). Не и двете."\n\nФН - Факултетният номер на студента\nВзета (на дипломирането) - Да или Не\nВзета (предварително) - Да или Не';
+                    break;
+            }
+            updateStudents(endpoint, text);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+}
+
+function updateStudents(endpoint, text) {
+    var form = document.getElementById("students_responsibilities_form");
+
+    var studentsData = form.updateResponsibilitiesForStudents.value;
+
+    fetch(`../../api.php?endpoint=${endpoint}`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(studentsData)
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            var message_bar = document.getElementById('message-bar-update-responsibilities');
+            if (!data.success) {
+                message_bar.classList.remove(['success']);
+                message_bar.classList.add(['error']);
+                message_bar.style.display = "block";
+                message_bar.innerHTML = data.message;
+            } else {
+                message_bar.classList.remove(['error']);
+                message_bar.classList.add(['success']);
+                message_bar.innerHTML = data.message;
+                message_bar.style.display = "block";
+                var student_placeholder = document.getElementById("updateResponsibilitiesForStudents");
+                student_placeholder.value = "";
+                responsibilitiesByModeratorRole();
+            }
+        })
+        .finally(() => {
+            setTimeout(() => {
+                var message_bar = document.getElementById('message-bar-update-responsibilities');
+                message_bar.style.display = "none";
+            }, 5000);
+        });
+}
+
+
 
 
 

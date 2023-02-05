@@ -7,6 +7,7 @@ getStudentsDiplomaInfo();
 getGraduationInfo();
 makeArchive();
 getClasses();
+getNewUsersToDistribute();
 
 google.charts.load('current', { 'packages': ['corechart'] });
 
@@ -923,6 +924,9 @@ function submitUserHelper(bodyData) {
                 document.getElementById("userTextarea").value = "";
                 getAllNonStudentUsers();
             }
+        })
+        .finally(() => {
+            getNewUsersToDistribute();
         });
 }
 
@@ -932,7 +936,6 @@ function submitUsers(event) {
     var usersData = form.userTextarea.value;
 
     submitUserHelper(JSON.stringify(usersData));
-
 }
 
 function submitUsersFromFile(event) {
@@ -1144,6 +1147,9 @@ function submitStudentHelper(bodyData) {
                 document.getElementById("studentTextarea").value = "";
                 getAllStudents();
             }
+        })
+        .finally(() => {
+            getNewUsersToDistribute();
         });
 }
 
@@ -1154,6 +1160,7 @@ function submitStudents(event) {
     var studentsData = form.studentTextarea.value;
 
     submitStudentHelper(JSON.stringify(studentsData));
+    getNewUsersToDistribute();
 }
 
 function submitStudentsFromFile(event) {
@@ -1165,6 +1172,7 @@ function submitStudentsFromFile(event) {
     }
     submitStudentHelper(formData);
     document.getElementById('fileStudent').value = "";
+    getNewUsersToDistribute();
 }
 
 function submitAction(event) {
@@ -1983,17 +1991,25 @@ function distributeModerators() {
             }
         })
         .then((data) => {
-            var errElem = document.getElementById('message-bar-distribute-moderators');
+            var messageElem = document.getElementById('message-bar-distribute-moderators');
             if (data.error) {
-                errElem.classList.remove(['success']);
-                errElem.classList.add(['error']);
+                messageElem.classList.remove('success','info');
+                messageElem.classList.add('error');
                 console.log(data.error);
-                errElem.innerHTML = data.error;
+                messageElem.innerHTML = data.error;
             } else {
-                errElem.classList.remove(['error']);
-                errElem.classList.add(['success']);
-                console.log(data.success);
-                errElem.innerHTML = data.success;
+                messageElem.classList.remove('error','info');
+                messageElem.classList.add('success');
+                messageElem.innerHTML = data.success;
+                distribute_button = document.getElementById("distribute_moderators_button");
+                distribute_button.classList.add('disabled-button');
+                distribute_button.setAttribute('disabled', '');
+                setTimeout(function() {
+                    messageElem.classList.remove('success');
+                    messageElem.classList.add('info');
+                    messageElem.innerHTML = "Отговорностите са вече разпределени.";
+
+                },5000);
             }
         })
         .finally(() => { });
@@ -2280,7 +2296,6 @@ function getClasses() {
         })
         .then((data) => {
             if (!data.success) {
-                console.log(data.message);
             } else {
                 let div = document.getElementById('for_buttons');
                 while (div.firstChild) {
@@ -2327,5 +2342,40 @@ function downloadArchive(event, id) {
             link.download = "achieve" + id + ".csv";
             link.click();
             link.remove();
+        });
+}
+
+function getNewUsersToDistribute() {
+    fetch('../../api.php?endpoint=get_new_students_moderators_to_distribute', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }})
+        .then(response => {
+            if (response.ok) {
+                return response.json();  
+            }
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then(data => {
+            var infoElem = document.getElementById('message-bar-distribute-moderators');
+            infoElem.classList.add(['info']);
+            if(data.students.length === 0  && data.moderators.length === 0) {
+                distribute_button = document.getElementById("distribute_moderators_button");
+                distribute_button.classList.add('disabled-button');
+                distribute_button.setAttribute('disabled', '');
+                infoElem.innerHTML = "Отговорностите са вече разпределени."
+            }
+            else {
+                distribute_button = document.getElementById("distribute_moderators_button");
+                distribute_button.classList.remove('disabled-button');
+                distribute_button.removeAttribute('disabled');
+                infoElem.innerHTML = "Добавени са нови студенти или модератори. Нужно е да се разпределят отговорностите.";
+            }
         });
 }

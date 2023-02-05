@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         $conn = $database->getConnection();
 
         $stmt = $conn->prepare("
-            select student.fn, user.name, user.email, user.phone,student_diploma.attendance,student_hat.hat_taken
+            select student.fn, user.name, user.email, user.phone, student_hat.hat_taken
             from student
             join user on user.id = student.user_id
             join student_hat on student.fn = student_hat.student_fn
@@ -31,6 +31,8 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             and hat_requested = 1");
         $stmt->execute(["email" => $email]);
 
+        $column_names = array("ФН", "Име", "Имейл", "Телефон", "Взета");
+
         if ($format !== 'pdf' && $format !== 'no') {
             header('Content-Type: text/csv; charset=utf-8');
             header('Content-Disposition: attachment; filename="' . basename($name));
@@ -39,11 +41,10 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             fwrite($output, "\xEF\xBB\xBF");
             fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
-            fputcsv($output, array("ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета"));
+            fputcsv($output, $column_names);
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 //Тук ще оправя повторението на код след като оправим кои ще са null по default
-                $row['attendance'] = ($row['attendance'] == null) ? '-' : ($row['attendance'] == 0 ? 'Не' : 'Да');
-                $row['hat_taken'] = ($row['hat_taken'] == 0) ? 'Не' : 'Да';
+                $row['hat_taken'] = ($row['hat_taken'] === 0 || $row['hat_taken'] === null) ? 'Не' : 'Да';
                 fputcsv($output, $row);
             }
             fclose($output);
@@ -57,11 +58,10 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             $pdf->setFontSubsetting(false); //cyrillic
             $pdf->SetFont('dejavusans', '', 10, '', true);
             $pdf->AddPage();
-            $pdf->Cell(0, 0, implode(",", array("ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета")), 0, 1);
+            $pdf->Cell(0, 0, implode(",", $column_names), 0, 1);
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 //Тук ще оправя повторението на код след като оправим кои ще са null по default
-                $row['attendance'] = ($row['attendance'] == null) ? '-' : ($row['attendance'] == 0 ? 'Не' : 'Да');
-                $row['hat_taken'] = ($row['hat_taken'] == 0) ? 'Не' : 'Да';
+                $row['hat_taken'] = ($row['hat_taken'] === 0 || $row['hat_taken'] === null) ? 'Не' : 'Да';
                 $pdf->Cell(0, 0, implode(",", $row), 0, 1);
             }
             $pdf->Output("students_for_hat.pdf", 'D');
