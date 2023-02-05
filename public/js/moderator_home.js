@@ -270,8 +270,8 @@ function buildStudentsDiplomaTable(users) {
     var columnNames = [
         "ФН", "Име", "Цвят", "Ред на връчване", "Час на връчване", "Степен", "Спец.", "Група", "Успех",
         "Присъствие", "Има право", "Модератор за диплома", "Готова диплома", "Взета", "Заявка взимане предв.", "Коментар (студент)",
-        "Взета предв.", "Дата/час", "Коментар (администр.)", "Покана реч", "Отговор", "Снимки", "Модератор за тога", "Заявена тога",
-        "Взета", "Дата/час", "Върната", "Дата/час", "Модератор за шапка", "Заявена шапка", "Взета", "Дата/час"];
+        "Взета предв.", "Коментар (администр.)", "Покана реч", "Отговор", "Снимки", "Модератор за тога", "Заявена тога",
+        "Взета", "Върната", "Модератор за шапка", "Заявена шапка", "Взета"];
     table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-diploma', 'diploma-table');
     let i = 1;
 
@@ -303,27 +303,17 @@ function buildStudentsDiplomaTable(users) {
                 user.take_in_advance_request == 0 ? 'Не' : 'Да',
                 user.take_in_advance_request_comment == null ? "<i class='far fa-comment-alt comment-icon'><span class='studentComm'>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span class='studentComm'>${user.take_in_advance_request_comment}</span></i>`,
                 user.is_taken_in_advance == 0 ? 'Не' : 'Да',
-                user.taken_at_time,
                 user.diploma_comment == null ? "<i class='far fa-comment-alt comment-icon'><span class='userComm'>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span class='userComm'>${user.diploma_comment}</span></i>`,
                 user.speech_request = (user.speech_request == 1) ? 'Да' : 'Не',
                 user.speech_response = response,
                 user.photos_requested == 0 ? 'Не' : 'Да',
                 user.moderator_gown_email === null ? 'не е избран' : user.moderator_gown_email,
-                //gown_requested
                 user.gown_requested == null ? '' : user.gown_requested == 0 ? 'Не' : 'Да',
-                //gown_taken
                 user.gown_requested != 1 ? '' : user.gown_taken == 0 || user.gown_taken == null ? 'Не' : 'Да',
-                user.gown_taken_date,
-                //gown_returned
                 user.gown_taken != 1 ? '' : user.gown_returned == 0 || user.gown_returned == null ? 'Не' : 'Да',
-                user.gown_returned_date,
                 user.moderator_hat_email === null ? 'не е избран' : user.moderator_hat_email,
-                //hat_requested
                 user.hat_requested == null ? '' : user.hat_requested == 0 ? 'Не' : 'Да',
-                //hat_taken
                 user.hat_requested != 1 ? '' : user.hat_taken == 0 || user.hat_taken == null ? 'Не' : 'Да',
-                user.hat_taken_date,
-
             ];
             const number_columns = row_data.length;
             for (var j = 0; j < number_columns; j++) {
@@ -334,7 +324,6 @@ function buildStudentsDiplomaTable(users) {
     }
 }
 
-/*---- GET_STUDENTS_DIPLOMA  END ----*/
 
 /*---- SWITCH_SECTIONS  START ----*/
 function showUsers() {
@@ -718,7 +707,7 @@ function buildResponsibilitiesSectionForModeratorHat(users) {
 
 
     let i = 1;
-    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Дата на вземане"];
+    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета"];
     table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header_responsibilities_table', 'responsibilities_table');
     for (const user of users) {
         if (user.hat_requested == 1) {
@@ -731,7 +720,6 @@ function buildResponsibilitiesSectionForModeratorHat(users) {
                 user.phone,
                 user.attendance === 0 ? 'Не' : 'Да',
                 user.hat_taken === null ? '' : user.hat_taken === 0 ? 'Не' : 'Да',
-                user.hat_taken === 1 ? user.hat_taken_date : ''
             ]
             for (var j = 0; j < row_data.length; j++) {
                 row.insertCell(j).innerHTML = row_data[j];
@@ -771,7 +759,7 @@ function buildResponsibilitiesSectionForModeratorGown(users) {
     tableheader.innerHTML = "<i class=\"fas fa-list\"></i>" + " Студенти заявили тога";
 
     let i = 1;
-    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Дата на вземане", "Върната", "Дата на връщане"];
+    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Върната"];
     table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header_responsibilities_table', 'responsibilities_table');
     for (const user of users) {
         if (user.gown_requested === 1) {
@@ -784,9 +772,7 @@ function buildResponsibilitiesSectionForModeratorGown(users) {
                 user.phone,
                 user.attendance === 0 ? 'Не' : 'Да',
                 user.gown_taken === null ? '' : user.gown_taken === 0 ? 'Не' : 'Да',
-                user.gown_taken === 1 ? user.gown_taken_date : '',
                 user.gown_returned === null ? '' : user.gown_returned === 0 ? 'Не' : 'Да',
-                user.gown_returned_date === 1 ? user.gown_returned_date : ''
             ]
             for (var j = 0; j < row_data.length; j++) {
                 row.insertCell(j).innerHTML = row_data[j];
@@ -826,7 +812,7 @@ function buildResponsibilitiesSectionForModeratorSignature(users) {
 
     let i = 1;
     var table = document.getElementById("responsibilities_table");
-    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Заявка взимане предв.", "Коментар (студент)", "Взета предв.", "Дата/час", "Коментар (администр.)"];
+    var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Заявка взимане предв.", "Коментар (студент)", "Взета предв.", "Коментар (администр.)"];
     table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header_responsibilities_table', 'responsibilities_table');
     for (const user of users) {
         if (user.has_right) {
@@ -842,7 +828,6 @@ function buildResponsibilitiesSectionForModeratorSignature(users) {
                 user.take_in_advance_request === 0 ? 'Не' : 'Да',
                 user.take_in_advance_request_comment === null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.take_in_advance_request_comment}</span></i>`,
                 user.is_taken_in_advance === 0 ? 'Не' : 'Да',
-                user.taken_at_time,
                 user.diploma_comment === null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.diploma_comment}</span></i>`,
             ]
             for (var j = 0; j < row_data.length; j++) {
