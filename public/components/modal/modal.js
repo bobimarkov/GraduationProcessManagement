@@ -7,12 +7,12 @@ template.innerHTML = `
             left: 50%;
             transform: translate(-50%, -50%);
             width: 500px;
-            height: 500px;
             background: linear-gradient(90deg, #86CEFA 0%, rgba(226,237,238,1) 75%, rgba(255,255,255,1) 100%);
             box-shadow: 5px 5px 20px black;    
-            z-index: 1;
+            z-index: 1001;
             display: none;
             user-select: contain;
+            border-radius: 5px;
         }
         
         .modal-overlay {
@@ -24,6 +24,7 @@ template.innerHTML = `
             background-color: rgba(0,0,0,.5);
             display: none;
             user-select: none;
+            z-index: 1000;
         }
         
         .modal-header {
@@ -40,6 +41,9 @@ template.innerHTML = `
             text-align: center;
             font-size: 27px;
             font-weight: bold;
+            padding-top: 70px;
+            color: darkslategray;
+            text-transform: uppercase;
         }
 
         .modal-close-button {
@@ -52,7 +56,7 @@ template.innerHTML = `
         }
         
         .active {
-            display: block;
+            display: grid;
         }
     </style>
         
@@ -63,7 +67,7 @@ template.innerHTML = `
         </div>
         <slot></slot>
     </div>
-    <div class="modal-overlay"></div`
+    <div class="modal-overlay"></div>`
         
 class Modal extends HTMLElement {
             
@@ -75,6 +79,7 @@ class Modal extends HTMLElement {
         this.modal_overlay = shadow.querySelector(".modal-overlay");
         this.modal_title = shadow.querySelector(".modal-title");
         this.close_button = shadow.querySelector(".modal-close-button");
+        this.onCloseFunction = null;
         this.close_button.addEventListener("click", (e) => {
             this.removeAttribute("active");
         });
@@ -92,17 +97,33 @@ class Modal extends HTMLElement {
         return this.getAttribute("width") != null;
     }
 
+    get hasMaxHeight() {
+        return this.getAttribute("max-height") != null;
+    }
+
+    get hasMaxWidth() {
+        return this.getAttribute("max-width") != null;
+    }
+
+    get hasMinHeight() {
+        return this.getAttribute("min-height") != null;
+    }
+
+    get hasMinWidth() {
+        return this.getAttribute("min-width") != null;
+    }
+
     static get observedAttributes() {
-        return ["active", "width", "height", "title"];
+        return ["active", "width", "height", "max-width", "max-height", "min-width", "min-height", "modal-title"];
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-        if (name === "title") this.changeTitle();
+        if (name === "modal-title") this.changeTitle();
         if (name === "active") this.activateModal();
-        if (name === "width" || name === "height") this.changeSize();
+        if (name === "width" || name === "height" || name === "max-width" || name === "max-height" || name === "min-width" || name === "min-height") this.changeSize();
     }
 
-    activateModal() {
+    activateModal() { 
         if (this.isActivated) {
             this.modal.classList.add("active");
             this.modal_overlay.classList.add("active");
@@ -115,11 +136,15 @@ class Modal extends HTMLElement {
 
     changeSize() {
         this.modal.style.width = this.hasWidth ? this.getAttribute("width") : "500px";
-        this.modal.style.height = this.hasHeight ? this.getAttribute("height") : "500px";
+        this.modal.style.height = this.hasHeight ? this.getAttribute("height") : "";
+        this.modal.style["max-height"] = this.hasMaxHeight ? this.getAttribute("max-height") : "500px";
+        this.modal.style["max-width"] = this.hasMaxWidth ? this.getAttribute("max-width") : "500px";
+        this.modal.style["min-height"] = this.hasMinHeight ? this.getAttribute("min-height") : "500px";
+        this.modal.style["min-width"] = this.hasMinWidth ? this.getAttribute("min-width") : "500px";
     }
 
     changeTitle() {
-        this.modal_title.innerHTML = this.getAttribute("title");
+        this.modal_title.innerHTML = this.getAttribute("modal-title");
     }
 }
 
