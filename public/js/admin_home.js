@@ -350,8 +350,8 @@ function buildStudentsDiplomaTable(users) {
         var columnNames = [
             "ФН", "Име", "Степен", "Спец.", "Група", "Успех",
             "Присъствие", "Има право", "Модератор за диплома", "Готова диплома", "Взета", "Заявка взимане предв.", "Коментар (студент)",
-            "Взета предв.", "Дата/час", "Коментар (администр.)", "Покана реч", "Отговор", "Снимки", "Модератор за тога", "Заявена тога",
-            "Взета", "Дата/час", "Върната", "Дата/час", "Модератор за шапка", "Заявена шапка", "Взета", "Дата/час"];
+            "Взета предв.", "Коментар (администр.)", "Покана реч", "Отговор", "Снимки", "Модератор за тога", "Заявена тога",
+            "Взета", "Върната", "Модератор за шапка", "Заявена шапка", "Взета"];
     
 
     table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-diploma', 'diploma-table');
@@ -388,20 +388,12 @@ function buildStudentsDiplomaTable(users) {
                 user.speech_response = response,
                 user.photos_requested == 0 ? 'Не' : 'Да',
                 user.moderator_gown_email === null ? 'не е избран' : user.moderator_gown_email,
-                //gown_requested
                 user.gown_requested == null ? '' : user.gown_requested == 0 ? 'Не' : 'Да',
-                //gown_taken
                 user.gown_requested != 1 ? '' : user.gown_taken == 0 || user.gown_taken == null ? 'Не' : 'Да',
-                user.gown_taken_date,
-                //gown_returned
                 user.gown_taken != 1 ? '' : user.gown_returned == 0 || user.gown_returned == null ? 'Не' : 'Да',
-                user.gown_returned_date,
                 user.moderator_hat_email === null ? 'не е избран' : user.moderator_hat_email,
-                //hat_requested
                 user.hat_requested == null ? '' : user.hat_requested == 0 ? 'Не' : 'Да',
-                //hat_taken
                 user.hat_requested != 1 ? '' : user.hat_taken == 0 || user.hat_taken == null ? 'Не' : 'Да',
-                user.hat_taken_date,
             ];
             const number_columns = row_data.length;
             for (var j = 0; j < number_columns; j++) {
@@ -418,8 +410,8 @@ function buildStudentsAttendanceDiplomaTable(users) {
     var columnNames = [
         "ФН", "Име", "Цвят", "Ред на връчване", "Час на връчване", "Степен", "Спец.", "Група", "Успех",
         "Присъствие", "Има право", "Модератор за диплома", "Готова диплома", "Взета", "Заявка взимане предв.", "Коментар (студент)",
-        "Взета предв.", "Дата/час", "Коментар (администр.)", "Покана реч", "Отговор", "Снимки", "Модератор за тога", "Заявена тога",
-        "Взета", "Дата/час", "Върната", "Дата/час", "Модератор за шапка", "Заявена шапка", "Взета", "Дата/час"];
+        "Взета предв.", "Коментар (администр.)", "Покана реч", "Отговор", "Снимки", "Модератор за тога", "Заявена тога",
+        "Взета", "Върната", "Модератор за шапка", "Заявена шапка", "Взета"];
     
     table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-attendance', 'attendance-table');
     let i = 1;
@@ -458,20 +450,12 @@ function buildStudentsAttendanceDiplomaTable(users) {
                 user.speech_response = response,
                 user.photos_requested == 0 ? 'Не' : 'Да',
                 user.moderator_gown_email === null ? 'не е избран' : user.moderator_gown_email,
-                //gown_requested
                 user.gown_requested == null ? '' : user.gown_requested == 0 ? 'Не' : 'Да',
-                //gown_taken
                 user.gown_requested != 1 ? '' : user.gown_taken == 0 || user.gown_taken == null ? 'Не' : 'Да',
-                user.gown_taken_date,
-                //gown_returned
                 user.gown_taken != 1 ? '' : user.gown_returned == 0 || user.gown_returned == null ? 'Не' : 'Да',
-                user.gown_returned_date,
                 user.moderator_hat_email === null ? 'не е избран' : user.moderator_hat_email,
-                //hat_requested
                 user.hat_requested == null ? '' : user.hat_requested == 0 ? 'Не' : 'Да',
-                //hat_taken
                 user.hat_requested != 1 ? '' : user.hat_taken == 0 || user.hat_taken == null ? 'Не' : 'Да',
-                user.hat_taken_date,
             ];
             const number_columns = row_data.length;
             for (var j = 0; j < number_columns; j++) {

@@ -21,8 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         $conn = $database->getConnection();
 
         $stmt = $conn->prepare("
-        select student.fn, user.name, user.email, user.phone,student_diploma.attendance, student_gown.gown_taken,
-        student_gown.gown_taken_date, student_gown.gown_returned, student_gown.gown_returned_date
+        select student.fn, user.name, user.email, user.phone,student_diploma.attendance, student_gown.gown_taken, student_gown.gown_returned
         from student
         join user on user.id = student.user_id
         join student_gown on student.fn = student_gown.student_fn
@@ -32,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         and gown_requested = 1");
         $stmt->execute(["email" => $email]);
 
-        $column_names = array("ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Дата на вземане", "Върната", "Дата на връщане");
+        $column_names = array("ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Върната");
 
         if ($format !== 'pdf' && $format !== 'no') {
             header('Content-Type: text/csv; charset=utf-8');

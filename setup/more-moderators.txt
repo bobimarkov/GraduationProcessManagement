@@ -1,8 +1,0 @@
-kboyazhieva@gmail.com   , Password1, Калина Иванова Бояджиева       , 0890202031, moderator-signature 
-vvolova@gmail.com       , Password1, Васи Спасова Волова             , 0890202038, moderator-signature 
-iivanov@gmail.com        , Password1, Иван Петров Иванов             , 0890402030, moderator-hat
-ivelichkov@gmail.com   , Password1, Иво Великов Величков             , 0890403330, moderator-hat 
-mivanova@gmail.com       , Password1, Мариела Костадинова Иванова    , 0890132032, moderator-gown
-mbonev@gmail.com       , Password1, Михаил Бонев Бонев              , 0890132040, moderator-gown
-mmilenova@gmail.com    , Password1, Мила Милова Миленова              , 0890132046, moderator-gown
-aspaski@gmail.com    , Password1, Атанас Гандев Спаски            , 0890132044, moderator-gown
