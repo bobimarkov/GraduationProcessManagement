@@ -64,9 +64,7 @@ function submitRequestSpeechAnswer(email, value) {
 }
 
 function setAttendance(email, value) {
-    if (value == 1) {
-        updateGownAndHatValue(email);
-    }
+    updateGownAndHatValue(email);    
     var requestData = {
         "column_name": "attendance",
         "email": email,
@@ -477,6 +475,7 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
                 if (today <= new Date(deadline_gown)) {
                     let gownRequest = document.getElementById("gown_request_select");
                     if (user.gown_requested === null) {
+                        gownRequestDiv.style.display = "flex";
                         gownRequest.value = -1;
                     }
                     else if (user.gown_requested === 0) {
@@ -511,6 +510,7 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
                     let hatRequest = document.getElementById("hat_request_select");
                     if (user.hat_requested === null) {
                         hatRequest.value = -1;
+                        hatRequestDiv.style.display = "flex";
                     }
                     else if (user.hat_requested === 0) {
                         hatRequestedMessage.innerHTML = "Статус: Отказана";

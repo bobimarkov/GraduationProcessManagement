@@ -191,7 +191,7 @@ function executeQuery($order_values, $conn)
 
 function getColor($i, $n, $rowColors, $colorInterval)
 {
-    $part = round(($colorInterval / 100 * $n));
+    $part = ceil(($colorInterval / 100 * $n));
     $current_part = $part;
     $color_index = 1;
 
