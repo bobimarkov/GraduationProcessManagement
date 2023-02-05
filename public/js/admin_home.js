@@ -2346,7 +2346,7 @@ function downloadArchive(event, id) {
 }
 
 function getNewUsersToDistribute() {
-    fetch('../../api?endpoint=get_new_students_moderators_to_distribute', {
+    fetch('../../api.php?endpoint=get_new_students_moderators_to_distribute', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,

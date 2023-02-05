@@ -1014,7 +1014,7 @@ function sendMessage(event) {
         "recipient": recipient.value,
         "message": message.value
     };
-    fetch('../../api?endpoint=send_message_moderator', {
+    fetch('../../api.php?endpoint=send_message_moderator', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -1049,7 +1049,7 @@ function sendMessage(event) {
 
 function getMessages() {
     let notifications = document.getElementById("notifications");
-    fetch('../../api?endpoint=get_messages', {
+    fetch('../../api.php?endpoint=get_messages', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -1084,7 +1084,7 @@ function getMessages() {
 
 function updateStudentsByModeratorRole(event) {
     event.preventDefault();
-    fetch(`../../api?endpoint=get_user_role`, {
+    fetch(`../../api.php?endpoint=get_user_role`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -1129,7 +1129,7 @@ function updateStudents(endpoint, text) {
 
     var studentsData = form.updateResponsibilitiesForStudents.value;
 
-    fetch(`../../api?endpoint=${endpoint}`, {
+    fetch(`../../api.php?endpoint=${endpoint}`, {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
