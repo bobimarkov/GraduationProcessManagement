@@ -688,8 +688,13 @@ textarea {
     #export_att_graduated, 
     #export_files_users,
     #export_files_student,
-    .import_files {
+    .import_files,
+    #for_buttons {
         flex-direction: column;
+    }
+
+    #for_buttons {
+        gap: 5px;
     }
 
     .dashboard {
