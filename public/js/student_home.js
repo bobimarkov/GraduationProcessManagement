@@ -64,7 +64,7 @@ function submitRequestSpeechAnswer(email, value) {
 }
 
 function setAttendance(email, value) {
-    updateGownAndHatValue(email);    
+    updateGownAndHatValue(email);
     var requestData = {
         "column_name": "attendance",
         "email": email,
@@ -358,9 +358,7 @@ function buildContentForNotGraduatingStudent(user) {
     document.getElementById("group").innerText = 'Група: ' + user.group;
     document.getElementById("fn").innerText = 'Факултетен номер: ' + user.student_fn;
 
-    document.getElementById("attendance").checked = user.attendance === 1 ? true : false;
-    document.getElementById("photos_requested").checked = user.photos_requested === 1 ? true : false;
-
+    getStartHour(false);
 }
 
 function getStudentsAttendanceInfo() {
@@ -388,6 +386,7 @@ function getStudentsAttendanceInfo() {
             }
         })
 }
+
 
 
 function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, deadline_attendance) {
@@ -421,6 +420,17 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
     let hatRequestDiv = document.getElementById("request_gown_hat_content_2");
     let hatGownRequest = document.getElementById("request_gown_hat_content");
 
+    let gown_taken = document.getElementById("gown_taken");
+    let gown_date = document.getElementById("gown_taken_date");
+    let gown_ret = document.getElementById("gown_returned");
+    let gown_ret_date = document.getElementById("gown_returned_date");
+    let gown_moderator = document.getElementById("gown_moderator");
+
+
+    let hat_taken = document.getElementById("hat_taken");
+    let hat_taken_date = document.getElementById("hat_taken_date");
+    let hat_moderator = document.getElementById("hat_moderator");
+
     if (today <= new Date(deadline_attendance)) {
         let comment = document.getElementById("request_diploma_in_advance_form");
         let selectAttendance = document.getElementById("attendance_request_select");
@@ -444,7 +454,7 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
             if (user.attendance === 0) {
                 comment.style.display = "flex";
                 selectAttendance.value = 0;
-                hatGownRequest.style.display = "none";               
+                hatGownRequest.style.display = "none";
                 messageGownAndHat.style.display = "flex";
 
                 let errElem = document.getElementById('message-bar-diploma-request');
@@ -476,6 +486,12 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
                     let gownRequest = document.getElementById("gown_request_select");
                     if (user.gown_requested === null) {
                         gownRequestDiv.style.display = "flex";
+                        gown_taken.style.display = "none";
+                        gown_date.style.display = "none";
+                        gown_ret.style.display = "none";
+                        gown_ret_date.style.display = "none";
+                        gown_moderator.style.display = "none";
+                        gownRequestedMessage.style.display = "none";
                         gownRequest.value = -1;
                     }
                     else if (user.gown_requested === 0) {
@@ -485,11 +501,11 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
                     else {
                         gownRequestedMessage.innerHTML = "Статус: Заявена";
                         gownRequest.value = 1;
-                        document.getElementById("gown_taken").innerHTML = 'Взета: ' + (user.gown_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
-                        document.getElementById("gown_taken_date").innerHTML = 'Дата/час: ' + (user.gown_taken_date === null || user.gown_taken_date === "" ? "-" : user.gown_taken_date);
-                        document.getElementById("gown_returned").innerHTML = 'Върната: ' + (user.gown_returned === 1 ? '<i class="far fa-check-square"></i>' : "Не");
-                        document.getElementById("gown_returned_date").innerHTML = 'Дата/час: ' + ((user.gown_returned_date === null || user.gown_returned_date === "") ? "-" : user.gown_returned_date);
-                        document.getElementById("gown_moderator").innerHTML = 'Модератор за тога: ' + (user.moderator_gown_email === null || user.gown_requested !== 1 ? '-' : user.moderator_gown_email);
+                        gown_taken.innerHTML = 'Взета: ' + (user.gown_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
+                        gown_date.innerHTML = 'Дата/час: ' + (user.gown_taken_date === null || user.gown_taken_date === "" ? "-" : user.gown_taken_date);
+                        gown_ret.innerHTML = 'Върната: ' + (user.gown_returned === 1 ? '<i class="far fa-check-square"></i>' : "Не");
+                        gown_ret_date.innerHTML = 'Дата/час: ' + ((user.gown_returned_date === null || user.gown_returned_date === "") ? "-" : user.gown_returned_date);
+                        gown_moderator.innerHTML = 'Модератор за тога: ' + (user.moderator_gown_email === null || user.gown_requested !== 1 ? '-' : user.moderator_gown_email);
                     }
                 }
                 else {
@@ -502,7 +518,7 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
                     }
                     else {
                         gownRequestedMessage.innerHTML = "Статус: Заявена";
-                        document.getElementById("gown_moderator").innerHTML = 'Модератор за тога: ' + (user.moderator_gown_email === null || user.gown_requested !== 1 ? '-' : user.moderator_gown_email);
+                        gown_moderator.innerHTML = 'Модератор за тога: ' + (user.moderator_gown_email === null || user.gown_requested !== 1 ? '-' : user.moderator_gown_email);
                     }
                 }
 
@@ -511,6 +527,10 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
                     if (user.hat_requested === null) {
                         hatRequest.value = -1;
                         hatRequestDiv.style.display = "flex";
+                        hat_taken.style.display = "none";
+                        hat_taken_date.style.display = "none";
+                        hat_moderator.style.display = "none";
+                        hatRequestedMessage.style.display = "none";
                     }
                     else if (user.hat_requested === 0) {
                         hatRequestedMessage.innerHTML = "Статус: Отказана";
@@ -519,9 +539,9 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
                     else {
                         hatRequestedMessage.innerHTML = "Статус: Заявена";
                         hatRequest.value = 1;
-                        document.getElementById("hat_taken").innerHTML = 'Взета: ' + (user.hat_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
-                        document.getElementById("hat_taken_date").innerHTML = 'Дата/час: ' + (user.hat_taken_date === null || user.hat_taken_date === "" ? "-" : user.hat_taken_date);
-                        document.getElementById("hat_moderator").innerHTML = 'Модератор за шапка: ' + (user.moderator_hat_email === null || user.hat_requested !== 1 ? '-' : user.moderator_hat_email);
+                        hat_taken.innerHTML = 'Взета: ' + (user.hat_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
+                        hat_taken_date.innerHTML = 'Дата/час: ' + (user.hat_taken_date === null || user.hat_taken_date === "" ? "-" : user.hat_taken_date);
+                        hat_moderator.innerHTML = 'Модератор за шапка: ' + (user.moderator_hat_email === null || user.hat_requested !== 1 ? '-' : user.moderator_hat_email);
                     }
                 }
                 else {
@@ -534,7 +554,7 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
                     }
                     else {
                         hatRequestedMessage.innerHTML = "Статус: Заявена";
-                        document.getElementById("hat_moderator").innerHTML = 'Модератор за шапка: ' + (user.moderator_hat_email === null || user.hat_requested !== 1 ? '-' : user.moderator_hat_email);
+                        hat_moderator.innerHTML = 'Модератор за шапка: ' + (user.moderator_hat_email === null || user.hat_requested !== 1 ? '-' : user.moderator_hat_email);
                     }
                 }
             }
@@ -565,7 +585,7 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
         }
         else {
             gownRequestedMessage.innerHTML = "Статус: Заявена";
-            document.getElementById("gown_moderator").innerHTML = 'Модератор за тога: ' + (user.moderator_gown_email === null || user.gown_requested !== 1 ? '-' : user.moderator_gown_email);
+            gown_moderator.innerHTML = 'Модератор за тога: ' + (user.moderator_gown_email === null || user.gown_requested !== 1 ? '-' : user.moderator_gown_email);
         }
 
         if (user.hat_requested === null) {
@@ -576,7 +596,7 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
         }
         else {
             hatRequestedMessage.innerHTML = "Статус: Заявена";
-            document.getElementById("hat_moderator").innerHTML = 'Модератор за шапка: ' + (user.moderator_hat_email === null || user.hat_requested !== 1 ? '-' : user.moderator_hat_email);
+            hat_moderator.innerHTML = 'Модератор за шапка: ' + (user.moderator_hat_email === null || user.hat_requested !== 1 ? '-' : user.moderator_hat_email);
         }
     }
 
@@ -584,12 +604,12 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
 
     document.getElementById("diploma_comment").value = user.diploma_comment === null || user.diploma_comment === "" ? "Няма коментари" : user.diploma_comment;
     getMessages();
-    getStartHour();
+    getStartHour(true);
     getDiplomaOrder();
 }
 
 
-function getStartHour() {
+function getStartHour(graduated) {
     let start_date_grad = document.getElementById('start_date');
     let start_time_grad = document.getElementById('start_time');
     let auditory_grad = document.getElementById('auditory');
@@ -627,10 +647,11 @@ function getStartHour() {
                 start_date_nograd.innerHTML = ("Дата: ").concat(data.graduation_time[0].graduation_date);
                 start_time_nograd.innerHTML = ("Начален час: ").concat(data.graduation_time[0].start_time);
                 auditory_nograd.innerHTML = ("Местоположение: ").concat(data.graduation_time[0].graduation_place);
-                deadline_gown.innerHTML = ("Краен срок за заявка за тога: ").concat(data.graduation_time[0].deadline_gown);
-                deadline_hat.innerHTML = ("Краен срок за заявка за шапка: ").concat(data.graduation_time[0].deadline_hat);
-                deadline_attendance.innerHTML = ("Краен срок за заявка за присъствие: ").concat(data.graduation_time[0].deadline_attendance);
-
+                if (graduated) {
+                    deadline_gown.innerHTML = ("Краен срок за заявка за тога: ").concat(data.graduation_time[0].deadline_gown);
+                    deadline_hat.innerHTML = ("Краен срок за заявка за шапка: ").concat(data.graduation_time[0].deadline_hat);
+                    deadline_attendance.innerHTML = ("Краен срок за заявка за присъствие: ").concat(data.graduation_time[0].deadline_attendance);
+                }
                 getStudentsOrder();
                 window.graduation_time = data.graduation_time[0];
             }
