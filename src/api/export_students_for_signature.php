@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 //Тук ще оправя повторението на код след като оправим кои ще са null по default
                                 
-                $row['attendance'] = ($row['attendance'] == 0) ? 'Не' : 'Да';
+                $row['attendance'] = ($row['attendance'] == null) ? '-' : ($row['attendance'] == 0 ? 'Не' : 'Да');
                 $row['is_taken'] = ($row['is_taken'] == 0) ? 'Не' : 'Да';
                 $row['take_in_advance_request'] = ($row['take_in_advance_request'] == 0) ? 'Не' : 'Да';
                 $row['take_in_advance_request_comment'] = ($row['take_in_advance_request_comment'] === null) ? '-' : $row['take_in_advance_request_comment'] ;
@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             $pdf->Cell(0, 0, implode(",", $column_names), 0, 1);
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 //Тук ще оправя повторението на код след като оправим кои ще са null по default
-                $row['attendance'] = ($row['attendance'] == 0) ? 'Не' : 'Да';
+                $row['attendance'] = ($row['attendance'] == null) ? '-' : ($row['attendance'] == 0 ? 'Не' : 'Да');
                 $row['is_taken'] = ($row['is_taken'] == 0) ? 'Не' : 'Да';
                 $row['take_in_advance_request'] = ($row['take_in_advance_request'] == 0) ? 'Не' : 'Да';
                 $row['take_in_advance_request_comment'] = ($row['take_in_advance_request_comment'] === null) ? '-' : $row['take_in_advance_request_comment'] ;

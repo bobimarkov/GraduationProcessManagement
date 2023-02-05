@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             fputcsv($output,  $column_names);
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 //Тук ще оправя повторението на код след като оправим кои ще са null по default
-                $row['attendance'] = ($row['attendance'] == 0) ? 'Не' : 'Да';
+                $row['attendance'] = ($row['attendance'] == null) ? '-' : ($row['attendance'] == 0 ? 'Не' : 'Да');
                 $row['gown_taken'] = ($row['gown_taken'] == 0) ? 'Не' : 'Да';
                 $row['gown_returned'] = ($row['gown_returned'] == 0) ? 'Не' : 'Да';
                 fputcsv($output, $row);
@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             $pdf->Cell(0, 0, implode(",", $column_names), 0, 1);
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 //Тук ще оправя повторението на код след като оправим кои ще са null по default
-                $row['attendance'] = ($row['attendance'] == 0) ? 'Не' : 'Да';
+                $row['attendance'] = ($row['attendance'] == null) ? '-' : ($row['attendance'] == 0 ? 'Не' : 'Да');
                 $row['gown_taken'] = ($row['gown_taken'] == 0) ? 'Не' : 'Да';
                 $row['gown_returned'] = ($row['gown_returned'] == 0) ? 'Не' : 'Да';
                 $pdf->Cell(0, 0, implode(",", $row), 0, 1);

@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 //Тук ще оправя повторението на код след като оправим кои ще са null по default
                 $row['color'] = presentColor($row);
-                $row['attendance'] = ($row['attendance'] == 0) ? 'Не' : 'Да';
+                $row['attendance'] = ($row['attendance'] == null) ? '-' : ($row['attendance'] == 0 ? 'Не' : 'Да');
                 $row['has_right'] = ($row['has_right'] == 0) ? 'Не' : 'Да';
                 $row['is_ready'] = ($row['is_ready'] == 0) ? 'Не' : 'Да';
                 $row['is_taken'] = ($row['is_taken'] == 0) ? 'Не' : 'Да';
@@ -122,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 //Тук ще оправя повторението на код след като оправим кои ще са null по default
                 $row['color'] = presentColor($row);
-                $row['attendance'] = ($row['attendance'] == 0) ? 'Не' : 'Да';
+                $row['attendance'] = ($row['attendance'] == null) ? '-' : ($row['attendance'] == 0 ? 'Не' : 'Да');
                 $row['has_right'] = ($row['has_right'] == 0) ? 'Не' : 'Да';
                 $row['is_ready'] = ($row['is_ready'] == 0) ? 'Не' : 'Да';
                 $row['is_taken'] = ($row['is_taken'] == 0) ? 'Не' : 'Да';

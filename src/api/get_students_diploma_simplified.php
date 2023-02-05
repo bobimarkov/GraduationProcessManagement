@@ -8,7 +8,7 @@ include_once '../src/utils/JWTUtils.php';
 
 $errors = array();
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    validateJWT($jwt, ["admin", "moderator-hat","moderator-gown","moderator-signature", "student"]);
+    validateJWT($jwt, ["admin", "student", "moderator-hat","moderator-gown","moderator-signature"]);
 
     if ($errors) {
         $response = array("success" => false, "errors:" => json_encode($errors, JSON_UNESCAPED_UNICODE));

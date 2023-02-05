@@ -455,6 +455,9 @@ function showGivenSection(sectionToBeDisplayed) {
         }
 
     }
+    if (sectionToBeDisplayed.localeCompare(sections[3].id) == 0) {
+        sections[3].style.display = 'flex';
+    } 
 }
 
 /*---- SWITCH_SECTIONS  END ----*/
