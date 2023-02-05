@@ -31,6 +31,8 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             and hat_requested = 1");
         $stmt->execute(["email" => $email]);
 
+        $column_names = array("ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Дата на вземане");
+
         if ($format !== 'pdf' && $format !== 'no') {
             header('Content-Type: text/csv; charset=utf-8');
             header('Content-Disposition: attachment; filename="' . basename($name));
@@ -39,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             fwrite($output, "\xEF\xBB\xBF");
             fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
-            fputcsv($output, array("ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Дата на вземане"));
+            fputcsv($output, $column_names);
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 //Тук ще оправя повторението на код след като оправим кои ще са null по default
                 $row['attendance'] = ($row['attendance'] == 0) ? 'Не' : 'Да';
@@ -57,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             $pdf->setFontSubsetting(false); //cyrillic
             $pdf->SetFont('dejavusans', '', 10, '', true);
             $pdf->AddPage();
-            $pdf->Cell(0, 0, implode(",", array("ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Дата на вземане")), 0, 1);
+            $pdf->Cell(0, 0, implode(",", $column_names), 0, 1);
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 //Тук ще оправя повторението на код след като оправим кои ще са null по default
                 $row['attendance'] = ($row['attendance'] == 0) ? 'Не' : 'Да';

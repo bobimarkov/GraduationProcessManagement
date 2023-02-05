@@ -22,6 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
         $stmt = $conn->prepare("
         select student.fn, user.name, user.email, user.phone,student_diploma.attendance,
+        student_diploma.color, student_diploma.num_order, student_diploma.time_diploma,
         student_diploma.is_taken, student_diploma.take_in_advance_request, student_diploma.take_in_advance_request_comment, student_diploma.is_taken_in_advance,
         student_diploma.taken_at_time, student_diploma.diploma_comment
         from student
@@ -32,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         and attendance = 1");
         $stmt->execute(["email" => $email]);
 
-        $column_names = array("ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Заявка взимане предв.", "Коментар (студент)", "Взета предв.", "Дата/час", "Коментар (администр.)");
+        $column_names = array("ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Цвят","Ред на връчване", "Час на връчване", "Заявка взимане предв.", "Коментар (студент)", "Взета предв.", "Дата/час", "Коментар (администр.)");
 
         if ($format !== 'pdf' && $format !== 'no') {
             header('Content-Type: text/csv; charset=utf-8');
