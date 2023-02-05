@@ -410,7 +410,6 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
 
     document.getElementById("is_taken").innerText = 'Взета: ' + (user.is_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
     document.getElementById("take_in_advance_request").innerHTML = 'Заявена предварително: ' + (user.take_in_advance_request === 1 ? '<i class="far fa-check-square"></i>' : "Не");
-    document.getElementById("taken_at_time").innerText = 'Дата/час на взимане: ' + (user.taken_at_time === null || user.taken_at_time === "" ? "-" : user.taken_at_time);
     document.getElementById("signature_moderator").innerHTML = 'Модератор за диплома: ' + (user.moderator_signature_email === null || user.attendance !== 1 ? '-' : user.moderator_signature_email);
 
     let messageGownAndHat = document.getElementById("message-bar-gown-hat-request");
@@ -421,14 +420,11 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
     let hatGownRequest = document.getElementById("request_gown_hat_content");
 
     let gown_taken = document.getElementById("gown_taken");
-    let gown_date = document.getElementById("gown_taken_date");
     let gown_ret = document.getElementById("gown_returned");
-    let gown_ret_date = document.getElementById("gown_returned_date");
     let gown_moderator = document.getElementById("gown_moderator");
 
 
     let hat_taken = document.getElementById("hat_taken");
-    let hat_taken_date = document.getElementById("hat_taken_date");
     let hat_moderator = document.getElementById("hat_moderator");
 
     if (today <= new Date(deadline_attendance)) {
@@ -487,9 +483,7 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
                     if (user.gown_requested === null) {
                         gownRequestDiv.style.display = "flex";
                         gown_taken.style.display = "none";
-                        gown_date.style.display = "none";
                         gown_ret.style.display = "none";
-                        gown_ret_date.style.display = "none";
                         gown_moderator.style.display = "none";
                         gownRequestedMessage.style.display = "none";
                         gownRequest.value = -1;
@@ -502,9 +496,7 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
                         gownRequestedMessage.innerHTML = "Статус: Заявена";
                         gownRequest.value = 1;
                         gown_taken.innerHTML = 'Взета: ' + (user.gown_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
-                        gown_date.innerHTML = 'Дата/час: ' + (user.gown_taken_date === null || user.gown_taken_date === "" ? "-" : user.gown_taken_date);
                         gown_ret.innerHTML = 'Върната: ' + (user.gown_returned === 1 ? '<i class="far fa-check-square"></i>' : "Не");
-                        gown_ret_date.innerHTML = 'Дата/час: ' + ((user.gown_returned_date === null || user.gown_returned_date === "") ? "-" : user.gown_returned_date);
                         gown_moderator.innerHTML = 'Модератор за тога: ' + (user.moderator_gown_email === null || user.gown_requested !== 1 ? '-' : user.moderator_gown_email);
                     }
                 }
@@ -528,7 +520,6 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
                         hatRequest.value = -1;
                         hatRequestDiv.style.display = "flex";
                         hat_taken.style.display = "none";
-                        hat_taken_date.style.display = "none";
                         hat_moderator.style.display = "none";
                         hatRequestedMessage.style.display = "none";
                     }
@@ -540,7 +531,6 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
                         hatRequestedMessage.innerHTML = "Статус: Заявена";
                         hatRequest.value = 1;
                         hat_taken.innerHTML = 'Взета: ' + (user.hat_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
-                        hat_taken_date.innerHTML = 'Дата/час: ' + (user.hat_taken_date === null || user.hat_taken_date === "" ? "-" : user.hat_taken_date);
                         hat_moderator.innerHTML = 'Модератор за шапка: ' + (user.moderator_hat_email === null || user.hat_requested !== 1 ? '-' : user.moderator_hat_email);
                     }
                 }

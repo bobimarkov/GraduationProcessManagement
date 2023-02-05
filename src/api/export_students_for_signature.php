@@ -22,8 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
         $stmt = $conn->prepare("
         select student.fn, user.name, user.email, user.phone,student_diploma.attendance,
-        student_diploma.is_taken, student_diploma.take_in_advance_request, student_diploma.take_in_advance_request_comment, student_diploma.is_taken_in_advance,
-        student_diploma.taken_at_time, student_diploma.diploma_comment
+        student_diploma.is_taken, student_diploma.take_in_advance_request, student_diploma.take_in_advance_request_comment, student_diploma.is_taken_in_advance, student_diploma.diploma_comment
         from student
         join user on user.id = student.user_id
         join student_diploma on student.fn = student_diploma.student_fn
@@ -32,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         and attendance = 1");
         $stmt->execute(["email" => $email]);
 
-        $column_names = array("ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Заявка взимане предв.", "Коментар (студент)", "Взета предв.", "Дата/час", "Коментар (администр.)");
+        $column_names = array("ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Заявка взимане предв.", "Коментар (студент)", "Взета предв.", "Коментар (администр.)");
 
         if ($format !== 'pdf' && $format !== 'no') {
             header('Content-Type: text/csv; charset=utf-8');
@@ -51,7 +50,6 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                 $row['take_in_advance_request'] = ($row['take_in_advance_request'] == 0) ? 'Не' : 'Да';
                 $row['take_in_advance_request_comment'] = ($row['take_in_advance_request_comment'] === null) ? '-' : $row['take_in_advance_request_comment'] ;
                 $row['is_taken_in_advance'] = ($row['is_taken_in_advance'] == 0) ? 'Не' : 'Да';
-                $row['taken_at_time'] = ($row['taken_at_time'] === null ) ? '-' : $row['taken_at_time'];
                 $row['diploma_comment'] = ($row['diploma_comment'] === null ) ? '-' : $row['diploma_comment'];
                 fputcsv($output, $row);
             }
@@ -74,7 +72,6 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                 $row['take_in_advance_request'] = ($row['take_in_advance_request'] == 0) ? 'Не' : 'Да';
                 $row['take_in_advance_request_comment'] = ($row['take_in_advance_request_comment'] === null) ? '-' : $row['take_in_advance_request_comment'] ;
                 $row['is_taken_in_advance'] = ($row['is_taken_in_advance'] == 0) ? 'Не' : 'Да';
-                $row['taken_at_time'] = ($row['taken_at_time'] === null ) ? '-' : $row['taken_at_time'];
                 $row['diploma__comment'] = ($row['diploma_comment'] === null ) ? '-' : $row['diploma__comment'];
                 $pdf->Cell(0, 0, implode(",", $row), 0, 1);
             }
