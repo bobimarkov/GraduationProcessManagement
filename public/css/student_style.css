@@ -100,11 +100,6 @@ input[type=checkbox] {
     display: flex;
 }
 
-.request_diploma_in_advance_form {
-    display: flex;
-    align-items: center;
-}
-
 #profile_info_section_content_1_wrapper,
 #diploma_info_section_content_1_wrapper,
 #request_gown_hat_content_1_wrapper {
@@ -113,10 +108,21 @@ input[type=checkbox] {
     border-left: 1px solid rgba(47, 79, 79, 0.603);
 }
 
+#diploma_info_section_content_1_wrapper {
+    width: 15%;
+}
+
+#diploma_info_section_content_2_wrapper {
+    width: 30%;
+}
+
+#diploma_info_section_content_3_wrapper {
+    width: 20%;
+}
+
 #profile_info_section_content_2_wrapper,
 #diploma_info_section_content_2_wrapper,
 #diploma_info_section_content_3_wrapper,
-#diploma_info_section_content_4_wrapper,
 #request_gown_hat_content_2_wrapper {
     margin-left: 3em;
     padding-left: 1em;
@@ -132,7 +138,7 @@ textarea {
 }
 
 .diploma_comment {
-    width: 30em;
+    width: 170%;
     height: 8em;
     background-color: snow;
 }
@@ -142,6 +148,10 @@ textarea {
     justify-content: space-between;
     margin-bottom: 1em;
     border-top: 1px solid rgba(47, 79, 79, 0.603);
+}
+
+#speech_request_section {
+    display: none;
 }
 
 #speech_request_select{
@@ -177,6 +187,7 @@ textarea {
     border: 1px solid darkslategray;
     padding: 0 1em;
     margin-left: 2em;
+    margin-top: 25px;
     cursor: pointer;
     background-color: snow;
     font-weight: bold;
@@ -305,4 +316,20 @@ table tr {
     color: darkslategray;
     font-size: medium;
     margin-bottom: 1em;
+}
+
+#request_diploma_in_advance_form {
+    margin-top: 20px;
+}
+
+#message-bar-diploma-request {
+    margin-left: 0;
+}
+
+#attendance_request_select {
+    width: 25%;
+}
+
+#message-bar-gown-hat-request {
+    margin-left: 0;
 }

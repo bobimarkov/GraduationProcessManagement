@@ -10,19 +10,19 @@ $data_array = array();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     validateJWT($jwt, ["student"]);
-    
+
     $data = json_decode(file_get_contents("php://input"));
 
     foreach ($data as $k => $v) {
         switch ($k) {
             case "column_name": {
-                if (empty(trim($v))) {
-                    $response = array("success" => false, "message" => "Грешка: Възникна технически проблем. Моля да ни извините.");
-                    echo json_encode($response);
-                    die;
-                }
-                $data_array["column_name"] = trim($v);
-                break;
+                    if (empty(trim($v))) {
+                        $response = array("success" => false, "message" => "Грешка: Възникна технически проблем. Моля да ни извините.");
+                        echo json_encode($response);
+                        die;
+                    }
+                    $data_array["column_name"] = trim($v);
+                    break;
                 }
             case "comment": {
                     if (empty(trim($v))) {
@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     break;
                 }
             case "value":
-                if ($v != 0 && $v != 1) {
+                if ($v != 0 && $v != 1 && $v != 'NULL') {
                     $response = array("success" => false, "message" => "Грешка: Невалидни входни данни. Възможно е да има техническа грешка.");
                     echo json_encode($response);
                     die;
@@ -55,7 +55,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     updateUserToDB($data_array);
 }
 
-function updateUserToDB($content) {
+function updateUserToDB($content)
+{
     $column = $content["column_name"];
     $email = $content["email"];
     $comment = isset($content["comment"]) ? $content["comment"] : "";
@@ -67,12 +68,17 @@ function updateUserToDB($content) {
                                         FROM student
                                         RIGHT JOIN user ON user.id = student.user_id 
                                         WHERE user.email = :email");
-    $update_stmt = new PDOStatement();
-    if ($column == "take_in_advance_request") {
+
+    if ($column == "attendance") {
+        $newValue = 1 - $value;
         $update_stmt = $conn->prepare("UPDATE student_diploma 
-                                       SET take_in_advance_request = \"$value\", take_in_advance_request_comment = \"$comment\" 
+                                       SET $column = \"$value\", take_in_advance_request = \"$newValue\", take_in_advance_request_comment = NULL  
                                        WHERE student_fn = :fn");
-    } else if ($column == "photos_requested" || $column == "attendance" || $column == "speech_response") {
+    } else if ($column == "take_in_advance_request") {
+        $update_stmt = $conn->prepare("UPDATE student_diploma 
+                                           SET take_in_advance_request_comment = \"$comment\" 
+                                           WHERE student_fn = :fn");
+    } else if ($column == "photos_requested"|| $column == "speech_response") {
         $update_stmt = $conn->prepare("UPDATE student_diploma 
                                        SET $column = \"$value\" 
                                        WHERE student_fn = :fn");
@@ -84,14 +90,15 @@ function updateUserToDB($content) {
         $update_stmt = $conn->prepare("UPDATE student_hat
                                        SET $column = \"$value\" 
                                        WHERE student_fn = :fn");
-    }
+    } 
 
     $get_user_fn_stmt->execute(["email" => $email]);
     $fn = $get_user_fn_stmt->fetchAll();
 
 
     $success = $update_stmt->execute(["fn" => $fn[0]["fn"]]);
-    
+
+
     if ($success) {
         $response = array("success" => true, "message" => "Промените са запаметени успешно.");
         echo json_encode($response);

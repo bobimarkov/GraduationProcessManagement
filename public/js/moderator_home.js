@@ -295,7 +295,7 @@ function buildStudentsDiplomaTable(users) {
                 user.major,
                 user.group,
                 user.grade,
-                user.attendance == 0 ? 'Не' : 'Да',
+                user.attendance == null ? '' : user.attendance == 0 ? 'Не' : 'Да',
                 user.has_right == 0 ? 'Не' : 'Да',
                 user.moderator_signature_email === null ? 'не е избран' : user.moderator_signature_email,
                 user.is_ready == 0 ? 'Не' : 'Да',
