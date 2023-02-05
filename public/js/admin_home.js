@@ -1,12 +1,15 @@
 tokenRefresher();
 showDiplomaSection();
-getAllUsers();
+getAllNonStudentUsers();
 getAllStudents();
+getAllUsers();
 getStudentsDiplomaInfo();
 getGraduationInfo();
 makeArchive();
 getClasses();
 getNewUsersToDistribute();
+
+google.charts.load('current', { 'packages': ['corechart'] });
 
 
 let logoutHeader = document.getElementById("logout_header");
@@ -100,7 +103,7 @@ function tokenRefresher() {
 }
 
 /*---- GET_USERS  START ----*/
-function getAllUsers() {
+function getAllNonStudentUsers() {
     fetch(`../../api?endpoint=get_users`, {
         method: 'GET',
         headers: {
@@ -122,6 +125,32 @@ function getAllUsers() {
                 console.log(data.error);
             } else {
                 buildUsersTable(data);
+            }
+        })
+}
+
+function getAllUsers() {
+    fetch(`../../api?endpoint=get_all_users`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            if (data.error) {
+                console.log(data.error);
+            } else {
+                buildEditAllUsersTable(data);
             }
         })
 }
@@ -180,32 +209,54 @@ function getAllStudents() {
                 console.log(data.error);
             } else {
                 buildStudentsTable(data);
-                buildEditStudentsTable(data);
             }
         })
 }
 
-function buildEditStudentsTable(data) {
-    var table = document.getElementById("edit-students-table");
+function buildEditAllUsersTable(data) {
+    var table = document.getElementById("edit-users-table");
     let i = 1;
-    let users = data.users;
+    const users = data.users;
 
-    var columnNames = ["Име", "Имейл", "Телефон", "Фн"];
-    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-edit', 'edit-students-table');
+    const columnNames = ["ID", "Име", "Имейл", "Телефон", "Роля"]
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortByEdit', 'header-table-edit', 'edit-users-table');
 
     for (const user of users) {
         var row = table.insertRow(i);
-        row.id = 'user' + i;
+        row.id = 'user' + user.id;
         let row_data = [
+            user.id,
             user.name,
             user.email,
             user.phone,
-            user.fn
+            user.role == 'admin' ? '<i class="fas fa-user-lock user-role-icon"></i>' :
+                user.role == 'moderator-hat' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-graduation-cap user-role-icon"></i>' :
+                    user.role == 'moderator-gown' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-tshirt user-role-icon"></i>' :
+                        user.role == 'moderator-signature' ? '<i class="fas fa-user-cog user-role-icon"></i>     <i class="fas fa-pen user-role-icon"></i>' :
+                            '<i class="fas fa-user-graduate user-role-icon"></i>'
         ];
         const number_columns = row_data.length;
         for (var j = 0; j < number_columns; j++) {
             row.insertCell(j).innerHTML = row_data[j];
         }
+        row.addEventListener("click", (e) => {
+            let edit_modal = document.getElementById("edit_user_modal");
+            let message_bar_modal = document.getElementById("message-bar-modal-edit-users");
+            let input_name = document.getElementById("user_name");
+            let input_email = document.getElementById("user_email");
+            let input_phone = document.getElementById("user_phone");
+            let input_role = document.getElementById("user_role");
+
+            edit_modal.setAttribute("active", "");
+            edit_modal.setAttribute("user_id", user.id);
+            message_bar_modal.style.display = "none";
+
+            input_name.value = user.name;
+            input_email.value = user.email;
+            input_phone.value = user.phone;
+            input_role.value = user.role;
+        })
+        row.style.cursor = "pointer";
         i++;
     }
 }
@@ -267,15 +318,111 @@ function getStudentsDiplomaInfo() {
         })
 }
 
+function getStudentsAttendanceInfo() {
+    fetch(`../../api?endpoint=get_student_attendance`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            if (data.error) {
+                console.log(data.error);
+            } else {
+                buildStudentsAttendanceDiplomaTable(data.users);
+            }
+        })
+}
+
+
 function buildStudentsDiplomaTable(users) {
-    var table = document.getElementById("diploma-table");
+    var table = document.getElementById('diploma-table');
+
+        var columnNames = [
+            "ФН", "Име", "Степен", "Спец.", "Група", "Успех",
+            "Присъствие", "Има право", "Модератор за диплома", "Готова диплома", "Взета", "Заявка взимане предв.", "Коментар (студент)",
+            "Взета предв.", "Дата/час", "Коментар (администр.)", "Покана реч", "Отговор", "Снимки", "Модератор за тога", "Заявена тога",
+            "Взета", "Дата/час", "Върната", "Дата/час", "Модератор за шапка", "Заявена шапка", "Взета", "Дата/час"];
+    
+
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-diploma', 'diploma-table');
+    let i = 1;
+
+    for (const user of users) {
+        if (user.grade >= 3) {
+            var row = table.insertRow(i);
+            row.id = 'user' + i;
+            let response;
+            switch (user.speech_response) {
+                case null: response = '-'; break;
+                case 0: response = 'Отказва'; break;
+                case 1: response = 'Приема'; break;
+            }
+            var row_data = [
+                user.student_fn,
+                user.name,
+                user.degree,
+                user.major,
+                user.group,
+                user.grade,
+                user.attendance == null ? '' : user.attendance == 0 ? 'Не' : 'Да',
+                user.has_right == 0 ? 'Не' : 'Да',
+                user.moderator_signature_email === null ? 'не е избран' : user.moderator_signature_email,
+                user.is_ready == 0 ? 'Не' : 'Да',
+                user.is_taken == 0 ? 'Не' : 'Да',
+                user.take_in_advance_request == 0 ? 'Не' : 'Да',
+                user.take_in_advance_request_comment == null ? "<i class='far fa-comment-alt comment-icon'><span class='studentComm'>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span class='studentComm'>${user.take_in_advance_request_comment}</span></i>`,
+                user.is_taken_in_advance == 0 ? 'Не' : 'Да',
+                user.taken_at_time,
+                user.diploma_comment == null ? "<i class='far fa-comment-alt comment-icon'><span class='userComm'>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span class='userComm'>${user.diploma_comment}</span></i>`,
+                user.speech_request = (user.speech_request == 1) ? 'Да' : 'Не',
+                user.speech_response = response,
+                user.photos_requested == 0 ? 'Не' : 'Да',
+                user.moderator_gown_email === null ? 'не е избран' : user.moderator_gown_email,
+                //gown_requested
+                user.gown_requested == null ? '' : user.gown_requested == 0 ? 'Не' : 'Да',
+                //gown_taken
+                user.gown_requested != 1 ? '' : user.gown_taken == 0 || user.gown_taken == null ? 'Не' : 'Да',
+                user.gown_taken_date,
+                //gown_returned
+                user.gown_taken != 1 ? '' : user.gown_returned == 0 || user.gown_returned == null ? 'Не' : 'Да',
+                user.gown_returned_date,
+                user.moderator_hat_email === null ? 'не е избран' : user.moderator_hat_email,
+                //hat_requested
+                user.hat_requested == null ? '' : user.hat_requested == 0 ? 'Не' : 'Да',
+                //hat_taken
+                user.hat_requested != 1 ? '' : user.hat_taken == 0 || user.hat_taken == null ? 'Не' : 'Да',
+                user.hat_taken_date,
+            ];
+            const number_columns = row_data.length;
+            for (var j = 0; j < number_columns; j++) {
+                row.insertCell(j).innerHTML = row_data[j];
+            }
+            i++;
+        }
+    }
+}
+
+function buildStudentsAttendanceDiplomaTable(users) {
+    var table = document.getElementById('attendance-table');
 
     var columnNames = [
         "ФН", "Име", "Цвят", "Ред на връчване", "Час на връчване", "Степен", "Спец.", "Група", "Успех",
         "Присъствие", "Има право", "Модератор за диплома", "Готова диплома", "Взета", "Заявка взимане предв.", "Коментар (студент)",
         "Взета предв.", "Дата/час", "Коментар (администр.)", "Покана реч", "Отговор", "Снимки", "Модератор за тога", "Заявена тога",
         "Взета", "Дата/час", "Върната", "Дата/час", "Модератор за шапка", "Заявена шапка", "Взета", "Дата/час"];
-    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-diploma', 'diploma-table');
+    
+    table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header-table-attendance', 'attendance-table');
     let i = 1;
 
     for (const user of users) {
@@ -298,7 +445,7 @@ function buildStudentsDiplomaTable(users) {
                 user.major,
                 user.group,
                 user.grade,
-                user.attendance == 0 ? 'Не' : 'Да',
+                user.attendance == null ? '' : user.attendance == 0 ? 'Не' : 'Да',
                 user.has_right == 0 ? 'Не' : 'Да',
                 user.moderator_signature_email === null ? 'не е избран' : user.moderator_signature_email,
                 user.is_ready == 0 ? 'Не' : 'Да',
@@ -367,7 +514,9 @@ function showEditSection() {
     tokenRefresher();
     showGivenSection("edit_section");
     activeHeader("edit_header");
+    getAllNonStudentUsers();
     getAllUsers();
+    getAllStudents();
 }
 
 function showMessagesSection() {
@@ -392,6 +541,11 @@ function showSettingsSection() {
     errElem.classList.remove(['success']);
     errElem.classList.remove(['error']);
     errElem.innerHTML = "";
+
+    let errElem1 = document.getElementById('message-add-deadline-info');
+    errElem1.classList.remove(['success']);
+    errElem1.classList.remove(['error']);
+    errElem1.innerHTML = "";
 
 }
 
@@ -424,7 +578,6 @@ function showAnalyticsSection() {
                 //console.log(data.error);
             } else {
                 // Load google charts
-                google.charts.load('current', { 'packages': ['corechart'] });
                 text.innerHTML = '<i class="fa fa-pie-chart"></i> Статистиката е на база дипломиращи се студенти!';
                 text.style = "text-align : center; height : 1em";
                 document.getElementById('analytics1').style = 'margin-top: 1em';
@@ -460,7 +613,7 @@ function showAnalyticsSectionHelper() {
                 let studentGradeData = dataGradesToArray(data);
                 let studentDegreeData = dataDegreeToArray(data);
                 let studentHasRightData = dataHasRightToArray(data);
-                google.charts.setOnLoadCallback(drawChart(studentMajorData, "analytics1", "рой дипломиращи се студенти от дадена специалност със степен 'Бакалавър'"));
+                google.charts.setOnLoadCallback(drawChart(studentMajorData, "analytics1", "Брой дипломиращи се студенти от дадена специалност със степен 'Бакалавър'"));
                 google.charts.setOnLoadCallback(drawChart(studentGradeData, "analytics2", "Брой дипломиращи се студенти с дадени оценки"));
                 google.charts.setOnLoadCallback(drawChart(studentDegreeData, "analytics3", "Брой дипломиращи се студенти с дадени степени на образование"));
                 google.charts.setOnLoadCallback(drawChart(studentHasRightData, "analytics4", "Студенти, имащи право на диплома"));
@@ -489,6 +642,17 @@ function showDiplomaSection() {
     showDiplomaOrderMessage();
 }
 
+function showAttendanceSection() {
+    tokenRefresher();
+    showGivenSection("attendance_section");
+    activeHeader("attendance_header");
+    getStudentsAttendanceInfo();
+    let errElem = document.getElementById('message-bar-export-attendance');
+    errElem.classList.remove(['success']);
+    errElem.classList.remove(['error']);
+    errElem.innerHTML = "";
+}
+
 //make section visible, giving only its name
 function showGivenSection(sectionToBeDisplayed) {
 
@@ -498,15 +662,16 @@ function showGivenSection(sectionToBeDisplayed) {
         'students_section',
         'edit_section',
         'diploma_section',
-        'excellent_order',
-        'diploma_order_section',
+        'excellent_order',       
         'distribute_moderators',
         'analytic_section',
         'messages_send_section',
         'messages_receive_section',
         'settings_section',
         'settings_date_section',
-        'settings_archive_section'
+        'settings_archive_section',
+        'attendance_section',
+        'diploma_order_section'
     ];
 
     sections = sections.map(x => document.getElementById(x));
@@ -524,22 +689,25 @@ function showGivenSection(sectionToBeDisplayed) {
     }
 
     //the corner cases for flex and make 2 grids at the same time
-    if (sectionToBeDisplayed.localeCompare(sections[7].id) == 0) {
-        sections[7].style.display = 'flex';
+    if (sectionToBeDisplayed.localeCompare(sections[6].id) == 0) {
+        sections[6].style.display = 'flex';
     } else if (sectionToBeDisplayed.localeCompare(sections[3].id) == 0) {
         sections[3].style.display = 'grid';
         sections[4].style.display = 'grid';
         sections[5].style.display = 'grid';
-        sections[6].style.display = 'grid';
     }
-    else if (sectionToBeDisplayed.localeCompare(sections[8].id) == 0) {
+    else if (sectionToBeDisplayed.localeCompare(sections[7].id) == 0) {
+        sections[7].style.display = 'grid';
         sections[8].style.display = 'grid';
-        sections[9].style.display = 'grid';
     }
-    else if (sectionToBeDisplayed.localeCompare(sections[10].id) == 0) {
+    else if (sectionToBeDisplayed.localeCompare(sections[9].id) == 0) {
+        sections[9].style.display = 'grid';
         sections[10].style.display = 'grid';
         sections[11].style.display = 'grid';
+    }
+    else if (sectionToBeDisplayed.localeCompare(sections[12].id) == 0) {
         sections[12].style.display = 'grid';
+        sections[13].style.display = 'grid';
     }
 }
 
@@ -553,7 +721,9 @@ function activeHeader(elementId) {
         'diploma_header',
         'analytic_header',
         'messages_header',
-        'settings_header'];
+        'settings_header',
+        'attendance_header'
+    ];
 
     headers = headers.map(x => document.getElementById(x));
 
@@ -768,7 +938,7 @@ function submitUserHelper(bodyData) {
                 errElem.classList.add(['success']);
                 errElem.innerHTML = data.message;
                 document.getElementById("userTextarea").value = "";
-                getAllUsers();
+                getAllNonStudentUsers();
             }
         })
         .finally(() => {
@@ -821,12 +991,12 @@ document.getElementById('fileStudent').addEventListener('change', function () {
     }
 });
 
-function editStudent(event) {
+function editUsers(event) {
     event.preventDefault;
-    var form = document.getElementById("edit_students_form");
-    var usersData = form.editStudentTextarea.value;
+    var form = document.getElementById("edit_users_form");
+    var usersData = form.editUsersTextarea.value;
 
-    fetch('../../api?endpoint=edit_students', {
+    fetch('../../api?endpoint=edit_users', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -844,7 +1014,7 @@ function editStudent(event) {
             }
         })
         .then((data) => {
-            var errElem = document.getElementById('message-bar-edit-students');
+            var errElem = document.getElementById('message-bar-edit-users');
             if (!data.success) {
                 errElem.classList.remove(['success']);
                 errElem.classList.add(['error']);
@@ -853,11 +1023,115 @@ function editStudent(event) {
                 errElem.classList.remove(['error']);
                 errElem.classList.add(['success']);
                 errElem.innerHTML = data.message;
-                document.getElementById("userTextarea").value = "";
+                errElem.style.display = "block";
+                document.getElementById("editUsersTextarea").value = "";
+
+                getAllUsers();
+                getAllStudents();
+                getAllNonStudentUsers();
             }
         }
         );
-    form.editStudentTextarea.valuе = null;
+}
+
+function editSelectedUser(event) {
+    event.preventDefault();
+    let editModal = document.getElementById("edit_user_modal");
+    const editForm = document.getElementById("edit_selected_user_form");
+    let editData = new FormData(editForm);
+    editData.append("id", editModal.getAttribute("user_id"));
+    const userData = Object.fromEntries(editData.entries());
+
+    fetch('../../api?endpoint=edit_user', {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then(data => {
+            let errElemModal = document.getElementById("message-bar-modal-edit-users");
+            let errElem = document.getElementById("message-bar-edit-users");
+
+            if (!data.success) {
+                errElemModal.style.display = "block";
+                errElemModal.classList.remove(['success']);
+                errElemModal.classList.add(['error']);
+                errElemModal.innerHTML = data.message;
+                errElem.style.display = "none";
+            } else {
+                editModal.removeAttribute("active");
+                
+                errElem.style.display = "block";
+                errElem.classList.remove(['error']);
+                errElem.classList.add(['success']);
+                errElem.innerHTML = data.message;
+                errElemModal.style.display = "none";
+
+                getAllUsers();
+                getAllStudents();
+                getAllNonStudentUsers();
+            }
+        });
+}
+
+function deleteSelectedUser(event) {
+    event.preventDefault();
+
+    let editModal = document.getElementById("edit_user_modal");
+    userData = {"id" : editModal.getAttribute("user_id")}
+
+    fetch('../../api?endpoint=delete-user', {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then(data => {
+            let errElemModal = document.getElementById("message-bar-modal-edit-users");
+            let errElem = document.getElementById("message-bar-edit-users");
+
+            if (!data.success) {
+                errElemModal.style.display = "block";
+                errElemModal.classList.remove(['success']);
+                errElemModal.classList.add(['error']);
+                errElemModal.innerHTML = data.message;
+                errElem.style.display = "none";
+            } else {
+                editModal.removeAttribute("active");
+                
+                errElem.style.display = "block";
+                errElem.classList.remove(['error']);
+                errElem.classList.add(['success']);
+                errElem.innerHTML = data.message;
+                errElemModal.style.display = "none";
+
+                getAllUsers();
+                getAllStudents();
+                getAllNonStudentUsers();
+            }
+        });
 }
 
 function submitStudentHelper(bodyData) {
@@ -1188,6 +1462,7 @@ function submitDiplomaOrder(event) {
                 errElem.innerHTML = data.message;
             }
             getStudentsDiplomaInfo();
+            getStudentsAttendanceInfo();
         });
 };
 
@@ -1440,6 +1715,81 @@ function downloadExportedGraduated(event) {
     }
 }
 
+function downloadExportedAttGraduated(event) {
+    event.preventDefault();
+    let form = document.getElementById("export_att_graduated");
+    let fileFormat = form.formatatt.value;
+    console.log(fileFormat);
+    let errElem = document.getElementById('message-bar-export-attendance');
+    if (fileFormat === 'no') {
+        errElem.classList.remove(['success']);
+        errElem.classList.add(['error']);
+        errElem.innerHTML = "Не сте избрали файлов формат!"
+    }
+    else {
+        errElem.classList.remove(['error']);
+        errElem.innerHTML = "";
+        values = { "format": fileFormat }
+        if (fileFormat !== 'pdf') {
+            fetch('../../api?endpoint=export_attendance', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(values)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    }
+                    else {
+                        localStorage.removeItem('token');
+                        window.location.replace("../../");
+                    }
+                })
+                .then(data => {
+
+                    const blob = new Blob([data], { type: "application/octet-stream" });
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "graduated.".concat(fileFormat);
+                    link.click();
+                    link.remove();
+                });
+        }
+        else {
+            fetch('../../api?endpoint=export_attendance', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(values)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob();
+                    }
+                    else {
+                        localStorage.removeItem('token');
+                        window.location.replace("../../");
+                    }
+                })
+                .then(blob => {
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = "graduated.pdf";
+
+                    document.body.appendChild(link);
+                    link.click();
+
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(link.href);
+                });
+        }
+    }
+}
+
 function downloadExcellentStudent(event) {
     event.preventDefault();
     let form = document.getElementById("export_excellent");
@@ -1515,6 +1865,68 @@ function downloadExcellentStudent(event) {
 }
 
 
+
+function sortByEdit(c) {
+    let table = document.getElementById('edit-users-table'); 
+    let rows = table.rows.length;
+    let columns = table.rows[0].cells.length;
+    let arrTable = new Array(rows);
+    for (let i = 0; i < arrTable.length; i++) {
+        arrTable[i] = new Array(columns);
+    }
+    for (let row = 0; row < rows; row++) {
+        for (col = 0; col < columns; col++) {
+            arrTable[row][col] = table.rows[row].cells[col].innerHTML;
+        }
+    }
+    for (let row = 1; row < rows; row++) {
+        table.deleteRow(1);
+    }
+    let firstLine = arrTable.shift();
+
+    if (c !== cPrev) {
+        arrTable.sort(
+            function (a, b) {
+                if (a[c] === b[c]) {
+                    return 0;
+                } else {
+                    return (a[c] < b[c]) ? -1 : 1;
+                }
+            }
+        );
+    } else {
+        arrTable.reverse();
+    }
+    cPrev = c;
+    arrTable.unshift(firstLine);
+    
+    for (let row = 1; row < rows; row++) {
+        let n_row = table.insertRow(row);
+        n_row.id = 'user' + arrTable[0];
+        for (col = 0; col < columns; col++) {
+            n_row.insertCell(col).innerHTML = arrTable[row][col];
+        }
+        n_row.addEventListener("click", (e) => {
+            let edit_modal = document.getElementById("edit_user_modal");
+            let message_bar_modal = document.getElementById("message-bar-modal-edit-users");
+            let input_name = document.getElementById("user_name");
+            let input_email = document.getElementById("user_email");
+            let input_phone = document.getElementById("user_phone");
+            let input_fn = document.getElementById("user_fn");
+
+            edit_modal.setAttribute("active", "");
+            edit_modal.setAttribute("user_id", arrTable[row][0]);
+            message_bar_modal.style.display = "none";
+
+            input_name.value = arrTable[row][1];
+            input_email.value = arrTable[row][2];
+            input_phone.value = arrTable[row][3];
+            input_fn.value = arrTable[row][4];
+        })
+        n_row.style.cursor = "pointer";
+    }
+}
+
 function searchInTable(table_id, input_id) {
     const table = document.getElementById(table_id);
     const input = document.getElementById(input_id);
@@ -1543,11 +1955,11 @@ function searchInTable(table_id, input_id) {
 
 
 function buildGradTable(data) {
-    var table = document.getElementById("info-graduation-table");
+    let table1 = document.getElementById("info-graduation-table1");
 
-    table.innerHTML = '<tr> <td>Начален час</td> <td>Интервал между студентите</td> <td>Дата на дипломирането</td> <td>Място на дипломирането</td> <td>Година на завършване</td> </tr>';
+    table1.innerHTML = '<tr> <td>Начален час</td> <td>Интервал между студентите</td> <td>Дата на дипломирането</td> <td>Място на дипломирането</td> <td>Година на завършване</td> </tr>';
     let i = 1;
-    let row = table.insertRow(i);
+    let row = table1.insertRow(i);
     let row_data = [
         data[0].start_time,
         data[0].students_interval,
@@ -1555,7 +1967,22 @@ function buildGradTable(data) {
         data[0].graduation_place,
         data[0].class
     ];
-    const number_columns = row_data.length;
+    let number_columns = row_data.length;
+    for (let j = 0; j < number_columns; j++) {
+        row.insertCell(j).innerHTML = row_data[j];
+    }
+
+    let table2 = document.getElementById("info-graduation-table2");
+
+    table2.innerHTML = '<tr><td>Краен срок за заявка за тога</td><td>Краен срок за заявка за шапка</td><td>Краен срок за потвърждаване на присъствие</td></tr>';
+    i = 1;
+    row = table2.insertRow(i);
+    row_data = [
+        data[0].deadline_gown,
+        data[0].deadline_hat,
+        data[0].deadline_attendance,
+    ];
+    number_columns = row_data.length;
     for (let j = 0; j < number_columns; j++) {
         row.insertCell(j).innerHTML = row_data[j];
     }
@@ -1798,6 +2225,55 @@ function sendGraduationInfo(c) {
     }
 }
 
+
+function sendDeadlineInfo(event) {
+    event.preventDefault();
+    let gown = document.getElementById('date-gown');
+    let hat = document.getElementById('date-hat');
+    let attendance = document.getElementById('date-attendance');
+
+    let errElem = document.getElementById('message-add-deadline-info');
+
+    let action = {
+        "deadline_gown": gown.value,
+        "deadline_hat": hat.value,
+        "deadline_attendance": attendance.value
+    };
+
+    fetch('../../api?endpoint=add_deadline_info', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(action)
+    })
+        .then(response => {
+            if (response.ok)
+                return response.json()
+            else {
+                localStorage.removeItem('token');
+                window.location.replace("../../");
+            }
+        })
+        .then((data) => {
+            if (!data.success) {
+                errElem.classList.remove(['success']);
+                errElem.classList.add(['error']);
+                errElem.innerHTML = data.message;
+            } else {
+                errElem.classList.remove(['error']);
+                errElem.classList.add(['success']);
+                errElem.innerHTML = data.message;
+                gown.value = "";
+                hat.value = "";
+                attendance.value = "";
+                getGraduationInfo();
+            }
+        });
+
+}
 
 function makeArchive() {
     fetch('../../api?endpoint=make_archive', {

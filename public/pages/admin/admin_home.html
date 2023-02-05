@@ -4,6 +4,7 @@
 <head>
     <link href="../../css/admin_style.css" rel="stylesheet" />
     <script defer src="../../js/admin_home.js"></script>
+    <script src="../../components/modal/modal.js"></script>
     <script src="https://kit.fontawesome.com/ee112817f8.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js"></script>
@@ -17,6 +18,10 @@
     <div class="navigation">
         <h2 class="navigation_element" id="diploma_header" onclick="showDiplomaSection()">
             ДИПЛОМИРАНЕ
+        </h2>
+        <div class="vertical_line"></div>
+        <h2 class="navigation_element" id="attendance_header" onclick="showAttendanceSection()">
+            ПРИСЪСТВАЩИ
         </h2>
         <div class="vertical_line"></div>
         <h2 class="navigation_element active_header" id="users_header" onclick="showUsers()">
@@ -141,22 +146,36 @@
         </div>
 
         <div id="edit_section">
-            <h3><i class="fas fa-list"></i> Списък студенти</h3>
-            <table class="edit-students-table" id="edit-students-table">
+            <popup-modal id="edit_user_modal" modal-title="Редактиранe" width="30%">
+                <form id="edit_selected_user_form" name="edit_selected_user_form" >
+                    <p id="message-bar-modal-edit-users"></p>
+                    <input type="text" class="settings" name="role" id="user_role" placeholder="Роля" disabled/>
+                    <input type="text" class="settings" name="name" id="user_name" placeholder="Име на потребителя" />
+                    <input type="email" class="settings" name="email" id="user_email" placeholder="Имейл на потребителя" />
+                    <input type="text" class="settings" name="phone" id="user_phone" placeholder="Телефон на потребителя" />
+                    <div id="edit-user-button-section">
+                        <button class="submit-action" onclick="editSelectedUser(event)">Редактирай</button>
+                        <button class="submit-action error" onclick="deleteSelectedUser(event)">Премахни потребител</button>
+                    </div>
+                </form>
+            </popup-modal> 
+            <h3><i class="fas fa-list"></i> Списък потребители</h3>
+            <p class="message-bar" id="message-bar-edit-users"></p>
+            <h4>Можете да редактирате няколко потребителя с формата под таблицата или да редактирате конкретен потребител като натиснете върху него на таблицата.</h4>
+            <table class="edit-users-table" id="edit-users-table">
                 <tr>
                     <td>ID</td>
                     <td>Име</td>
                     <td>Имейл</td>
                     <td>Телефон</td>
-                    <td>ФН</td>
+                    <td>Роля</td>
                 </tr>
             </table>
             <h3><i class="fas fa-user-edit"></i> Редактиране</h3>
-            <p class="message-bar" id="message-bar-edit-students"></p>
-            <form id="edit_students_form" name="edit_students_form" onsubmit="return false">
-                <textarea class="form-input" name="editStudentTextarea" id="editStudentTextarea" rows="30"
-                    placeholder='Формат: &NewLine;"ФН,имейл,телефон"&NewLine;&NewLine;ФН - факултетен номер на студента, чиито данни ще променяме&NewLine;Имейл - новият имейл(при нужда на промяна), ако не бъде променян се записва стария имейл&NewLine;телефон - новият телефон(при нужда на промяна), ако не бъде променян се записва стария телефон'></textarea>
-                <button type="submit" class="long-submit-button" onclick="editStudent(event)">
+            <form id="edit_users_form" name="edit_users_form" onsubmit="return false">
+                <textarea class="form-input" name="editUsersTextarea" id="editUsersTextarea" rows="30"
+                    placeholder='Формат: &NewLine;"ID, Име, Имейл, Телефон"&NewLine;&NewLine;ID - идентификационен номер на потребителя, чийто данни ще променяте&NewLine;Име - новото име(при нужда на промяна), ако не бъде променяно се записва старото име&NewLine;Имейл - новият имейл(при нужда на промяна), ако не бъде променян се записва стария имейл&NewLine;телефон - новият телефон(при нужда на промяна), ако не бъде променян се записва стария телефон'></textarea>
+                <button type="submit" class="long-submit-button" onclick="editUsers(event)">
                     Редактирай
                 </button>
             </form>
@@ -180,7 +199,7 @@
 
         <div id="settings_section">
             <h3><i class="fa fa-plus-square"></i> Добавяне на информация относно дипломирането</h3>
-            <table id="info-graduation-table">
+            <table id="info-graduation-table1">
                 <tr>
                     <td>Начален час</td>
                     <td>Интервал между студентите</td>
@@ -200,7 +219,7 @@
                 <input type="number" id="class" class="settings" placeholder="Година на завършване" min="2020" />
 
             </form>
-            <button type="submit" id="add-grad-info" class="settings" onclick="getClassArchiveInfo(event)"> Обнови <i
+            <button type="submit" class="settings add-grad-info" onclick="getClassArchiveInfo(event)"> Обнови <i
                     class="fa fa-plus"></i></button>
             <p class="message-bar" id="message-add-graduation-info"></p>
         </div>
@@ -214,11 +233,70 @@
             <div id="analytics4" class="analytics"></div>
         </div>
 
+        <div id="attendance_section">
+            <h3><i class="fas fa-list"></i> Списък студенти</h3>
+            <div class="filters">
+
+                <input id="searchAttendance" class="search" placeholder="Търсене..."
+                    oninput="searchInTable('attendance-table','searchAttendance')" />
+
+                <form id="export_att_graduated">
+                    <select class="dashboard-action" name="formatatt">
+                        <option value="no" selected disabled hidden>Изберете файлов формат...</option>
+                        <option value="csv">CSV</option>
+                        <option value="txt">TextFile</option>
+                        <option value="doc">MsWord</option>
+                        <option value="xls">Excel</option>
+                        <option value="pdf">PDF</option>
+                    </select>
+                    <button type="submit" id="export-att-graduated" class="submit-action"
+                        onclick="downloadExportedAttGraduated(event)">Изтегли <i class="fas fa-file-export"></i>
+                    </button>
+                </form>
+            </div>
+            <p class="message-bar" id="message-bar-export-attendance"></p>
+
+            <table class="diploma-table" id="attendance-table">
+                <tr>
+                    <td>ФН</td>
+                    <td>Име</td>
+                    <td>Степен</td>
+                    <td>Спец.</td>
+                    <td>Група</td>
+                    <td>Успех</td>
+                    <td>Присъствие</td>
+                    <td>Има право</td>
+                    <td>Модератор за диплома</td>
+                    <td>Готова диплома</td>
+                    <td>Взета</td>
+                    <td>Заявка взимане предв.</td>
+                    <td>Коментар (студент)</td>
+                    <td>Взета предв.</td>
+                    <td>Дата/час</td>
+                    <td>Коментар (администр.)</td>
+                    <td>Покана реч</td>
+                    <td>Отговор</td>
+                    <td>Снимки</td>
+                    <td>Модератор за тога</td>
+                    <td>Заявена тога</td>
+                    <td>Взета</td>
+                    <td>Дата/час</td>
+                    <td>Върната</td>
+                    <td>Дата/час</td>
+                    <td>Модератор за шапка</td>
+                    <td>Заявена шапка</td>
+                    <td>Взета</td>
+                    <td>Дата/час</td>
+                </tr>
+            </table>
+
+        </div>
+
         <div id="diploma_section">
             <h3><i class="fas fa-list"></i> Списък студенти</h3>
             <div class="filters">
 
-                <input id="search" class="searchGrad" placeholder="Търсене..."
+                <input id="search" class="search" placeholder="Търсене..."
                     oninput="searchInTable('diploma-table','search')" />
 
                 <form id="export_graduated">
@@ -313,7 +391,7 @@
 
     <div class="row" id="settings_date_section">
         <h3><i class="fas fa-calendar-alt"></i> Настройки на крайни срокове </h3>
-        <table id="info-graduation-table">
+        <table id="info-graduation-table2">
             <tr>
                 <td>Краен срок за заявка за тога</td>
                 <td>Краен срок за заявка за шапка</td>
@@ -321,19 +399,19 @@
             </tr>
         </table>
 
-        <h4>Внимание! 
+        <h4>Внимание! Не може да задавате дата, която е след дипломирането!
         </h4>
         <form class="input" id="deadline">
             <input type="text" id="date-gown" class="settings" name="date-gown" placeholder="Дата за тога"
                 onfocus="(this.type='date')" onblur="(this.type='text')" />
             <input type="text" id="date-hat" class="settings" name="date-hat" placeholder="Дата за шапка"
                 onfocus="(this.type='date')" onblur="(this.type='text')" />
-            <input type="text" id="date-attendance" class="settings" name="date-attendance" placeholder="Дата за присъствие"
-                onfocus="(this.type='date')" onblur="(this.type='text')" />
+            <input type="text" id="date-attendance" class="settings" name="date-attendance"
+                placeholder="Дата за присъствие" onfocus="(this.type='date')" onblur="(this.type='text')" />
         </form>
-        <button type="submit" id="add-grad-info" class="settings" onclick=""> Обнови <i
+        <button type="submit" class="settings add-grad-info" onclick="sendDeadlineInfo(event)"> Обнови <i
                 class="fa fa-plus"></i></button>
-        <p class="message-bar" id="message-add-graduation-info"></p>
+        <p class="message-bar" id="message-add-deadline-info"></p>
     </div>
 
     <div class="row" id="settings_archive_section">

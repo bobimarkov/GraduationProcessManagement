@@ -296,7 +296,7 @@ function buildStudentsDiplomaTable(users) {
                 user.major,
                 user.group,
                 user.grade,
-                user.attendance == 0 ? 'Не' : 'Да',
+                user.attendance == null ? '' : user.attendance == 0 ? 'Не' : 'Да',
                 user.has_right == 0 ? 'Не' : 'Да',
                 user.moderator_signature_email === null ? 'не е избран' : user.moderator_signature_email,
                 user.is_ready == 0 ? 'Не' : 'Да',
@@ -468,6 +468,9 @@ function showGivenSection(sectionToBeDisplayed) {
         sections[5].style.display = 'grid';
         sections[6].style.display = 'grid';
     }
+    if (sectionToBeDisplayed.localeCompare(sections[3].id) == 0) {
+        sections[3].style.display = 'flex';
+    } 
 }
 
 /*---- SWITCH_SECTIONS  END ----*/

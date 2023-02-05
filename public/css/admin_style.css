@@ -88,6 +88,20 @@ textarea {
     width: 100%;
 }
 
+#message-bar-modal-edit-users {
+    display: none;
+    font-size: 1.2em;
+    border-radius: 10px;
+    font-family: monospace;
+    padding: 10px;
+    width: 85%;
+    text-align: center;
+}
+
+#message-bar-edit-users {
+    display: none;
+}
+
 .dashboard {
     display: flex;
     align-items: center;
@@ -101,7 +115,8 @@ textarea {
     margin-top: 1em;
 }
 
-#diploma_section .dashboard-action {
+#diploma_section .dashboard-action,
+#attendance_section .dashboard-action  {
     margin: auto 1em;
 }
 
@@ -232,12 +247,13 @@ table td {
     margin-top: 0;
 }
 
-/*students-table css-style end*/
+
 #students-table>tbody>tr :nth-child(5),
 #students-table>tbody>tr :nth-child(6),
 #students-table>tbody>tr :nth-child(7),
 #students-table>tbody>tr :nth-child(8),
-#students-table>tbody>tr :nth-child(9) {
+#students-table>tbody>tr :nth-child(9), 
+#edit-users-table>tbody>tr :nth-child(5) {
     text-align: center;
 }
 
@@ -313,7 +329,7 @@ table tr:nth-child(even) {
     display: block;
     z-index: 100;
     left: 0px;
-    margin: 10px;
+    margin: -40px;
     position: absolute;
     top: 10px;
     text-decoration: none;
@@ -381,16 +397,18 @@ h3 {
 }
 
 h4 {
-    margin-top: 0 !important;
+    margin: 0 !important;
     padding: 5px;
     border-radius: 5px;
     width: 100%;
     background: rgba(247, 241, 241, 0.603);
     text-decoration: none;
     color: #2f4f4f;
-}
+    display: flex;
+    justify-content: center;}
 
-#diploma_section>h3 {
+#diploma_section>h3,
+#attendance_section>h3 {
     margin-bottom: 0;
 }
 
@@ -428,7 +446,7 @@ svg {
     border: 1px solid grey;
 }
 
-#search {
+.search {
     margin-top: 2rem;
     height: 2.5rem;
     background-color: rgb(235, 238, 241);
@@ -438,13 +456,15 @@ svg {
     font: 1em sans-serif;
 }
 
-#export-graduated {
+#export-graduated,
+#export-att-graduated {
     margin-top: 2rem;
     width: 20rem;
     margin-left: 0;
 }
 
 #header-table-diploma,
+#header-table-attendance,
 #header-table-students,
 #header-table-users,
 #header-table-edit {
@@ -461,9 +481,9 @@ svg {
 #diploma-table>tbody>tr :nth-child(6),
 #diploma-table>tbody>tr :nth-child(7),
 #diploma-table>tbody>tr :nth-child(8),
-#diploma-table>tbody>tr :nth-child(9),
 #diploma-table>tbody>tr :nth-child(10),
 #diploma-table>tbody>tr :nth-child(11),
+#diploma-table>tbody>tr :nth-child(12),
 #diploma-table>tbody>tr :nth-child(13),
 #diploma-table>tbody>tr :nth-child(14),
 #diploma-table>tbody>tr :nth-child(15),
@@ -471,17 +491,45 @@ svg {
 #diploma-table>tbody>tr :nth-child(17),
 #diploma-table>tbody>tr :nth-child(18),
 #diploma-table>tbody>tr :nth-child(19),
-#diploma-table>tbody>tr :nth-child(20),
 #diploma-table>tbody>tr :nth-child(21),
 #diploma-table>tbody>tr :nth-child(22),
+#diploma-table>tbody>tr :nth-child(23),
 #diploma-table>tbody>tr :nth-child(24),
 #diploma-table>tbody>tr :nth-child(25),
-#diploma-table>tbody>tr :nth-child(26),
 #diploma-table>tbody>tr :nth-child(27),
 #diploma-table>tbody>tr :nth-child(28),
-#diploma-table>tbody>tr :nth-child(30),
-#diploma-table>tbody>tr :nth-child(31),
-#diploma-table>tbody>tr :nth-child(32) {
+#diploma-table>tbody>tr :nth-child(29) {
+    text-align: center;
+}
+
+
+#attendance-table>tbody>tr :nth-child(3),
+#attendance-table>tbody>tr :nth-child(4),
+#attendance-table>tbody>tr :nth-child(5),
+#attendance-table>tbody>tr :nth-child(6),
+#attendance-table>tbody>tr :nth-child(7),
+#attendance-table>tbody>tr :nth-child(8),
+#attendance-table>tbody>tr :nth-child(9),
+#attendance-table>tbody>tr :nth-child(10),
+#attendance-table>tbody>tr :nth-child(11),
+#attendance-table>tbody>tr :nth-child(13),
+#attendance-table>tbody>tr :nth-child(14),
+#attendance-table>tbody>tr :nth-child(15),
+#attendance-table>tbody>tr :nth-child(16),
+#attendance-table>tbody>tr :nth-child(17),
+#attendance-table>tbody>tr :nth-child(18),
+#attendance-table>tbody>tr :nth-child(19),
+#attendance-table>tbody>tr :nth-child(20),
+#attendance-table>tbody>tr :nth-child(21),
+#attendance-table>tbody>tr :nth-child(22),
+#attendance-table>tbody>tr :nth-child(24),
+#attendance-table>tbody>tr :nth-child(25),
+#attendance-table>tbody>tr :nth-child(26),
+#attendance-table>tbody>tr :nth-child(27),
+#attendance-table>tbody>tr :nth-child(28),
+#attendance-table>tbody>tr :nth-child(30),
+#attendance-table>tbody>tr :nth-child(31),
+#attendance-table>tbody>tr :nth-child(32) {
     text-align: center;
 }
 
@@ -532,7 +580,7 @@ svg {
 
 .custom-file-upload:hover,
 #export-excellent:hover,
-#add-grad-info:hover {
+.add-grad-info:hover {
     background-color: #006199;
     color: snow;
 }
@@ -589,12 +637,13 @@ svg {
     width: 32% !important;
 }
 
-#info-graduation-table > tbody{
+#info-graduation-table1 > tbody,
+#info-graduation-table2 > tbody {
     display: inline-table;
     width: 100%;
 }
 
-#add-grad-info {
+.add-grad-info {
     width: 100% !important;
     background-color: snow;
     font-weight: bold;
@@ -625,3 +674,33 @@ svg {
     color: #666666;
     cursor: auto;
 }
+#edit_selected_user_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 88%;
+    padding-top: 30px;
+    row-gap: 1.5rem;    
+}
+
+#edit_selected_user_form > input {
+    width: 350px;
+    height: 2.3em;
+    margin-top: 0;
+
+}
+
+#edit-user-button-section {
+    margin-top: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    column-gap: 30px;
+}
+
+#edit-user-button-section > button {
+    width: 90%;
+    margin: 0;
+    padding: 0;
+}
+
