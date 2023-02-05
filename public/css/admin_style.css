@@ -98,7 +98,7 @@ textarea {
 
 #textarea-emails {
     width: 100%;
-    height: 8em;
+    height: 10em;
 }
 
 #message {
@@ -118,6 +118,20 @@ textarea {
 
 #message-bar-edit-users {
     display: none;
+}
+
+#message-bar-users, #message-bar-students {
+    margin-bottom: 1em;
+}
+
+#message-bar-distribute-moderators, 
+#message-bar-export-users, 
+#message-bar-export-student, 
+#message-bar-edit-users, 
+#message-add-deadline-info, 
+#message-add-graduation-info,
+#message-bar-export-message {
+    margin-top: 1em;
 }
 
 .dashboard {
@@ -331,7 +345,7 @@ table tr:nth-child(even) {
     z-index: 100;
     left: 0px;
     margin: -40px;
-
+    padding: 0.45em;
     position: absolute;
     top: 10px;
     text-decoration: none;
@@ -403,7 +417,6 @@ h4 {
 
 
 #export_files_users, #export_files_student {
-    margin-top: 1.25%;
     display: flex;
     align-items: flex-start;
     gap: 1%;

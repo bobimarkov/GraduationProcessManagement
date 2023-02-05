@@ -1010,8 +1010,10 @@ function editUsers(event) {
             }
         })
         .then((data) => {
-            var errElem = document.getElementById('message-bar-edit-users');
+            let errElem = document.getElementById('message-bar-edit-users');
+
             if (!data.success) {
+                errElem.style.display = "block";
                 errElem.classList.remove(['success']);
                 errElem.classList.add(['error']);
                 errElem.innerHTML = data.message;
