@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <img class="logo" src="../../images/su-logo.png" alt="su-logo" />
+    <img class="logo" src="../../images/su-logo.png" alt="su-logo"/>
     <p class="su-header">СУ "СВ. КЛИМЕНТ ОХРИДСКИ"</p>
     <div class="navigation">
         <h2 class="navigation_element" id="diploma_header" onclick="showDiplomaSection()">
@@ -65,7 +65,7 @@
                     <option value="xls">Excel</option>
                     <option value="pdf">PDF</option>
                 </select>
-                <button type="submit" class="submit-action" onclick="downloadExportedUsers(event)">Изтегли <i
+                <button class="button" type="submit" onclick="downloadExportedUsers(event)">Изтегли <i
                         class="fas fa-file-export"></i></button>
             </form>
             <p class="message-bar" id="message-bar-export-users"></p>
@@ -83,7 +83,7 @@
             <form class="import_files" method="post">
                 <label for="fileUsers" class="custom-file-upload">Изберете файл(ове)</label>
                 <input type="file" name="file[]" id="fileUsers" accept=".txt,.csv, .doc, .xls, .pdf" multiple />
-                <button type="submit" class="submit-action" onclick="submitUsersFromFile(event)">Добави <i
+                <button class="button" type="submit" onclick="submitUsersFromFile(event)">Добави <i
                         class="fas fa-solid fa-plus"></i></button>
             </form>
             <p id="file-name1">Все още няма избрани файлове</p>
@@ -91,7 +91,7 @@
             <form id="add_users_form" name="new_user_form" onsubmit="return false">
                 <textarea class="form-input" name="userTextarea" id="userTextarea" rows="30"
                     placeholder='Формат: &NewLine;"имейл, парола, имена, телефон, роля"&NewLine;&NewLine;роля=[admin, moderator-hat,moderator-gown,moderator-signature]'></textarea>
-                <button type="submit" id="long-submit-button" class="long-submit-button" onclick="submitUsers(event)">
+                <button class="button long-button mt-5" type="submit" id="long-submit-button" onclick="submitUsers(event)">
                     Добави <i class="fas fa-solid fa-plus"></i>
                 </button>
             </form>
@@ -108,7 +108,7 @@
                     <option value="xls">Excel</option>
                     <option value="pdf">PDF</option>
                 </select>
-                <button type="submit" class="submit-action" onclick="downloadExportedStudents(event)">Изтегли <i
+                <button class="button" type="submit"  onclick="downloadExportedStudents(event)">Изтегли <i
                         class="fas fa-file-export"></i></button>
             </form>
             <p class="message-bar" id="message-bar-export-student"></p>
@@ -130,7 +130,7 @@
             <form class="import_files" method="post">
                 <label for="fileStudent" class="custom-file-upload">Изберете файл(ове)</label>
                 <input type="file" name="file[]" id="fileStudent" accept=".txt,.csv, .doc, .xls, .pdf" multiple />
-                <button type="submit" class="submit-action" onclick="submitStudentsFromFile(event)">Добави <i
+                <button class="button" type="submit"  onclick="submitStudentsFromFile(event)">Добави <i
                         class="fas fa-solid fa-plus"></i></button>
             </form>
             <p id="file-name2">Все още няма избрани файлове</p>
@@ -139,7 +139,7 @@
             <form id="add_students_form" name="add_students_form" onsubmit="return false">
                 <textarea class="form-input" name="studentTextarea" id="studentTextarea" rows="30"
                     placeholder="Формат: &NewLine;&quot;имейл, парола, имена, телефон, роля, ФН, степен, специалност, група, оценка от диплома&quot;&NewLine;&NewLine;роля=[student]&NewLine;степен=[Б, М, Д]&NewLine;специалност=[КН, СИ, ИС, И, М, ПМ, С], ако степен=Б&NewLine;група=[1, 2, 3, 4, 5, 6, 7, 8], ако degree=Б&NewLine;оценка = число с плаваща запетая или '-', ако е студент от долен курс"></textarea>
-                <button type="submit" class="long-submit-button" class="submit-action" onclick="submitStudents(event)">
+                <button class="button long-button mt-5" type="submit" onclick="submitStudents(event)">
                     Добави <i class="fas fa-solid fa-plus"></i>
                 </button>
             </form>
@@ -175,7 +175,7 @@
             <form id="edit_users_form" name="edit_users_form" onsubmit="return false">
                 <textarea class="form-input" name="editUsersTextarea" id="editUsersTextarea" rows="30"
                     placeholder='Формат: &NewLine;"ID, Име, Имейл, Телефон"&NewLine;&NewLine;ID - идентификационен номер на потребителя, чийто данни ще променяте&NewLine;Име - новото име(при нужда на промяна), ако не бъде променяно се записва старото име&NewLine;Имейл - новият имейл(при нужда на промяна), ако не бъде променян се записва стария имейл&NewLine;телефон - новият телефон(при нужда на промяна), ако не бъде променян се записва стария телефон'></textarea>
-                <button type="submit" class="long-submit-button" onclick="editUsers(event)">
+                    <button class="button long-button mt-5" type="submit" onclick="editUsers(event)">
                     Редактирай
                 </button>
             </form>
@@ -190,7 +190,7 @@
                     <textarea class="dashboard-textarea-fn" name="message" id="message"
                         placeholder="Напишете вашето съобщение"></textarea>
                 </div>
-                <button type="submit" class="submit-button-users" id="send-message" onclick="sendMessage(event)">Изпрати
+                <button class="button long-button mt-5" type="submit" class="submit-button-users" id="send-message" onclick="sendMessage(event)">Изпрати
                     <i class="fa fa-send-o"></i>
                 </button>
                 <p class="message-bar" id="message-bar-export-message"></p>
@@ -219,13 +219,16 @@
                 <input type="number" id="class" class="settings" placeholder="Година на завършване" min="2020" />
 
             </form>
-            <button type="submit" class="settings add-grad-info" onclick="getClassArchiveInfo(event)"> Обнови <i
-                    class="fa fa-plus"></i></button>
+<!-- <<<<<<< HEAD -->
+            <button type="submit" class="button add-grad-info" onclick="getClassArchiveInfo(event)"> Обнови <i
+                class="fa fa-plus"></i></button>
+                <!-- >>>>>>> b7aaeb6 (Admin page design fixed) -->
+                <!-- <button class="button" type="submit" id="add-grad-info" onclick="getClassArchiveInfo(event)"> Обнови <i -->
             <p class="message-bar" id="message-add-graduation-info"></p>
         </div>
 
 
-        <div id="analytic_section" style="display: flex">
+        <div id="analytic_section">
             <h3 id="analytic_text"></h3>
             <div id="analytics1" class="analytics"></div>
             <div id="analytics2" class="analytics"></div>
@@ -300,7 +303,7 @@
                     oninput="searchInTable('diploma-table','search')" />
 
                 <form id="export_graduated">
-                    <select class="dashboard-action" name="format">
+                    <select class="file-extension-picker" name="format">
                         <option value="no" selected disabled hidden>Изберете файлов формат...</option>
                         <option value="csv">CSV</option>
                         <option value="txt">TextFile</option>
@@ -308,7 +311,7 @@
                         <option value="xls">Excel</option>
                         <option value="pdf">PDF</option>
                     </select>
-                    <button type="submit" id="export-graduated" class="submit-action"
+                    <button class="button" id="export-graduated"
                         onclick="downloadExportedGraduated(event)">Изтегли <i class="fas fa-file-export"></i>
                     </button>
                 </form>
@@ -376,7 +379,7 @@
                     <option value="Не">Не</option>
                 </select>
                 <textarea class="textarea-after-select" id="textarea_after_select" placeholder="Коментар..."></textarea>
-                <button type="submit" id="submit_action" class="submit-action" onclick="submitAction(event)">
+                <button class="button" type="submit" id="submit_action"  onclick="submitAction(event)">
                     Запази <i class="far fa-save"></i>
                 </button>
             </form>
@@ -409,8 +412,9 @@
             <input type="text" id="date-attendance" class="settings" name="date-attendance"
                 placeholder="Дата за присъствие" onfocus="(this.type='date')" onblur="(this.type='text')" />
         </form>
-        <button type="submit" class="settings add-grad-info" onclick="sendDeadlineInfo(event)"> Обнови <i
-                class="fa fa-plus"></i></button>
+        <button type="submit" class="button add-grad-info" onclick="sendDeadlineInfo(event)"> Обнови <i
+            class="fa fa-plus"></i></button>
+<!-- <button class="button" type="submit" id="add-grad-info" class="settings" onclick=""> Обнови <i -->
         <p class="message-bar" id="message-add-deadline-info"></p>
     </div>
 
@@ -431,16 +435,16 @@
                 <option value="xls">Excel</option>
                 <option value="pdf">PDF</option>
             </select>
-            <button type="submit" id="export-excellent" onclick="downloadExcellentStudent(event)">Изтегли списък с
+            <button class="button" type="submit" id="export-excellent" onclick="downloadExcellentStudent(event)">Изтегли списък с
                 отличници <i class="fas fa-file-export"></i>
             </button>
-            <p class="message-bar" id="message-bar-export-excellent"></p>
         </form>
+        <p class="message-bar" id="message-bar-export-excellent"></p>
     </div>
 
     <div class="row distribute_moderators" id="distribute_moderators">
         <h3><i class="fas fa-clipboard-list"></i> Разпределяне на Отговорностите на Модераторите</h3>
-        <button type="button" class="long-submit-button" onclick="distributeModerators(event)">Разпредели
+        <button class="button long-button mt-5" type="button" onclick="distributeModerators(event)">Разпредели
             Модераторите</button>
         <p class="message-bar" id="message-bar-distribute-moderators"></p>
     </div>
@@ -508,7 +512,7 @@
                 <option value="group">Група</option>
                 <option value="grade">Успех</option>
             </select>
-            <button type="submit" id="submit_action" class="submit-action" onclick="submitDiplomaOrder(event)">
+            <button class="button" type="submit" id="submit_action"  onclick="submitDiplomaOrder(event)">
                 Запази <i class="far fa-save"></i>
             </button>
             <p class="message-bar" id="message-bar-diploma-order"></p>
