@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $stmt = $conn->prepare("
     select student.fn, user.name, user.email, user.phone,student_diploma.attendance,
     student_diploma.has_right, student_hat.hat_requested,
-    student_hat.hat_taken, student_hat.hat_taken_date,
+    student_hat.hat_taken,
     student_moderators.moderator_hat_email, (select `range` from moderator_range where email = :email) as name_range
     from student
     join user on user.id = student.user_id

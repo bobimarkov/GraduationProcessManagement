@@ -11,7 +11,7 @@ logoutHeader.addEventListener("click", (e) => {
 });
 
 function tokenRefresher() {
-    fetch('../../api?endpoint=refresh_token', {
+    fetch('../../api.php?endpoint=refresh_token', {
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ function submitRequestSpeechAnswer(email, value) {
         "email": email,
         "value": value
     };
-    fetch('../../api?endpoint=submit_student_action', {
+    fetch('../../api.php?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -64,13 +64,13 @@ function submitRequestSpeechAnswer(email, value) {
 }
 
 function setAttendance(email, value) {
-    updateGownAndHatValue(email);    
+    updateGownAndHatValue(email);
     var requestData = {
         "column_name": "attendance",
         "email": email,
         "value": value
     };
-    fetch('../../api?endpoint=submit_student_action', {
+    fetch('../../api.php?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -101,7 +101,7 @@ function updateGownAndHatValue(email) {
     var requestData = {
         "email": email
     };
-    fetch('../../api?endpoint=update_default_gown_hat', {
+    fetch('../../api.php?endpoint=update_default_gown_hat', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -139,7 +139,7 @@ function requestDiplomaInAdvance(email, event, value) {
         "value": value
     };
 
-    fetch('../../api?endpoint=submit_student_action', {
+    fetch('../../api.php?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -189,7 +189,7 @@ function requestPhotos(email, checkbox) {
         "email": email,
         "value": value
     };
-    fetch('../../api?endpoint=submit_student_action', {
+    fetch('../../api.php?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -222,7 +222,7 @@ function requestGown(email, value) {
         "email": email,
         "value": value
     };
-    fetch('../../api?endpoint=submit_student_action', {
+    fetch('../../api.php?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -255,7 +255,7 @@ function requestHat(email, value) {
         "value": value
     };
 
-    fetch('../../api?endpoint=submit_student_action', {
+    fetch('../../api.php?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -285,7 +285,7 @@ function requestHat(email, value) {
 var graduation_time;
 
 function getStudentData() {
-    fetch(`../../api?endpoint=get_student_data`, {
+    fetch(`../../api.php?endpoint=get_student_data`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -312,7 +312,7 @@ function getStudentData() {
                 if (data.users[0].grade < 3) {
                     buildContentForNotGraduatingStudent(data.users[0]);
                 } else {
-                    fetch('../../api?endpoint=get_graduation_time', {
+                    fetch('../../api.php?endpoint=get_graduation_time', {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -358,13 +358,11 @@ function buildContentForNotGraduatingStudent(user) {
     document.getElementById("group").innerText = 'Група: ' + user.group;
     document.getElementById("fn").innerText = 'Факултетен номер: ' + user.student_fn;
 
-    document.getElementById("attendance").checked = user.attendance === 1 ? true : false;
-    document.getElementById("photos_requested").checked = user.photos_requested === 1 ? true : false;
-
+    getStartHour(false);
 }
 
 function getStudentsAttendanceInfo() {
-    fetch(`../../api?endpoint=get_student_attendance`, {
+    fetch(`../../api.php?endpoint=get_student_attendance`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -390,6 +388,7 @@ function getStudentsAttendanceInfo() {
 }
 
 
+
 function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, deadline_attendance) {
     let today = new Date();
     document.querySelector(".non_graduating_warning_section").style.display = 'none';
@@ -411,7 +410,6 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
 
     document.getElementById("is_taken").innerText = 'Взета: ' + (user.is_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
     document.getElementById("take_in_advance_request").innerHTML = 'Заявена предварително: ' + (user.take_in_advance_request === 1 ? '<i class="far fa-check-square"></i>' : "Не");
-    document.getElementById("taken_at_time").innerText = 'Дата/час на взимане: ' + (user.taken_at_time === null || user.taken_at_time === "" ? "-" : user.taken_at_time);
     document.getElementById("signature_moderator").innerHTML = 'Модератор за диплома: ' + (user.moderator_signature_email === null || user.attendance !== 1 ? '-' : user.moderator_signature_email);
 
     let messageGownAndHat = document.getElementById("message-bar-gown-hat-request");
@@ -420,6 +418,14 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
     let gownRequestDiv = document.getElementById("request_gown_hat_content_1");
     let hatRequestDiv = document.getElementById("request_gown_hat_content_2");
     let hatGownRequest = document.getElementById("request_gown_hat_content");
+
+    let gown_taken = document.getElementById("gown_taken");
+    let gown_ret = document.getElementById("gown_returned");
+    let gown_moderator = document.getElementById("gown_moderator");
+
+
+    let hat_taken = document.getElementById("hat_taken");
+    let hat_moderator = document.getElementById("hat_moderator");
 
     if (today <= new Date(deadline_attendance)) {
         let comment = document.getElementById("request_diploma_in_advance_form");
@@ -444,7 +450,7 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
             if (user.attendance === 0) {
                 comment.style.display = "flex";
                 selectAttendance.value = 0;
-                hatGownRequest.style.display = "none";               
+                hatGownRequest.style.display = "none";
                 messageGownAndHat.style.display = "flex";
 
                 let errElem = document.getElementById('message-bar-diploma-request');
@@ -476,6 +482,10 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
                     let gownRequest = document.getElementById("gown_request_select");
                     if (user.gown_requested === null) {
                         gownRequestDiv.style.display = "flex";
+                        gown_taken.style.display = "none";
+                        gown_ret.style.display = "none";
+                        gown_moderator.style.display = "none";
+                        gownRequestedMessage.style.display = "none";
                         gownRequest.value = -1;
                     }
                     else if (user.gown_requested === 0) {
@@ -485,11 +495,9 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
                     else {
                         gownRequestedMessage.innerHTML = "Статус: Заявена";
                         gownRequest.value = 1;
-                        document.getElementById("gown_taken").innerHTML = 'Взета: ' + (user.gown_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
-                        document.getElementById("gown_taken_date").innerHTML = 'Дата/час: ' + (user.gown_taken_date === null || user.gown_taken_date === "" ? "-" : user.gown_taken_date);
-                        document.getElementById("gown_returned").innerHTML = 'Върната: ' + (user.gown_returned === 1 ? '<i class="far fa-check-square"></i>' : "Не");
-                        document.getElementById("gown_returned_date").innerHTML = 'Дата/час: ' + ((user.gown_returned_date === null || user.gown_returned_date === "") ? "-" : user.gown_returned_date);
-                        document.getElementById("gown_moderator").innerHTML = 'Модератор за тога: ' + (user.moderator_gown_email === null || user.gown_requested !== 1 ? '-' : user.moderator_gown_email);
+                        gown_taken.innerHTML = 'Взета: ' + (user.gown_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
+                        gown_ret.innerHTML = 'Върната: ' + (user.gown_returned === 1 ? '<i class="far fa-check-square"></i>' : "Не");
+                        gown_moderator.innerHTML = 'Модератор за тога: ' + (user.moderator_gown_email === null || user.gown_requested !== 1 ? '-' : user.moderator_gown_email);
                     }
                 }
                 else {
@@ -502,7 +510,7 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
                     }
                     else {
                         gownRequestedMessage.innerHTML = "Статус: Заявена";
-                        document.getElementById("gown_moderator").innerHTML = 'Модератор за тога: ' + (user.moderator_gown_email === null || user.gown_requested !== 1 ? '-' : user.moderator_gown_email);
+                        gown_moderator.innerHTML = 'Модератор за тога: ' + (user.moderator_gown_email === null || user.gown_requested !== 1 ? '-' : user.moderator_gown_email);
                     }
                 }
 
@@ -511,6 +519,9 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
                     if (user.hat_requested === null) {
                         hatRequest.value = -1;
                         hatRequestDiv.style.display = "flex";
+                        hat_taken.style.display = "none";
+                        hat_moderator.style.display = "none";
+                        hatRequestedMessage.style.display = "none";
                     }
                     else if (user.hat_requested === 0) {
                         hatRequestedMessage.innerHTML = "Статус: Отказана";
@@ -519,9 +530,8 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
                     else {
                         hatRequestedMessage.innerHTML = "Статус: Заявена";
                         hatRequest.value = 1;
-                        document.getElementById("hat_taken").innerHTML = 'Взета: ' + (user.hat_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
-                        document.getElementById("hat_taken_date").innerHTML = 'Дата/час: ' + (user.hat_taken_date === null || user.hat_taken_date === "" ? "-" : user.hat_taken_date);
-                        document.getElementById("hat_moderator").innerHTML = 'Модератор за шапка: ' + (user.moderator_hat_email === null || user.hat_requested !== 1 ? '-' : user.moderator_hat_email);
+                        hat_taken.innerHTML = 'Взета: ' + (user.hat_taken === 1 ? '<i class="far fa-check-square"></i>' : "Не");
+                        hat_moderator.innerHTML = 'Модератор за шапка: ' + (user.moderator_hat_email === null || user.hat_requested !== 1 ? '-' : user.moderator_hat_email);
                     }
                 }
                 else {
@@ -534,7 +544,7 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
                     }
                     else {
                         hatRequestedMessage.innerHTML = "Статус: Заявена";
-                        document.getElementById("hat_moderator").innerHTML = 'Модератор за шапка: ' + (user.moderator_hat_email === null || user.hat_requested !== 1 ? '-' : user.moderator_hat_email);
+                        hat_moderator.innerHTML = 'Модератор за шапка: ' + (user.moderator_hat_email === null || user.hat_requested !== 1 ? '-' : user.moderator_hat_email);
                     }
                 }
             }
@@ -565,7 +575,7 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
         }
         else {
             gownRequestedMessage.innerHTML = "Статус: Заявена";
-            document.getElementById("gown_moderator").innerHTML = 'Модератор за тога: ' + (user.moderator_gown_email === null || user.gown_requested !== 1 ? '-' : user.moderator_gown_email);
+            gown_moderator.innerHTML = 'Модератор за тога: ' + (user.moderator_gown_email === null || user.gown_requested !== 1 ? '-' : user.moderator_gown_email);
         }
 
         if (user.hat_requested === null) {
@@ -576,7 +586,7 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
         }
         else {
             hatRequestedMessage.innerHTML = "Статус: Заявена";
-            document.getElementById("hat_moderator").innerHTML = 'Модератор за шапка: ' + (user.moderator_hat_email === null || user.hat_requested !== 1 ? '-' : user.moderator_hat_email);
+            hat_moderator.innerHTML = 'Модератор за шапка: ' + (user.moderator_hat_email === null || user.hat_requested !== 1 ? '-' : user.moderator_hat_email);
         }
     }
 
@@ -584,12 +594,12 @@ function buildContentForGraduatingStudent(user, deadline_gown, deadline_hat, dea
 
     document.getElementById("diploma_comment").value = user.diploma_comment === null || user.diploma_comment === "" ? "Няма коментари" : user.diploma_comment;
     getMessages();
-    getStartHour();
+    getStartHour(true);
     getDiplomaOrder();
 }
 
 
-function getStartHour() {
+function getStartHour(graduated) {
     let start_date_grad = document.getElementById('start_date');
     let start_time_grad = document.getElementById('start_time');
     let auditory_grad = document.getElementById('auditory');
@@ -600,7 +610,7 @@ function getStartHour() {
     let deadline_hat = document.getElementById('deadline_hat');
     let deadline_attendance = document.getElementById('deadline_attendance');
 
-    fetch('../../api?endpoint=get_graduation_time', {
+    fetch('../../api.php?endpoint=get_graduation_time', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -627,10 +637,11 @@ function getStartHour() {
                 start_date_nograd.innerHTML = ("Дата: ").concat(data.graduation_time[0].graduation_date);
                 start_time_nograd.innerHTML = ("Начален час: ").concat(data.graduation_time[0].start_time);
                 auditory_nograd.innerHTML = ("Местоположение: ").concat(data.graduation_time[0].graduation_place);
-                deadline_gown.innerHTML = ("Краен срок за заявка за тога: ").concat(data.graduation_time[0].deadline_gown);
-                deadline_hat.innerHTML = ("Краен срок за заявка за шапка: ").concat(data.graduation_time[0].deadline_hat);
-                deadline_attendance.innerHTML = ("Краен срок за заявка за присъствие: ").concat(data.graduation_time[0].deadline_attendance);
-
+                if (graduated) {
+                    deadline_gown.innerHTML = ("Краен срок за заявка за тога: ").concat(data.graduation_time[0].deadline_gown);
+                    deadline_hat.innerHTML = ("Краен срок за заявка за шапка: ").concat(data.graduation_time[0].deadline_hat);
+                    deadline_attendance.innerHTML = ("Краен срок за заявка за присъствие: ").concat(data.graduation_time[0].deadline_attendance);
+                }
                 getStudentsOrder();
                 window.graduation_time = data.graduation_time[0];
             }
@@ -638,7 +649,7 @@ function getStartHour() {
 }
 
 function getStudentsOrder() {
-    fetch('../../api?endpoint=get_students_diploma_simplified', {
+    fetch('../../api.php?endpoint=get_students_diploma_simplified', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -668,7 +679,7 @@ function getStudentsOrder() {
 }
 
 function getDiplomaOrder() {
-    fetch('../../api?endpoint=get_diploma_order', {
+    fetch('../../api.php?endpoint=get_diploma_order', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -727,7 +738,7 @@ function displayOrderMessage(data) {
 
 function getMessages() {
     let notifications = document.getElementById("no-notifications");
-    fetch('../../api?endpoint=get_messages', {
+    fetch('../../api.php?endpoint=get_messages', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -774,7 +785,7 @@ function sendMessage(fn, event) {
         "email": email.value,
         "message": message.value
     };
-    fetch('../../api?endpoint=send_message_student', {
+    fetch('../../api.php?endpoint=send_message_student', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,

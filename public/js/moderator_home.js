@@ -100,7 +100,7 @@ function searchInTable(table_id, input_id) {
 }
 
 function tokenRefresher() {
-    fetch('../../api?endpoint=refresh_token', {
+    fetch('../../api.php?endpoint=refresh_token', {
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
@@ -123,7 +123,7 @@ function tokenRefresher() {
 /*---- GET_USERS  START ----*/
 
 function getAllUsers() {
-    fetch(`../../api?endpoint=get_users`, {
+    fetch(`../../api.php?endpoint=get_users`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -181,7 +181,7 @@ function buildUsersTable(data) {
 
 /*---- GET_STUDENTS  START ----*/
 function getAllStudents() {
-    fetch(`../../api?endpoint=get_students`, {
+    fetch(`../../api.php?endpoint=get_students`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -240,7 +240,7 @@ function buildStudentsTable(data) {
 
 /*---- GET_STUDENTS_DIPLOMA  START ----*/
 function getStudentsDiplomaInfo() {
-    fetch(`../../api?endpoint=get_students_diploma`, {
+    fetch(`../../api.php?endpoint=get_students_diploma`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -309,14 +309,11 @@ function buildStudentsDiplomaTable(users) {
                 user.speech_response = response,
                 user.photos_requested == 0 ? 'Не' : 'Да',
                 user.moderator_gown_email === null ? 'не е избран' : user.moderator_gown_email,
-                //gown_requested
                 user.gown_requested == null ? '' : user.gown_requested == 0 ? 'Не' : 'Да',
-                //gown_taken
                 user.gown_requested != 1 ? '' : user.gown_taken == 0 || user.gown_taken == null ? 'Не' : 'Да',
                 //gown_returned
                 user.gown_taken != 1 ? '' : user.gown_returned == 0 || user.gown_returned == null ? 'Не' : 'Да',
                 user.moderator_hat_email === null ? 'не е избран' : user.moderator_hat_email,
-                //hat_requested
                 user.hat_requested == null ? '' : user.hat_requested == 0 ? 'Не' : 'Да',
                 //hat_taken
                 user.hat_requested != 1 ? '' : user.hat_taken == 0 || user.hat_taken == null ? 'Не' : 'Да'
@@ -330,7 +327,6 @@ function buildStudentsDiplomaTable(users) {
     }
 }
 
-/*---- GET_STUDENTS_DIPLOMA  END ----*/
 
 /*---- SWITCH_SECTIONS  START ----*/
 function showUsers() {
@@ -354,7 +350,7 @@ function showMessagesSection() {
 
 function showAnalyticsSection() {
     let text = document.getElementById('analytic_text');
-    fetch(`../../api?endpoint=get_students_diploma_simplified`, {
+    fetch(`../../api.php?endpoint=get_students_diploma_simplified`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -391,7 +387,7 @@ function showAnalyticsSection() {
 }
 
 function showAnalyticsSectionHelper() {
-    fetch(`../../api?endpoint=statistics`, {
+    fetch(`../../api.php?endpoint=statistics`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -602,7 +598,7 @@ function drawChart(majorData, id, titleMessage) {
 }
 
 function responsibilitiesByModeratorRole() {
-    fetch(`../../api?endpoint=get_user_role`, {
+    fetch(`../../api.php?endpoint=get_user_role`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -658,7 +654,7 @@ function responsibilitiesForModeratorSignature() {
 
 function fetchDataForStudents(moderatorFunction, endpoint) {
 
-    fetch(`../../api?endpoint=${endpoint}`, {
+    fetch(`../../api.php?endpoint=${endpoint}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -893,7 +889,7 @@ function buildResponsibilitiesSectionForModeratorSignature(users) {
 
 function getExportEndpointByModeratorRole(event, export_files_id, message_bar) {
     event.preventDefault();
-    fetch(`../../api?endpoint=get_user_role`, {
+    fetch(`../../api.php?endpoint=get_user_role`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -948,7 +944,7 @@ function downloadExportedModeratorResponsibilities(endpoint, export_files_id, me
         errElem.innerHTML = "";
         values = { "format": fileFormat }
         if (fileFormat !== 'pdf') {
-            fetch(`../../api?endpoint=${endpoint}`, {
+            fetch(`../../api.php?endpoint=${endpoint}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -975,7 +971,7 @@ function downloadExportedModeratorResponsibilities(endpoint, export_files_id, me
                 });
         }
         else {
-            fetch(`../../api?endpoint=${endpoint}`, {
+            fetch(`../../api.php?endpoint=${endpoint}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
