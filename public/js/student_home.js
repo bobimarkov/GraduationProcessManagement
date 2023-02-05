@@ -11,7 +11,7 @@ logoutHeader.addEventListener("click", (e) => {
 });
 
 function tokenRefresher() {
-    fetch('../../api?endpoint=refresh_token', {
+    fetch('../../api.php?endpoint=refresh_token', {
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ function submitRequestSpeechAnswer(email, value) {
         "email": email,
         "value": value
     };
-    fetch('../../api?endpoint=submit_student_action', {
+    fetch('../../api.php?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -70,7 +70,7 @@ function setAttendance(email, value) {
         "email": email,
         "value": value
     };
-    fetch('../../api?endpoint=submit_student_action', {
+    fetch('../../api.php?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -101,7 +101,7 @@ function updateGownAndHatValue(email) {
     var requestData = {
         "email": email
     };
-    fetch('../../api?endpoint=update_default_gown_hat', {
+    fetch('../../api.php?endpoint=update_default_gown_hat', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -139,7 +139,7 @@ function requestDiplomaInAdvance(email, event, value) {
         "value": value
     };
 
-    fetch('../../api?endpoint=submit_student_action', {
+    fetch('../../api.php?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -189,7 +189,7 @@ function requestPhotos(email, checkbox) {
         "email": email,
         "value": value
     };
-    fetch('../../api?endpoint=submit_student_action', {
+    fetch('../../api.php?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -222,7 +222,7 @@ function requestGown(email, value) {
         "email": email,
         "value": value
     };
-    fetch('../../api?endpoint=submit_student_action', {
+    fetch('../../api.php?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -255,7 +255,7 @@ function requestHat(email, value) {
         "value": value
     };
 
-    fetch('../../api?endpoint=submit_student_action', {
+    fetch('../../api.php?endpoint=submit_student_action', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -285,7 +285,7 @@ function requestHat(email, value) {
 var graduation_time;
 
 function getStudentData() {
-    fetch(`../../api?endpoint=get_student_data`, {
+    fetch(`../../api.php?endpoint=get_student_data`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -312,7 +312,7 @@ function getStudentData() {
                 if (data.users[0].grade < 3) {
                     buildContentForNotGraduatingStudent(data.users[0]);
                 } else {
-                    fetch('../../api?endpoint=get_graduation_time', {
+                    fetch('../../api.php?endpoint=get_graduation_time', {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -364,7 +364,7 @@ function buildContentForNotGraduatingStudent(user) {
 }
 
 function getStudentsAttendanceInfo() {
-    fetch(`../../api?endpoint=get_student_attendance`, {
+    fetch(`../../api.php?endpoint=get_student_attendance`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -600,7 +600,7 @@ function getStartHour() {
     let deadline_hat = document.getElementById('deadline_hat');
     let deadline_attendance = document.getElementById('deadline_attendance');
 
-    fetch('../../api?endpoint=get_graduation_time', {
+    fetch('../../api.php?endpoint=get_graduation_time', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -638,7 +638,7 @@ function getStartHour() {
 }
 
 function getStudentsOrder() {
-    fetch('../../api?endpoint=get_students_diploma_simplified', {
+    fetch('../../api.php?endpoint=get_students_diploma_simplified', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -668,7 +668,7 @@ function getStudentsOrder() {
 }
 
 function getDiplomaOrder() {
-    fetch('../../api?endpoint=get_diploma_order', {
+    fetch('../../api.php?endpoint=get_diploma_order', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -727,7 +727,7 @@ function displayOrderMessage(data) {
 
 function getMessages() {
     let notifications = document.getElementById("no-notifications");
-    fetch('../../api?endpoint=get_messages', {
+    fetch('../../api.php?endpoint=get_messages', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -774,7 +774,7 @@ function sendMessage(fn, event) {
         "email": email.value,
         "message": message.value
     };
-    fetch('../../api?endpoint=send_message_student', {
+    fetch('../../api.php?endpoint=send_message_student', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,

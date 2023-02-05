@@ -81,7 +81,7 @@ function sortBy(c, id) {
 
 
 function tokenRefresher() {
-    fetch('../../api?endpoint=refresh_token', {
+    fetch('../../api.php?endpoint=refresh_token', {
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
@@ -103,7 +103,7 @@ function tokenRefresher() {
 
 /*---- GET_USERS  START ----*/
 function getAllNonStudentUsers() {
-    fetch(`../../api?endpoint=get_users`, {
+    fetch(`../../api.php?endpoint=get_users`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -129,7 +129,7 @@ function getAllNonStudentUsers() {
 }
 
 function getAllUsers() {
-    fetch(`../../api?endpoint=get_all_users`, {
+    fetch(`../../api.php?endpoint=get_all_users`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -187,7 +187,7 @@ function buildUsersTable(data) {
 
 /*---- GET_STUDENTS  START ----*/
 function getAllStudents() {
-    fetch(`../../api?endpoint=get_students`, {
+    fetch(`../../api.php?endpoint=get_students`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -292,7 +292,7 @@ function buildStudentsTable(data) {
 
 /*---- GET_STUDENTS_DIPLOMA  START ----*/
 function getStudentsDiplomaInfo() {
-    fetch(`../../api?endpoint=get_students_diploma`, {
+    fetch(`../../api.php?endpoint=get_students_diploma`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -318,7 +318,7 @@ function getStudentsDiplomaInfo() {
 }
 
 function getStudentsAttendanceInfo() {
-    fetch(`../../api?endpoint=get_student_attendance`, {
+    fetch(`../../api.php?endpoint=get_student_attendance`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -550,7 +550,7 @@ function showSettingsSection() {
 
 function showAnalyticsSection() {
     let text = document.getElementById('analytic_text');
-    fetch(`../../api?endpoint=get_students_diploma_simplified`, {
+    fetch(`../../api.php?endpoint=get_students_diploma_simplified`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -586,7 +586,7 @@ function showAnalyticsSection() {
 }
 
 function showAnalyticsSectionHelper() {
-    fetch(`../../api?endpoint=statistics`, {
+    fetch(`../../api.php?endpoint=statistics`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -852,7 +852,7 @@ function showDiplomaOrderMessage() {
     order_message.classList.add(['info']);
     order_message.innerHTML = "";
 
-    fetch('../../api?endpoint=get_diploma_order', {
+    fetch('../../api.php?endpoint=get_diploma_order', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -918,7 +918,7 @@ function showDashboardAdditionalInputElement(value) {
 }
 
 function submitUserHelper(bodyData) {
-    fetch('../../api?endpoint=add_users', {
+    fetch('../../api.php?endpoint=add_users', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -993,7 +993,7 @@ function editUsers(event) {
     var form = document.getElementById("edit_users_form");
     var usersData = form.editUsersTextarea.value;
 
-    fetch('../../api?endpoint=edit_users', {
+    fetch('../../api.php?endpoint=edit_users', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -1039,7 +1039,7 @@ function editSelectedUser(event) {
     editData.append("id", editModal.getAttribute("user_id"));
     const userData = Object.fromEntries(editData.entries());
 
-    fetch('../../api?endpoint=edit_user', {
+    fetch('../../api.php?endpoint=edit_user', {
         method: 'PUT',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -1088,7 +1088,7 @@ function deleteSelectedUser(event) {
     let editModal = document.getElementById("edit_user_modal");
     userData = {"id" : editModal.getAttribute("user_id")}
 
-    fetch('../../api?endpoint=delete-user', {
+    fetch('../../api.php?endpoint=delete-user', {
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -1132,7 +1132,7 @@ function deleteSelectedUser(event) {
 }
 
 function submitStudentHelper(bodyData) {
-    fetch('../../api?endpoint=add_students', {
+    fetch('../../api.php?endpoint=add_students', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -1196,7 +1196,7 @@ function submitAction(event) {
         "action_content": action_content
     };
 
-    fetch('../../api?endpoint=save_action', {
+    fetch('../../api.php?endpoint=save_action', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -1242,7 +1242,7 @@ function sendMessage(event) {
         "recipient": recipient.value,
         "message": message.value
     };
-    fetch('../../api?endpoint=send_message', {
+    fetch('../../api.php?endpoint=send_message', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -1423,7 +1423,7 @@ function submitDiplomaOrder(event) {
         "v5": v5,
         "v6": v6,
     };
-    fetch('../../api?endpoint=submit_diploma_order', {
+    fetch('../../api.php?endpoint=submit_diploma_order', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -1500,7 +1500,7 @@ function downloadExportedStudents(event) {
         errElem.innerHTML = "";
         values = { "format": fileFormat }
         if (fileFormat !== 'pdf') {
-            fetch('../../api?endpoint=export_students', {
+            fetch('../../api.php?endpoint=export_students', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -1527,7 +1527,7 @@ function downloadExportedStudents(event) {
                 });
         }
         else {
-            fetch('../../api?endpoint=export_students', {
+            fetch('../../api.php?endpoint=export_students', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -1573,7 +1573,7 @@ function downloadExportedUsers(event) {
         errElem.innerHTML = "";
         values = { "format": fileFormat }
         if (fileFormat !== 'pdf') {
-            fetch('../../api?endpoint=export_users', {
+            fetch('../../api.php?endpoint=export_users', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -1602,7 +1602,7 @@ function downloadExportedUsers(event) {
                 });
         }
         else {
-            fetch('../../api?endpoint=export_users', {
+            fetch('../../api.php?endpoint=export_users', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -1648,7 +1648,7 @@ function downloadExportedGraduated(event) {
         errElem.innerHTML = "";
         values = { "format": fileFormat }
         if (fileFormat !== 'pdf') {
-            fetch('../../api?endpoint=export_graduated', {
+            fetch('../../api.php?endpoint=export_graduated', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -1676,7 +1676,7 @@ function downloadExportedGraduated(event) {
                 });
         }
         else {
-            fetch('../../api?endpoint=export_graduated', {
+            fetch('../../api.php?endpoint=export_graduated', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -1723,7 +1723,7 @@ function downloadExportedAttGraduated(event) {
         errElem.innerHTML = "";
         values = { "format": fileFormat }
         if (fileFormat !== 'pdf') {
-            fetch('../../api?endpoint=export_attendance', {
+            fetch('../../api.php?endpoint=export_attendance', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -1751,7 +1751,7 @@ function downloadExportedAttGraduated(event) {
                 });
         }
         else {
-            fetch('../../api?endpoint=export_attendance', {
+            fetch('../../api.php?endpoint=export_attendance', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -1797,7 +1797,7 @@ function downloadExcellentStudent(event) {
         errElem.innerHTML = "";
         values = { "format": fileFormat }
         if (fileFormat !== 'pdf') {
-            fetch('../../api?endpoint=export_excellent', {
+            fetch('../../api.php?endpoint=export_excellent', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -1825,7 +1825,7 @@ function downloadExcellentStudent(event) {
                 });
         }
         else {
-            fetch('../../api?endpoint=export_excellent', {
+            fetch('../../api.php?endpoint=export_excellent', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -1982,7 +1982,7 @@ function buildGradTable(data) {
 
 
 function distributeModerators() {
-    fetch('../../api?endpoint=edit_student_moderators', {
+    fetch('../../api.php?endpoint=edit_student_moderators', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -2016,7 +2016,7 @@ function distributeModerators() {
 }
 
 function getGraduationInfo() {
-    fetch(`../../api?endpoint=get_graduation_time`, {
+    fetch(`../../api.php?endpoint=get_graduation_time`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -2043,7 +2043,7 @@ function getGraduationInfo() {
 
 function getMessages() {
     let notifications = document.getElementById("notifications");
-    fetch('../../api?endpoint=get_messages', {
+    fetch('../../api.php?endpoint=get_messages', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -2086,7 +2086,7 @@ function getMessages() {
 
 function getClassArchiveInfo(event) {
     event.preventDefault();
-    fetch(`../../api?endpoint=get_last_class_archive`, {
+    fetch(`../../api.php?endpoint=get_last_class_archive`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -2165,7 +2165,7 @@ function sendGraduationInfo(c) {
                 "class": classes.value
             };
 
-            fetch('../../api?endpoint=add_graduation_info', {
+            fetch('../../api.php?endpoint=add_graduation_info', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -2224,7 +2224,7 @@ function sendDeadlineInfo(event) {
         "deadline_attendance": attendance.value
     };
 
-    fetch('../../api?endpoint=add_deadline_info', {
+    fetch('../../api.php?endpoint=add_deadline_info', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -2260,7 +2260,7 @@ function sendDeadlineInfo(event) {
 }
 
 function makeArchive() {
-    fetch('../../api?endpoint=make_archive', {
+    fetch('../../api.php?endpoint=make_archive', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -2278,7 +2278,7 @@ function makeArchive() {
 
 
 function getClasses() {
-    fetch(`../../api?endpoint=get_archive_classes`, {
+    fetch(`../../api.php?endpoint=get_archive_classes`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -2319,7 +2319,7 @@ function getClasses() {
 function downloadArchive(event, id) {
     event.preventDefault();
     let values = { "id": id };
-    fetch('../../api?endpoint=export_archives', {
+    fetch('../../api.php?endpoint=export_archives', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
