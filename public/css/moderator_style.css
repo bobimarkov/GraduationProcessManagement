@@ -397,6 +397,10 @@ svg{
     width: 30%;
 }
 
+textarea {
+    resize: none !important;
+}
+
 #textarea-fn {
     width: 100%;
 }
@@ -460,6 +464,13 @@ svg{
 .dashboard-action:active,
 .boolean-select-after-select:active {
     outline: none;
+}
+
+.dashboard-textarea-fn {
+    width: 25em;
+    height: 5em;
+    /* margin: 1em; */
+    margin-top: 1em;
 }
 
 .disabled-button, .disabled-button:hover  {
