@@ -78,6 +78,10 @@
                         <p id="has_right"></p>
                         <p id="is_ready"></p>
                         <p id="grade"></p>
+                        <p>
+                            Искам снимки:
+                            <input type="checkbox" id="photos_requested" onchange="requestPhotos(email, this)" />
+                        </p>
                     </div>
                 </div>
                 <div id="diploma_info_section_content_2_wrapper">
@@ -89,20 +93,9 @@
                         <p id="signature_moderator"></p>
                     </div>
                 </div>
+    
                 <div id="diploma_info_section_content_3_wrapper">
                     <div id="diploma_info_section_content_3">
-                        <p>
-                            Ще присъствам на дипломирането:
-                            <input type="checkbox" id="attendance" onchange="setAttandance(email, this)" />
-                        </p>
-                        <p>
-                            Искам снимки:
-                            <input type="checkbox" id="photos_requested" onchange="requestPhotos(email, this)" />
-                        </p>
-                    </div>
-                </div>
-                <div id="diploma_info_section_content_4_wrapper">
-                    <div id="diploma_info_section_content_4">
                         <p>Административен коментар:</p>
                         <textarea class="diploma_comment" id="diploma_comment" disabled></textarea>
                     </div>
@@ -112,10 +105,16 @@
 
         <div class="request_diploma_in_advance_section">
             <h3>
-                <i class="fa fa-paper-plane-o" aria-hidden="true"></i> Заяви вземане на диплома
-                предварително
+                <i class="fa fa-paper-plane-o" aria-hidden="true"></i> Заяви присъствие на дипломирането
             </h3>
-            <div class="request_diploma_in_advance_content">
+            <p id="deadline_attendance"></p>
+            <div id="attendance_section">
+                <select class="speech_request_select" id="attendance_request_select"
+                    onchange="setAttendance(email, this.value)">
+                    <option value="-1" selected disabled hidden>Отговор ...</option>
+                    <option value="1">Ще присъствам на дипломирането</option>
+                    <option value="0">Ще си взема дипломата предварително</option>
+                </select>
                 <form class="request_diploma_in_advance_form" id="request_diploma_in_advance_form">
                     <textarea class="request_diploma_in_advance_comment" name="request_diploma_in_advance_comment"
                         id="request_diploma_in_advance_comment" placeholder="Причина..."></textarea>
@@ -123,27 +122,24 @@
                         id="request_diploma_in_advance" onclick="requestDiplomaInAdvance(email, event, 1)">
                         Заяви
                     </button>
-                    <button type="submit" class="request_diploma_in_advance_submit_button"
-                        id="cancel_request_diploma_in_advance" onclick="requestDiplomaInAdvance(email, event, 0)">
-                        Отмени
-                    </button>
-                    <p class="message-bar" id="message-bar-diploma-request"></p>
                 </form>
+                <p class="message-bar" id="message-bar-diploma-request"></p>
             </div>
+            <p id="messageAttendance"></p>
         </div>
 
 
         <div class="request_gown_hat_section">
             <h3><i class="fa fa-graduation-cap" aria-hidden="true"></i> Заяви тога и шапка</h3>
-            <div class="request_gown_hat_content">
+            <p class="message-bar" id="message-bar-gown-hat-request">Имате право да заявите тога и шапка само когато ще
+                присъствате на церемонията!</p>
+            <div class="request_gown_hat_content" id="request_gown_hat_content">
                 <div id="request_gown_hat_content_1_wrapper">
+                    <p id="deadline_gown"></p>
                     <div id="request_gown_hat_content_1">
-                        <p id="gown_request">
-                            <i>Веднъж въведено, отговорът Ви не може да бъде променен.</i>
-                        </p>
                         <select class="gown_request_select" id="gown_request_select"
                             onchange="requestGown(email, this.value)">
-                            <option value="-1" selected disabled hidden>Тога</option>
+                            <option value="-1" selected disabled hidden>Заяви тога</option>
                             <option value="1">Желая да взема тога.</option>
                             <option value="0">Не желая.</option>
                         </select>
@@ -151,24 +147,24 @@
                         <p id="gown_taken_date"></p>
                         <p id="gown_returned"></p>
                         <p id="gown_returned_date"></p>
-                        <p id="gown_moderator"></p>
                     </div>
+                    <p id="gown_request"></p>
+                    <p id="gown_moderator"></p>
                 </div>
                 <div id="request_gown_hat_content_2_wrapper">
+                    <p id="deadline_hat"></p>
                     <div id="request_gown_hat_content_2">
-                        <p id="hat_request">
-                            <i>Веднъж въведено, отговорът Ви не може да бъде променен.</i>
-                        </p>
                         <select class="hat_request_select" id="hat_request_select"
                             onchange="requestHat(email, this.value)">
-                            <option value="-1" selected disabled hidden>Шапка</option>
+                            <option value="-1" selected disabled hidden>Заяви шапка</option>
                             <option value="1">Желая да взема шапка.</option>
                             <option value="0">Не желая.</option>
                         </select>
                         <p id="hat_taken"></p>
                         <p id="hat_taken_date"></p>
-                        <p id="hat_moderator"></p>
                     </div>
+                    <p id="hat_request"></p>
+                    <p id="hat_moderator"></p>
                 </div>
             </div>
         </div>

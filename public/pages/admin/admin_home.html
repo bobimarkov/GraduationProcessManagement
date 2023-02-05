@@ -20,6 +20,10 @@
             ДИПЛОМИРАНЕ
         </h2>
         <div class="vertical_line"></div>
+        <h2 class="navigation_element" id="attendance_header" onclick="showAttendanceSection()">
+            ПРИСЪСТВАЩИ
+        </h2>
+        <div class="vertical_line"></div>
         <h2 class="navigation_element active_header" id="users_header" onclick="showUsers()">
             ПОТРЕБИТЕЛИ
         </h2>
@@ -195,7 +199,7 @@
 
         <div id="settings_section">
             <h3><i class="fa fa-plus-square"></i> Добавяне на информация относно дипломирането</h3>
-            <table id="info-graduation-table">
+            <table id="info-graduation-table1">
                 <tr>
                     <td>Начален час</td>
                     <td>Интервал между студентите</td>
@@ -215,7 +219,7 @@
                 <input type="number" id="class" class="settings" placeholder="Година на завършване" min="2020" />
 
             </form>
-            <button type="submit" id="add-grad-info" class="settings" onclick="getClassArchiveInfo(event)"> Обнови <i
+            <button type="submit" class="settings add-grad-info" onclick="getClassArchiveInfo(event)"> Обнови <i
                     class="fa fa-plus"></i></button>
             <p class="message-bar" id="message-add-graduation-info"></p>
         </div>
@@ -229,11 +233,70 @@
             <div id="analytics4" class="analytics"></div>
         </div>
 
+        <div id="attendance_section">
+            <h3><i class="fas fa-list"></i> Списък студенти</h3>
+            <div class="filters">
+
+                <input id="searchAttendance" class="search" placeholder="Търсене..."
+                    oninput="searchInTable('attendance-table','searchAttendance')" />
+
+                <form id="export_att_graduated">
+                    <select class="dashboard-action" name="formatatt">
+                        <option value="no" selected disabled hidden>Изберете файлов формат...</option>
+                        <option value="csv">CSV</option>
+                        <option value="txt">TextFile</option>
+                        <option value="doc">MsWord</option>
+                        <option value="xls">Excel</option>
+                        <option value="pdf">PDF</option>
+                    </select>
+                    <button type="submit" id="export-att-graduated" class="submit-action"
+                        onclick="downloadExportedAttGraduated(event)">Изтегли <i class="fas fa-file-export"></i>
+                    </button>
+                </form>
+            </div>
+            <p class="message-bar" id="message-bar-export-attendance"></p>
+
+            <table class="diploma-table" id="attendance-table">
+                <tr>
+                    <td>ФН</td>
+                    <td>Име</td>
+                    <td>Степен</td>
+                    <td>Спец.</td>
+                    <td>Група</td>
+                    <td>Успех</td>
+                    <td>Присъствие</td>
+                    <td>Има право</td>
+                    <td>Модератор за диплома</td>
+                    <td>Готова диплома</td>
+                    <td>Взета</td>
+                    <td>Заявка взимане предв.</td>
+                    <td>Коментар (студент)</td>
+                    <td>Взета предв.</td>
+                    <td>Дата/час</td>
+                    <td>Коментар (администр.)</td>
+                    <td>Покана реч</td>
+                    <td>Отговор</td>
+                    <td>Снимки</td>
+                    <td>Модератор за тога</td>
+                    <td>Заявена тога</td>
+                    <td>Взета</td>
+                    <td>Дата/час</td>
+                    <td>Върната</td>
+                    <td>Дата/час</td>
+                    <td>Модератор за шапка</td>
+                    <td>Заявена шапка</td>
+                    <td>Взета</td>
+                    <td>Дата/час</td>
+                </tr>
+            </table>
+
+        </div>
+
         <div id="diploma_section">
             <h3><i class="fas fa-list"></i> Списък студенти</h3>
             <div class="filters">
 
-                <input id="search" class="searchGrad" placeholder="Търсене..."
+                <input id="search" class="search" placeholder="Търсене..."
                     oninput="searchInTable('diploma-table','search')" />
 
                 <form id="export_graduated">
@@ -328,7 +391,7 @@
 
     <div class="row" id="settings_date_section">
         <h3><i class="fas fa-calendar-alt"></i> Настройки на крайни срокове </h3>
-        <table id="info-graduation-table">
+        <table id="info-graduation-table2">
             <tr>
                 <td>Краен срок за заявка за тога</td>
                 <td>Краен срок за заявка за шапка</td>
@@ -336,19 +399,19 @@
             </tr>
         </table>
 
-        <h4>Внимание! 
+        <h4>Внимание! Не може да задавате дата, която е след дипломирането!
         </h4>
         <form class="input" id="deadline">
             <input type="text" id="date-gown" class="settings" name="date-gown" placeholder="Дата за тога"
                 onfocus="(this.type='date')" onblur="(this.type='text')" />
             <input type="text" id="date-hat" class="settings" name="date-hat" placeholder="Дата за шапка"
                 onfocus="(this.type='date')" onblur="(this.type='text')" />
-            <input type="text" id="date-attendance" class="settings" name="date-attendance" placeholder="Дата за присъствие"
-                onfocus="(this.type='date')" onblur="(this.type='text')" />
+            <input type="text" id="date-attendance" class="settings" name="date-attendance"
+                placeholder="Дата за присъствие" onfocus="(this.type='date')" onblur="(this.type='text')" />
         </form>
-        <button type="submit" id="add-grad-info" class="settings" onclick=""> Обнови <i
+        <button type="submit" class="settings add-grad-info" onclick="sendDeadlineInfo(event)"> Обнови <i
                 class="fa fa-plus"></i></button>
-        <p class="message-bar" id="message-add-graduation-info"></p>
+        <p class="message-bar" id="message-add-deadline-info"></p>
     </div>
 
     <div class="row" id="settings_archive_section">
