@@ -63,6 +63,10 @@ h2, .logout_header_link {
     font-family: monospace;
 }
 
+#message-bar-update-responsibilities {
+    display: none;
+}
+
 .error {
     background: rgba(255, 20, 20, 0.755);
 }
@@ -463,4 +467,8 @@ svg{
     background-color: #cccccc;
     color: #666666;
     cursor: auto;
+}
+
+.form-input {
+    width: 100%;
 }

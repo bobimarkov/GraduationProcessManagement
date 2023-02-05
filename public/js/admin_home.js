@@ -2312,7 +2312,6 @@ function getClasses() {
         })
         .then((data) => {
             if (!data.success) {
-                console.log(data.message);
             } else {
                 let div = document.getElementById('for_buttons');
                 while (div.firstChild) {
@@ -2363,7 +2362,6 @@ function downloadArchive(event, id) {
 }
 
 function getNewUsersToDistribute() {
-    console.log("new_users");
     fetch('../../api?endpoint=get_new_students_moderators_to_distribute', {
         method: 'GET',
         headers: {

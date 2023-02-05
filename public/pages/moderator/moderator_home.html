@@ -178,7 +178,18 @@
                 <tr></tr>
             </table>
             <h3 id="header_responsibilities_table2"></h3>
-            <table class="responsibilities_table" id="responsibilities_table2"></table>
+            <table class="responsibilities_table" id="responsibilities_table2">
+                <tr></tr>
+            </table>
+            <h3><i class="fas fa-user-edit"></i> Актуализация</h3>
+            <p id="message-bar-update-responsibilities" class="message-bar"></p>
+            <form id="students_responsibilities_form" name="students_responsibilities_form" onsubmit="return false">
+                <textarea class="form-input" name="updateResponsibilitiesForStudents" id="updateResponsibilitiesForStudents" rows="30"></textarea>
+                <button type="submit" class="long-submit-button" onclick="updateStudentsByModeratorRole(event)">
+                    Актуализирай
+                </button>
+            </form>
+
         </div>
     </body>
 </html></div><div class="row" id="messages_receive_section">

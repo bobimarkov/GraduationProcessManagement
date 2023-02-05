@@ -21,10 +21,9 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         $conn = $database->getConnection();
 
         $stmt = $conn->prepare("
-        select student.fn, user.name, user.email, user.phone,student_diploma.attendance,
+        select student.fn, user.name, user.email, user.phone,
         student_diploma.color, student_diploma.num_order, student_diploma.time_diploma,
-        student_diploma.is_taken, student_diploma.take_in_advance_request, student_diploma.take_in_advance_request_comment, student_diploma.is_taken_in_advance,
-        student_diploma.taken_at_time, student_diploma.diploma_comment
+        student_diploma.is_taken
         from student
         join user on user.id = student.user_id
         join student_diploma on student.fn = student_diploma.student_fn
@@ -33,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         and attendance = 1");
         $stmt->execute(["email" => $email]);
 
-        $column_names = array("ФН", "Име", "Имейл", "Телефон", "Присъствие", "Взета", "Цвят","Ред на връчване", "Час на връчване", "Заявка взимане предв.", "Коментар (студент)", "Взета предв.", "Дата/час", "Коментар (администр.)");
+        $column_names = array("ФН", "Име", "Имейл", "Телефон", "Цвят","Ред на връчване", "Час на връчване", "Взета");
 
         if ($format !== 'pdf' && $format !== 'no') {
             header('Content-Type: text/csv; charset=utf-8');
@@ -47,13 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 //Тук ще оправя повторението на код след като оправим кои ще са null по default
                                 
-                $row['attendance'] = ($row['attendance'] == null) ? '-' : ($row['attendance'] == 0 ? 'Не' : 'Да');
-                $row['is_taken'] = ($row['is_taken'] == 0) ? 'Не' : 'Да';
-                $row['take_in_advance_request'] = ($row['take_in_advance_request'] == 0) ? 'Не' : 'Да';
-                $row['take_in_advance_request_comment'] = ($row['take_in_advance_request_comment'] === null) ? '-' : $row['take_in_advance_request_comment'] ;
-                $row['is_taken_in_advance'] = ($row['is_taken_in_advance'] == 0) ? 'Не' : 'Да';
-                $row['taken_at_time'] = ($row['taken_at_time'] === null ) ? '-' : $row['taken_at_time'];
-                $row['diploma_comment'] = ($row['diploma_comment'] === null ) ? '-' : $row['diploma_comment'];
+                $row['is_taken'] = ($row['is_taken'] === 0 || $row['is_taken'] === null) ? 'Не' : 'Да';
                 fputcsv($output, $row);
             }
             fclose($output);
@@ -70,13 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             $pdf->Cell(0, 0, implode(",", $column_names), 0, 1);
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 //Тук ще оправя повторението на код след като оправим кои ще са null по default
-                $row['attendance'] = ($row['attendance'] == null) ? '-' : ($row['attendance'] == 0 ? 'Не' : 'Да');
-                $row['is_taken'] = ($row['is_taken'] == 0) ? 'Не' : 'Да';
-                $row['take_in_advance_request'] = ($row['take_in_advance_request'] == 0) ? 'Не' : 'Да';
-                $row['take_in_advance_request_comment'] = ($row['take_in_advance_request_comment'] === null) ? '-' : $row['take_in_advance_request_comment'] ;
-                $row['is_taken_in_advance'] = ($row['is_taken_in_advance'] == 0) ? 'Не' : 'Да';
-                $row['taken_at_time'] = ($row['taken_at_time'] === null ) ? '-' : $row['taken_at_time'];
-                $row['diploma__comment'] = ($row['diploma_comment'] === null ) ? '-' : $row['diploma__comment'];
+                $row['is_taken'] = ($row['is_taken'] === 0 || $row['is_taken'] === null) ? 'Не' : 'Да';
                 $pdf->Cell(0, 0, implode(",", $row), 0, 1);
             }
             $pdf->Output("students_for_gown.pdf", 'D');
