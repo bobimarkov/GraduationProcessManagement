@@ -2,7 +2,7 @@ checkAlreadyLoggedIn();
 
 function checkAlreadyLoggedIn() {
     if (localStorage.getItem('token') !== null) {
-        fetch(`../api?endpoint=get_user_role`, {
+        fetch(`../api.php?endpoint=get_user_role`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -18,7 +18,7 @@ function checkAlreadyLoggedIn() {
                 }
             })
             .then(data => {
-                window.location.replace(`./${data.role}/${data.role}_home.html`);
+                window.location.replace(`./${data.role}/${data.role}_home`);
             })
 
     }
@@ -31,7 +31,7 @@ loginForm.addEventListener("submit", (e) => {
     const formData = new FormData(loginForm);
     const data = Object.fromEntries(formData.entries());
 
-    fetch("../api?endpoint=login", {
+    fetch("../api.php?endpoint=login", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -45,10 +45,10 @@ loginForm.addEventListener("submit", (e) => {
                 localStorage.setItem("token", response.jwt);
                 const moderator_roles = ["moderator-hat", "moderator-gown", "moderator-signature"];
                 if (moderator_roles.includes(response.role)) {
-                    window.location.replace(`./moderator/moderator_home.html`);
+                    window.location.replace(`./moderator/moderator_home`);
                 }
                 else {
-                    window.location.replace(`./${response.role}/${response.role}_home.html`);
+                    window.location.replace(`./${response.role}/${response.role}_home`);
                 }
             }
             else {

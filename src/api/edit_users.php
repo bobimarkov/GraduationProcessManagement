@@ -54,15 +54,25 @@ function updateStudentsDB($users_arr_2d)
     $database = new Db();
     $conn = $database->getConnection();
 
+    try {
+        $stmt = $conn->prepare("UPDATE user SET name = :name, email = :email , phone = :phone WHERE id = :id ");
 
-    $stmt = $conn->prepare("UPDATE user SET name = :name, email = :email , phone = :phone WHERE id = :id ");
+        foreach ($users_arr_2d as $user) {
+            $stmt->execute(["id" => $user[0], "name" => $user[1], "email" => $user[2], "phone" => $user[3]]);
+        }
+        $response = array("success" => true, "message" => "Данните на потребителите са променени успешно.");
 
-    foreach ($users_arr_2d as $user) {
-        $stmt->execute(["id" => $user[0], "name" => $user[1], "email" => $user[2], "phone" => $user[3]]);
+        echo json_encode($response);
     }
-    $response = array("success" => true, "message" => "Данните на потребителите са променени успешно.");
-
-    echo json_encode($response);
+    catch (PDOException $e) {
+        if ($e->getCode() == 23000) {
+            $response = array("success" => false, "message" => "Вече съществува потребител с тази поща.");
+            echo json_encode($response);
+        } else {
+            $response = array("success" => false, "message" => "Непозната грешка.");
+            echo json_encode($response);
+        }
+    }
 
 }
 

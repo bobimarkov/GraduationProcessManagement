@@ -2,7 +2,7 @@ getGraduationInfo();
 
 button = document.getElementById("to_login_button");
 button.addEventListener("click", (e) => {
-    window.location.href = "./pages/login.html";
+    window.location.href = "./pages/login";
 });
 
 function getWeekDay(weekDay) {
@@ -20,7 +20,7 @@ function getWeekDay(weekDay) {
 async function getGraduationInfo() {
     let graduationInfo = document.querySelector(".graduation_info_section");
 
-    await fetch('./api?endpoint=get_graduation_time', {
+    await fetch('./api.php?endpoint=get_graduation_time', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

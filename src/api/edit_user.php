@@ -50,11 +50,22 @@ function updateStudentsDB($data)
     $database = new Db();
     $conn = $database->getConnection();
 
-    $stmt = $conn -> prepare("UPDATE user SET name = :name, email = :email , phone = :phone WHERE id = :id");
-    $stmt -> execute(["name" => $data["name"], "email" => $data["email"], "phone" => $data["phone"], "id" => $data["id"]]);
+    try {
+        $stmt = $conn->prepare("UPDATE user SET name = :name, email = :email , phone = :phone WHERE id = :id");
+        $stmt->execute(["name" => $data["name"], "email" => $data["email"], "phone" => $data["phone"], "id" => $data["id"]]);
 
-    $response = array("success" => true, "message" => "Данните на студента са променени успешно.");
-    echo json_encode($response);
+        $response = array("success" => true, "message" => "Данните на студента са променени успешно.");
+        echo json_encode($response);
+    }
+    catch (PDOException $e) {
+        if ($e->getCode() == 23000) {
+            $response = array("success" => false, "message" => "Вече съществува потребител с тази поща.");
+            echo json_encode($response);
+        } else {
+            $response = array("success" => false, "message" => "Непозната грешка.");
+            echo json_encode($response);
+        }
+    }
 }
 
 ?>
