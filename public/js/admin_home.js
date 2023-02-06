@@ -362,6 +362,8 @@ function buildStudentsDiplomaTable(users) {
         if (user.grade >= 3) {
             var row = table.insertRow(i);
             row.id = 'user' + i;
+
+            row.setAttribute("onmousedown", "toggleBorderColor(this)")
             let response;
             switch (user.speech_response) {
                 case null: response = '-'; break;
@@ -401,6 +403,24 @@ function buildStudentsDiplomaTable(users) {
             }
             i++;
         }
+    }
+}
+
+function toggleBorderColor(c) {
+    var fn = c.cells[0].innerHTML;
+    var fnTextArea = document.getElementById('dashboard_textarea');
+    var currentFns = fnTextArea.value;
+
+    if (c.style.backgroundColor == "slategray") {
+        c.style.backgroundColor = "transparent";
+        c.style.color = "black";
+        currentFns = currentFns.replace(`${fn},`, "");
+        fnTextArea.value = currentFns
+    } else {
+        c.style.backgroundColor = "slategray";
+        c.style.color = "snow";
+        currentFns = currentFns.concat(`${fn},`);
+        fnTextArea.value = currentFns
     }
 }
 

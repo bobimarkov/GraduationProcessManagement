@@ -490,15 +490,11 @@ svg {
 #diploma-table>tbody>tr :nth-child(16),
 #diploma-table>tbody>tr :nth-child(17),
 #diploma-table>tbody>tr :nth-child(18),
-#diploma-table>tbody>tr :nth-child(19),
+#diploma-table>tbody>tr :nth-child(20),
 #diploma-table>tbody>tr :nth-child(21),
 #diploma-table>tbody>tr :nth-child(22),
-#diploma-table>tbody>tr :nth-child(23),
 #diploma-table>tbody>tr :nth-child(24),
 #diploma-table>tbody>tr :nth-child(25),
-#diploma-table>tbody>tr :nth-child(27),
-#diploma-table>tbody>tr :nth-child(28),
-#diploma-table>tbody>tr :nth-child(29),
 #attendance-table>tbody>tr :nth-child(3),
 #attendance-table>tbody>tr :nth-child(4),
 #attendance-table>tbody>tr :nth-child(5),
@@ -517,15 +513,11 @@ svg {
 #attendance-table>tbody>tr :nth-child(19),
 #attendance-table>tbody>tr :nth-child(20),
 #attendance-table>tbody>tr :nth-child(21),
-#attendance-table>tbody>tr :nth-child(22),
+#attendance-table>tbody>tr :nth-child(23),
 #attendance-table>tbody>tr :nth-child(24),
 #attendance-table>tbody>tr :nth-child(25),
-#attendance-table>tbody>tr :nth-child(26),
 #attendance-table>tbody>tr :nth-child(27),
-#attendance-table>tbody>tr :nth-child(28),
-#attendance-table>tbody>tr :nth-child(30),
-#attendance-table>tbody>tr :nth-child(31),
-#attendance-table>tbody>tr :nth-child(32) {
+#attendance-table>tbody>tr :nth-child(28) {
     text-align: center;
 }
 
