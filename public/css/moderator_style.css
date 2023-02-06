@@ -93,6 +93,7 @@ h2, .logout_header_link {
 
 #message-bar-update-responsibilities {
     display: none;
+
 }
 
 .error {
@@ -360,6 +361,7 @@ svg{
     background-color: rgb(235, 238, 241);
     border-radius: 5px;
     text-indent: 3px;
+
     box-sizing: border-box;
     font: 1em sans-serif;
 }
@@ -436,8 +438,6 @@ textarea {
     border-color: darkslategray;
     border-radius: 5px;
     padding: 5px;
-    box-sizing: border-box;
-    font: 1em sans-serif;
 }
 
 .form-input:focus,
@@ -472,4 +472,28 @@ textarea {
 
 .form-input {
     width: 100%;
+}
+
+.dashboard-action,
+.boolean-select-after-select,
+.file-extension-picker {
+    text-indent: 3px;
+    height: 2.5em;
+    width: 10%;
+    font: 1em sans-serif;
+    color: darkslategray;
+    background-color: snow;
+    border-radius: 5px;
+}
+
+.file-extension-picker {
+    width: 80%;
+}
+
+
+#export_files_moderator_responsibilities {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+
 }
