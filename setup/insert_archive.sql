@@ -1,3 +1,4 @@
+use archive_graduation;
 INSERT INTO `student` (`fn`, `email`, `name`, `phone`, `degree`, `major`, `group`, `class`)
        VALUES ('60001', 'mganev@gmail.com', 'Михаил Иванов Ганев', '0895241251', 'Б', 'КН', '4', '2021');
 

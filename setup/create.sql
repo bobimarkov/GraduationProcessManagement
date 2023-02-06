@@ -1,9 +1,5 @@
-CREATE DATABASE graduation
-GO
-USE graduation
-GO
-
------ Create Tables -----
+CREATE DATABASE graduation;
+USE graduation;
 
 
 CREATE TABLE `user` ( 
