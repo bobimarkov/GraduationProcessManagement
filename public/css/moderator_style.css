@@ -497,3 +497,15 @@ textarea {
     gap: 1rem;
 
 }
+
+.received_messages {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    text-indent: 0.5em;
+    border: 1px solid #006199;
+    background: rgba(247, 241, 241, 0.603);
+    color: darkslategray;
+    font-size: medium;
+    margin-bottom: 1em;
+}

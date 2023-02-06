@@ -1065,15 +1065,21 @@ function getMessages() {
         })
         .then((data) => {
             notifications.style.display = "block";
+            while (notifications.firstChild) {
+                notifications.removeChild(notifications.firstChild);
+            }
             if (!data.success) {
                 let text = document.createElement("p");
                 text.innerHTML = "В момента нямате никакви известия.";
                 notifications.appendChild(text);
             } else {
-                for (let i = 0; i < data.order.length; i++) {   
-                    let text = document.createElement("p");                 
-                    text.innerHTML = `${i + 1})От ${data.order[i].sender} - ${data.order[i].message}`;
-                    notifications.appendChild(text);
+                for (let i = 0; i < data.order.length; i++) {
+                    let div = document.createElement("div");
+                    div.setAttribute("class", "received_messages");
+                    let text = document.createElement("p");
+                    text.innerHTML = `${i + 1}) От ${data.order[i].sender} - ${data.order[i].message}`;
+                    div.appendChild(text);
+                    notifications.appendChild(div);
                 }
             }
         });
