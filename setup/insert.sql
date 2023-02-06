@@ -1,3 +1,4 @@
+use graduation;
 INSERT INTO `user` (`email`, `password`, `name`, `phone`, `role`) VALUES 
 ('admin@gmail.com', '70ccd9007338d6d81dd3b6271621b9cf9a97ea00', 'Admin Admin Admin', '0870102030', 'admin');
 
