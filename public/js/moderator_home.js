@@ -372,7 +372,6 @@ function showAnalyticsSection() {
             activeHeader("analytic_header");
             if (!data.success) {
                 text.innerHTML = '<i class="fa fa-pie-chart"></i> В момента няма данни за дипломиращи се студенти и няма направена статистика! <br> Когато добавите данни, то ще получите статистика за тях!';
-                document.getElementById('analytic_section').style = 'height: 1em !important';
                 text.style = "text-align : center";
                 //console.log(data.error);
             } else {
@@ -380,7 +379,6 @@ function showAnalyticsSection() {
                 google.charts.load('current', { 'packages': ['corechart'] });
                 text.innerHTML = '<i class="fa fa-pie-chart"></i> Статистиката е на база дипломиращи се студенти!';
                 text.style = "text-align : center; height : 1em";
-                document.getElementById('analytics1').style = 'margin-top: 1em';
                 showAnalyticsSectionHelper();
             }
         })

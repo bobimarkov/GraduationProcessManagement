@@ -1,7 +1,6 @@
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #33B4FF;
-    background-size: 64px 128px;
+* {
+    margin: 0;
+    padding: 0;
 }
 
 .su-header {
@@ -11,6 +10,20 @@ body {
     margin: auto;
     font-weight: bolder;
     color: #006199;
+}
+
+.mt-5 {
+    margin-top: 5px;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #33B4FF;
+    background-size: 64px 128px;
+}
+
+.logo {
+    max-width: 30rem;
 }
 
 .row {
@@ -23,11 +36,8 @@ body {
     box-shadow: 5px 5px 20px darkslategray;
 }
 
-.long-submit-button,
-.submit-button-users {
-    margin-top: 1em;
+.button {
     height: 2.5em;
-    width: 100%;
     border-radius: 5px;
     border: 1px solid #006199;
     cursor: pointer;
@@ -35,16 +45,25 @@ body {
     font-weight: bold;
     color: darkslategray;
     font-size: medium;
+    padding: 0 1rem;
 }
 
-.long-submit-button:hover,
-.submit-button-users:hover  {
+.long-button {
+    width: 100%;
+}
+
+.delete-button {
+    background: rgba(255, 20, 20, 0.755);
+}
+
+.button:hover  {
     background-color: #006199;
     color: snow;
 }
 
 .form-input {
     width: 100%;
+    margin-bottom: 5px;
 }
 
 textarea {
@@ -57,7 +76,6 @@ textarea {
     background-color: rgb(235, 238, 241);
     border-color: darkslategray;
     border-radius: 5px;
-    padding: 5px;
     box-sizing: border-box;
     font: 1em sans-serif;
 }
@@ -80,7 +98,7 @@ textarea {
 
 #textarea-emails {
     width: 100%;
-    height: 8em;
+    height: 10em;
 }
 
 #message {
@@ -102,33 +120,58 @@ textarea {
     display: none;
 }
 
+#message-bar-users, #message-bar-students {
+    margin-bottom: 1em;
+}
+
+#message-bar-distribute-moderators, 
+#message-bar-export-users, 
+#message-bar-export-student, 
+#message-bar-edit-users, 
+#message-add-deadline-info, 
+#message-add-graduation-info,
+#message-bar-export-message {
+    margin-top: 1em;
+}
+
 .dashboard {
+    margin-top: 1.25%;
+    margin-bottom: 1.25%;
     display: flex;
-    align-items: center;
+    align-items: start;
+    gap: 1%;
 }
 
 .dashboard-textarea-fn,
 .textarea-after-select {
     width: 25em;
     height: 5em;
-    /* margin: 1em; */
-    margin-top: 1em;
 }
 
-#diploma_section .dashboard-action,
-#attendance_section .dashboard-action  {
-    margin: auto 1em;
+#diploma_order_form {
+    margin-top: 1.25%;
 }
 
 .dashboard-action,
 .boolean-select-after-select,
-.diploma_order_select {
-    margin-top: 1em;
+.diploma_order_select,
+.file-extension-picker-short,
+.file-extension-picker-long {
+    text-indent: 3px;
     height: 2.5em;
+    width: 10%;
     font: 1em sans-serif;
     color: darkslategray;
     background-color: snow;
     border-radius: 5px;
+}
+
+.file-extension-picker-long {
+    width: 50%;
+}
+
+.file-extension-picker-short {
+    width: 20%;
 }
 
 .boolean-select-after-select {
@@ -139,24 +182,8 @@ textarea {
     display: none;
 }
 
-.submit-action {
-    height: 2.5em;
-    width: 10%;
-    max-width: 25%;
-    border-radius: 5px;
-    border: 1px solid darkslategray;
-    padding: 0 1em;
-    margin-left: 1em;
-    cursor: pointer;
-    background-color: snow;
-    font-weight: bold;
-    color: darkslategray;
-    font-size: 1vw;
-}
-
-.submit-action:hover {
-    background-color: #006199;
-    color: snow;
+#editStudentTextarea {
+    margin-top: 1.25%;
 }
 
 h2,
@@ -169,7 +196,7 @@ h2,
 .navigation {
     padding: 5px;
     background: rgba(247, 241, 241, 0.3);
-    margin: 1em 0;
+    margin: 1em 0.5em;
 }
 
 .vertical_line {
@@ -186,6 +213,7 @@ h2,
 .navigation_element {
     display: inline;
     cursor: pointer;
+    font-size: 1.35rem;
 }
 
 .navigation_element:hover,
@@ -194,11 +222,11 @@ h2,
 }
 
 .message-bar {
-    padding: 10px;
-    margin-bottom: 1em;
+    text-indent: 10px;
     font-size: 1.2em;
     border-radius: 10px;
     font-family: monospace;
+    padding: 0.5rem 0;
 }
 
 .error {
@@ -214,10 +242,9 @@ h2,
 }
 
 table {
-    /*border: 0.5px solid slategray;*/
     box-shadow: 2px 2px 20px #006199;
     margin-bottom: 2em;
-    margin-top: 2em;
+    margin-top: 1em;
     max-height: 50vh;
     width: 100%;
     border-collapse: collapse;
@@ -243,11 +270,6 @@ table td {
     width: 8%;
 }
 
-#users-table {
-    margin-top: 0;
-}
-
-
 #students-table>tbody>tr :nth-child(5),
 #students-table>tbody>tr :nth-child(6),
 #students-table>tbody>tr :nth-child(7),
@@ -257,15 +279,10 @@ table td {
     text-align: center;
 }
 
-#students-table {
-    margin-top: 0;
-}
-
 .diploma-table {
     display: block;
     overflow-x: auto;
     white-space: nowrap;
-    margin-top: 0;
 }
 
 .diploma_take_columns {
@@ -301,7 +318,6 @@ table tr:nth-child(even) {
 }
 
 .user-role-icon {
-    /* background-color: darkslategray; */
     width: 1em;
     color: darkslategray;
 }
@@ -325,11 +341,11 @@ table tr:nth-child(even) {
 
 .comment-icon:hover span {
     background-color: snow;
-    padding: 5px;
     display: block;
     z-index: 100;
     left: 0px;
     margin: -40px;
+    padding: 0.45em;
     position: absolute;
     top: 10px;
     text-decoration: none;
@@ -341,18 +357,7 @@ table tr:nth-child(even) {
     border-radius: 5px;
 }
 
-.delete-button {
-    height: 1.5em;
-    border: 0.5px solid grey;
-    cursor: pointer;
-    background-color: snow;
-    color: darkslategray;
-}
 
-.delete-button:hover {
-    background-color: darkslategray;
-    color: snow;
-}
 
 ::-webkit-scrollbar {
     width: 7px;
@@ -382,14 +387,16 @@ table tr:nth-child(even) {
 }
 
 .excellent_order {
-    height: 11.5em;
+    min-height: 8.5em;
 }
 
 h3 {
     margin-top: 0 !important;
+    margin-bottom: 1.25%;
     padding: 5px;
     border-radius: 5px;
     width: 100%;
+    min-height: 22px;
     background: rgba(247, 241, 241, 0.603);
     text-transform: uppercase;
     text-decoration: none;
@@ -405,33 +412,25 @@ h4 {
     text-decoration: none;
     color: #2f4f4f;
     display: flex;
-    justify-content: center;}
-
-#diploma_section>h3,
-#attendance_section>h3 {
-    margin-bottom: 0;
+    justify-content: center;
 }
 
 
+#export_files_users, #export_files_student {
+    display: flex;
+    align-items: flex-start;
+    gap: 1%;
+}
+
 #export_files {
     border-radius: 5px;
-    padding: 5px;
-    margin-top: 1%;
     width: 100%;
     background-color: rgba(247, 241, 241, 0.603);
 }
 
-/* Newly added*/
-
-#analytic_section {
-    height: 100%;
-    padding-bottom: 10%;
-}
 
 .analytics {
-    margin-top: 5rem;
-    margin-left: 7rem;
-    margin-right: 7rem;
+    margin: 2em 3.5em;
     border-radius: 5px;
 }
 
@@ -439,6 +438,7 @@ body #analytic_section {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    align-items: flex-start;
 }
 
 svg {
@@ -447,20 +447,18 @@ svg {
 }
 
 .search {
-    margin-top: 2rem;
     height: 2.5rem;
+    min-width: 20%;
     background-color: rgb(235, 238, 241);
     border-radius: 5px;
-    padding: 5px;
+    text-indent: 3px;
     box-sizing: border-box;
     font: 1em sans-serif;
 }
 
 #export-graduated,
 #export-att-graduated {
-    margin-top: 2rem;
     width: 20rem;
-    margin-left: 0;
 }
 
 #header-table-diploma,
@@ -473,6 +471,8 @@ svg {
 
 .filters {
     display: flex;
+    align-items: flex-start;
+    gap: 1rem;
 }
 
 #diploma-table>tbody>tr :nth-child(3),
@@ -498,11 +498,7 @@ svg {
 #diploma-table>tbody>tr :nth-child(25),
 #diploma-table>tbody>tr :nth-child(27),
 #diploma-table>tbody>tr :nth-child(28),
-#diploma-table>tbody>tr :nth-child(29) {
-    text-align: center;
-}
-
-
+#diploma-table>tbody>tr :nth-child(29),
 #attendance-table>tbody>tr :nth-child(3),
 #attendance-table>tbody>tr :nth-child(4),
 #attendance-table>tbody>tr :nth-child(5),
@@ -533,28 +529,19 @@ svg {
     text-align: center;
 }
 
-#export-excellent {
-    height: 2.5em;
-    width: 20%;
-    border-radius: 5px;
-    border: 1px solid darkslategray;
-    padding: 0 1em;
-    margin-left: 1em;
-    cursor: pointer;
-    background-color: snow;
-    font-weight: bold;
-    color: darkslategray;
-    font-size: medium;
+#export_excellent, #export_graduated, #export_att_graduated {
+    display: flex;
+    column-gap: 1rem;
+    margin-bottom: 1rem;
 }
 
 .dashboard-excellent {
-    margin-top: 1em;
-    margin-bottom: 2em;
     height: 2.5em;
     font: 1em sans-serif;
     color: darkslategray;
     background-color: snow;
     border-radius: 5px;
+    text-indent: 3px;
 }
 
 #fileUsers,
@@ -563,19 +550,19 @@ svg {
 }
 
 .custom-file-upload {
-    display: table-cell;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     width: 15%;
     text-align: center;
-    line-height: 250%;
-    height: 2.5em;
+    min-height: 2.5em;
     border-radius: 5px;
     border: 1px solid darkslategray;
-    padding: 0 1em;
     cursor: pointer;
     background-color: snow;
     color: darkslategray;
     font-size: medium;
-    margin-bottom: 0;
 }
 
 .custom-file-upload:hover,
@@ -592,14 +579,14 @@ svg {
 
 .import_files {
     display: flex;
-    height: 3em;
+    gap: 1%;
     margin-top: 1em;
 }
 
 #file-name1,
 #file-name2 {
     text-indent: 0.5em;
-    margin-bottom: 0;
+    margin: 1em 0;
 }
 
 #message-bar-export-excellent {
@@ -611,26 +598,38 @@ svg {
     font-family: monospace;
 }
 
+#message-bar-diploma-order {
+    margin-top: 1%;
+}
+
 #textarea {
     display: grid;
 }
 
+textarea {
+    padding-top: 3px;
+    padding-left: 3px;
+}
+
+#textarea-emails, #message {
+    margin-bottom: 1.25%;
+}
+
 .settings {
-    margin-top: 1.5rem;
     height: 70%;
     width: 19%;
     background-color: rgb(235, 238, 241);
     border: 1px solid darkslategray;
     border-radius: 5px;
-    padding: 5px;
+    padding: 1rem;
     box-sizing: border-box;
-    font: 1vw sans-serif;
     cursor: pointer;
 }
 
 .input {
     display: flex;
     justify-content: space-evenly;
+    align-items: center;
 }
 
 #deadline > input{
@@ -653,6 +652,7 @@ svg {
 #for_buttons {
     display: flex;
     justify-content: center;
+    gap: 1rem;
 }
 
 .received_messages {
@@ -664,7 +664,6 @@ svg {
     background: rgba(247, 241, 241, 0.603);
     color: darkslategray;
     font-size: medium;
-    margin-bottom: 1em;
 }
 
 
@@ -685,22 +684,59 @@ svg {
 
 #edit_selected_user_form > input {
     width: 350px;
-    height: 2.3em;
+    height: 3.2em;
     margin-top: 0;
 
 }
 
 #edit-user-button-section {
     margin-top: 15px;
-    width: 100%;
+    width: 80%;
     display: flex;
     justify-content: center;
     column-gap: 30px;
 }
 
-#edit-user-button-section > button {
-    width: 90%;
-    margin: 0;
-    padding: 0;
-}
+@media screen and (max-width: 900px) {
+    .filters {
+        display: block;
+    }
 
+    #export_excellent,
+    #export_graduated,
+    #diploma_order_form, 
+    #export_att_graduated, 
+    #export_files_users,
+    #export_files_student,
+    .import_files,
+    #for_buttons {
+        flex-direction: column;
+    }
+
+    #for_buttons {
+        gap: 5px;
+    }
+
+    .dashboard {
+        display: block;
+    }
+
+    .search,
+    .file-extension-picker-long, 
+    .file-extension-picker-short, 
+    .button, .long-button, 
+    #dashboard_action, 
+    #dashboard_textarea,
+    .diploma_order_select,
+    .custom-file-upload,
+    #export-att-graduated,
+    #export-graduated {
+        width: 100%;
+        margin-bottom: 1%;
+    }
+
+    #textarea-emails {
+        padding-bottom: 65%;
+    }
+
+}

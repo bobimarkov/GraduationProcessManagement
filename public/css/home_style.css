@@ -17,7 +17,6 @@ body {
 	flex-direction: column;
 	font-family: 'Montserrat', sans-serif;
 	height: 100%;
-	/* margin: -20px 0 50px; */
 }
 
 h1 {
@@ -25,38 +24,22 @@ h1 {
 	margin: 0;
 }
 
-h2 {
-	text-align: center;
-}
-
-p {
-	font-size: 14px;
-	font-weight: 100;
-	line-height: 20px;
-	letter-spacing: 0.5px;
-	/* margin: 20px 0 30px; */
-}
-
 img {
     width: 30%;
 }
 
 button {
-    width: 400px;
-    height: 50px;
+    width: 60%;
 	border-radius: 20px;
 	border: 1px solid #33B4FF;
 	background-color: #33B4FF;
 	color: #FFFFFF;
 	font-size: 12px;
 	font-weight: bold;
-	padding: 12px 45px;
+	padding: 12px 5px;
 	letter-spacing: 1px;
 	text-transform: uppercase;
-}
-
-button:active {
-	transform: scale(0.95);
+	text-align: center;
 }
 
 button:focus {
@@ -70,12 +53,12 @@ button.ghost {
 
 .container {
     margin: 2em;
-    padding: 1em;
+    padding: 3em 0;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
     flex-direction: column;
-    height: 80%;
+	min-height: 80%;
     width: 45%;
     background: rgb(195,192,236);
     background: linear-gradient(90deg, #86CEFA 0%, rgba(226,237,238,1) 75%, rgba(255,255,255,1) 100%);
@@ -93,5 +76,19 @@ button.ghost {
 .graduation_info_section {
     width: 65%;
     text-align: center;    
-    font-size: 1.7rem;
+	font-size: 1.5rem;
+
+}
+
+@media screen and (max-width: 900px) {
+	.graduation_info_section {
+		width: 80%;
+		text-align: center;   
+		font-size: 1.4rem;
+
+	}
+
+	.container {
+		width: 90%;
+	}
 }

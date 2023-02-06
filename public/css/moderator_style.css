@@ -11,6 +11,7 @@ body {
     margin: auto;
     font-weight: bolder;
     color: #006199;
+    font-family: Arial, Helvetica, sans-serif !important;
 }
 
 .row {
@@ -23,6 +24,31 @@ body {
     box-shadow: 5px 5px 20px darkslategray;
 }
 
+.button {
+    height: 2.5em;
+    border-radius: 5px;
+    border: 1px solid #006199;
+    cursor: pointer;
+    background-color: snow;
+    font-weight: bold;
+    color: darkslategray;
+    font-size: medium;
+    padding: 0 1rem;
+}
+
+.long-button {
+    width: 100%;
+}
+
+.button:hover  {
+    background-color: #006199;
+    color: snow;
+}
+
+#button-export-moderator-responsibilities {
+    width: 40%;
+}
+
 h2, .logout_header_link {
     text-transform: capitalize;
     text-decoration: none;
@@ -32,7 +58,7 @@ h2, .logout_header_link {
 .navigation {
     padding: 5px;
     background: rgba(247, 241, 241, 0.3);
-    margin: 1em 0;
+    margin: 1em 0.5em;
 }
 
 .vertical_line {
@@ -49,6 +75,7 @@ h2, .logout_header_link {
 .navigation_element {
     display: inline;
     cursor: pointer;
+    font-size: 1.35rem;
 }
 
 .navigation_element:hover, .logout_header_link:hover {
@@ -56,15 +83,17 @@ h2, .logout_header_link {
 }
 
 .message-bar {
-    padding: 10px;
-    margin-bottom: 1em;
+    text-indent: 10px;
     font-size: 1.2em;
     border-radius: 10px;
     font-family: monospace;
+    padding: 0.5rem 0;
+
 }
 
 #message-bar-update-responsibilities {
     display: none;
+
 }
 
 .error {
@@ -80,9 +109,9 @@ h2, .logout_header_link {
 }
 
 table {
-    /*border: 0.5px solid slategray;*/
     box-shadow: 2px 2px 20px #006199;
     margin-bottom: 2em;
+    margin-top: 1em;
     max-height: 50vh;
     width: 100%;
     border-collapse: collapse;
@@ -227,7 +256,6 @@ table tr:nth-child(even) {
 }
 
 .user-role-icon {
-    /* background-color: darkslategray; */
     width: 1em;
     color: darkslategray;
 }
@@ -249,11 +277,11 @@ table tr:nth-child(even) {
 }
 .comment-icon:hover span {
     background-color: snow;
-    padding: 5px;
     display: block;
     z-index: 100;
     left: 0px;
     margin: -40px;
+
     position: absolute;
     top: 10px;
     text-decoration: none;
@@ -263,19 +291,6 @@ table tr:nth-child(even) {
     color: darkslategray;
     border: 1px solid darkslategray;
     border-radius: 5px;
-}
-
-.delete-button {
-    height: 1.5em;
-    border: 0.5px solid grey;
-    cursor: pointer;
-    background-color: snow;
-    color: darkslategray;
-}
-
-.delete-button:hover {
-    background-color: darkslategray;
-    color: snow;
 }
 
 ::-webkit-scrollbar {
@@ -317,84 +332,61 @@ h3 {
 
 /* Newly added*/
 
-#analytic_section{
-    height: 100%;
-    padding-bottom: 10%;
+.analytics {
+    margin: 2em 3.5em;
+    border-radius: 5px;
 }
 
-.analytics{
-    margin-top:5rem;
-    margin-left:7rem;
-    margin-right:7rem;
-    border-radius:5px;
-}
-
-body #analytic_section{
-    display:flex ;
-    flex-wrap:wrap;
-    justify-content:space-evenly;
+body #analytic_section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: flex-start;
 }
 
 svg{
-    border-radius:5px;
-    border:1px solid grey;
+    border-radius: 5px;
+    border: 1px solid grey;
 }
 
 .filters {
     display: flex;
-    align-items: baseline;
+    align-items: flex-start;
+    gap: 1rem;
 }
 
-.filters input{
-    width: 10rem;
-   
-    margin-bottom: 1rem;
-    height: 2rem;
-}
-#searchByFn{
-    width:12rem !important;
-}
-
-#search-responsibilities, #search-diploma {
-    margin-top: 2rem;
+.search {
     height: 2.5rem;
+    min-width: 20%;
     background-color: rgb(235, 238, 241);
     border-radius: 5px;
-    padding: 5px;
+    text-indent: 3px;
+
     box-sizing: border-box;
     font: 1em sans-serif;
 }
 
 .dashboard-action,
-.boolean-select-after-select {
-    margin-top: 1em;
+.boolean-select-after-select,
+.file-extension-picker {
+    text-indent: 3px;
     height: 2.5em;
+    width: 10%;
     font: 1em sans-serif;
     color: darkslategray;
     background-color: snow;
     border-radius: 5px;
 }
 
-
-.submit-action {
-    height: 2.5em;
-    border-radius: 5px;
-    border: 1px solid darkslategray;
-    padding: 0 1em;
-    margin-left: 1em;
-    cursor: pointer;
-    background-color: snow;
-    font-weight: bold;
-    color: darkslategray;
-    font-size: 1vw;
+.file-extension-picker {
+    width: 80%;
 }
+
 
 #export_files_moderator_responsibilities {
     display: flex;
-    align-items: end;
-    justify-content: center;
-    column-gap: 10px;
-    width: 30%;
+    align-items: flex-start;
+    gap: 1rem;
 }
 
 textarea {
@@ -446,8 +438,6 @@ textarea {
     border-color: darkslategray;
     border-radius: 5px;
     padding: 5px;
-    box-sizing: border-box;
-    font: 1em sans-serif;
 }
 
 .form-input:focus,
