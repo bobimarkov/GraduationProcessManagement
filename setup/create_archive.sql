@@ -1,9 +1,6 @@
-CREATE DATABASE archive_graduation
-GO
-USE archive_graduation
-GO
+CREATE DATABASE archive_graduation;
+USE archive_graduation;
 
------ Create Tables -----
 
 CREATE TABLE `student` ( 
     `fn` VARCHAR(99) NOT NULL , 
