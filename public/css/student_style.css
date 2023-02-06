@@ -316,6 +316,8 @@ table tr {
 
 #request_diploma_in_advance_form {
     margin-top: 20px;
+    display: flex;
+    gap: 1%;
 }
 
 #message-bar-diploma-request {
@@ -339,6 +341,10 @@ table tr {
         display: block;
     }
 
+    #request_diploma_in_advance_form {
+        flex-direction: column;
+    }
+
     #profile_info_section_content_1_wrapper,
     #diploma_info_section_content_1_wrapper,
     #request_gown_hat_content_1_wrapper,
@@ -352,7 +358,11 @@ table tr {
         border-left: none
     }
 
-    #diploma_info_section_content_1_wrapper, #diploma_info_section_content_2_wrapper, #diploma_info_section_content_3_wrapper {
+    #attendance_request_select, 
+    #request_diploma_in_advance_comment, 
+    #diploma_info_section_content_1_wrapper, 
+    #diploma_info_section_content_2_wrapper, 
+    #diploma_info_section_content_3_wrapper {
         width: 100%;
     }
 
