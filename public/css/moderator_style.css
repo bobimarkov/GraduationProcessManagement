@@ -483,3 +483,39 @@ textarea {
 .form-input {
     width: 100%;
 }
+
+.dashboard-action,
+.boolean-select-after-select,
+.file-extension-picker {
+    text-indent: 3px;
+    height: 2.5em;
+    width: 10%;
+    font: 1em sans-serif;
+    color: darkslategray;
+    background-color: snow;
+    border-radius: 5px;
+}
+
+.file-extension-picker {
+    width: 80%;
+}
+
+
+#export_files_moderator_responsibilities {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+
+}
+
+.received_messages {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    text-indent: 0.5em;
+    border: 1px solid #006199;
+    background: rgba(247, 241, 241, 0.603);
+    color: darkslategray;
+    font-size: medium;
+    margin-bottom: 1em;
+}
