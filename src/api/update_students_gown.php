@@ -39,9 +39,9 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         foreach ($students_arr_1d as $student) {
             $student = trim($student);
             $values = array_values(explode(",", $student));
-            $values = array("fn" => trim($values[0]), "gown_taken" => trim($values[1]),"gown_returned" => trim($values[2]));
  
             validateInput($values, $student, ($i + 1), $conn, $email);
+            $values = array("fn" => trim($values[0]), "gown_taken" => trim($values[1]),"gown_returned" => trim($values[2]));
             $students_arr_2d += [$i => array_map("trim", $values)];
             $i++;
         }
@@ -57,6 +57,8 @@ function validateInput($values, $student, $i, $connection, $email)
         echo json_encode($response);
         die;
     }
+
+    $values = array("fn" => trim($values[0]), "gown_taken" => trim($values[1]),"gown_returned" => trim($values[2]));
 
     if (empty($values["fn"])) {
         $response = array("success" => false, "message" => "Грешка за потребител на ред $i ($student) - Фн не може да е празна стойност!");
