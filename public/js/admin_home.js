@@ -557,14 +557,13 @@ function showAnalyticsSection() {
             activeHeader("analytic_header");
             if (!data.success) {
                 text.innerHTML = '<i class="fa fa-pie-chart"></i> В момента няма данни за дипломиращи се студенти и няма направена статистика! <br> Когато добавите данни, то ще получите статистика за тях!';
-                document.getElementById('analytic_section').style = 'height: 1em !important';
+                // document.getElementById('analytic_section').style = 'height: 1em !important';
                 text.style = "text-align : center";
                 //console.log(data.error);
             } else {
                 // Load google charts
                 text.innerHTML = '<i class="fa fa-pie-chart"></i> Статистиката е на база дипломиращи се студенти!';
                 text.style = "text-align : center; height : 1em";
-                document.getElementById('analytics1').style = 'margin-top: 1em';
                 showAnalyticsSectionHelper();
             }
         })
@@ -998,8 +997,10 @@ function editUsers(event) {
             }
         })
         .then((data) => {
-            var errElem = document.getElementById('message-bar-edit-users');
+            let errElem = document.getElementById('message-bar-edit-users');
+
             if (!data.success) {
+                errElem.style.display = "block";
                 errElem.classList.remove(['success']);
                 errElem.classList.add(['error']);
                 errElem.innerHTML = data.message;
@@ -2306,7 +2307,7 @@ function getClasses() {
                     let text = document.createTextNode(data.class[i].class);
                     button.appendChild(text);
                     button.setAttribute("id", "but" + data.class[i].class)
-                    button.setAttribute("class", "submit-action");
+                    button.setAttribute("class", "button");
                     button.onclick = function (event) { downloadArchive(event, data.class[i].class); }
                     div.appendChild(button);
                 }
