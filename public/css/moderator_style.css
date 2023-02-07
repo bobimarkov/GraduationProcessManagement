@@ -274,7 +274,7 @@ table tr:nth-child(even) {
     z-index: 100;
     left: 0px;
     margin: -40px;
-
+    padding: 0.45em;
     position: absolute;
     top: 10px;
     text-decoration: none;
