@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             fputcsv($output,  $column_names);
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 //Тук ще оправя повторението на код след като оправим кои ще са null по default
-                                
+                $row['color'] = presentColor($row);
                 $row['is_taken'] = ($row['is_taken'] === 0 || $row['is_taken'] === null) ? 'Не' : 'Да';
                 fputcsv($output, $row);
             }
