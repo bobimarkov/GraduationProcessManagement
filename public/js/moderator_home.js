@@ -16,13 +16,13 @@ logoutHeader.addEventListener("click", (e) => {
 
 function generateTableHeaderRow(columnNames, functionName, header_table_id, table_id) {
     var headerCells =
-        functionName === undefined ?
+        functionName == undefined ?
             columnNames.reduce(
                 (accumulator, currentValue) => accumulator.concat(`<td>${currentValue}</td>`),
                 ''
             )
             :
-            table_id === undefined ?
+            table_id == undefined ?
                 columnNames.reduce(
                     (accumulator, currentValue, currentIndex) => accumulator.concat(`<td onclick=${functionName}(${currentIndex})>${currentValue}</td>`),
                     ''
@@ -33,7 +33,7 @@ function generateTableHeaderRow(columnNames, functionName, header_table_id, tabl
                     ''
                 )
 
-    return header_table_id === undefined ? `<tr>${headerCells}</tr>` : `<tr id=${header_table_id}>${headerCells}</tr>`;
+    return header_table_id == undefined ? `<tr>${headerCells}</tr>` : `<tr id=${header_table_id}>${headerCells}</tr>`;
 }
 
 var cPrev = -1;
@@ -51,10 +51,10 @@ function sortBy(c, id) {
     }
     let firstLine = arrTable.shift();
 
-    if (c !== cPrev) {
+    if (c != cPrev) {
         arrTable.sort(
             function (a, b) {
-                if (a[c] === b[c]) {
+                if (a[c] == b[c]) {
                     return 0;
                 } else {
                     return (a[c] < b[c]) ? -1 : 1;
@@ -284,10 +284,14 @@ function buildStudentsDiplomaTable(users) {
             var row = table.insertRow(i);
             row.id = 'user' + i;
             let response;
-            switch (user.speech_response) {
-                case null: response = '-'; break;
-                case 0: response = 'Отказва'; break;
-                case 1: response = 'Приема'; break;
+            if (user.speech_response == 1) {
+                response = 'Приема';
+            }
+            else if (user.speech_response == 0) {
+                response = 'Отказва';
+            }
+            else if (user.speech_response == null) {
+                response = '-';
             }
             var row_data = [
                 user.student_fn,
@@ -298,7 +302,7 @@ function buildStudentsDiplomaTable(users) {
                 user.grade,
                 user.attendance == null ? '' : user.attendance == 0 ? 'Не' : 'Да',
                 user.has_right == 0 ? 'Не' : 'Да',
-                user.moderator_signature_email === null ? 'не е избран' : user.moderator_signature_email,
+                user.moderator_signature_email == null ? 'не е избран' : user.moderator_signature_email,
                 user.is_ready == 0 ? 'Не' : 'Да',
                 user.is_taken == 0 ? 'Не' : 'Да',
                 user.take_in_advance_request == 0 ? 'Не' : 'Да',
@@ -308,12 +312,12 @@ function buildStudentsDiplomaTable(users) {
                 user.speech_request = (user.speech_request == 1) ? 'Да' : 'Не',
                 user.speech_response = response,
                 user.photos_requested == 0 ? 'Не' : 'Да',
-                user.moderator_gown_email === null ? 'не е избран' : user.moderator_gown_email,
+                user.moderator_gown_email == null ? 'не е избран' : user.moderator_gown_email,
                 user.gown_requested == null ? '' : user.gown_requested == 0 ? 'Не' : 'Да',
                 user.gown_requested != 1 ? '' : user.gown_taken == 0 || user.gown_taken == null ? 'Не' : 'Да',
                 //gown_returned
                 user.gown_taken != 1 ? '' : user.gown_returned == 0 || user.gown_returned == null ? 'Не' : 'Да',
-                user.moderator_hat_email === null ? 'не е избран' : user.moderator_hat_email,
+                user.moderator_hat_email == null ? 'не е избран' : user.moderator_hat_email,
                 user.hat_requested == null ? '' : user.hat_requested == 0 ? 'Не' : 'Да',
                 //hat_taken
                 user.hat_requested != 1 ? '' : user.hat_taken == 0 || user.hat_taken == null ? 'Не' : 'Да'
@@ -493,15 +497,11 @@ function dataHasRightToArray(data) {
 
     let rows = data.users;
     rows.forEach(row_data => {
-        switch (row_data.has_right) {
-            case 1:
-                a[1][1]++;
-                break;
-            case 0:
-                a[2][1]++;
-                break;
-            default:
-                break;
+        if (row_data.has_right == 1) {
+            a[1][1]++;
+        }
+        else if (row_data.has_right == 0) {
+            a[2][1]++;
         }
     });
     return a;
@@ -698,7 +698,7 @@ function createSumDivForModerator(parentId, sums_text, sum_values) {
 
 function buildResponsibilitiesSectionForModeratorHat(users) {
     var resp_beginning = document.getElementById("responsibilities_beginning");
-    var name_range = users[0] === undefined ? '' : users[0].name_range;
+    var name_range = users[0] == undefined ? '' : users[0].name_range;
     resp_beginning.innerHTML = '<i class="fas fa-graduation-cap"> </i>' + " " + " Отговорност: Шапки " + name_range;
     var table = document.getElementById("responsibilities_table");
     var sums = {
@@ -709,12 +709,11 @@ function buildResponsibilitiesSectionForModeratorHat(users) {
     }
     var sums_text = ["Студенти с право на диплома: ", "Студенти заявили присъствие: ", "Студенти заявили шапка: ", "Студенти отказали шапка: "];
     for (const user of users) {
-        sums.hat_requested += user.hat_requested === 1;
-        sums.hat_declined += user.hat_requested === 0;
-        sums.has_right += user.has_right === 1;
-        sums.attendance += user.attendance === 1;
+        if (user.hat_requested == 1) sums.hat_requested++;
+        if (user.hat_requested == 0) sums.hat_declined++;
+        if (user.has_right == 1) sums.has_right++;
+        if (user.attendance == 1) sums.attendance++;
     }
-
     createSumDivForModerator("sums-div", sums_text, Object.values(sums));
 
     tableheader = document.getElementById("header_responsibilities_table");
@@ -733,7 +732,7 @@ function buildResponsibilitiesSectionForModeratorHat(users) {
                 user.name,
                 user.email,
                 user.phone,
-                user.hat_taken === null ? '' : user.hat_taken === 0 ? 'Не' : 'Да'
+                user.hat_taken == null ? '' : user.hat_taken == 0 ? 'Не' : 'Да'
             ]
             for (var j = 0; j < row_data.length; j++) {
                 row.insertCell(j).innerHTML = row_data[j];
@@ -754,7 +753,7 @@ function buildResponsibilitiesSectionForModeratorHat(users) {
 
 function buildResponsibilitiesSectionForModeratorGown(users) {
     var resp_beginning = document.getElementById("responsibilities_beginning");
-    var name_range = users[0] === undefined ? '' : users[0].name_range;
+    var name_range = users[0] == undefined ? '' : users[0].name_range;
     resp_beginning.innerHTML = '<i class="fas fa-tshirt"></i>' + " Отговорност: Тоги " + name_range;
     var table = document.getElementById("responsibilities_table");
     var sums = {
@@ -765,10 +764,10 @@ function buildResponsibilitiesSectionForModeratorGown(users) {
     }
     var sums_text = ["Студенти с право на диплома: ", "Студенти заявили присъствие: ", "Студенти заявили тога: ", "Студенти отказали тога: "];
     for (const user of users) {
-        sums.gown_requested += user.gown_requested === 1;
-        sums.gown_declined += user.gown_requested === 0;
-        sums.has_right += user.has_right === 1;
-        sums.attendance += user.attendance === 1;
+        if (user.gown_requested == 1) sums.gown_requested++;
+        if (user.gown_requested == 0) sums.gown_declined++;
+        if (user.has_right == 1) sums.has_right++;
+        if (user.attendance == 1) sums.attendance++;
     }
     createSumDivForModerator("sums-div", sums_text, Object.values(sums));
 
@@ -779,7 +778,7 @@ function buildResponsibilitiesSectionForModeratorGown(users) {
     var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Взета", "Върната"];
     table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header_responsibilities_table', 'responsibilities_table');
     for (const user of users) {
-        if (user.gown_requested === 1) {
+        if (user.gown_requested == 1) {
             var row = table.insertRow(i);
             row.id = 'user' + i;
             let row_data = [
@@ -787,8 +786,8 @@ function buildResponsibilitiesSectionForModeratorGown(users) {
                 user.name,
                 user.email,
                 user.phone,
-                user.gown_taken === null ? '' : user.gown_taken === 0 ? 'Не' : 'Да',
-                user.gown_returned === null ? '' : user.gown_returned === 0 ? 'Не' : 'Да',
+                user.gown_taken == null ? '' : user.gown_taken == 0 ? 'Не' : 'Да',
+                user.gown_returned == null ? '' : user.gown_returned == 0 ? 'Не' : 'Да',
             ]
             for (var j = 0; j < row_data.length; j++) {
                 row.insertCell(j).innerHTML = row_data[j];
@@ -809,7 +808,7 @@ function buildResponsibilitiesSectionForModeratorGown(users) {
 
 function buildResponsibilitiesSectionForModeratorSignature(users) {
     var resp_beginning = document.getElementById("responsibilities_beginning");
-    var name_range = users[0] === undefined ? '' : users[0].name_range;
+    var name_range = users[0] == undefined ? '' : users[0].name_range;
     resp_beginning.innerHTML = '<i class="fas fa-pen"></i>' + " Отговорност: Дипломи " + name_range;
     var sums = {
         has_right: 0,
@@ -819,10 +818,10 @@ function buildResponsibilitiesSectionForModeratorSignature(users) {
     }
     var sums_text = ["Студенти с право на диплома: ", "Студенти заявили присъствие: ", "Студенти искащи дипломата си предварително: ", "Студенти взели дипломите си: "];
     for (const user of users) {
-        sums.taken += user.is_taken;
-        sums.has_right += user.has_right;
-        sums.take_in_advance += user.take_in_advance_request;
-        sums.attendance += user.attendance;
+        if (user.is_taken == 1) sums.taken++;
+        if (user.has_right == 1) sums.has_right++;
+        if (user.take_in_advance_request == 1) sums.take_in_advance++;
+        if (user.attendance == 1) sums.attendance++;
     }
     createSumDivForModerator("sums-div", sums_text, Object.values(sums));
 
@@ -834,7 +833,7 @@ function buildResponsibilitiesSectionForModeratorSignature(users) {
     var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Цвят","Ред на връчване", "Час на връчване", "Взета"];
     table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header_responsibilities_table', 'responsibilities_table');
     for (const user of users) {
-        if (user.attendance === 1 ) {
+        if (user.attendance == "1" ) {
             var row = table.insertRow(i);
             row.id = 'user' + i;
             let row_data = [
@@ -845,7 +844,7 @@ function buildResponsibilitiesSectionForModeratorSignature(users) {
                 user.color = "<i class='fas fa-square' style='color:" + user.color + ";'></i>",
                 user.num_order,
                 user.time_diploma,
-                user.is_taken === null ? '' : user.is_taken === 0 ? 'Не' : 'Да'
+                user.is_taken == null ? '' : user.is_taken == 0 ? 'Не' : 'Да'
             ]
             for (var j = 0; j < row_data.length; j++) {
                 row.insertCell(j).innerHTML = row_data[j];
@@ -861,7 +860,7 @@ function buildResponsibilitiesSectionForModeratorSignature(users) {
     var columnNames = ["ФН", "Име", "Имейл", "Телефон", "Коментар (студент)", "Взета", "Коментар (администр.)"];
     table.innerHTML = generateTableHeaderRow(columnNames, 'sortBy', 'header_responsibilities_table2', 'responsibilities_table2');
     for (const user of users) {
-        if (user.take_in_advance_request === 1) {
+        if (user.take_in_advance_request == 1) {
             var row = table.insertRow(i);
             row.id = 'user' + i;
             let row_data = [
@@ -869,9 +868,9 @@ function buildResponsibilitiesSectionForModeratorSignature(users) {
                 user.name,
                 user.email,
                 user.phone,
-                user.take_in_advance_request_comment === null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.take_in_advance_request_comment}</span></i>`,
-                user.is_taken_in_advance === null ? '' : user.is_taken_in_advance === 0 ? 'Не' : 'Да',
-                user.diploma_comment === null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.diploma_comment}</span></i>`,
+                user.take_in_advance_request_comment == null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.take_in_advance_request_comment}</span></i>`,
+                user.is_taken_in_advance == null ? '' : user.is_taken_in_advance == 0 ? 'Не' : 'Да',
+                user.diploma_comment == null ? "<i class='far fa-comment-alt comment-icon'><span>Няма коментари</span></i>" : `<i class='fas fa-comment-alt comment-icon'><span>${user.diploma_comment}</span></i>`,
             ]
             for (var j = 0; j < row_data.length; j++) {
                 row.insertCell(j).innerHTML = row_data[j];
@@ -932,7 +931,7 @@ function downloadExportedModeratorResponsibilities(endpoint, export_files_id, me
     let form = document.getElementById(export_files_id);
     let fileFormat = form.format.value;
     let errElem = document.getElementById(message_bar);
-    if (fileFormat === 'no') {
+    if (fileFormat == 'no') {
         errElem.classList.remove(['success']);
         errElem.classList.add(['error']);
         errElem.innerHTML = "Не сте избрали файлов формат!"
@@ -941,7 +940,7 @@ function downloadExportedModeratorResponsibilities(endpoint, export_files_id, me
         errElem.classList.remove(['error']);
         errElem.innerHTML = "";
         values = { "format": fileFormat }
-        if (fileFormat !== 'pdf') {
+        if (fileFormat != 'pdf') {
             fetch(`../../api.php?endpoint=${endpoint}`, {
                 method: 'POST',
                 headers: {
@@ -989,7 +988,6 @@ function downloadExportedModeratorResponsibilities(endpoint, export_files_id, me
                     var link = document.createElement('a');
                     link.href = window.URL.createObjectURL(blob);
                     link.download = file_name.concat(".pdf");
-                    console.log(link.download);
 
                     document.body.appendChild(link);
                     link.click();
