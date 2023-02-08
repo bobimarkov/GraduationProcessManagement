@@ -22,13 +22,13 @@ logoutHeader.addEventListener("click", (e) => {
 
 function generateTableHeaderRow(columnNames, functionName, header_table_id, table_id) {
     var headerCells =
-        functionName === undefined ?
+        functionName == undefined ?
             columnNames.reduce(
                 (accumulator, currentValue) => accumulator.concat(`<td>${currentValue}</td>`),
                 ''
             )
             :
-            table_id === undefined ?
+            table_id == undefined ?
                 columnNames.reduce(
                     (accumulator, currentValue, currentIndex) => accumulator.concat(`<td onclick=${functionName}(${currentIndex})>${currentValue}</td>`),
                     ''
@@ -39,7 +39,7 @@ function generateTableHeaderRow(columnNames, functionName, header_table_id, tabl
                     ''
                 )
 
-    return header_table_id === undefined ? `<tr>${headerCells}</tr>` : `<tr id=${header_table_id}>${headerCells}</tr>`;
+    return header_table_id == undefined ? `<tr>${headerCells}</tr>` : `<tr id=${header_table_id}>${headerCells}</tr>`;
 }
 
 
@@ -58,10 +58,10 @@ function sortBy(c, id) {
     }
     let firstLine = arrTable.shift();
 
-    if (c !== cPrev) {
+    if (c != cPrev) {
         arrTable.sort(
             function (a, b) {
-                if (a[c] === b[c]) {
+                if (a[c] == b[c]) {
                     return 0;
                 } else {
                     return (a[c] < b[c]) ? -1 : 1;
@@ -365,10 +365,14 @@ function buildStudentsDiplomaTable(users) {
 
             row.setAttribute("onmousedown", "toggleBorderColor(this)")
             let response;
-            switch (user.speech_response) {
-                case null: response = '-'; break;
-                case 0: response = 'Отказва'; break;
-                case 1: response = 'Приема'; break;
+            if (user.speech_response == 1) {
+                response = 'Приема';
+            }
+            else if (user.speech_response == 0) {
+                response = 'Отказва';
+            }
+            else if (user.speech_response == null) {
+                response = '-';
             }
             var row_data = [
                 user.student_fn,
@@ -379,7 +383,7 @@ function buildStudentsDiplomaTable(users) {
                 user.grade,
                 user.attendance == null ? '' : user.attendance == 0 ? 'Не' : 'Да',
                 user.has_right == 0 ? 'Не' : 'Да',
-                user.moderator_signature_email === null ? 'не е избран' : user.moderator_signature_email,
+                user.moderator_signature_email == null ? 'не е избран' : user.moderator_signature_email,
                 user.is_ready == 0 ? 'Не' : 'Да',
                 user.is_taken == 0 ? 'Не' : 'Да',
                 user.take_in_advance_request == 0 ? 'Не' : 'Да',
@@ -389,11 +393,11 @@ function buildStudentsDiplomaTable(users) {
                 user.speech_request = (user.speech_request == 1) ? 'Да' : 'Не',
                 user.speech_response = response,
                 user.photos_requested == 0 ? 'Не' : 'Да',
-                user.moderator_gown_email === null ? 'не е избран' : user.moderator_gown_email,
+                user.moderator_gown_email == null ? 'не е избран' : user.moderator_gown_email,
                 user.gown_requested == null ? '' : user.gown_requested == 0 ? 'Не' : 'Да',
                 user.gown_requested != 1 ? '' : user.gown_taken == 0 || user.gown_taken == null ? 'Не' : 'Да',
                 user.gown_taken != 1 ? '' : user.gown_returned == 0 || user.gown_returned == null ? 'Не' : 'Да',
-                user.moderator_hat_email === null ? 'не е избран' : user.moderator_hat_email,
+                user.moderator_hat_email == null ? 'не е избран' : user.moderator_hat_email,
                 user.hat_requested == null ? '' : user.hat_requested == 0 ? 'Не' : 'Да',
                 user.hat_requested != 1 ? '' : user.hat_taken == 0 || user.hat_taken == null ? 'Не' : 'Да',
             ];
@@ -441,10 +445,14 @@ function buildStudentsAttendanceDiplomaTable(users) {
             var row = table.insertRow(i);
             row.id = 'user' + i;
             let response;
-            switch (user.speech_response) {
-                case null: response = '-'; break;
-                case 0: response = 'Отказва'; break;
-                case 1: response = 'Приема'; break;
+            if (user.speech_response == 1) {
+                response = 'Приема';
+            }
+            else if (user.speech_response == 0) {
+                response = 'Отказва';
+            }
+            else if (user.speech_response == null) {
+                response = '-';
             }
             var row_data = [
                 user.student_fn,
@@ -458,7 +466,7 @@ function buildStudentsAttendanceDiplomaTable(users) {
                 user.grade,
                 user.attendance == null ? '' : user.attendance == 0 ? 'Не' : 'Да',
                 user.has_right == 0 ? 'Не' : 'Да',
-                user.moderator_signature_email === null ? 'не е избран' : user.moderator_signature_email,
+                user.moderator_signature_email == null ? 'не е избран' : user.moderator_signature_email,
                 user.is_ready == 0 ? 'Не' : 'Да',
                 user.is_taken == 0 ? 'Не' : 'Да',
                 user.take_in_advance_request == 0 ? 'Не' : 'Да',
@@ -468,11 +476,11 @@ function buildStudentsAttendanceDiplomaTable(users) {
                 user.speech_request = (user.speech_request == 1) ? 'Да' : 'Не',
                 user.speech_response = response,
                 user.photos_requested == 0 ? 'Не' : 'Да',
-                user.moderator_gown_email === null ? 'не е избран' : user.moderator_gown_email,
+                user.moderator_gown_email == null ? 'не е избран' : user.moderator_gown_email,
                 user.gown_requested == null ? '' : user.gown_requested == 0 ? 'Не' : 'Да',
                 user.gown_requested != 1 ? '' : user.gown_taken == 0 || user.gown_taken == null ? 'Не' : 'Да',
                 user.gown_taken != 1 ? '' : user.gown_returned == 0 || user.gown_returned == null ? 'Не' : 'Да',
-                user.moderator_hat_email === null ? 'не е избран' : user.moderator_hat_email,
+                user.moderator_hat_email == null ? 'не е избран' : user.moderator_hat_email,
                 user.hat_requested == null ? '' : user.hat_requested == 0 ? 'Не' : 'Да',
                 user.hat_requested != 1 ? '' : user.hat_taken == 0 || user.hat_taken == null ? 'Не' : 'Да',
             ];
@@ -744,15 +752,11 @@ function dataHasRightToArray(data) {
 
     let rows = data.users;
     rows.forEach(row_data => {
-        switch (row_data.has_right) {
-            case 1:
-                a[1][1]++;
-                break;
-            case 0:
-                a[2][1]++;
-                break;
-            default:
-                break;
+        if (row_data.has_right == 1) {
+            a[1][1]++;
+        }
+        else if (row_data.has_right == 0) {
+            a[2][1]++;
         }
     });
     return a;
@@ -1501,7 +1505,7 @@ function downloadExportedStudents(event) {
     let form = document.getElementById("export_files_student");
     let fileFormat = form.format.value;
     let errElem = document.getElementById('message-bar-export-student');
-    if (fileFormat === 'no') {
+    if (fileFormat == 'no') {
         errElem.classList.remove(['success']);
         errElem.classList.add(['error']);
         errElem.innerHTML = "Не сте избрали файлов формат!"
@@ -1510,7 +1514,7 @@ function downloadExportedStudents(event) {
         errElem.classList.remove(['error']);
         errElem.innerHTML = "";
         values = { "format": fileFormat }
-        if (fileFormat !== 'pdf') {
+        if (fileFormat != 'pdf') {
             fetch('../../api.php?endpoint=export_students', {
                 method: 'POST',
                 headers: {
@@ -1574,7 +1578,7 @@ function downloadExportedUsers(event) {
     let form = document.getElementById("export_files_users");
     let fileFormat = form.format.value;
     let errElem = document.getElementById('message-bar-export-users');
-    if (fileFormat === 'no') {
+    if (fileFormat == 'no') {
         errElem.classList.remove(['success']);
         errElem.classList.add(['error']);
         errElem.innerHTML = "Не сте избрали файлов формат!"
@@ -1583,7 +1587,7 @@ function downloadExportedUsers(event) {
         errElem.classList.remove(['error']);
         errElem.innerHTML = "";
         values = { "format": fileFormat }
-        if (fileFormat !== 'pdf') {
+        if (fileFormat != 'pdf') {
             fetch('../../api.php?endpoint=export_users', {
                 method: 'POST',
                 headers: {
@@ -1649,7 +1653,7 @@ function downloadExportedGraduated(event) {
     let form = document.getElementById("export_graduated");
     let fileFormat = form.format.value;
     let errElem = document.getElementById('message-bar-export-graduated');
-    if (fileFormat === 'no') {
+    if (fileFormat == 'no') {
         errElem.classList.remove(['success']);
         errElem.classList.add(['error']);
         errElem.innerHTML = "Не сте избрали файлов формат!"
@@ -1658,7 +1662,7 @@ function downloadExportedGraduated(event) {
         errElem.classList.remove(['error']);
         errElem.innerHTML = "";
         values = { "format": fileFormat }
-        if (fileFormat !== 'pdf') {
+        if (fileFormat != 'pdf') {
             fetch('../../api.php?endpoint=export_graduated', {
                 method: 'POST',
                 headers: {
@@ -1722,9 +1726,8 @@ function downloadExportedAttGraduated(event) {
     event.preventDefault();
     let form = document.getElementById("export_att_graduated");
     let fileFormat = form.formatatt.value;
-    console.log(fileFormat);
     let errElem = document.getElementById('message-bar-export-attendance');
-    if (fileFormat === 'no') {
+    if (fileFormat == 'no') {
         errElem.classList.remove(['success']);
         errElem.classList.add(['error']);
         errElem.innerHTML = "Не сте избрали файлов формат!"
@@ -1733,7 +1736,7 @@ function downloadExportedAttGraduated(event) {
         errElem.classList.remove(['error']);
         errElem.innerHTML = "";
         values = { "format": fileFormat }
-        if (fileFormat !== 'pdf') {
+        if (fileFormat != 'pdf') {
             fetch('../../api.php?endpoint=export_attendance', {
                 method: 'POST',
                 headers: {
@@ -1798,7 +1801,7 @@ function downloadExcellentStudent(event) {
     let form = document.getElementById("export_excellent");
     let fileFormat = form.format.value;
     let errElem = document.getElementById('message-bar-export-excellent');
-    if (fileFormat === 'no') {
+    if (fileFormat == 'no') {
         errElem.classList.remove(['success']);
         errElem.classList.add(['error']);
         errElem.innerHTML = "Не сте избрали файлов формат!"
@@ -1807,7 +1810,7 @@ function downloadExcellentStudent(event) {
         errElem.classList.remove(['error']);
         errElem.innerHTML = "";
         values = { "format": fileFormat }
-        if (fileFormat !== 'pdf') {
+        if (fileFormat != 'pdf') {
             fetch('../../api.php?endpoint=export_excellent', {
                 method: 'POST',
                 headers: {
@@ -1887,10 +1890,10 @@ function sortByEdit(c) {
     }
     let firstLine = arrTable.shift();
 
-    if (c !== cPrev) {
+    if (c != cPrev) {
         arrTable.sort(
             function (a, b) {
-                if (a[c] === b[c]) {
+                if (a[c] == b[c]) {
                     return 0;
                 } else {
                     return (a[c] < b[c]) ? -1 : 1;
@@ -2384,7 +2387,7 @@ function getNewUsersToDistribute() {
         .then(data => {
             var infoElem = document.getElementById('message-bar-distribute-moderators');
             infoElem.classList.add(['info']);
-            if(data.students.length === 0  && data.moderators.length === 0) {
+            if(data.students.length == 0  && data.moderators.length == 0) {
                 distribute_button = document.getElementById("distribute_moderators_button");
                 distribute_button.classList.add('disabled-button');
                 distribute_button.setAttribute('disabled', '');

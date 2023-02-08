@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             fputcsv($output,  $column_names);
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 //Тук ще оправя повторението на код след като оправим кои ще са null по default
-                                
+                $row['color'] = presentColor($row);
                 $row['is_taken'] = ($row['is_taken'] === 0 || $row['is_taken'] === null) ? 'Не' : 'Да';
                 fputcsv($output, $row);
             }
@@ -63,11 +63,38 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             $pdf->Cell(0, 0, implode(",", $column_names), 0, 1);
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 //Тук ще оправя повторението на код след като оправим кои ще са null по default
+                $row['color'] = presentColor($row);
                 $row['is_taken'] = ($row['is_taken'] === 0 || $row['is_taken'] === null) ? 'Не' : 'Да';
                 $pdf->Cell(0, 0, implode(",", $row), 0, 1);
             }
             $pdf->Output("students_for_gown.pdf", 'D');
         }
+    }
+}
+
+function presentColor($row)
+{
+    switch ($row['color']) {
+        case '#FF0000':
+            return 'Червен';
+        case '#FFA500':
+            return 'Оранжев';
+        case '#FFFF00':
+            return 'Жълт';
+        case '#228B22':
+            return 'Зелен';
+        case '#0000FF':
+            return 'Син';
+        case '#FF1493':
+            return 'Розов';
+        case '#663399':
+            return 'Лилав';
+        case '#8B4513':
+            return 'Кафяв';
+        case '#000000':
+            return 'Черен';
+        case '#F0FFFF':
+            return 'Сив';
     }
 }
 ?>
