@@ -7,8 +7,6 @@ header("Access-Control-Allow-Methods: POST");
 include_once '../src/database/db_conf.php';
 include_once '../src/utils/JWTUtils.php';
 
-echo "HELLLOOOOOO";
-
 $data = (array) $data;
 $email = $password = "";
 
