@@ -22,17 +22,14 @@ $issuer = $config["issuer"];
 
 echo "HERE 8";
 try {
-    echo "HERE 8.1";
     $KmsClient = new KmsClient([
         'profile' => 'default',
         'version' => '2014-11-01',
         'region' => 'us-east-1'
     ]);
-    echo "HERE 8.2";
 }
 catch (Error $e) {
-    echo "HERE 8.3";
-    var_dump($e);
+    echo $e->getTrace();
     echo "\n";
 }
 
