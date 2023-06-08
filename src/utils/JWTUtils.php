@@ -21,11 +21,17 @@ $config = json_decode(file_get_contents("../src/config/config.json"), true);
 $issuer = $config["issuer"];
 
 echo "HERE 8";
+try {
 $KmsClient = new KmsClient([
     'profile' => 'default',
     'version' => '2014-11-01',
     'region' => 'us-east-1'
 ]);
+}
+catch (AwsException $e) {
+    echo $e->getMessage();
+    echo "\n";
+}
 
 echo "HERE 9";
 $keyId = 'arn:aws:kms:us-east-1:175668400529:key/ab9e8b5b-ed4b-4383-8391-3267c88de2f7';
