@@ -15,22 +15,22 @@ use Firebase\JWT\SignatureInvalidException;
 use Aws\Kms\KmsClient;
 use Aws\Exception\AwsException;
 
-echo "HERE 8";
+echo "HERE 7";
 
 $config = json_decode(file_get_contents("../src/config/config.json"), true);
 $issuer = $config["issuer"];
 
-echo "HERE 9";
+echo "HERE 8";
 $KmsClient = new KmsClient([
     'profile' => 'default',
     'version' => '2014-11-01',
     'region' => 'us-east-1'
 ]);
 
-echo "HERE 10";
+echo "HERE 9";
 $keyId = 'arn:aws:kms:us-east-1:175668400529:key/ab9e8b5b-ed4b-4383-8391-3267c88de2f7';
 
-echo "HERE 11";
+echo "HERE 10";
 try {
     $result = $KmsClient->describeKey([
         'KeyId' => $keyId,
@@ -41,7 +41,7 @@ try {
     echo "\n";
 }
 
-echo "HERE 12";
+echo "HERE 11";
  
 
 $secret_key = $config["secret_key"];
