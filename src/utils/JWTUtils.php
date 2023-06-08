@@ -29,7 +29,7 @@ try {
     ]);
 }
 catch (Error $e) {
-    echo $e->getTrace();
+    var_dump($e->getTrace());
     echo "\n";
 }
 
