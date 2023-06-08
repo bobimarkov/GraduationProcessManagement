@@ -18,7 +18,7 @@ use Aws\SecretsManager\SecretsManagerClient;
 $config = json_decode(file_get_contents("../src/config/config.json"), true);
 
 
-$secret_name = "GPM/JWT_KEY";
+$secret_name = "JWT/GPM-S";
 
 try {
     $SMClient = new SecretsManagerClient([
