@@ -3,15 +3,19 @@ require_once "../src/lib/aws/aws-autoloader.php";
 
 use Aws\Exception\AwsException;
 use Aws\SecretsManager\SecretsManagerClient;
+use Aws\Credentials\CredentialProvider;
 
 class Db {
     private $connection;
     public function __construct() {
         $secret_name = "MySQL/GPM-S-TEST-1";
 
+        $credentials = CredentialProvider::defaultProvider();
+
         $SMClient = new SecretsManagerClient([
             'version' => '2017-10-17',
-            'region' => 'us-east-1'
+            'region' => 'us-east-1',
+            'credentials  ' => $credentials
         ]);
 
         try {        
