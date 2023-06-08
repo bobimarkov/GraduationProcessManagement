@@ -14,7 +14,7 @@ $error = "";
 $user = [];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    echo "TEST";
+    header("Test: Yes");
     // Check if username is empty
     if(empty(trim($data["email"]))) {
         $error = "Моля попълнете всички полета";
