@@ -1,4 +1,6 @@
 <?php
+  echo "HERE 2";
+
   $headers = apache_request_headers();
   $jwt = "";
   if (isset($headers['Authorization'])) {
