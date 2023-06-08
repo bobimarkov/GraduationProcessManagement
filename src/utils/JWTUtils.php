@@ -42,7 +42,7 @@ try {
         'KeyId' => $keyId,
     ]);
     // var_dump($result);
-} catch (AwsException $e) {
+} catch (AwsException | Error $e) {
     echo $e->getMessage();
     echo "\n";
 }
