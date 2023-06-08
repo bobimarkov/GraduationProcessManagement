@@ -38,7 +38,7 @@ try {
     ]);
     $jsonData = json_decode($result["SecretString"], true);
 
-} catch (AwsException $e) {
+} catch (Exception | Error $e) {
     echo $e->getMessage();
     echo "\n";
 } 
