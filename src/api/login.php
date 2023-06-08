@@ -1,10 +1,14 @@
+
 <?php
+echo "HERE 6";
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 
 include_once '../src/database/db_conf.php';
 include_once '../src/utils/JWTUtils.php';
+
+echo "HERE 7";
 
 $data = (array) $data;
 $email = $password = "";
@@ -13,7 +17,6 @@ $response = ["success" => true];
 $error = "";
 $user = [];
 
-echo "HERE";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Check if username is empty
