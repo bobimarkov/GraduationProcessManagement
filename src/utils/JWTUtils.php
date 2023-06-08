@@ -21,16 +21,16 @@ $issuer = $config["issuer"];
 $KmsClient = new KmsClient([
     'profile' => 'default',
     'version' => '2014-11-01',
-    'region' => 'us-east-2'
+    'region' => 'us-east-1'
 ]);
 
-$keyId = 'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab';
+$keyId = 'arn:aws:kms:us-east-1:175668400529:key/ab9e8b5b-ed4b-4383-8391-3267c88de2f7';
 
 try {
     $result = $KmsClient->describeKey([
         'KeyId' => $keyId,
     ]);
-    var_dump($result);
+    // var_dump($result);
 } catch (AwsException $e) {
     echo $e->getMessage();
     echo "\n";
