@@ -1,6 +1,6 @@
 {
     "secret_key": "dh&wK=BY=[4!`,ArPf=)$x@b_SKK*FN",
-    "issuer": "GraduationProcessManagement",
+    "issuer": "",
     "db_host": "localhost",
     "db_name": "graduation",
     "db_username": "root",

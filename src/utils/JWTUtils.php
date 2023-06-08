@@ -12,16 +12,17 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\SignatureInvalidException;
-use Aws\Kms\KmsClient;
 use Aws\Exception\AwsException;
+use Aws\SecretsManager\SecretsManagerClient;
 
 $config = json_decode(file_get_contents("../src/config/config.json"), true);
-$issuer = $config["issuer"];
+
+
+$secret_name = "GPM/JWT_KEY";
 
 try {
-    $KmsClient = new KmsClient([
-        'profile' => 'default',
-        'version' => '2014-11-01',
+    $SMClient = new SecretsManagerClient([
+        'version' => '2017-10-17',
         'region' => 'us-east-1'
     ]);
 }
@@ -30,19 +31,20 @@ catch (Error $e) {
     echo "\n";
 }
 
-$keyId = 'arn:aws:kms:us-east-1:175668400529:key/ab9e8b5b-ed4b-4383-8391-3267c88de2f7';
-
 try {
-    $result = $KmsClient->describeKey([
-        'KeyId' => $keyId,
+    $result = $SMClient -> getSecretValue([
+          "SecretId" => $secret_name,
+          "VersionStage" => "AWSCURRENT" 
     ]);
-    // var_dump($result);
+    $jsonData = json_decode($result["SecretString"], true);
+
 } catch (AwsException $e) {
     echo $e->getMessage();
     echo "\n";
 } 
 
-$secret_key = $config["secret_key"];
+$secret_key = $jsonData["JWT_KEY"];
+$issuer = $jsonData["ISSUER"];
 
 function generateJWT($email, $role)
 {
