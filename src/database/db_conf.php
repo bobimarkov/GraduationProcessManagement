@@ -21,7 +21,7 @@ class Db {
             ]);
             $dbData = json_decode($result["SecretString"], true);
         } catch (Exception | Error $e) {
-            echo $e->getMessage();
+            var_dump($e->getTrace());
             echo "\n";
         }
 
