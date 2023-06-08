@@ -1,11 +1,11 @@
 
 <?php
-echo "HERE 6";
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 
 include_once '../src/database/db_conf.php';
+echo "HERE 6";
 include_once '../src/utils/JWTUtils.php';
 
 echo "HERE 7";
