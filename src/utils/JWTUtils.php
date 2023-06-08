@@ -22,14 +22,14 @@ $issuer = $config["issuer"];
 
 echo "HERE 8";
 try {
-$KmsClient = new KmsClient([
-    'profile' => 'default',
-    'version' => '2014-11-01',
-    'region' => 'us-east-1'
-]);
+    $KmsClient = new KmsClient([
+        'profile' => 'default',
+        'version' => '2014-11-01',
+        'region' => 'us-east-1'
+    ]);
 }
 catch (Exception $e) {
-    echo $e->getMessage();
+    var_dump($e);
     echo "\n";
 }
 
