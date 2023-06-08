@@ -28,7 +28,7 @@ $KmsClient = new KmsClient([
     'region' => 'us-east-1'
 ]);
 }
-catch (AwsException $e) {
+catch (Exception $e) {
     echo $e->getMessage();
     echo "\n";
 }
