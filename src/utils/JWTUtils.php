@@ -6,15 +6,39 @@ require_once "../src/database/db_conf.php";
 require_once "../src/exception/InvalidIssuerException.php";
 require_once "../src/exception/UserNotFoundException.php";
 require_once "../src/exception/UnauthorizedAccessException.php";
+require_once "../src/lib/aws/aws-autoloader.php";
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\SignatureInvalidException;
+use Aws\Kms\KmsClient;
+use Aws\Exception\AwsException;
 
 $config = json_decode(file_get_contents("../src/config/config.json"), true);
-$secret_key = $config["secret_key"];
 $issuer = $config["issuer"];
+
+$KmsClient = new KmsClient([
+    'profile' => 'default',
+    'version' => '2014-11-01',
+    'region' => 'us-east-2'
+]);
+
+$keyId = 'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab';
+
+try {
+    $result = $KmsClient->describeKey([
+        'KeyId' => $keyId,
+    ]);
+    var_dump($result);
+} catch (AwsException $e) {
+    echo $e->getMessage();
+    echo "\n";
+}
+ 
+ 
+
+$secret_key = $config["secret_key"];
 
 function generateJWT($email, $role)
 {
