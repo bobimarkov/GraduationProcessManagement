@@ -1,7 +1,7 @@
 <IfModule mod_rewrite.c>
     Options -Multiviews -Indexes
     RewriteEngine On
-    RewriteBase /GraduationProcessManagement/public
+    RewriteBase /public
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^(.*)$ $1.html
