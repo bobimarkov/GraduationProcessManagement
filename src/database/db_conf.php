@@ -10,13 +10,9 @@ class Db {
     public function __construct() {
         $secret_name = "MySQL/GPM-S-TEST-1";
 
-        $credentials = CredentialProvider::defaultProvider();
-        // var_dump($credentials);
-
         $SMClient = new SecretsManagerClient([
             'version' => '2017-10-17',
             'region' => 'us-east-1',
-            // 'credentials  ' => $credentials
         ]);
 
         try {        
