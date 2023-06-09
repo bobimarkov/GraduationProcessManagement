@@ -11,6 +11,7 @@ class Db {
         $secret_name = "MySQL/GPM-S-TEST-1";
 
         $credentials = CredentialProvider::defaultProvider();
+        var_dump($credentials);
 
         $SMClient = new SecretsManagerClient([
             'version' => '2017-10-17',
