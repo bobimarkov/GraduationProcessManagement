@@ -6,7 +6,7 @@ use Aws\SecretsManager\SecretsManagerClient;
 class DbA {
     private $connection;
     public function __construct() {
-        $secret_name = "MySQL/GPM-Archive-S-TEST-1";
+        $secret_name = "MySQL/GPM-Archive-S-TEST-2";
 
         $SMClient = new SecretsManagerClient([
             'version' => '2017-10-17',
