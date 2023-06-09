@@ -1,0 +1,7 @@
+
+atrendafilova@gmail.com  , Password1, Алекс Иванова Трендафилова 	 , 0880102040, student, 81832, М, х, 1, -
+dkozhuharev@gmail.com    , Password1, Данаил Трендафилов Кожухарев   , 0880102051, student, 81823, Б, С, 2, 2.00
+dtopolov@gmail.com       , Password1, Димитър Ивайлов Тополов 	     , 0880102052, student, 81822, Б, С, 2, -
+vyankova@gmail.com       , Password1, Василена Стоянова Янкова 	 	 , 0880102065, student, 81837, Д, х, 1, -
+vgeorgieva@gmail.com     , Password1, Велислава Добромирова Георгиева, 0880102037, student, 81809, Б, КН, 8, 2.00
+gatanasov@gmail.com      , Password1, Георги Петров Атанасов         , 0880102038, student, 81800, Б, СИ, 7, 2.00
