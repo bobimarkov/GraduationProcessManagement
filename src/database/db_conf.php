@@ -15,7 +15,7 @@ class Db {
         $SMClient = new SecretsManagerClient([
             'version' => '2017-10-17',
             'region' => 'us-east-1',
-            'credentials  ' => $credentials
+            // 'credentials  ' => $credentials
         ]);
 
         try {        
